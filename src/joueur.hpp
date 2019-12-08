@@ -12,6 +12,7 @@
 */
 
 #include <iostream>
+#include "lombric.hpp"
 
 /*
     Classe: Joueur.
