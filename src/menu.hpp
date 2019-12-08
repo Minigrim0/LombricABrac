@@ -14,6 +14,18 @@
 #include <iostream>
 
 /*
+    Classe : MenuUI.
+    Gère l'affichage des différents menus, des boutons, ...
+*/
+class MenuUI{
+    public:
+        MenuUI();
+        ~MenuUI();
+
+        void affiche();
+};
+
+/*
     Classe: Menu.
     Gère les menus, avec les boutons, les différentes actions (connexion, ...),
     L'affichage de celui ci, ainsi que le lancement et le setup de parties
@@ -29,4 +41,5 @@ class Menu{
 
     private:
         std::string m_title;
+        MenuUI ui;
 };
