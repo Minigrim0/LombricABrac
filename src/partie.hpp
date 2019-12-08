@@ -16,6 +16,13 @@
 #include "carte.hpp"
 #include "joueur.hpp"
 
+typedef struct {
+    Joueur* joueurs;
+    std::string nom;
+    int couleur[3];
+    int joueur_actuel;
+    int lombrics_en_vie;
+} Equipe;
 
 /*
     Classe: Partie.
@@ -36,11 +43,5 @@ class Partie{
         int m_temps_tour;
         int m_equipe_actuelle;
 
-        struct Equipe{
-            Joueur* joueurs;
-            std::string nom;
-            int couleur[3];
-            int joueur_actuel;
-            int lombrics_en_vie;
-        }* m_equipes;
+        Equipe* m_equipes;
 };
