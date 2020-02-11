@@ -3,7 +3,6 @@ LINKER_FLAGS=-pthread
 EXECUTABLE=server
 CXX=g++ -ggdb
 
-HEADER=$(wildcard includes/*.hpp)
 SOURCES=$(wildcard src/*.cpp)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
