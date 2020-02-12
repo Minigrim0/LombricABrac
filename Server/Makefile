@@ -11,6 +11,10 @@ OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 
 all: pre $(EXECUTABLE)
 
+init_db: init_db.cpp $(LIBS)
+	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
+	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
