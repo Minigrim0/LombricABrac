@@ -1,4 +1,5 @@
 #include "client.hpp"
+#include "../comm_macros.hpp"
 
 void* Client::run(char* adresse, uint16_t port){
 	int res;
@@ -48,14 +49,26 @@ void* Client::run(char* adresse, uint16_t port){
 
 template<typename T> 
 void Client::sendInt(T n){
-	int size, sent_size = 0;
-	uint32_t packet_size;
-	T res;
-	T* parser;
-	
-	size = sizeof(n);
-	packet_size = htonl(size);
-	res = send(client_socket, &packet_size, sizeof(packet_size), 0);
+	int res;
+	switch(sizeof(T)){
+		case 2:
+			n = htons(n);
+			break;
+		case 4:
+			n = htonl(n);
+			break;
+	}
+	res = send(client_socket, &n, sizeof(n), 0);
+    /*if (res==-1){
+        return ???;
+    }  on renvoie quoi en cas d'erreur???*/ 
+}
+
+void sendString(String message){
+	int size, res;
+	size = message.lenght();
+
+}
 
 template <typename T> T Client::readInt(){
 	T res;

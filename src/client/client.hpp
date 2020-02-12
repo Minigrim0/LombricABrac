@@ -17,8 +17,7 @@
 class Client{
 private:
 	int client_socket;
-	template<typename T> 
-	void sendInt(T n);
+	template<typename T> void sendInt(T n);
 	void sendString(String mesage);
 	void sendInt(int n);
 	void sendString(std::string mesage);
