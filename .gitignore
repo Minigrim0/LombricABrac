@@ -1,3 +1,4 @@
 *.hpp.gch
 *.o
 server
+.vscode

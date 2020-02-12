@@ -4,10 +4,11 @@
 #include <cstdlib>
 #include <netinet/in.h>
 #include <cstring>
+#include <thread> 
 
 #include "includes/utils.hpp"
-
-#define INIT_TAILLE_BUFFER 1024
+#include "includes/user_thread.hpp"
+#include "includes/constant.hpp"
 
 int main(int argc, char **argv){
 
@@ -45,7 +46,7 @@ int main(int argc, char **argv){
     res = listen (sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    str_buffer = static_cast<char*>(malloc(sizeof(char) * INIT_TAILLE_BUFFER));
+    str_buffer = static_cast<char*>(malloc(sizeof(char) * INIT_SIZE_BUFFER));
     if(!str_buffer) {
         perror("Error while initializing the reception buffer");
         close (sockfd);
@@ -62,6 +63,7 @@ int main(int argc, char **argv){
             fprintf (stderr, "Connexion impossible.\n");
             continue;
         }
+        std::thread thread_obj(client_thread, socket_client);
     }
 
     return EXIT_SUCCESS;
