@@ -47,6 +47,6 @@ valrun: all
 	valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --gen-suppressions=all --log-file=supdata.log ./$(EXECUTABLE)
 
 mrproper: clean
-	rm -f $(EXECUTABLE)
+	rm -f $(EXECUTABLE) init_db
 
 .PHONY: clean mrproper
