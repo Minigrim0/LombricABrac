@@ -1,9 +1,10 @@
 COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override
-LINKER_FLAGS=-pthread
+LINKER_FLAGS=-pthread -ldl -lpthread
 EXECUTABLE=server
-CXX=g++ -ggdb
+CXX=g++ -ggdb -ldl
 
 SOURCES=$(wildcard src/*.cpp)
+LIBS=lib/sqlite3.o
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
@@ -13,16 +14,20 @@ all: pre $(EXECUTABLE)
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(OBJECTS)
+$(EXECUTABLE): main.cpp $(OBJECTS) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
-
+		
 build/%.o: src/%.cpp
 	@mkdir -p build
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
 	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
 
-clean :
+lib/sqlite3.o: lib/sqlite3.c
+	@echo "\e[1;33m >> $^ -> $@\e[0m"
+	@gcc -c $^ -o $@
+
+clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
