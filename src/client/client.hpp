@@ -16,7 +16,8 @@
 class Client{
 private:
 	int client_socket;
-	void sendInt(int n);
+	template<typename T> 
+	void sendInt(T n);
 	void sendString(String mesage);
 
 	uint16_t readInt();//fonction qui lit un entier sur le socket

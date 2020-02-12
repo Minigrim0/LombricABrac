@@ -45,3 +45,15 @@ void* Client::run(char* adresse, uint16_t port){
 
 	return nullptr;
 }
+
+template<typename T> 
+void Client::sendInt(T n){
+	int size, sent_size = 0;
+	uint32_t packet_size;
+	T res;
+	T* parser;
+	
+	size = sizeof(n);
+	packet_size = htonl(size);
+	res = send(client_socket, &packet_size, sizeof(packet_size), 0);
+}
