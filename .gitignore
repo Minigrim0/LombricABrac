@@ -1,1 +1,3 @@
 *.hpp.gch
+*.o
+server
