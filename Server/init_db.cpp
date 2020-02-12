@@ -21,7 +21,7 @@ int main() {
 
     /* Create SQL statement */
     sql = "CREATE TABLE users(\
-        id             INT      PRIMARY KEY AUTOINCREMENT,\
+        id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
         username       CHAR(40) NOT NULL,\
         password       CHAR(40) NOT NULL,\
         victory_amount INT\
