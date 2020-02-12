@@ -10,7 +10,7 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
             perror(msg);
         }
         else{
-            std::cout << msg;
+            std::cout << msg << std::endl;
         }
 
         if(nb_to_close > 0){
