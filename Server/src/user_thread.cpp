@@ -11,7 +11,7 @@ void client_thread(int socket_client){
     char* str_buffer;
     str_buffer = static_cast<char*>(malloc (sizeof(char) * INIT_SIZE_BUFFER));
     if(!str_buffer){
-        perror("Initialisation du buffer de reception");
+        perror("Initialization of the reception buffer");
         close(socket_client);
         exit(EXIT_FAILURE);
     }
