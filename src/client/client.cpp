@@ -64,10 +64,19 @@ void Client::sendInt(T n){
     }  on renvoie quoi en cas d'erreur???*/ 
 }
 
-void sendString(String message){
-	int size, res;
-	size = message.lenght();
+void Client::sendString(std::string message){
+	int res;
+	uint8_t size;
+	uint8_t sent_size = 0;
+	const char* parser = message.c_str();
+	size = message.length();
 
+	sendInt<uint8_t>(size);
+	while (sent_size<size){
+		res = send(client_socket, parser, size-sent_size, 0);
+		sent_size += res;
+        parser += res;
+	}
 }
 
 template <typename T> T Client::readInt(){
