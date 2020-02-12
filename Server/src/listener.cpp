@@ -17,6 +17,7 @@ void Listener::reception(int sockfd , char* str_buffer){
     int res;
     int len_char;
     uint32_t packet_size;
+    bzero(str_buffer, sizeof(str_buffer));
 
     res = static_cast<int>(recv(sockfd, &packet_size, sizeof(uint32_t), 0));
     if(res == -1){
