@@ -63,7 +63,9 @@ int main(int argc, char **argv){
             fprintf (stderr, "Connexion impossible.\n");
             continue;
         }
+
         std::thread thread_obj(client_thread, socket_client);
+        thread_obj.detach();
     }
 
     return EXIT_SUCCESS;
