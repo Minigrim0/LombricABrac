@@ -48,14 +48,37 @@ void* Client::run(char* adresse, uint16_t port){
 
 template <typename T> T Client::readInt(){
 	T res;
-	int size = sizeof(T); //taille à lire
-	T* parser = &res;
+	int r = recv(client_socket, &res, sizeof(T), 0);
+	if (r==-1){
+		//Comment on gerre les erreurs ? on peurt pas juste crash.
+	}
 
-	while(size > 0){//boucle pour être sur que tous est lu
-		int r = recv(client_socket, &res, sizeof(T), 0);
-		size -= r;
-		parser += r;
+	switch(sizeof(T)){
+		case 2:
+			res = ntohs(res);
+			break;
+		case 4:
+			res = ntohl(res);
+			break;
 	}
 
 	return res;
+}
+
+
+std::string Client::readString(){
+	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
+	uint8_t taille = readInt<uint8_t>();
+
+	char res[taille];
+	char* parser = res;
+
+	while (taille>0){
+		int r = recv(client_socket, &parser, taille, 0);
+		taille -= r;
+		parser += r;
+	}
+	return static_cast<std::string>(res);
+
+
 }
