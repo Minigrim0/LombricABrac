@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #define _DEFAULT_SOURCE 1
 
@@ -10,7 +11,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
-#include <string.h>
+
 
 
 class Client{
@@ -19,9 +20,10 @@ private:
 	template<typename T> 
 	void sendInt(T n);
 	void sendString(String mesage);
-
-	uint16_t readInt();//fonction qui lit un entier sur le socket
-	String readString();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
+	void sendInt(int n);
+	void sendString(std::string mesage);
+	template <typename T> T readInt();//fonction qui lit un entier sur le socket
+	std::string readString();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 public:
 	Client();
 	void* run(char* ip, uint16_t port);

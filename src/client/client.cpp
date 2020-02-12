@@ -56,4 +56,17 @@ void Client::sendInt(T n){
 	size = sizeof(n);
 	packet_size = htonl(size);
 	res = send(client_socket, &packet_size, sizeof(packet_size), 0);
+
+template <typename T> T Client::readInt(){
+	T res;
+	int size = sizeof(T); //taille à lire
+	T* parser = &res;
+
+	while(size > 0){//boucle pour être sur que tous est lu
+		int r = recv(client_socket, &res, sizeof(T), 0);
+		size -= r;
+		parser += r;
+	}
+
+	return res;
 }
