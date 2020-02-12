@@ -17,9 +17,10 @@
 class Client{
 private:
 	int client_socket;
+	template<typename T> void sendInt(T n);
+	void sendString(String mesage);
 	void sendInt(int n);
 	void sendString(std::string mesage);
-
 	template <typename T> T readInt();//fonction qui lit un entier sur le socket
 	std::string readString();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 public:
