@@ -67,43 +67,27 @@ void Client::sendMessage(message msg){
 	}
 }
 
-template <typename T> T Client::readInt(){
-	T res;
-	int r = recv(client_socket, &res, sizeof(T), 0);
-	if (r==-1){
-		//Comment on gerre les erreurs ? on peurt pas juste crash.
-	}
-
-	switch(sizeof(T)){
-		case 2:
-			res = ntohs(res);
-			break;
-		case 4:
-			res = ntohl(res);
-			break;
-	}
-	return res;
-}
-
-
-std::string Client::readString(){
+std::string Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
-	uint8_t taille = readInt<uint8_t>();
+	uint32_t size;//taille du message
+	int res;
+	message m;
 
-	char res[taille];
-	char* parser = res;
-	std::cout << taille << std::endl;
+	res = recv(client_sock&m.type, sizeof(m.type), 0); // reçois le type du message
+	res = recv(client_socket, &size, sizeof(size), 0);
+	size = ntohl(size);
+
+	char buffer[size+1];
+	char* parser = buffer;
 
 	while (taille>0){
-		int r = recv(client_socket, &parser, taille, 0);
-		taille -= r;
+		int r = recv(client_socket, parser, size, 0);
+		size -= r;
 		parser += r;
 	}
-	return static_cast<std::string>(res);	
-}
+	buffer[size] = '\0';
 
-/*int main(){
-	Client c;
-	c.run("192.168.1.5", 44444);
-	return 1;
-}*/
+	m.msg = static_cast<std::string>(buffer); 
+
+	return message;
+}
