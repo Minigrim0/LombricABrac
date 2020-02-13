@@ -59,7 +59,7 @@ void Listener::reception(int sockfd , char* str_buffer){
         str_buffer = tmp_buf;
     }
 
-    for(str_parser = str_buffer, taille_recue = 0;taille_recue < len_char; ){
+    for(str_parser = str_buffer, received_size = 0;received_size < len_char; ){
             res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
             if(res == -1){
                 perror("Unable to receive message.\n");
@@ -70,7 +70,7 @@ void Listener::reception(int sockfd , char* str_buffer){
                 exit(EXIT_FAILURE);
             }
 
-            taille_recue += res;
+            received_size += res;
             str_parser += res;
         }
     
