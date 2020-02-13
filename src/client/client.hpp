@@ -12,6 +12,12 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
+struct message
+{
+	uint8_t type;
+	std::string msg;
+};
+
 
 
 class Client{
