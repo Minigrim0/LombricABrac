@@ -10,6 +10,9 @@ OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 
 all: pre $(EXECUTABLE)
 
+client: client_test.cpp
+	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
+
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
