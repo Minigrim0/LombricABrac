@@ -31,7 +31,7 @@ void* Client::run(char* adresse, uint16_t port){
 
 	fd_set rfds;//utilisation du multiplexage
 	int n = client_socket+1;
-	//sendString("C'est le 12");
+	//sendString("C'est le 12");	
 
 	while(running){
 		FD_ZERO(&rfds);
@@ -50,6 +50,9 @@ void* Client::run(char* adresse, uint16_t port){
 }
 
 void Client::sendMessage(message msg){
+
+	Mutex.lock();
+	
 	int res;
 	uint32_t size;
 	uint32_t sent_size = 0;
@@ -89,5 +92,7 @@ std::string Client::readMessage(){
 
 	m.msg = static_cast<std::string>(buffer); 
 
+	Mutex.unlock();
 	return message;
 }
+
