@@ -17,6 +17,7 @@ void Listener::reception(int sockfd , char* str_buffer){
     int res;
     int len_char;
     uint32_t packet_size;
+    bzero(str_buffer, sizeof(str_buffer));
 
     res = static_cast<int>(recv(sockfd, &packet_size, sizeof(uint32_t), 0));
     if(res == -1){
@@ -28,9 +29,11 @@ void Listener::reception(int sockfd , char* str_buffer){
 
     len_char = static_cast<int>(ntohl(packet_size));
 
-    if(INIT_SIZE_BUFFER <= len_char){
-        char* tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>((len_char + 1))));
+    if( static_cast<long unsigned int>(len_char+1) > sizeof(str_buffer) ){
+        char* tmp_buf;
 
+        tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>((len_char+1))));
+        
         if(!tmp_buf){
             perror("Failed to realloc\n");
             free(str_buffer);
@@ -41,20 +44,36 @@ void Listener::reception(int sockfd , char* str_buffer){
         str_buffer = tmp_buf;
     }
 
-    for(str_parser = str_buffer, received_size = 0;received_size < len_char; ){
-        res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
-        if(res == -1){
-            perror("Unable to receive the message.\n");
-            break;
-        }
-        else if(res == 0){
-            std::cout << "Server closed socket." << std::endl;
+    else if( len_char+1 < INIT_SIZE_BUFFER && sizeof(str_buffer) != INIT_SIZE_BUFFER){
+        char* tmp_buf;
+
+        tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>(INIT_SIZE_BUFFER)));
+        
+        if(!tmp_buf){
+            perror("Failed to realloc\n");
+            free(str_buffer);
+            close(sockfd);
+            exit(EXIT_FAILURE);
         }
 
-        received_size += res;
-        str_parser += res;
+        str_buffer = tmp_buf;
     }
 
+    for(str_parser = str_buffer, taille_recue = 0;taille_recue < len_char; ){
+            res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
+            if(res == -1){
+                perror("Impossible de recevoir le msg.\n");
+                exit(EXIT_FAILURE);
+            }
+            else if(res == 0){
+                perror("Fermeture du socket coté serveur.\n");
+                exit(EXIT_FAILURE);
+            }
+
+            taille_recue += res;
+            str_parser += res;
+        }
+    
     str_buffer[len_char+1] = '\0';
 }
 
