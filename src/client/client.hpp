@@ -16,18 +16,18 @@
 struct message
 {
 	uint8_t type;
-	std::string msg;
+	std::string text;
 };
 
 
 
 class Client{
 private:
-	message Message;
+	message msg;
 	std::mutex Mutex;
 	int client_socket;
 	void sendMessage(message m);
-	message readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
+	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 public:
 	Client();
 	void* run(char* ip, uint16_t port);

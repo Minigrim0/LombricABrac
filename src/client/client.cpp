@@ -42,8 +42,7 @@ void* Client::run(char* adresse, uint16_t port){
 		}
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
-			std::string result;
-			result = readString();
+			readMessage();
 		}
 	}
 	return nullptr;
@@ -56,9 +55,9 @@ void Client::sendMessage(message msg){
 	int res;
 	uint32_t size;
 	uint32_t sent_size = 0;
-	const char* parser = msg.c_str();
+	const char* parser = msg.text.c_str();
 	
-	size = msg.length();
+	size = static_cast<uint32_t>(msg.text.length());
 	size = htonl(size);
 
 	res = send(client_socket, &msg.type, sizeof(msg.type), 0);
@@ -70,29 +69,33 @@ void Client::sendMessage(message msg){
 	}
 }
 
-std::string Client::readMessage(){
+void Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
-	message m;
 
-	res = recv(client_sock&m.type, sizeof(m.type), 0); // reçois le type du message
+	res = recv(client_socket, &msg.type , sizeof(msg.type), 0); // reçois le type du message
+	if(res==-1){
+		
+	}
 	res = recv(client_socket, &size, sizeof(size), 0);
+	if (res==-1){
+
+	}
 	size = ntohl(size);
 
 	char buffer[size+1];
 	char* parser = buffer;
 
-	while (taille>0){
+	while (size>0){
 		int r = recv(client_socket, parser, size, 0);
 		size -= r;
 		parser += r;
 	}
 	buffer[size] = '\0';
 
-	m.msg = static_cast<std::string>(buffer); 
+	msg.text = static_cast<std::string>(buffer); 
 
 	Mutex.unlock();
-	return message;
 }
 
