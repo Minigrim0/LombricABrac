@@ -45,14 +45,17 @@ int callback(void *data, int argc, char **argv, char **azColName){
 }
 
 void DataBase::get_user(std::string username) const{
-
+    std::cout << username << std::endl;
 }
 
 bool DataBase::verify_user(std::string username, std::string password) const{
+    std::cout << username << std::endl;
+    std::cout << password << std::endl;
 
     return false;
 }
 
 void DataBase::register_user(std::string username, std::string password){
-
+    std::cout << username << std::endl;
+    std::cout << password << std::endl;
 }
