@@ -9,20 +9,27 @@ class DataBase{
         DataBase(std::string);
         virtual ~DataBase();
 
+        // Simple Getters
+        bool is_opened() const;
+
+        bool catch_error();
+
         // Users operations
-        void get_user(std::string);
+        void get_user(std::string) const;
+        bool verify_user(std::string, std::string) const;
+
         void register_user(std::string, std::string);
-        bool verify_user(std::string, std::string);
 
         // Game history operations
 
         // Message operations
 
     private:
-        sqlite3* m_db;
+        sqlite3* m_db; // The database object itself
 
-        int rc;
-        char* zErrMsg;
+        char* m_zErrMsg;
+        int m_rc;
+        bool m_is_open; // Identifier to know if the databse could be opened or not
 };
 
 #endif
