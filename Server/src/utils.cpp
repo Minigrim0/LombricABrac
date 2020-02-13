@@ -2,13 +2,15 @@
 #include <unistd.h>
 #include <cstdarg>
 
+// Depending on the value of res, indicate an error, with the error message provided,
+// and closes given pipes before exiting the program
 void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
     if(res == -1){
         if(is_perror == 1){
             perror(msg);
         }
         else{
-            fprintf(stderr, "%s", msg);
+            std::cout << msg << std::endl;
         }
 
         if(nb_to_close > 0){
