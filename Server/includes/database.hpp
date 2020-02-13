@@ -11,8 +11,8 @@ class DataBase{
 
         // Simple Getters
         bool is_opened() const;
-
         bool catch_error();
+        int callback(void *data, int argc, char **argv, char **azColName);
 
         // Users operations
         void get_user(std::string) const;

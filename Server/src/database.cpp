@@ -28,8 +28,20 @@ bool DataBase::catch_error(){
        sqlite3_free(m_zErrMsg);
        return false;
     }
-    std::cout << "Table created successfully" << std::endl;
+    std::cout << "Request successfull" << std::endl;
     return true;
+}
+
+int callback(void *data, int argc, char **argv, char **azColName){
+   int i;
+   fprintf(stderr, "%s: ", (const char*)data);
+
+   for(i = 0; i<argc; i++){
+      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+   }
+
+   printf("\n");
+   return 0;
 }
 
 void DataBase::get_user(std::string username) const{
