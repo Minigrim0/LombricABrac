@@ -29,10 +29,25 @@ void Listener::reception(int sockfd , char* str_buffer){
 
     len_char = static_cast<int>(ntohl(packet_size));
 
-    if( INIT_SIZE_BUFFER <= len_char){
+    if( static_cast<long unsigned int>(len_char+1) > sizeof(str_buffer) ){
         char* tmp_buf;
 
-        tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>((len_char + 1))));
+        tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>((len_char+1))));
+        
+        if(!tmp_buf){
+            perror("Failed to realloc\n");
+            free(str_buffer);
+            close(sockfd);
+            exit(EXIT_FAILURE);
+        }
+
+        str_buffer = tmp_buf;
+    }
+
+    else if( len_char+1 < INIT_SIZE_BUFFER && sizeof(str_buffer) != INIT_SIZE_BUFFER){
+        char* tmp_buf;
+
+        tmp_buf = static_cast<char*>(realloc(str_buffer, sizeof(char) * static_cast<long unsigned int>(INIT_SIZE_BUFFER)));
         
         if(!tmp_buf){
             perror("Failed to realloc\n");
@@ -48,16 +63,17 @@ void Listener::reception(int sockfd , char* str_buffer){
             res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
             if(res == -1){
                 perror("Impossible de recevoir le msg.\n");
-                break;
+                exit(EXIT_FAILURE);
             }
             else if(res == 0){
-                printf("Fermeture du socket coté serveur.\n");
+                perror("Fermeture du socket coté serveur.\n");
+                exit(EXIT_FAILURE);
             }
 
             taille_recue += res;
             str_parser += res;
         }
-
+    
     str_buffer[len_char+1] = '\0';
 }
 

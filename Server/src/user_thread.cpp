@@ -15,5 +15,8 @@ void client_thread(int socket_client){
         close(socket_client);
         exit(EXIT_FAILURE);
     }
+    while(1){
     yolo.reception(socket_client, str_buffer);
+    std::cout << str_buffer << std::endl;
+    }
 }
