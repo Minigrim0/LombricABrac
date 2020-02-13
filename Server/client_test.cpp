@@ -1,5 +1,5 @@
 #define _DEFAULT_SOURCE
-#define INIT_TAILLE_BUFFER 1024
+#define INIT_TAILLE_BUFFER 4096
 
 #include <cstdlib>
 #include <cstdio>
@@ -19,6 +19,7 @@ void send_msg(int sockfd, char* str_buffer, char* msg){
     char* str_parser;
     int sent_size = 0;
 
+    strtok(msg, "\n");
     int chain_length = static_cast<int>(strlen(msg));
     uint32_t packet_size = htonl(static_cast<uint32_t>(chain_length));
 
