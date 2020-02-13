@@ -1,6 +1,8 @@
 #include "client.hpp"
 #include "../comm_macros.hpp"
 
+//Client::Client(){};
+
 void* Client::run(char* adresse, uint16_t port){
 	int res;
 	bool running = true;
@@ -29,6 +31,7 @@ void* Client::run(char* adresse, uint16_t port){
 
 	fd_set rfds;//utilisation du multiplexage
 	int n = client_socket+1;
+	//sendString("C'est le 12");
 
 	while(running){
 		FD_ZERO(&rfds);
@@ -39,39 +42,24 @@ void* Client::run(char* adresse, uint16_t port){
 		}
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
-			
+			std::string result;
+			result = readString();
 		}
-
 	}
-
 	return nullptr;
 }
 
-template<typename T> 
-void Client::sendInt(T n){
+void Client::sendMessage(message msg){
 	int res;
-	switch(sizeof(T)){
-		case 2:
-			n = htons(n);
-			break;
-		case 4:
-			n = htonl(n);
-			break;
-	}
-	res = send(client_socket, &n, sizeof(n), 0);
-    /*if (res==-1){
-        return ???;
-    }  on renvoie quoi en cas d'erreur???*/ 
-}
+	uint32_t size;
+	uint32_t sent_size = 0;
+	const char* parser = msg.c_str();
+	
+	size = msg.length();
+	size = htonl(size);
 
-void Client::sendString(std::string message){
-	int res;
-	uint8_t size;
-	uint8_t sent_size = 0;
-	const char* parser = message.c_str();
-	size = message.length();
-
-	sendInt<uint8_t>(size);
+	res = send(client_socket, &msg.type, sizeof(msg.type), 0);
+	res = send(client_socket, &size, sizeof(size), 0);
 	while (sent_size<size){
 		res = send(client_socket, parser, size-sent_size, 0);
 		sent_size += res;
@@ -94,7 +82,6 @@ template <typename T> T Client::readInt(){
 			res = ntohl(res);
 			break;
 	}
-
 	return res;
 }
 
@@ -105,13 +92,18 @@ std::string Client::readString(){
 
 	char res[taille];
 	char* parser = res;
+	std::cout << taille << std::endl;
 
 	while (taille>0){
 		int r = recv(client_socket, &parser, taille, 0);
 		taille -= r;
 		parser += r;
 	}
-	return static_cast<std::string>(res);
-
-
+	return static_cast<std::string>(res);	
 }
+
+/*int main(){
+	Client c;
+	c.run("192.168.1.5", 44444);
+	return 1;
+}*/
