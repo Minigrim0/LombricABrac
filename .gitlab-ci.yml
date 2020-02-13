@@ -8,3 +8,5 @@ compile:
   script:
   - cd Server
   - make
+  - make init_db
+  - ./init_db
