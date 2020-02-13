@@ -1,0 +1,10 @@
+image: ubuntu:14.04
+
+before_script:
+  - apt-get update
+  - apt-get install -y gcc g++
+
+compile:
+  script:
+  - cd Server
+  - make
