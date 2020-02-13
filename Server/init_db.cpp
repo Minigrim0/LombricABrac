@@ -87,6 +87,25 @@ int main() {
         std::cout << "Table created successfully" << std::endl;
     }
 
+    std::cout << "----- Creating Friends Table ------" << std::endl << ">> ";
+    sql = "CREATE TABLE friends(\
+        id             INTEGER PRIMARY KEY AUTOINCREMENT,\
+        sender_id      INTEGER,\
+        receiver_id    INTEGER,\
+        accepted        BOOL,\
+        timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
+    );";
+
+    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
+
+    if(rc != SQLITE_OK){
+       std::cout << "SQL error: " << zErrMsg << std::endl;
+       sqlite3_free(zErrMsg);
+    }
+    else{
+        std::cout << "Table created successfully" << std::endl;
+    }
+
     sqlite3_close(db);
 
     return EXIT_SUCCESS;
