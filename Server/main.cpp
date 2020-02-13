@@ -57,6 +57,9 @@ int main(int argc, char **argv){
         int socket_client;
         struct sockaddr_in adresse_client;
         socklen_t taille_struct_addr_client;
+        bzero(&adresse_client , sizeof(adresse_client));
+        bzero(&taille_struct_addr_client, sizeof(taille_struct_addr_client));
+
 
         socket_client = accept(sockfd, reinterpret_cast<struct sockaddr *>(&adresse_client), &taille_struct_addr_client);
         if(socket_client == -1) {
@@ -67,6 +70,7 @@ int main(int argc, char **argv){
         std::thread thread_obj(client_thread, socket_client);
         thread_obj.detach();
     }
-
+    
+    close(sockfd);
     return EXIT_SUCCESS;
 }

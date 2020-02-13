@@ -1,6 +1,6 @@
 #ifndef user_thread_hpp
     #define user_thread_hpp
 
-void client_thread(int socket_client);
+int client_thread(int socket_client);
 
 #endif

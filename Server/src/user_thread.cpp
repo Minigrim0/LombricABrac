@@ -6,17 +6,25 @@
 #include "../includes/listener.hpp"
 #include "../includes/constant.hpp"
 
-void client_thread(int socket_client){
+int client_thread(int socket_client){
     Listener yolo;
     char* str_buffer;
-    str_buffer = static_cast<char*>(malloc (sizeof(char) * INIT_SIZE_BUFFER));
+    size_t currrent_size_buffer = INIT_SIZE_BUFFER;
+    int res;
+    str_buffer = static_cast<char*>(malloc (sizeof(char)*INIT_SIZE_BUFFER));
     if(!str_buffer){
         perror("Initialization of the reception buffer");
         close(socket_client);
         exit(EXIT_FAILURE);
     }
     while(1){
-    yolo.reception(socket_client, str_buffer);
-    std::cout << str_buffer << std::endl;
+        res = yolo.reception(socket_client, &str_buffer, &currrent_size_buffer);
+        if (res == EXIT_FAILURE){
+            break;
+        }
+        printf("%s \n", str_buffer);
     }
+    free(str_buffer);
+    close(socket_client);
+    return EXIT_SUCCESS;
 }

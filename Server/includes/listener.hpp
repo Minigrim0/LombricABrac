@@ -7,8 +7,8 @@ class Listener{
         Listener();
         ~Listener();
 
-        void reception(int sockfd , char* str_buffer);
-        void envoie_msg(int sockfd , std::string msg);
+        int reception(int sockfd , char** str_buffer, size_t* currrent_size_buffer);
+        int envoie_msg(int sockfd , std::string msg);
     private:
 
 };
