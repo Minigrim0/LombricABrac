@@ -62,11 +62,11 @@ void Listener::reception(int sockfd , char* str_buffer){
     for(str_parser = str_buffer, taille_recue = 0;taille_recue < len_char; ){
             res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
             if(res == -1){
-                perror("Impossible de recevoir le msg.\n");
+                perror("Unable to receive message.\n");
                 exit(EXIT_FAILURE);
             }
             else if(res == 0){
-                perror("Fermeture du socket coté serveur.\n");
+                perror("Client closed socket.\n");
                 exit(EXIT_FAILURE);
             }
 
