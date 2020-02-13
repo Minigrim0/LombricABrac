@@ -43,6 +43,7 @@ void* Client::run(char* adresse, uint16_t port){
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			readMessage();
+			sendMutex.unlock();//on réautorise l'accès au send quand une réponse est reçue
 		}
 	}
 	return nullptr;
@@ -50,7 +51,7 @@ void* Client::run(char* adresse, uint16_t port){
 
 void Client::sendMessage(message msg){
 
-	Mutex.lock();
+	sendMutex.lock();//verrouille pour que un message soit envoyé à la fois
 	
 	int res;
 	uint32_t size;
@@ -76,7 +77,7 @@ void Client::readMessage(){
 
 	res = recv(client_socket, &msg.type , sizeof(msg.type), 0); // reçois le type du message
 	if(res==-1){
-		
+
 	}
 	res = recv(client_socket, &size, sizeof(size), 0);
 	if (res==-1){
@@ -95,7 +96,8 @@ void Client::readMessage(){
 	buffer[size] = '\0';
 
 	msg.text = static_cast<std::string>(buffer); 
+}
 
-	Mutex.unlock();
+int main(){
 }
 
