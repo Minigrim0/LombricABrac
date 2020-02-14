@@ -29,8 +29,10 @@ private:
 	void sendMessage(message m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 public:
-	Client();
-	void* run(char* ip, uint16_t port);
+	Client(char* ip, uint16_t port);
+	void* run();
+
+	void sendMessage(message m);
 
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string userName, std::string password);//demande de connection

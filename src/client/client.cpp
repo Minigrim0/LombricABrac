@@ -1,11 +1,8 @@
 #include "client.hpp"
 #include "../comm_macros.hpp"
 
-//Client::Client(){};
-
-void* Client::run(char* adresse, uint16_t port){
+Client::Client(char* adresse, uint16_t port){
 	int res;
-	bool running = true;
 	struct sockaddr_in server_addr, client_addr;
 
 
@@ -28,7 +25,12 @@ void* Client::run(char* adresse, uint16_t port){
 	res=connect(client_socket,reinterpret_cast<sockaddr*> (&server_addr),sizeof(struct sockaddr));
 	if(res==-1){perror("Connect failed: ");close(client_socket);return nullptr;}
 
+};
 
+void* Client::run(){
+	int res;
+	bool running = true;
+	
 	fd_set rfds;//utilisation du multiplexage
 	int n = client_socket+1;
 	//sendString("C'est le 12");	
@@ -99,5 +101,7 @@ void Client::readMessage(){
 }
 
 int main(){
+	Client c;
+	c
 }
 
