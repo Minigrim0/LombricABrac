@@ -37,7 +37,7 @@ public:
 	bool createAcount(std::string userName, std::string password);//demande de création de compte
 	
 	//méthode utilisées dans le chat
-	void chatSend(std::string m, std::str destinataire);//envoi du message m à destinataire
+	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
 	void sendInvitation(std::string destianataire);//invite un amis à une partie
