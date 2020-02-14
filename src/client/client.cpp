@@ -20,10 +20,10 @@ Client::Client(char* adresse, uint16_t port){
 	if(client_socket==-1){perror("socket failed: ");}
 
 	res=bind(client_socket,reinterpret_cast<sockaddr*> (&client_addr),sizeof(struct sockaddr));
-	if(res==-1){perror("Bind failed: ");close(client_socket);return nullptr;}
+	if(res==-1){perror("Bind failed: ");close(client_socket);}
 
 	res=connect(client_socket,reinterpret_cast<sockaddr*> (&server_addr),sizeof(struct sockaddr));
-	if(res==-1){perror("Connect failed: ");close(client_socket);return nullptr;}
+	if(res==-1){perror("Connect failed: ");close(client_socket);}
 
 };
 
@@ -69,7 +69,7 @@ void Client::sendMessage(message msg){
 		res = send(client_socket, parser, size-sent_size, 0);
 		sent_size += res;
         parser += res;
-	}
+	}	
 }
 
 void Client::readMessage(){
@@ -89,19 +89,24 @@ void Client::readMessage(){
 
 	char buffer[size+1];
 	char* parser = buffer;
+	buffer[size] = '\0';
 
 	while (size>0){
 		int r = recv(client_socket, parser, size, 0);
 		size -= r;
 		parser += r;
 	}
-	buffer[size] = '\0';
 
 	msg.text = static_cast<std::string>(buffer); 
 }
 
 int main(){
-	Client c;
-	c
+	/*
+	Client c("192.168.1.5", 4444);
+	message m;
+	m.text = "FAIT LES AVEUX";
+	m.type = 12;
+	c.sendMessage(m);
+	*/
 }
 

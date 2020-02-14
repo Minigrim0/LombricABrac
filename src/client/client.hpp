@@ -26,7 +26,7 @@ private:
 	message msg;
 	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
 	int client_socket;
-	void sendMessage(message m);
+	//void sendMessage(message m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 public:
 	Client(char* ip, uint16_t port);
