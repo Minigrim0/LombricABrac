@@ -1,3 +1,5 @@
 *.hpp.gch
 *.o
 server
+client
+.vscode
