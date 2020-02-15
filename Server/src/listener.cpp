@@ -10,8 +10,8 @@
 Listener::Listener(){}
 Listener::~Listener(){}
 
-int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_buffer){
-
+int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buffer){
+    std::cout << sizeof(str_buffer) << std::endl;
     char* str_parser;
     int received_size;
     int res;
@@ -26,31 +26,18 @@ int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_bu
 
     len_char = ntohl(packet_size);
     if( static_cast<long unsigned int>(len_char+1) > *current_size_buffer ){
-        char* tmp_buf;
-        *current_size_buffer = sizeof(char)*static_cast<long unsigned int>((len_char+1));
-        tmp_buf = static_cast<char*>(realloc(*str_buffer, *current_size_buffer));
-        if(!tmp_buf){
-            perror("Failed to realloc\n");
-            return EXIT_FAILURE;
-        }
-
-        *str_buffer = tmp_buf;
+        delete[] str_buffer;
+        str_buffer = new char[len_char+1];
+        *current_size_buffer = len_char+1;
     }
 
-    else if( len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != sizeof(char)*INIT_SIZE_BUFFER){
-        char* tmp_buf;
-        *current_size_buffer = sizeof(char)*static_cast<long unsigned int>(INIT_SIZE_BUFFER);
-        tmp_buf = static_cast<char*>(realloc(*str_buffer, *current_size_buffer));
-        if(!tmp_buf){
-            perror("Failed to realloc\n");
-            return EXIT_FAILURE;
-        }
-
-        *str_buffer = tmp_buf;
+    else if( len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
+        delete[] str_buffer;
+        str_buffer = new char[INIT_SIZE_BUFFER];
     }
-    bzero(*str_buffer, *current_size_buffer);
-    for(str_parser = *str_buffer, received_size = 0;static_cast<uint32_t>(received_size) < len_char; ){
-            res = static_cast<int>(recv(sockfd, *str_buffer, static_cast<long unsigned int>(len_char), 0));
+    bzero(str_buffer, *current_size_buffer);
+    for(str_parser = str_buffer, received_size = 0;static_cast<uint32_t>(received_size) < len_char; ){
+            res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
             if(res == -1){
                 perror("Unable to receive message.\n");
                 return EXIT_FAILURE;
@@ -63,7 +50,8 @@ int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_bu
             received_size += res;
             str_parser += res;
         }
-    *str_buffer[sizeof(*str_buffer)+1] = '\0';
+    
+    str_buffer[strlen(str_buffer)] = '\0';
     return EXIT_SUCCESS;
 }
 

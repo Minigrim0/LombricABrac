@@ -9,6 +9,7 @@
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/constant.hpp"
+#include "includes/user.pb.hpp"
 
 int main(int argc, char **argv){
 
@@ -18,7 +19,6 @@ int main(int argc, char **argv){
     uint16_t port;
     int sockfd;
 
-    char* str_buffer;
     errno = 0;
 
     if(argc != 2) {
@@ -45,13 +45,6 @@ int main(int argc, char **argv){
 
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
-
-    str_buffer = static_cast<char*>(malloc(sizeof(char) * INIT_SIZE_BUFFER));
-    if(!str_buffer) {
-        perror("Error while initializing the reception buffer");
-        close(sockfd);
-        return EXIT_FAILURE;
-    }
 
     while(1) {
         int socket_client;
