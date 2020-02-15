@@ -1,6 +1,6 @@
 #ifndef constant
     #define constant
 
-#define INIT_SIZE_BUFFER 1024
+#define INIT_SIZE_BUFFER 128
 
 #endif
