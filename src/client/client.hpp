@@ -13,16 +13,21 @@
 #include <errno.h>
 #include <mutex>
 
-struct message
+struct lombricPos
 {
-	uint8_t type;
-	std::string text;
+	int id_lomb;
+	int pos_x;
+	int pos_y;
 };
-
 
 
 class Client{
 private:
+	struct message
+	{
+		uint8_t type;
+		std::string text;
+	};
 	message msg;
 	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
 	int client_socket;
@@ -50,15 +55,23 @@ public:
 	void setLombricName(int id, std::string name);//change le nom d'un lombric
 
 	//méthodes du salon d'attente
-	// pas sur
+	void addJoueur(std::string user);//ajout d'un joueur
+	void setMap(int id_map);//modifications map
+	void setTime(int time);//durée partie
+	void setTimeRound(int time_round);//durée par tours
+	void set_nrb_lombrics(int nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	// pas sur
+	std::string* get_history(std::string* user, int first_game, int nbr_games);
 
 	//méthodes pour le rank
-	// pas sur
-
-	//méthodes pour la partie
 	// pas sur 
 
+	//méthodes pour la partie
+	void pos_lomb(int id_lomb, int pos_x, int pos_y);//move lombric
+	void shoot(int id_arme, int force, double angle);//utilisation arme à projectile
+	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé 
+	bool endTime();//fin du temps
+	bool endGame();//fin de la partie
+	bool endTour();//fin du tour
 };
