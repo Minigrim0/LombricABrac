@@ -1,7 +1,7 @@
 #include "client.hpp"
 #include "../comm_macros.hpp"
 
-Client::Client(char* adresse, uint16_t port){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),client_socket(){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -25,7 +25,7 @@ Client::Client(char* adresse, uint16_t port){
 	res=connect(client_socket,reinterpret_cast<sockaddr*> (&server_addr),sizeof(struct sockaddr));
 	if(res==-1){perror("Connect failed: ");close(client_socket);}
 
-};
+}
 
 void* Client::run(){
 	int res;
@@ -63,11 +63,11 @@ void Client::sendMessage(message msg){
 	size = static_cast<uint32_t>(msg.text.length());
 	size = htonl(size);
 
-	res = send(client_socket, &msg.type, sizeof(msg.type), 0);
-	res = send(client_socket, &size, sizeof(size), 0);
+	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0));
+	res = static_cast<int>(send(client_socket, &size, sizeof(size), 0));
 	while (sent_size<size){
-		res = send(client_socket, parser, size-sent_size, 0);
-		sent_size += res;
+		res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
+		sent_size += static_cast<uint32_t>(res);
         parser += res;
 	}	
 }
@@ -76,24 +76,25 @@ void Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
+	std::mutex sendMutex;//mutex pour éviter aue plu	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
 
-	res = recv(client_socket, &msg.type , sizeof(msg.type), 0); // reçois le type du message
+	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
 
 	}
-	res = recv(client_socket, &size, sizeof(size), 0);
+	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0));
 	if (res==-1){
 
 	}
 	size = ntohl(size);
 
-	char buffer[size+1];
+	char* buffer = new char[size+1];
 	char* parser = buffer;
 	buffer[size] = '\0';
 
 	while (size>0){
-		int r = recv(client_socket, parser, size, 0);
-		size -= r;
+		int r = static_cast<int>(recv(client_socket, parser, size, 0));
+		size -= static_cast<uint32_t>(r);
 		parser += r;
 	}
 
