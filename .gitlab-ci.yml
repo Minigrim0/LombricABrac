@@ -1,0 +1,10 @@
+image: ubuntu:19.04
+
+before_script:
+  - apt-get update
+  - apt-get install -y gcc g++ build-essential
+
+compile:
+  script:
+  - cd src/client
+  - make
