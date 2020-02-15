@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+message UserConnect {
+  bool isregister = 1;
+  string pseudo = 2;
+  string password = 3;
+}

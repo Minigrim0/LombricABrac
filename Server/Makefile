@@ -1,4 +1,4 @@
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override
+COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override `pkg-config --cflags --libs protobuf`
 LINKER_FLAGS=-pthread
 EXECUTABLE=server
 CXX=g++ -ggdb
@@ -9,6 +9,9 @@ TMP_OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 
 all: pre $(EXECUTABLE)
+
+user: src/user.cpp src/user.pb.cpp
+	@$(CXX) $^ $(COMPILER_FLAGS) -o $@ `pkg-config --cflags --libs protobuf`
 
 client: client_test.cpp
 	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
@@ -38,7 +41,7 @@ run: all
 
 valrun: all
 	@echo "\e[0;31m============ Valgrind Run ============\e[0m"
-	valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --gen-suppressions=all --log-file=supdata.log ./$(EXECUTABLE)
+	valgrind --leak-check=full --show-reachable=yes --show-leak-kinds=all --error-limit=no --gen-suppressions=all --log-file=supdata.log ./$(EXECUTABLE) 8080
 
 mrproper: clean
 	rm -f $(EXECUTABLE)
