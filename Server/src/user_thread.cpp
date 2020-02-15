@@ -23,6 +23,8 @@ int client_thread(int socket_client){
             break;
         }
         printf("%s \n", str_buffer);
+        std::string msg = "j'ai recu ton msg";
+        yolo.envoie_msg(socket_client, msg);
     }
     free(str_buffer);
     close(socket_client);

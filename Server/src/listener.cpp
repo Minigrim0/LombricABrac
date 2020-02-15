@@ -74,7 +74,7 @@ int Listener::envoie_msg(int sockfd , std::string msg){
     uint32_t sent_size;
     int res = 0;
     const char *cmsg = msg.c_str();
-    uint32_t len_char = sizeof(cmsg);
+    uint32_t len_char = static_cast<uint32_t>(strlen(cmsg));
 
     packet_size = htonl(len_char);
     res = static_cast<int>(send(sockfd, &packet_size, sizeof(uint32_t), 0));
