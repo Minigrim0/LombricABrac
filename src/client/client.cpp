@@ -1,7 +1,6 @@
 #include "client.hpp"
-#include "../comm_macros.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),client_socket(){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -45,16 +44,16 @@ void* Client::run(){
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			readMessage();
-			sendMutex.unlock();//on réautorise l'accès au send quand une réponse est reçue
+			if (reponseAttendue == msg.type){
+				waitMutex.unlock();//notify la fct qui attendait cette réponse
+				reponseAttendue = 0;
+			}
 		}
 	}
 	return nullptr;
 }
 
-void Client::sendMessage(message msg){
-
-	sendMutex.lock();//verrouille pour que un message soit envoyé à la fois
-	
+void Client::sendMessage(message& msg){
 	int res;
 	uint32_t size;
 	uint32_t sent_size = 0;
@@ -76,7 +75,6 @@ void Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
-	std::mutex sendMutex;//mutex pour éviter aue plu	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
 
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
@@ -101,13 +99,42 @@ void Client::readMessage(){
 	msg.text = static_cast<std::string>(buffer); 
 }
 
-int main(){
-	/*
-	Client c("192.168.1.5", 4444);
-	message m;
-	m.text = "FAIT LES AVEUX";
-	m.type = 12;
-	c.sendMessage(m);
-	*/
+std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
+	std::string* res = new std::string;
+	sendMutex.lock();
+
+	reponseAttendue = typeAttendu;
+	sendMessage(m);
+
+	waitMutex.lock();//saura toujours le verrouiller
+	waitMutex.lock();//bloc le verrouillage (sorte de wait)
+
+	*res = msg.text;
+	waitMutex.unlock();
+	sendMutex.unlock();
+	return res;
+
 }
+
+
+bool Client::connection(std::string username, std::string password){
+	message m{};
+	//construction de la structure
+	proto::P_Connect obj;
+	obj.set_username(username);
+	obj.set_password(password);
+
+	obj.SerializeToString(&m.text);
+	m.type = CON_S;
+
+	std::string* reponse = waitAnswers(CON_R, m);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	return res;
+}
+
+
+int main(){}
 

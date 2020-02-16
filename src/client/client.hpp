@@ -3,6 +3,9 @@
 
 #define _DEFAULT_SOURCE 1
 
+#include "../proto/src/structMessages.pb.h"
+#include "../comm_macros.hpp"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -30,17 +33,20 @@ private:
 	};
 	message msg;
 	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
+	std::mutex waitMutex;//mutex qui permet d'attedre la réponse à un message
+	uint8_t reponseAttendue;
 	int client_socket;
-	//void sendMessage(message m);
+	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
+	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
 public:
 	Client(char* ip, uint16_t port);
 	void* run();
 
-	void sendMessage(message m);
+	//void sendMessage(message m);
 
 	//méthode utilisées dans le pré-menu
-	bool connection(std::string userName, std::string password);//demande de connection
+	bool connection(std::string username, std::string password);//demande de connection
 	bool createAcount(std::string userName, std::string password);//demande de création de compte
 	
 	//méthode utilisées dans le chat
