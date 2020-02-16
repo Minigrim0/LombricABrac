@@ -12,6 +12,7 @@ before_script:
   - make check
   - make install
   - ldconfig
+  - cd ../
 
 compile:
   script:
