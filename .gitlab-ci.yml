@@ -3,8 +3,18 @@ image: ubuntu:19.04
 before_script:
   - apt-get update
   - apt-get install -y gcc g++ build-essential
+  - git clone https://github.com/protocolbuffers/protobuf.git
+  - cd protobuf
+  - git submodule update --init --recursive
+  - ./autogen.sh
+  - ./configure
+  - make
+  - make check
+  - make install
+  - ldconfig
 
 compile:
   script:
   - cd Server
   - make
+  - make client
