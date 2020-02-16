@@ -4,14 +4,21 @@ EXECUTABLE=server
 CXX=g++ -ggdb
 
 SOURCES=$(wildcard src/*.cpp)
+PROTO_SOURCES=$(wildcard *.proto)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 
+PROTO_TMP_OBJECTS=$(PROTO_SOURCES:.proto=.cpp)
+PROTO_OBJECTS=$(PROTO_TMP_OBJECTS:%=cpl_proto/%)
+
 all: pre $(EXECUTABLE)
 
-user: src/user.cpp src/user.pb.cpp
-	@$(CXX) $^ $(COMPILER_FLAGS) -o $@ `pkg-config --cflags --libs protobuf`
+cpl_proto/%.cpp: %.proto
+	@mkdir -p cpl_proto
+	@echo "\e[1;33mProtobuf >> $^ -> $@\e[0m"
+	@protoc -I=./ --cpp_out=./cpl_proto/ $^
+	@mv $(@:.cpp=.pb.cc) $@
 
 client: client_test.cpp
 	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
@@ -19,19 +26,20 @@ client: client_test.cpp
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(OBJECTS)
+$(EXECUTABLE): main.cpp $(PROTO_OBJECTS) $(OBJECTS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 build/%.o: src/%.cpp
 	@mkdir -p build
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
-	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
+	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@ `pkg-config --cflags --libs protobuf`
 
 clean :
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
+	rm -f cpl_proto/*
 
 run: all
 	@echo "\e[0;31m================= Run ================\e[0m"
