@@ -1,18 +1,9 @@
-image: ubuntu:19.04
+build:
+   image: registry.gitlab.com/infof209-1920/groupe-5
+
 
 before_script:
   - apt-get update
-  - apt-get install -y gcc g++ build-essential git autoconf libtool pkg-config
-  - git clone https://github.com/protocolbuffers/protobuf.git
-  - cd protobuf
-  - git submodule update --init --recursive
-  - ./autogen.sh
-  - ./configure
-  - make
-  - make check
-  - make install
-  - ldconfig
-  - cd ../
 
 compile:
   script:
