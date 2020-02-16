@@ -1,5 +1,4 @@
-image:
-  name: "https://gitlab.com/infof209-1920/groupe-5/-/tree/server_morti_portocolbuffers_yaml_fix/docker/ubuntu.tar"
+image: ubuntu:19.04
 
 before_script:
   - apt-get update
