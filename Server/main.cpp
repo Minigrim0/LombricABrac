@@ -63,7 +63,7 @@ int main(int argc, char **argv){
         std::thread thread_obj(client_thread, socket_client);
         thread_obj.detach();
     }
-    
+    google::protobuf::ShutdownProtobufLibrary();
     close(sockfd);
     return EXIT_SUCCESS;
 }

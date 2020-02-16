@@ -5,8 +5,8 @@
 #include "../includes/shared_memory.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/constant.hpp"
-#include "../includes/user.hpp"
 #include "../includes/user.pb.hpp"
+#include "../includes/user.hpp"
 
 int client_thread(int socket_client){
     UserConnect usr = setUser();
@@ -23,7 +23,10 @@ int client_thread(int socket_client){
         std::string msg;
         usr.SerializeToString(&msg);
         printf("%s \n", msg);
-        yolo.envoie_msg(socket_client, msg);
+        res = yolo.envoie_msg(socket_client, msg);
+        if (res == EXIT_FAILURE){
+            break;
+        }
     }
     google::protobuf::ShutdownProtobufLibrary();
     close(socket_client);
