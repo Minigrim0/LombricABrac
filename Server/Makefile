@@ -9,16 +9,18 @@ PROTO_SOURCES=$(wildcard *.proto)
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 
-PROTO_TMP_OBJECTS=$(PROTO_SOURCES:.proto=.cpp)
+PROTO_TMP_OBJECTS=$(PROTO_SOURCES:.proto=.pb.cpp)
 PROTO_OBJECTS=$(PROTO_TMP_OBJECTS:%=cpl_proto/%)
+PROTO_TMP_BUILDS=$(PROTO_TMP_OBJECTS:%=build/%)
+PROTO_BUILDS=$(PROTO_TMP_BUILDS:.cpp=.o)
 
-all: pre $(EXECUTABLE)
+all: pre $(PROTO_OBJECTS) $(EXECUTABLE)
 
-cpl_proto/%.cpp: %.proto
+cpl_proto/%.pb.cpp: %.proto
 	@mkdir -p cpl_proto
 	@echo "\e[1;33mProtobuf >> $^ -> $@\e[0m"
 	@protoc -I=./ --cpp_out=./cpl_proto/ $^
-	@mv $(@:.cpp=.pb.cc) $@
+	@mv $(@:.cpp=.cc) $@
 
 client: client_test.cpp
 	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
@@ -26,14 +28,19 @@ client: client_test.cpp
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(PROTO_OBJECTS) $(OBJECTS)
+$(EXECUTABLE): main.cpp $(OBJECTS) $(PROTO_BUILDS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
+build/%.pb.o: cpl_proto/%.pb.cpp
+	@mkdir -p build
+	@echo "\e[1;33m >> $^ -> $@\e[0m"
+	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@ `pkg-config --cflags --libs protobuf`
 
 build/%.o: src/%.cpp
 	@mkdir -p build
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
-	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@ `pkg-config --cflags --libs protobuf`
+	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
 
 clean :
 	clear
