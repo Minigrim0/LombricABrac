@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 
 #include "../includes/constant.hpp"
 #include "../includes/listener.hpp"
@@ -50,7 +50,7 @@ int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buf
             received_size += res;
             str_parser += res;
         }
-    
+
     str_buffer[strlen(str_buffer)] = '\0';
     return EXIT_SUCCESS;
 }

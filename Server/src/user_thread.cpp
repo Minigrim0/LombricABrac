@@ -5,8 +5,8 @@
 #include "../includes/shared_memory.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/constant.hpp"
-#include "../includes/user.pb.hpp"
 #include "../includes/user.hpp"
+#include "../cpl_proto/user.pb.h"
 
 int client_thread(int socket_client){
     UserConnect usr = setUser();
@@ -22,7 +22,7 @@ int client_thread(int socket_client){
         printf("%s \n", str_buffer);
         std::string msg;
         usr.SerializeToString(&msg);
-        printf("%s \n", msg);
+        printf("%s \n", msg.c_str());
         res = yolo.envoie_msg(socket_client, msg);
         if (res == EXIT_FAILURE){
             break;

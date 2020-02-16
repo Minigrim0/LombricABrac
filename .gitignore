@@ -4,3 +4,4 @@ server
 client
 .vscode
 Server/supdata.log
+cpl_proto/
