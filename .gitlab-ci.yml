@@ -1,4 +1,4 @@
-image: docker/ubuntu.tar
+image: ./docker/ubuntu.tar
 
 before_script:
   - apt-get update
