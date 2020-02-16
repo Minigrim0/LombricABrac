@@ -1,6 +1,6 @@
 #ifndef User_hpp
     #define User_hpp
-#include "../includes/user.pb.hpp"
+#include "../cpl_proto/user.pb.h"
 
 UserConnect setUser();
 

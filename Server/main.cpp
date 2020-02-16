@@ -9,7 +9,7 @@
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/constant.hpp"
-#include "includes/user.pb.hpp"
+#include "cpl_proto/user.pb.h"
 
 int main(int argc, char **argv){
 
