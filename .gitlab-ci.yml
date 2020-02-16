@@ -1,5 +1,4 @@
-build:
-   image: registry.gitlab.com/infof209-1920/groupe-5
+image: registry.gitlab.com/infof209-1920/groupe-5
 
 
 before_script:
