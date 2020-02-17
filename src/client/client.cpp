@@ -215,9 +215,9 @@ void Client::setLombricName(uint32_t id, std::string name){
 	sendMutex.unlock();
 }
 
-std::string* Client::getLombricsName(){
+/*stringTable* Client::getLombricsName(){
 	//??????????????????????????
-}
+}*/
 
 void Client::addJoueur(std::string user){
 	message m{};
@@ -233,9 +233,9 @@ void Client::addJoueur(std::string user){
 	sendMutex.unlock();
 }
 
-void Client::setMap(uint32_t id_map){
+/*void Client::setMap(uint32_t id_map){
 	//?
-}
+}*/
 
 void Client::setTime(uint32_t time){
 	message m{};
@@ -316,6 +316,15 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
 	sendMutex.lock();
 	sendMessage(m);
 	sendMutex.unlock();
+}
+
+void Client::acceptInvitation(invitation* inv){
+	if(inv->type == INVIT_PARTY){
+		joinPartie(inv->text);
+	}
+	else if(inv->type == INVIT_FRIEND){
+		addJoueur(inv->text);
+	}
 }
 
 int main(){}
