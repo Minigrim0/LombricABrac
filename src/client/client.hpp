@@ -16,11 +16,32 @@
 #include <errno.h>
 #include <mutex>
 
+#define INVIT_PARTY 1   //invitation à une partie
+#define INVIT_FRIEND 2  //quand ajout d'amis
+
 struct lombricPos
 {
 	int id_lomb;
 	int pos_x;
 	int pos_y;
+};
+
+struct stringTable{
+	int size;
+	std::string* table;
+};
+
+/*
+on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier 
+si c'est une invitation à une partie ou un ajout d'amis
+*/
+struct invitation{
+	int type;//peut prendre INVIT_PARTY ou INVIT_FRIEND comme valeur
+	std::string text;//texte à afficher
+};
+struct invitationTable{
+	int size;
+	invitation* table;
 };
 
 
@@ -43,9 +64,9 @@ public:
 	Client(char* ip, uint16_t port);
 	void* run();
 
-	//void sendMessage(message m);
-
 	//méthode utilisées dans le pré-menu
+	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée
+	//va disparaitre:
 	bool connection(std::string username, std::string password);//demande de connection
 	bool createAcount(std::string username, std::string password);//demande de création de compte
 	
@@ -57,7 +78,7 @@ public:
 	bool joinPartie(std::string host);//join la partie de host
 
 	//méthodes du menu lombric
-	std::string* getLombricsName();//renvoie un tableau de  8 strings
+	stringTable* getLombricsName();//renvoie un tableau de 8 strings
 	void setLombricName(uint32_t id, std::string name);//change le nom d'un lombric
 
 	//méthodes du salon d'attente
@@ -68,7 +89,7 @@ public:
 	void set_nrb_lombrics(int nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	std::string* get_history(std::string* user, int first_game, int nbr_games);
+	stringTable* get_history(std::string* user, int first_game, int nbr_games);
 
 	//méthodes pour le rank
 	// pas sur 
@@ -80,4 +101,6 @@ public:
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
 	bool endTour();//fin du tour
+
+	invitationTable* getInvitation();//renvoie le tableau des dernières invitations reçues
 };
