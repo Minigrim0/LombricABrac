@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package proto;
-
-message P_Connect {
-  string username = 1;
-  string password = 2;
-}
