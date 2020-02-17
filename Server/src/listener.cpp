@@ -12,43 +12,40 @@ Listener::~Listener(){}
 
 int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buffer){
     std::cout << sizeof(str_buffer) << std::endl;
-    char* str_parser;
-    int received_size;
-    int res;
-    uint32_t len_char;
-    uint32_t packet_size;
 
-    res = static_cast<int>(recv(sockfd, &packet_size, sizeof(uint32_t), 0));
-    if(res == -1){
+    m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
         perror("Failed receive message\n");
         return EXIT_FAILURE;
     }
 
-    len_char = ntohl(packet_size);
-    if( static_cast<long unsigned int>(len_char+1) > *current_size_buffer ){
+    m_len_char = ntohl(m_packet_size);
+    if( static_cast<long unsigned int>(m_len_char+1) > *current_size_buffer ){
         delete[] str_buffer;
-        str_buffer = new char[len_char+1];
-        *current_size_buffer = len_char+1;
+        str_buffer = new char[m_len_char+1];
+        //str_buffer = static_cast<char*>(realloc(str_buffer, m_len_char+1));
+        *current_size_buffer = m_len_char+1;
     }
 
-    else if( len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
+    else if( m_len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
         delete[] str_buffer;
         str_buffer = new char[INIT_SIZE_BUFFER];
+        //str_buffer = static_cast<char*>(realloc(str_buffer, INIT_SIZE_BUFFER));
     }
     bzero(str_buffer, *current_size_buffer);
-    for(str_parser = str_buffer, received_size = 0;static_cast<uint32_t>(received_size) < len_char; ){
-            res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
-            if(res == -1){
+    for(m_str_parser = str_buffer, m_received_size = 0;static_cast<uint32_t>(m_received_size) < m_len_char; ){
+            m_res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(m_len_char), 0));
+            if(m_res == -1){
                 perror("Unable to receive message.\n");
                 return EXIT_FAILURE;
             }
-            else if(res == 0){
+            else if(m_res == 0){
                 perror("Client closed socket.\n");
                 return EXIT_FAILURE;
             }
 
-            received_size += res;
-            str_parser += res;
+            m_received_size += m_res;
+            m_str_parser += m_res;
         }
 
     str_buffer[strlen(str_buffer)] = '\0';

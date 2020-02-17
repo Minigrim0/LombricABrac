@@ -12,7 +12,6 @@
 #include "cpl_proto/user.pb.h"
 
 int main(int argc, char **argv){
-
     struct sockaddr_in server_address;
 
     int res;
@@ -52,7 +51,6 @@ int main(int argc, char **argv){
         socklen_t taille_struct_addr_client;
         bzero(&adresse_client , sizeof(adresse_client));
         bzero(&taille_struct_addr_client, sizeof(taille_struct_addr_client));
-
 
         socket_client = accept(sockfd, reinterpret_cast<struct sockaddr *>(&adresse_client), &taille_struct_addr_client);
         if(socket_client == -1) {
