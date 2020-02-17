@@ -279,9 +279,11 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 
 }
 
+/*
 std::string* Client::get_history(std::string* user, uint32_t first_game, uint32_t nbr_games){
 	//???????????????????
 }
+*/
 
 void Client::pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y){
 	message m{};
