@@ -121,3 +121,15 @@ message Fri_rmv{
 message Fri_ls_r{
   repeated string user = 1;
 }
+
+message Lomb_pos{
+  uint32 id_lomb = 1;
+  uint32 pos_x = 2;
+  uint32 pos_y = 3;
+}
+
+message Projectile{
+  uint32 id_arme = 1;
+  uint32 force = 2;
+  double  angle = 3;
+}
