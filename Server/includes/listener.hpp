@@ -15,6 +15,7 @@ class Listener{
         int m_res;
         uint32_t m_len_char;
         uint32_t m_packet_size;
+        uint32_t m_sent_size;
 };
 
 #endif
