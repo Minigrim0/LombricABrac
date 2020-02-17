@@ -66,9 +66,6 @@ public:
 
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée
-	//va disparaitre:
-	bool connection(std::string username, std::string password);//demande de connection
-	bool createAcount(std::string username, std::string password);//demande de création de compte
 	
 	//méthode utilisées dans le chat
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire

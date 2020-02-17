@@ -117,12 +117,13 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 }
 
 
-bool Client::connection(std::string username, std::string password){
+bool Client::connection(std::string username, std::string password, bool inscription){
 	message m{};
 	//construction de la structure
 	UserConnect obj;
 	obj.set_pseudo(username);
 	obj.set_password(password);
+	obj.set_isregister(inscription);
 
 	obj.SerializeToString(&m.text);
 	m.type = CON_S;
