@@ -26,13 +26,13 @@ int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buf
 
     len_char = ntohl(packet_size);
     if( static_cast<long unsigned int>(len_char+1) > *current_size_buffer ){
-        delete str_buffer;
+        delete[] str_buffer;
         str_buffer = new char[len_char+1];
         *current_size_buffer = len_char+1;
     }
 
     else if( len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
-        delete str_buffer;
+        delete[] str_buffer;
         str_buffer = new char[INIT_SIZE_BUFFER];
     }
     bzero(str_buffer, *current_size_buffer);

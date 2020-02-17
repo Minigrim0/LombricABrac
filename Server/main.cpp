@@ -46,7 +46,7 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    while(1) {
+    //while(1) {
         int socket_client;
         struct sockaddr_in adresse_client;
         socklen_t taille_struct_addr_client;
@@ -57,12 +57,12 @@ int main(int argc, char **argv){
         socket_client = accept(sockfd, reinterpret_cast<struct sockaddr *>(&adresse_client), &taille_struct_addr_client);
         if(socket_client == -1) {
             std::cout << "Unable to connect." << std::endl;
-            continue;
+            //continue;
         }
 
         std::thread thread_obj(client_thread, socket_client);
-        thread_obj.detach();
-    }
+        thread_obj.join();
+    //}
     google::protobuf::ShutdownProtobufLibrary();
     close(sockfd);
     return EXIT_SUCCESS;
