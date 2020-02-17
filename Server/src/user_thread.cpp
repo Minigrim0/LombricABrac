@@ -11,9 +11,10 @@
 int client_thread(int socket_client){
     UserConnect usr = setUser();
     Listener yolo;
-    char str_buffer[INIT_SIZE_BUFFER];
+    char *str_buffer = new char[INIT_SIZE_BUFFER];
     size_t currrent_size_buffer = INIT_SIZE_BUFFER;
     int res;
+
     while(1){
         res = yolo.reception(socket_client, str_buffer, &currrent_size_buffer);
         if (res == EXIT_FAILURE){
@@ -28,7 +29,8 @@ int client_thread(int socket_client){
             break;
         }
     }
-    google::protobuf::ShutdownProtobufLibrary();
+
     close(socket_client);
+    delete[] str_buffer;
     return EXIT_SUCCESS;
 }

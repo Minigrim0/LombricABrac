@@ -30,7 +30,7 @@ pre:
 
 $(EXECUTABLE): main.cpp $(OBJECTS) $(PROTO_BUILDS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
-	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@ `pkg-config --cflags --libs protobuf`
 
 build/%.pb.o: cpl_proto/%.pb.cpp
 	@mkdir -p build
