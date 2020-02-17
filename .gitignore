@@ -1,5 +1,7 @@
 *.hpp.gch
 *.o
 server
+client
+.vscode
 init_db
 *.db
