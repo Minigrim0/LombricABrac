@@ -120,8 +120,8 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 bool Client::connection(std::string username, std::string password){
 	message m{};
 	//construction de la structure
-	proto::P_Connect obj;
-	obj.set_username(username);
+	UserConnect obj;
+	obj.set_pseudo(username);
 	obj.set_password(password);
 
 	obj.SerializeToString(&m.text);
@@ -135,6 +135,99 @@ bool Client::connection(std::string username, std::string password){
 	return res;
 }
 
+bool Client::createAcount(std::string username, std::string password){
+	message m{};
+	//construction de la structure
+	UserRegister obj;
+	obj.set_pseudo(username);
+	obj.set_password(password);
+
+	obj.SerializeToString(&m.text);
+	m.type = RG_S;
+
+	std::string* reponse = waitAnswers(RG_R, m);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	return res;
+}
+
+void Client::chatSend(std::string m, std::string destinataire){
+	/*
+	On gère le CHAT_R comme message inattendu donc on fait pas de waitAnswer? ou on fait quand meme?
+	*/
+	message msg{};
+
+	Chat obj;
+	obj.set_pseudo(destinataire);
+	obj.set_msg(m);
+
+	obj.SerializeToString(&msg.text);
+	msg.type = CHAT_S;
+
+	std::string* reponse = waitAnswers(CHAT_R, msg);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	//return res
+}
+
+void Client::sendInvitation(std::string destinataire){
+	/*
+	IDEM Chat pour CHAT_R
+	*/
+	message m{};
+
+	Invitation obj;
+	obj.set_pseudo(destinataire);
+
+	obj.SerializeToString(&m.text);
+	m.type = INVI_S;
+
+	std::string* reponse = waitAnswers(INVI_R, m);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	//return res;
+}
+
+bool Client::joinPartie(std::string host){
+	message m{};
+
+	Join obj;
+	obj.set_pseudo(host);
+
+	obj.SerializeToString(&m.text);
+	m.type = JOIN_S;
+
+	std::string* reponse = waitAnswers(JOIN_R, m);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	return res;
+}
+
+void Client::setLombricName(uint32_t id, std::string name){
+	message m{};
+
+	Lomb_mod obj;
+	obj.set_id_lomb(id);
+	obj.set_name_lomb(name); //dans .proto c'est nome_Lomb mais compil dit de mettre name_lomb
+
+	obj.SerializeToString(&m.text);
+	m.type = LOMB_MOD;
+
+	std::string* reponse = waitAnswers(LOMB_R, m);
+
+	//bool res = (*reponse)[0];
+
+	delete reponse;
+	//return res;
+}
 
 int main(){}
 

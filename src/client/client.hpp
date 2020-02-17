@@ -3,7 +3,7 @@
 
 #define _DEFAULT_SOURCE 1
 
-#include "../proto/src/structMessages.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../comm_macros.hpp"
 
 #include <stdio.h>
@@ -47,18 +47,18 @@ public:
 
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password);//demande de connection
-	bool createAcount(std::string userName, std::string password);//demande de création de compte
+	bool createAcount(std::string username, std::string password);//demande de création de compte
 	
 	//méthode utilisées dans le chat
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
-	void sendInvitation(std::string destianataire);//invite un amis à une partie
+	void sendInvitation(std::string destinataire);//invite un amis à une partie
 	bool joinPartie(std::string host);//join la partie de host
 
 	//méthodes du menu lombric
 	std::string* getLombricsName();//renvoie un tableau de  8 strings
-	void setLombricName(int id, std::string name);//change le nom d'un lombric
+	void setLombricName(uint32_t id, std::string name);//change le nom d'un lombric
 
 	//méthodes du salon d'attente
 	void addJoueur(std::string user);//ajout d'un joueur
