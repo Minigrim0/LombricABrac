@@ -154,9 +154,6 @@ bool Client::createAcount(std::string username, std::string password){
 }
 
 void Client::chatSend(std::string m, std::string destinataire){
-	/*
-	On gère le CHAT_R comme message inattendu donc on fait pas de waitAnswer? ou on fait quand meme?
-	*/
 	message msg{};
 
 	Chat obj;
@@ -166,18 +163,12 @@ void Client::chatSend(std::string m, std::string destinataire){
 	obj.SerializeToString(&msg.text);
 	msg.type = CHAT_S;
 
-	std::string* reponse = waitAnswers(CHAT_R, msg);
-
-	bool res = (*reponse)[0];
-
-	delete reponse;
-	//return res
+	sendMutex.lock();
+	sendMessage(msg);
+	sendMutex.unlock();
 }
 
 void Client::sendInvitation(std::string destinataire){
-	/*
-	IDEM Chat pour CHAT_R
-	*/
 	message m{};
 
 	Invitation obj;
@@ -186,12 +177,9 @@ void Client::sendInvitation(std::string destinataire){
 	obj.SerializeToString(&m.text);
 	m.type = INVI_S;
 
-	std::string* reponse = waitAnswers(INVI_R, m);
-
-	bool res = (*reponse)[0];
-
-	delete reponse;
-	//return res;
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }
 
 bool Client::joinPartie(std::string host){
@@ -221,12 +209,9 @@ void Client::setLombricName(uint32_t id, std::string name){
 	obj.SerializeToString(&m.text);
 	m.type = LOMB_MOD;
 
-	std::string* reponse = waitAnswers(LOMB_R, m);
-
-	//bool res = (*reponse)[0];
-
-	delete reponse;
-	//return res;
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }
 
 int main(){}
