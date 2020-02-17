@@ -1,8 +1,8 @@
-image: ubuntu:19.04
+image: registry.gitlab.com/infof209-1920/groupe-5:lastest
+
 
 before_script:
   - apt-get update
-  - apt-get install -y gcc g++ build-essential
 
 compile:
   script:
