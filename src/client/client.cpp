@@ -214,5 +214,106 @@ void Client::setLombricName(uint32_t id, std::string name){
 	sendMutex.unlock();
 }
 
+std::string* Client::getLombricsName(){
+	//??????????????????????????
+}
+
+void Client::addJoueur(std::string user){
+	message m{};
+
+	Usr_add obj;
+	obj.set_pseudo(user);
+
+	obj.SerializeToString(&m.text);
+	m.type = USR_ADD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setMap(uint32_t id_map){
+	//?
+}
+
+void Client::setTime(uint32_t time){
+	message m{};
+
+	Time_mod obj;
+	obj.set_time(time);
+
+	obj.SerializeToString(&m.text);
+	m.type = TIME_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setTimeRound(uint32_t time_round){
+	message m{};
+
+	Time_round_mod obj;
+	obj.set_time(time_round);
+
+	obj.SerializeToString(&m.text);
+	m.type = TIME_ROUND_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::set_nrb_lombrics(uint32_t nbr_lomb){
+	message m{};
+
+	Nbr_lomb_mod obj;
+	obj.set_nbr_lomb(nbr_lomb);
+
+	obj.SerializeToString(&m.text);
+	m.type = NB_LOMB_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+
+}
+
+std::string* Client::get_history(std::string* user, uint32_t first_game, uint32_t nbr_games){
+	//???????????????????
+}
+
+void Client::pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y){
+	message m{};
+
+	Lomb_pos obj;
+	obj.set_id_lomb(id_lomb);
+	obj.set_pos_x(pos_x);
+	obj.set_pos_y(pos_y);
+
+	obj.SerializeToString(&m.text);
+	m.type = POS_LOMB_S;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
+	message m{};
+
+	Projectile obj;
+	obj.set_id_arme(id_arme);
+	obj.set_force(force);
+	obj.set_angle(angle);
+
+	obj.SerializeToString(&m.text);
+	m.type = SHOOT;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 int main(){}
 

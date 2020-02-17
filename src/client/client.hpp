@@ -62,20 +62,20 @@ public:
 
 	//méthodes du salon d'attente
 	void addJoueur(std::string user);//ajout d'un joueur
-	void setMap(int id_map);//modifications map
-	void setTime(int time);//durée partie
-	void setTimeRound(int time_round);//durée par tours
-	void set_nrb_lombrics(int nbr_lomb);//nombre lombrics
+	void setMap(uint32_t id_map);//modifications map
+	void setTime(uint32_t time);//durée partie
+	void setTimeRound(uint32_t time_round);//durée par tours
+	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	std::string* get_history(std::string* user, int first_game, int nbr_games);
+	std::string* get_history(std::string* user, uint32_t first_game, uint32_t nbr_games);
 
 	//méthodes pour le rank
 	// pas sur 
 
 	//méthodes pour la partie
-	void pos_lomb(int id_lomb, int pos_x, int pos_y);//move lombric
-	void shoot(int id_arme, int force, double angle);//utilisation arme à projectile
+	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric
+	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
 	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé 
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
