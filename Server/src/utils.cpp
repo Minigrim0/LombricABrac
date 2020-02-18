@@ -32,8 +32,8 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 
 void handle_case(int msg_type){
     switch(msg_type){
-        case RG_S:
-            
+        case CON_S:
+
             break;
         default:
             ;
