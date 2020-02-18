@@ -4,14 +4,12 @@
 #include <iostream>
 
 #include "../includes/database.hpp"
+#include "../cpl_proto/user.pb.h"
 
-class ConnectedPlayer{
+class ConnectedPlayer: public UserConnect{
     public:
         ConnectedPlayer();
         ~ConnectedPlayer();
-
-        // Setter
-        void set_username(std::string username);
 
         // Getters
         bool is_auth() const;
@@ -23,7 +21,6 @@ class ConnectedPlayer{
         std::string hash_passwd(std::string passwd) const;
 
     private:
-        std::string m_name;
         bool m_is_auth;
 };
 
