@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -257,9 +257,19 @@ void Client::addJoueur(std::string user){
 	sendMutex.unlock();
 }
 
-/*void Client::setMap(uint32_t id_map){
-	//?
-}*/
+void Client::setMap(uint32_t id_map){
+	message m{};
+
+	Map_mod obj;
+	obj.set_id(id_map);
+
+	obj.SerializeToString(&m.text);
+	m.type = MAP_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
 
 void Client::setTime(uint32_t time){
 	message m{};
@@ -310,6 +320,10 @@ std::string* Client::get_history(std::string* user, uint32_t first_game, uint32_
 }
 */
 
+bool Client::gameStarted(){
+	return started;
+}
+
 void Client::pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y){
 	message m{};
 
@@ -352,4 +366,5 @@ void Client::acceptInvitation(invitation* inv){
 }
 
 int main(){}
+
 

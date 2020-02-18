@@ -39,6 +39,7 @@ struct invitation{
 	int type;//peut prendre INVIT_PARTY ou INVIT_FRIEND comme valeur
 	std::string text;//texte à afficher
 };
+
 struct invitationTable{
 	int size;
 	invitation* table;
@@ -57,6 +58,7 @@ private:
 	std::mutex waitMutex;//mutex qui permet d'attedre la réponse à un message
 	uint8_t reponseAttendue;
 	int client_socket;
+	bool started;
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
@@ -95,9 +97,10 @@ public:
 	// pas sur 
 
 	//méthodes pour la partie
-	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric
+	bool gameStarted();
+	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric (joueur)
 	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
-	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé 
+	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé (spectateur)
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
 	bool endTour();//fin du tour
