@@ -5,11 +5,10 @@
 #include "../includes/shared_memory.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/constant.hpp"
-#include "../includes/user.hpp"
 #include "../cpl_proto/user.pb.h"
 
 int client_thread(int socket_client){
-    UserConnect usr = setUser();
+    //UserConnect usr = setUser();
     Listener yolo;
     char *str_buffer = new char[INIT_SIZE_BUFFER];
     size_t currrent_size_buffer = INIT_SIZE_BUFFER;
@@ -21,8 +20,8 @@ int client_thread(int socket_client){
             break;
         }
         printf("%s \n", str_buffer);
-        std::string msg;
-        usr.SerializeToString(&msg);
+        std::string msg = "Ok";
+        //usr.SerializeToString(&msg);
         res = yolo.envoie_msg(socket_client, msg);
         if (res == EXIT_FAILURE){
             break;
