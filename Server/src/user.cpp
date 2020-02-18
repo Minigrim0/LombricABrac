@@ -8,6 +8,5 @@ UserConnect setUser(){
     user.set_isregister(true);
     user.set_pseudo("morti");
     user.set_password("abc");
-    std::cout << user.DebugString() << std::endl;
     return user;
 }
