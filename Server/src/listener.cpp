@@ -31,26 +31,22 @@ int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_bu
         delete[] *str_buffer;
         *str_buffer = new char[INIT_SIZE_BUFFER];
     }
-    bzero(str_buffer, *current_size_buffer);
+    bzero(*str_buffer, *current_size_buffer);
     for(m_str_parser = *str_buffer, m_received_size = 0;static_cast<uint32_t>(m_received_size) < m_len_char; ){
-            m_res = static_cast<int>(recv(sockfd, *str_buffer, static_cast<long unsigned int>(m_len_char), 0));
-            if(m_res == -1){
-                perror("Unable to receive message.\n");
-                return EXIT_FAILURE;
-            }
-            else if(m_res == 0){
-                perror("Client closed socket.\n");
-                return EXIT_FAILURE;
-            }
-
-            m_received_size += m_res;
-            m_str_parser += m_res;
+        m_res = static_cast<int>(recv(sockfd, *str_buffer, static_cast<long unsigned int>(m_len_char), 0));
+        if(m_res == -1){
+            perror("Unable to receive message.\n");
+            return EXIT_FAILURE;
         }
-    std::cout << strlen(*str_buffer) << std::endl;
-    *str_buffer[strlen(*str_buffer)] = '\0';
-    std::cout << "46" << std::endl;
-    std::cout << str_buffer << std::endl;
-    std::cout << "1" << std::endl;
+        else if(m_res == 0){
+            perror("Client closed socket.\n");
+            return EXIT_FAILURE;
+        }
+
+        m_received_size += m_res;
+        m_str_parser += m_res;
+    }
+    (*str_buffer)[m_len_char+1] = '\0';
     return EXIT_SUCCESS;
 }
 

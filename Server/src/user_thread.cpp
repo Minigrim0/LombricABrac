@@ -16,7 +16,7 @@ int client_thread(int socket_client){
     int res;
 
     while(1){
-        res = yolo.reception(socket_client, str_buffer, &currrent_size_buffer);
+        res = yolo.reception(socket_client, &str_buffer, &currrent_size_buffer);
         if (res == EXIT_FAILURE){
             break;
         }
