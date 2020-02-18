@@ -228,16 +228,16 @@ stringTable* Client::getLombricsName(){
 	std::string* reponse = waitAnswers(LOMB_R,m);
 
 	Lomb_r obj;
-	obj.ParseFromString(reponse);
+	obj.ParseFromString(*reponse);
 
-	*(res.table[0]) = obj.Lomb_1();
-	*(res.table[1]) = obj.Lomb_2();
-	*(res.table[2]) = obj.Lomb_3();
-	*(res.table[3]) = obj.Lomb_4();
-	*(res.table[4]) = obj.Lomb_5();
-	*(res.table[5]) = obj.Lomb_6();
-	*(res.table[6]) = obj.Lomb_7();
-	*(res.table[7]) = obj.Lomb_8();
+	res->table[0] = obj.lomb_1();
+	res->table[1] = obj.lomb_2();
+	res->table[2] = obj.lomb_3();
+	res->table[3] = obj.lomb_4();
+	res->table[4] = obj.lomb_5();
+	res->table[5] = obj.lomb_6();
+	res->table[6] = obj.lomb_7();
+	res->table[7] = obj.lomb_8();
 
 	delete reponse;
 	return res;
