@@ -32,7 +32,7 @@ bool DataBase::catch_error(){
     return true;
 }
 
-int callback(void *data, int argc, char **argv, char **azColName){
+int DataBase::callback(void *data, int argc, char **argv, char **azColName){
    int i;
    fprintf(stderr, "%s: ", static_cast<const char*>(data));
 
@@ -44,8 +44,13 @@ int callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
-void DataBase::get_user(std::string username) const{
+void DataBase::get_user(std::string username){
     std::cout << username << std::endl;
+
+    m_sql_request = "SELECT * from users";
+
+   /* Execute SQL statement */
+   m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
 bool DataBase::verify_user(std::string username, std::string password) const{

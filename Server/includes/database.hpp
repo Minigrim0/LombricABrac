@@ -12,10 +12,10 @@ class DataBase{
         // Simple Getters
         bool is_opened() const;
         bool catch_error();
-        int callback(void *data, int argc, char **argv, char **azColName);
+        static int callback(void *data, int argc, char **argv, char **azColName);
 
         // Users operations
-        void get_user(std::string) const;
+        void get_user(std::string);
         bool verify_user(std::string, std::string) const;
 
         void register_user(std::string, std::string);
@@ -30,6 +30,7 @@ class DataBase{
         char* m_zErrMsg;
         int m_rc;
         bool m_is_open; // Identifier to know if the databse could be opened or not
+        std::string m_sql_request;
 };
 
 #endif
