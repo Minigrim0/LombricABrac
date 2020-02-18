@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <string.h>
+#include <cstring>
 
 #include "../includes/constant.hpp"
 #include "../includes/listener.hpp"
@@ -10,84 +10,76 @@
 Listener::Listener(){}
 Listener::~Listener(){}
 
-int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buffer){
-    std::cout << sizeof(str_buffer) << std::endl;
-    char* str_parser;
-    int received_size;
-    int res;
-    uint32_t len_char;
-    uint32_t packet_size;
-
-    res = static_cast<int>(recv(sockfd, &packet_size, sizeof(uint32_t), 0));
-    if(res == -1){
+int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_buffer){
+    m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
         perror("Failed receive message\n");
         return EXIT_FAILURE;
     }
 
-    len_char = ntohl(packet_size);
-    if( static_cast<long unsigned int>(len_char+1) > *current_size_buffer ){
-        delete[] str_buffer;
-        str_buffer = new char[len_char+1];
-        *current_size_buffer = len_char+1;
+    m_len_char = ntohl(m_packet_size);
+    if( static_cast<long unsigned int>(m_len_char+1) > *current_size_buffer ){
+        std::cout << "a" << std::endl;
+        delete[] *str_buffer;
+        *str_buffer = new char[m_len_char+1];
+        *current_size_buffer = m_len_char+1;
+        std::cout << "c" << std::endl;
     }
 
-    else if( len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
-        delete[] str_buffer;
-        str_buffer = new char[INIT_SIZE_BUFFER];
+    else if( m_len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
+        std::cout << "b" << std::endl;
+        delete[] *str_buffer;
+        *str_buffer = new char[INIT_SIZE_BUFFER];
     }
-    bzero(str_buffer, *current_size_buffer);
-    for(str_parser = str_buffer, received_size = 0;static_cast<uint32_t>(received_size) < len_char; ){
-            res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(len_char), 0));
-            if(res == -1){
-                perror("Unable to receive message.\n");
-                return EXIT_FAILURE;
-            }
-            else if(res == 0){
-                perror("Client closed socket.\n");
-                return EXIT_FAILURE;
-            }
-
-            received_size += res;
-            str_parser += res;
+    bzero(*str_buffer, *current_size_buffer);
+    for(m_str_parser = *str_buffer, m_received_size = 0;static_cast<uint32_t>(m_received_size) < m_len_char; ){
+        m_res = static_cast<int>(recv(sockfd, *str_buffer, static_cast<long unsigned int>(m_len_char), 0));
+        if(m_res == -1){
+            perror("Unable to receive message.\n");
+            return EXIT_FAILURE;
         }
-    
-    str_buffer[strlen(str_buffer)] = '\0';
+        else if(m_res == 0){
+            perror("Client closed socket.\n");
+            return EXIT_FAILURE;
+        }
+
+        m_received_size += m_res;
+        m_str_parser += m_res;
+    }
+    (*str_buffer)[m_len_char+1] = '\0';
     return EXIT_SUCCESS;
 }
 
 int Listener::envoie_msg(int sockfd , std::string msg){
 
-    uint32_t packet_size;
-    char* str_parser;
-    uint32_t sent_size;
-    int res = 0;
+    m_res = 0;
     const char *cmsg = msg.c_str();
-    uint32_t len_char = static_cast<uint32_t>(strlen(cmsg));
+    m_len_char = static_cast<uint32_t>(strlen(cmsg));
 
-    packet_size = htonl(len_char);
-    res = static_cast<int>(send(sockfd, &packet_size, sizeof(uint32_t), 0));
-    if(res == -1){
+    m_packet_size = htonl(m_len_char);
+    m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
         perror("Unable to send message size.\n");
         return EXIT_FAILURE;
     }
 
-    str_parser = static_cast<char*>(malloc (sizeof(char) * len_char));
-    if(!str_parser){
+    m_str_parser = static_cast<char*>(malloc (sizeof(char) * m_len_char));
+    if(!m_str_parser){
         perror("Initialization of the parser buffer");
         return EXIT_FAILURE;
     }
 
-    for(strncpy(str_parser, cmsg, len_char), sent_size=0; sent_size < len_char;){
-        res = static_cast<int>(send(sockfd, cmsg, static_cast<long unsigned int>(len_char), 0));
-        if(res == -1){
+    for(strncpy(m_str_parser, cmsg, m_len_char), m_sent_size=0; m_sent_size < m_len_char;){
+        m_res = static_cast<int>(send(sockfd, cmsg, static_cast<long unsigned int>(m_len_char), 0));
+        if(m_res == -1){
             perror("Unable to send message\n");
             return EXIT_FAILURE;
         }
 
-        sent_size += static_cast<uint32_t>(res);
-        str_parser += res;
+        m_sent_size += static_cast<uint32_t>(m_res);
+        m_str_parser += m_res;
     }
-    if(res == -1){
+    if(m_res == -1){
         perror("Unable to send message\n");
         return EXIT_FAILURE;
     }

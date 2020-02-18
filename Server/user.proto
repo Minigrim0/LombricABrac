@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+message UserConnect{
+  bool isregister = 1;
+  string pseudo = 2;
+  string password = 3;
+}
+
+message Chat{
+  string pseudo = 1;
+  string msg = 2;
+}
+
+message Invitation{
+  string pseudo = 1;
+}
+
+message Join{
+  string pseudo = 1;
+}
+
+message Lomb_r{
+  string Lomb_1 = 1;
+  string Lomb_2 = 2;
+  string Lomb_3 = 3;
+  string Lomb_4 = 4;
+  string Lomb_5 = 5;
+  string Lomb_6 = 6;
+  string Lomb_7 = 7;
+  string Lomb_8 = 8;
+}
+
+message Lomb_mod{
+  uint32 id_lomb = 1;
+  string name_Lomb = 2;
+}
+
+message Usr_add{
+  string pseudo = 1;
+}
+
+message Map_mod{
+  uint32 id = 1;
+}
+
+message Time_mod{
+  uint32 time = 1;
+}
+
+message Time_round_mod{
+  uint32 time = 1;
+}
+
+message Nbr_lomb_mod{
+  uint32 nbr_lomb = 1;
+}
+
+message Join_groupe_s{
+  uint32 id = 1;
+}
+
+message Join_groupe_r{
+  string pseudo = 1;
+  uint32 id = 2;
+}
+
+message Get_history{
+  string pseudo = 1;
+  uint32 first_game = 2;
+  uint32 nbr_game = 3;
+}
+
+message History{
+  string pseudo_1 = 1;
+  string pseudo_2 = 2;
+  string pseudo_3 = 3;
+  string pseudo_4 = 4;
+  uint32 point_1 = 5;
+  uint32 point_2 = 6;
+  uint32 point_3 = 7;
+  uint32 point_4 = 8;
+  uint32 date = 9;
+}
+
+message History_r{
+  repeated History history = 1; //Sais pas si ça fonctionne comme ça
+}
+
+message Get_rank{
+  uint32 id_first_player = 1;
+  uint32 nbr_player = 2;
+}
+
+message Rank_r{
+   repeated string user = 1;
+   repeated uint32 point = 2;
+}
+
+message Fri_add{
+  string user = 1;
+}
+
+message Fri_rcv{
+  string user = 1;
+}
+
+message Fri_accept{
+  bool accept = 1;
+  string user = 2;
+}
+
+message Fri_rmv{
+  string user = 1;
+}
+
+message Fri_ls_r{
+  repeated string user = 1;
+}
