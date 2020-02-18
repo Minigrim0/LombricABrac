@@ -23,7 +23,6 @@ int client_thread(int socket_client){
         printf("%s \n", str_buffer);
         std::string msg;
         usr.SerializeToString(&msg);
-        printf("%s \n", msg.c_str());
         res = yolo.envoie_msg(socket_client, msg);
         if (res == EXIT_FAILURE){
             break;

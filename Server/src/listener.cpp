@@ -11,8 +11,6 @@ Listener::Listener(){}
 Listener::~Listener(){}
 
 int Listener::reception(int sockfd , char* str_buffer , size_t* current_size_buffer){
-    std::cout << sizeof(str_buffer) << std::endl;
-
     m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
     if(m_res == -1){
         perror("Failed receive message\n");
