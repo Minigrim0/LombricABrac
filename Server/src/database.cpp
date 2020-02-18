@@ -17,7 +17,7 @@ DataBase::~DataBase(){
     sqlite3_close(m_db);
 }
 
-// Simple Getters
+// Getters
 bool DataBase::is_opened() const{
     return m_is_open;
 }
@@ -44,6 +44,15 @@ int DataBase::callback(void *data, int argc, char **argv, char **azColName){
    return 0;
 }
 
+bool DataBase::get_las() const{
+    return m_rc;
+}
+
+std::string DataBase::get_last_out() const{
+    return "";
+}
+
+
 void DataBase::get_user(std::string username){
     std::cout << username << std::endl;
 
@@ -51,6 +60,10 @@ void DataBase::get_user(std::string username){
 
    /* Execute SQL statement */
    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::get_passwd(std::string username){
+    std::cout << "Getting password of " << username << std::endl;
 }
 
 bool DataBase::verify_user(std::string username, std::string password) const{
