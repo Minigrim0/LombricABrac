@@ -9,5 +9,5 @@ compile:
   - cd Server
   - make
   - make init_db
-  - ./init_db
+  - ./init_db true
   - make client
