@@ -15,6 +15,7 @@
 #include <arpa/inet.h>
 #include <errno.h>
 #include <mutex>
+#include <list>
 
 #define INVIT_PARTY 1   //invitation à une partie
 #define INVIT_FRIEND 2  //quand ajout d'amis
@@ -45,6 +46,11 @@ struct invitationTable{
 	invitation* table;
 };
 
+struct map{
+	int largeur;
+	int hauteur;
+	std::list<std::list<int>> mur;
+};
 
 class Client{
 private:
@@ -101,6 +107,7 @@ public:
 	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric (joueur)
 	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
 	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé (spectateur)
+	map* getMap();
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
 	bool endTour();//fin du tour
