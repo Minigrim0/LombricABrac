@@ -9,16 +9,15 @@
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/constant.hpp"
+#include "cpl_proto/user.pb.h"
 
 int main(int argc, char **argv){
-
     struct sockaddr_in server_address;
 
     int res;
     uint16_t port;
     int sockfd;
 
-    char* str_buffer;
     errno = 0;
 
     if(argc != 2) {
@@ -46,20 +45,12 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    str_buffer = static_cast<char*>(malloc(sizeof(char) * INIT_SIZE_BUFFER));
-    if(!str_buffer) {
-        perror("Error while initializing the reception buffer");
-        close(sockfd);
-        return EXIT_FAILURE;
-    }
-
     while(1) {
         int socket_client;
         struct sockaddr_in adresse_client;
         socklen_t taille_struct_addr_client;
         bzero(&adresse_client , sizeof(adresse_client));
         bzero(&taille_struct_addr_client, sizeof(taille_struct_addr_client));
-
 
         socket_client = accept(sockfd, reinterpret_cast<struct sockaddr *>(&adresse_client), &taille_struct_addr_client);
         if(socket_client == -1) {
@@ -70,7 +61,7 @@ int main(int argc, char **argv){
         std::thread thread_obj(client_thread, socket_client);
         thread_obj.detach();
     }
-    
+    google::protobuf::ShutdownProtobufLibrary();
     close(sockfd);
     return EXIT_SUCCESS;
 }
