@@ -215,9 +215,33 @@ void Client::setLombricName(uint32_t id, std::string name){
 	sendMutex.unlock();
 }
 
-/*stringTable* Client::getLombricsName(){
-	//??????????????????????????
-}*/
+stringTable* Client::getLombricsName(){
+	message m{};
+	
+	stringTable* res = new stringTable;
+	res->size = 8;
+	res->table = new std::string[8];//on va recevoir 8 noms de lombrics
+	
+	m.type = GAT_LOMB;
+	m.text = "";
+
+	std::string* reponse = waitAnswers(LOMB_R,m);
+
+	Lomb_r obj;
+	obj.ParseFromString(reponse);
+
+	*(res.table[0]) = obj.Lomb_1();
+	*(res.table[1]) = obj.Lomb_2();
+	*(res.table[2]) = obj.Lomb_3();
+	*(res.table[3]) = obj.Lomb_4();
+	*(res.table[4]) = obj.Lomb_5();
+	*(res.table[5]) = obj.Lomb_6();
+	*(res.table[6]) = obj.Lomb_7();
+	*(res.table[7]) = obj.Lomb_8();
+
+	delete reponse;
+	return res;
+}
 
 void Client::addJoueur(std::string user){
 	message m{};
