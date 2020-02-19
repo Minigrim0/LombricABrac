@@ -7,12 +7,15 @@
 #include "../includes/constant.hpp"
 #include "../cpl_proto/user.pb.h"
 #include "../includes/connected_player.hpp"
+#include "../includes/database.hpp"
 
 int client_thread(int socket_client){
     Listener yolo;
     ConnectedPlayer usr;
-
     usr.set_pseudo("michel");
+
+    DataBase db("lab.db");
+
     char *str_buffer = new char[INIT_SIZE_BUFFER];
     size_t currrent_size_buffer = INIT_SIZE_BUFFER;
     int res;
