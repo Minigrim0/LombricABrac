@@ -10,7 +10,6 @@ m_is_auth(false){}
 ConnectedPlayer::~ConnectedPlayer(){}
 
 bool ConnectedPlayer::is_auth() const{
-    std::cout << SerializeAsString() << std::endl;
     return m_is_auth;
 }
 
