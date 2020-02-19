@@ -385,7 +385,7 @@ void Client::acceptInvitation(invitation* inv){
 void Client::getGameInfo(infoPartie_s* gameInfo){
 	message m{};
 	
-	m.type = GAME_INFO;
+	m.type = GET_GAME_INFO;
 	m.text = "";
 
 	std::string* reponse = waitAnswers(GAME_INFO_R,m);
