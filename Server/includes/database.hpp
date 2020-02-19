@@ -2,6 +2,7 @@
     #define sql_parser_hpp
 
 #include <iostream>
+#include <sstream>
 #include "../lib/sqlite3.h"
 
 class DataBase{
@@ -19,12 +20,12 @@ class DataBase{
         // User operations
         void get_user(std::string username);
         void get_passwd(std::string username);
-        bool verify_user(std::string username, std::string passwd) const;
         void register_user(std::string username, std::string passwd);
 
         // Lombrics Operations
-        void set_lombric_name(int id, std::string uesrname);
-        void get_lombrics(std::string username);
+        void add_lombric(int user_id, std::string lombric_name);
+        void set_lombric_name(int lombric_id, std::string username);
+        void get_lombrics(int owner_id);
 
         // Game history operations
         void get_history(std::string username, int index, int size);
@@ -34,8 +35,10 @@ class DataBase{
         void get_rank(int index, int size);
 
         // Message operations
-        void send_message(std::string sender, std::string receiver, std::string message);
-        void get_messages(std::string username);
+        void send_message(int sender_id, int receiver_id, std::string message);
+        void get_received_messages(int user_id);
+        void get_sent_messages(int user_id);
+        void get_all_messages(int user_id);
 
         // Friendship operations
         void add_friend(std::string sender, std::string receiver);
@@ -53,6 +56,7 @@ class DataBase{
         int m_rc;
         bool m_is_open; // Identifier to know if the databse could be opened or not
         std::string m_sql_request;
+        std::ostringstream m_stringStream;
 };
 
 #endif
