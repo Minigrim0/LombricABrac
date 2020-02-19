@@ -11,12 +11,12 @@
 #include "lib/sqlite3.h"
 
 int main(int argc, char** argv) {
-    
+
     bool fill_db = false;
     if(argc == 2 && strcmp(argv[1], "true") == 0){
         fill_db = true;
     }
-    
+
     sqlite3 *db; // The database object
     std::string sql; // String that will contain the SQL query
 
@@ -61,16 +61,16 @@ int main(int argc, char** argv) {
              "VALUES (4, 'Mark', 'pass', 65);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
-       
+
        if(rc != SQLITE_OK){
            std::cout << "SQL error: " << zErrMsg << std::endl;
            sqlite3_free(zErrMsg);
        }
        else{
-           std::cout << "Table created successfully" << std::endl;
+           std::cout << "Table filled successfully" << std::endl;
        }
     }
-    
+
     std::cout << "------ Creating History Table ------" << std::endl << ">> ";
     sql = "CREATE TABLE history(\
         id             INTEGER PRIMARY KEY AUTOINCREMENT,\
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
              "VALUES (1, 1, 2, 3, 4, 50, 20, 40, 50); ";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
-       
+
        if(rc != SQLITE_OK){
            std::cout << "SQL error: " << zErrMsg << std::endl;
            sqlite3_free(zErrMsg);
@@ -128,13 +128,13 @@ int main(int argc, char** argv) {
     else{
         std::cout << "Table created successfully" << std::endl;
     }
-    
+
     if(fill_db){
         sql = "INSERT INTO messages (id, sender_id, receiver_id, content) "  \
              "VALUES (1, 1, 2, 'coucou toi'); ";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
-       
+
        if(rc != SQLITE_OK){
            std::cout << "SQL error: " << zErrMsg << std::endl;
            sqlite3_free(zErrMsg);
@@ -162,13 +162,51 @@ int main(int argc, char** argv) {
     else{
         std::cout << "Table created successfully" << std::endl;
     }
-    
+
     if(fill_db){
         sql = "INSERT INTO friends (sender_id, receiver_id, accepted) "  \
              "VALUES (1, 2, true); ";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
-       
+
+       if(rc != SQLITE_OK){
+           std::cout << "SQL error: " << zErrMsg << std::endl;
+           sqlite3_free(zErrMsg);
+       }
+       else{
+           std::cout << "Table filled successfully" << std::endl;
+       }
+    }
+
+    std::cout << "----- Creating Lombrics Table -----" << std::endl << ">> ";
+    sql = "CREATE TABLE worms(\
+        id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
+        name           CHAR(40) NOT NULL,\
+        owner_id       INTEGER  NOT NULL\
+    );";
+
+    rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
+
+    if(rc != SQLITE_OK){
+       std::cout << "SQL error: " << zErrMsg << std::endl;
+       sqlite3_free(zErrMsg);
+    }
+    else{
+        std::cout << "Table created successfully" << std::endl;
+    }
+
+    if(fill_db){
+        sql = "INSERT INTO worms (name,owner_id) "  \
+             "VALUES ('Paul', 1); " \
+             "INSERT INTO worms (name,owner_id) "  \
+             "VALUES ('Allen', 1); "     \
+             "INSERT INTO worms (name,owner_id)" \
+             "VALUES ('Teddy', 1);" \
+             "INSERT INTO worms (name,owner_id)" \
+             "VALUES ('Mark', 1);";
+
+       rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
+
        if(rc != SQLITE_OK){
            std::cout << "SQL error: " << zErrMsg << std::endl;
            sqlite3_free(zErrMsg);
