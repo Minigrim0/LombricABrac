@@ -165,7 +165,9 @@ int main(int argc, char** argv) {
 
     if(fill_db){
         sql = "INSERT INTO friends (sender_id, receiver_id, accepted) "  \
-             "VALUES (1, 2, true); ";
+              "VALUES (1, 2, true); " \
+              "INSERT INTO friends (sender_id, receiver_id, accepted) "  \
+              "VALUES (1, 3, false); " ;
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
