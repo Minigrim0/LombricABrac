@@ -11,6 +11,10 @@ message Chat{
   string msg = 2;
 }
 
+message Chat_r{
+  repeated Chat msgs = 1;
+}
+
 message Invitation{
   string pseudo = 1;
 }
