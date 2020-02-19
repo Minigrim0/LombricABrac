@@ -17,6 +17,17 @@ Listener::~Listener(){
     close(sockfd);
 }
 
+int Listener::reception_type(){
+    m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
+        perror("Failed receive message\n");
+        return EXIT_FAILURE;
+    }
+
+    m_len_char = ntohl(m_packet_size);
+    return m_len_char;
+}
+
 int Listener::reception(){
     m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
     if(m_res == -1){
@@ -55,11 +66,37 @@ int Listener::reception(){
     return EXIT_SUCCESS;
 }
 
-int Listener::envoie_msg(int sockfd , std::string msg){
+int Listener::envoie_bool(int type_msg ,int boolint){
+
+    m_res = 0;
+
+    m_packet_size = htonl(type_msg);
+    m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
+        perror("Unable to send message size.\n");
+        return EXIT_FAILURE;
+    }
+    
+    m_packet_size = htonl(boolint);
+    m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
+        perror("Unable to send message size.\n");
+        return EXIT_FAILURE;
+    }
+}
+
+int Listener::envoie_msg(int type_msg , std::string msg){
 
     m_res = 0;
     const char *cmsg = msg.c_str();
     m_len_char = static_cast<uint32_t>(strlen(cmsg));
+
+    m_packet_size = htonl(type_msg);
+    m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    if(m_res == -1){
+        perror("Unable to send message size.\n");
+        return EXIT_FAILURE;
+    }
 
     m_packet_size = htonl(m_len_char);
     m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
