@@ -6,6 +6,13 @@
 #include "../lib/sqlite3.h"
 #include "../cpl_proto/user.pb.h"
 
+#define DT_USR 1 // Datatype UserConnect
+#define DT_STR 2 // Datatype String
+#define DT_LOM 3 // Datatype Lomb_r
+#define DT_HIS 4 // Datatype History_r
+#define DT_RAN 5 // Datatype Rank_r
+#define DT_CHA 6 // Datatype Chat_r
+#define DT_FRI 7 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -50,14 +57,16 @@ class DataBase{
         int remove_friend(int id);
 
     private:
+        static uint8_t m_data_type; // The type of data the callback has to deal with
+
+        int m_rc; // The return value of the last sqlite3_exec() call
+        bool m_is_open; // Identifier to define wether the db is opened or not
+
         sqlite3* m_db; // The database object itself
 
-        char* m_zErrMsg;
-        std::string* m_data;
-        int m_rc;
-        bool m_is_open; // Identifier to know if the databse could be opened or not
-        std::string m_sql_request;
-        std::ostringstream m_stringStream;
+        char* m_zErrMsg; // The error message in case there a problem
+        std::string m_sql_request; // The last performed request
+        std::ostringstream m_stringStream; // Object used to properly concatenate requests
 };
 
 #endif

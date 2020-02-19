@@ -4,6 +4,9 @@
 #include "../includes/database.hpp"
 #include "../cpl_proto/user.pb.h"
 
+// Static attribute must be declared before class methods
+uint8_t DataBase::m_data_type;
+
 DataBase::DataBase(std::string db_path):m_is_open(false){
     m_rc = sqlite3_open(db_path.c_str(), &m_db);
     if(m_rc){
@@ -35,15 +38,46 @@ bool DataBase::catch_error(){
     return true;
 }
 
-int DataBase::callback(void *data_type, int argc, char **argv, char **azColName){
-   fprintf(stderr, "data : %s\n", static_cast<const char*>(data_type));
+int DataBase::callback(void *data_container, int argc, char **argv, char **azColName){
+    fprintf(stderr, "data type : %i\n", m_data_type);
 
-   for(int i = 0; i<argc; i++){
-      printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-   }
+    switch(m_data_type){
+        case DT_USR:
+            for(int i = 0; i<argc; i++){
+                if(strcmp(azColName[i], "username") == 0){
+                    static_cast<UserConnect*>(data_container)->set_pseudo(argv[i]);
+                }
+            }
+            break;
+        case DT_STR:
+            *static_cast<std::string*>(data_container) = argv[0];
+            break;
+        case DT_LOM:
+            static_cast<Lomb_r*>(data_container)->set_lomb_1(argv[0]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_2(argv[1]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_3(argv[2]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_4(argv[3]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_5(argv[4]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_6(argv[5]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_7(argv[6]);
+            static_cast<Lomb_r*>(data_container)->set_lomb_8(argv[7]);
+            break;
+        case DT_HIS:
+            break;
+        case DT_RAN:
+            break;
+        case DT_CHA:
+            break;
+        case DT_FRI:
+            break;
+        default:
+            std::cout << "Error, datatype not recognised" << std::endl;
+    }
 
-   printf("--------\n");
-   return 0;
+
+
+    printf("--------\n");
+    return 0;
 }
 
 bool DataBase::get_las() const{
@@ -56,6 +90,8 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_USR;
+
     m_sql_request = "SELECT id, username, victory_amount from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, userconnect, &m_zErrMsg);
 
@@ -65,6 +101,8 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
 int DataBase::get_passwd(std::string username, std::string* password){
     m_stringStream.str("");
     m_stringStream.clear();
+
+    m_data_type = DT_STR;
 
     m_sql_request = "SELECT password from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, password, &m_zErrMsg);
@@ -116,6 +154,8 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_LOM;
+
     m_stringStream << "SELECT name FROM worms WHERE owner_id=" << owner_id << ";";
     m_sql_request = m_stringStream.str();
 
@@ -127,6 +167,8 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
 
 // Game history operations
 int DataBase::get_history(std::string username, int index, int size, History_r* history_r){
+    m_data_type = DT_HIS;
+
     return m_rc;
 }
 
@@ -146,6 +188,8 @@ int DataBase::add_history_entry(int player1, int player2, int player3, int playe
 
 // Game rank operations
 int DataBase::get_rank(int index, int size, Rank_r* rank_r){
+    m_data_type = DT_RAN;
+
     return m_rc;
 }
 
@@ -168,6 +212,8 @@ int DataBase::get_received_messages(int user_id, Chat_r* chat_r){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_CHA;
+
     m_stringStream << "SELECT content, sender_id FROM messages ";
     m_stringStream << "WHERE receiver_id=" << user_id << " ORDER BY timestamp;";
     m_sql_request = m_stringStream.str();
@@ -181,6 +227,8 @@ int DataBase::get_sent_messages(int user_id, Chat_r* chat_r){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_CHA;
+
     m_stringStream << "SELECT content, receiver_id FROM messages ";
     m_stringStream << "WHERE sender_id=" << user_id << " ORDER BY timestamp;";
     m_sql_request = m_stringStream.str();
@@ -193,6 +241,8 @@ int DataBase::get_sent_messages(int user_id, Chat_r* chat_r){
 int DataBase::get_all_messages(int user_id, Chat_r* chat_r){
     m_stringStream.str("");
     m_stringStream.clear();
+
+    m_data_type = DT_CHA;
 
     m_stringStream << "SELECT content, receiver_id, sender_id FROM messages ";
     m_stringStream << "WHERE sender_id=" << user_id << " OR receiver_id=" << user_id;
@@ -210,6 +260,8 @@ int DataBase::add_friend(int sender_id, int receiver_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_FRI;
+
     m_stringStream << "INSERT INTO friends (sender_id, receiver_id, accepted)";
     m_stringStream << " VALUES (" << sender_id << ", " << receiver_id << ", false);";
     m_sql_request = m_stringStream.str();
@@ -222,6 +274,8 @@ int DataBase::add_friend(int sender_id, int receiver_id){
 int DataBase::get_friend_list(int user_id, Fri_ls_r* fri_ls_r){
     m_stringStream.str("");
     m_stringStream.clear();
+
+    m_data_type = DT_FRI;
 
     m_stringStream << "SELECT * FROM friends";
     m_stringStream << " WHERE (sender_id=" << user_id << " AND accepted=true) OR (receiver_id=" << user_id << " AND accepted=true);";
@@ -236,6 +290,8 @@ int DataBase::get_all_friend_list(int user_id, Fri_ls_r* fri_ls_r){
     m_stringStream.str("");
     m_stringStream.clear();
 
+    m_data_type = DT_FRI;
+
     m_stringStream << "SELECT * FROM friends";
     m_stringStream << " WHERE sender_id=" << user_id << " OR receiver_id=" << user_id << ";";
     m_sql_request = m_stringStream.str();
@@ -248,6 +304,8 @@ int DataBase::get_all_friend_list(int user_id, Fri_ls_r* fri_ls_r){
 int DataBase::get_friend_invites(int user_id, Fri_ls_r* fri_ls_r){
     m_stringStream.str("");
     m_stringStream.clear();
+
+    m_data_type = DT_FRI;
 
     m_stringStream << "SELECT * FROM friends";
     m_stringStream << " WHERE receiver_id=" << user_id << " AND accepted=false;";
