@@ -197,13 +197,13 @@ int main(int argc, char** argv) {
 
     if(fill_db){
         sql = "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Paul', 1); " \
+             "VALUES ('Michel', 1); " \
              "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Allen', 1); "     \
+             "VALUES ('Patrice', 1); "     \
              "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Teddy', 1);" \
+             "VALUES ('Josh', 1);" \
              "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Mark', 1);";
+             "VALUES ('Fred', 1);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
