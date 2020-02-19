@@ -131,5 +131,24 @@ message Lomb_pos{
 message Projectile{
   uint32 id_arme = 1;
   uint32 force = 2;
-  double  angle = 3;
+  double angle = 3;
+}
+
+message Lombric{
+  uint32 id_lomb = 1;
+  uint32 pos_x = 2;
+  uint32 pos_y = 3;
+  uint32 vie = 4;
+}
+
+message infoPartie_p{
+  uint32 largeur = 1;
+  uint32 hauteur = 2;
+  repeated uint32 mur = 3;
+  repeated Lombric lomb = 4;
+  repeated uint32 id_arme = 5;
+}
+
+message Create_room{
+  string pseudo = 1;
 }
