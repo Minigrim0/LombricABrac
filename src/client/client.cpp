@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false),infoGame(nullptr){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -167,6 +167,23 @@ void Client::chatSend(std::string m, std::string destinataire){
 	sendMutex.lock();
 	sendMessage(msg);
 	sendMutex.unlock();
+}
+
+bool Client::createRoom(std::string host){
+	message m{};
+
+	Create_room obj;
+	obj.set_pseudo(host);
+
+	obj.SerializeToString(&m.text);
+	m.type = ADD_ROOM_S;
+
+	std::string* reponse = waitAnswers(ADD_ROOM_R, m);
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	return res;
 }
 
 void Client::sendInvitation(std::string destinataire){
@@ -363,6 +380,19 @@ void Client::acceptInvitation(invitation* inv){
 	else if(inv->type == INVIT_FRIEND){
 		addJoueur(inv->text);
 	}
+}
+
+void Client::getGameInfo(infoPartie_s* gameInfo){
+	message m{};
+	
+	m.type = GAME_INFO;
+	m.text = "";
+
+	std::string* reponse = waitAnswers(GAME_INFO_R,m);
+
+	Lomb_r obj;
+	obj.ParseFromString(*reponse);
+
 }
 
 int main(){}

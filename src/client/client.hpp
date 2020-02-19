@@ -16,6 +16,8 @@
 #include <errno.h>
 #include <mutex>
 #include <list>
+#include <vector>
+
 
 #define INVIT_PARTY 1   //invitation à une partie
 #define INVIT_FRIEND 2  //quand ajout d'amis
@@ -46,10 +48,36 @@ struct invitationTable{
 	invitation* table;
 };
 
-struct map{
+struct map_s{
 	int largeur;
 	int hauteur;
-	std::list<std::list<int>> mur;
+	int* mur;
+};
+
+struct vers_s{
+	int id;
+	int vie;
+	int pos_x;
+	int pos_y;
+};
+
+struct projectile_s{
+	int pos_x;
+	int pos_y;
+	int speed_x;
+	int speed_y;
+};
+
+struct armeTable_s{
+	int size;
+	int* WeaponsIds;
+};
+
+struct infoPartie_s{
+	map_s carte;
+	std::vector<vers_s> versListe;
+	armeTable_s armes;
+	std::vector<projectile_s> projListe;
 };
 
 class Client{
@@ -65,6 +93,8 @@ private:
 	uint8_t reponseAttendue;
 	int client_socket;
 	bool started;
+	bool changed;
+	infoPartie_s* infoGame;
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
@@ -82,6 +112,7 @@ public:
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
+	bool createRoom(std::string host);
 	void sendInvitation(std::string destinataire);//invite un amis à une partie
 	bool joinPartie(std::string host);//join la partie de host
 
@@ -107,7 +138,7 @@ public:
 	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric (joueur)
 	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
 	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé (spectateur)
-	map* getMap();
+	map_s* getMap();
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
 	bool endTour();//fin du tour
@@ -116,4 +147,6 @@ public:
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void inline acceptInvitation(invitation* inv);//en fonction de l'invitation acceptée, envoi le bon message au serveur
+
+	void getGameInfo(infoPartie_s* gameInfo);
 };
