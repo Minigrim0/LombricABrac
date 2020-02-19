@@ -3,6 +3,8 @@
 #include <cstdarg>
 
 #include "../includes/comm_macros.hpp"
+#include "../includes/listener.hpp"
+#include "../includes/database.hpp"
 #include "../cpl_proto/user.pb.h"
 
 
@@ -30,12 +32,13 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
     }
 }
 
-void handle_case(int msg_type){
-    switch(msg_type){
-        case CON_S:
-
-            break;
-        default:
-            ;
+void handle_case(int msg_type, Listener* yolo , DataBase* db){
+    if(msg_type == CON_S){
+        UserConnect usr;
+        yolo->reception();
+        usr.ParseFromString(yolo->get_buffer());
+        if(usr.isregister() == true){
+            db->verify_user(usr.pseudo(),usr.password());
+        }
     }
 }

@@ -7,10 +7,17 @@
 #include "../includes/constant.hpp"
 #include "../includes/listener.hpp"
 
-Listener::Listener(){}
-Listener::~Listener(){}
+Listener::Listener(int socket_client){
+    str_buffer = new char[INIT_SIZE_BUFFER];
+    current_size_buffer = INIT_SIZE_BUFFER;
+    sockfd = socket_client;
+}
+Listener::~Listener(){
+    delete[] str_buffer;
+    close(sockfd);
+}
 
-int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_buffer){
+int Listener::reception(){
     m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
     if(m_res == -1){
         perror("Failed receive message\n");
@@ -18,22 +25,20 @@ int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_bu
     }
 
     m_len_char = ntohl(m_packet_size);
-    if( static_cast<long unsigned int>(m_len_char+1) > *current_size_buffer ){
-        std::cout << "a" << std::endl;
-        delete[] *str_buffer;
-        *str_buffer = new char[m_len_char+1];
-        *current_size_buffer = m_len_char+1;
-        std::cout << "c" << std::endl;
+    if( static_cast<long unsigned int>(m_len_char+1) > current_size_buffer ){
+        delete[] str_buffer;
+        str_buffer = new char[m_len_char+1];
+        current_size_buffer = m_len_char+1;
     }
 
-    else if( m_len_char+1 < INIT_SIZE_BUFFER && *current_size_buffer != INIT_SIZE_BUFFER){
+    else if( m_len_char+1 < INIT_SIZE_BUFFER && current_size_buffer != INIT_SIZE_BUFFER){
         std::cout << "b" << std::endl;
-        delete[] *str_buffer;
-        *str_buffer = new char[INIT_SIZE_BUFFER];
+        delete[] str_buffer;
+        str_buffer = new char[INIT_SIZE_BUFFER];
     }
-    bzero(*str_buffer, *current_size_buffer);
-    for(m_str_parser = *str_buffer, m_received_size = 0;static_cast<uint32_t>(m_received_size) < m_len_char; ){
-        m_res = static_cast<int>(recv(sockfd, *str_buffer, static_cast<long unsigned int>(m_len_char), 0));
+    bzero(str_buffer, current_size_buffer);
+    for(m_str_parser = str_buffer, m_received_size = 0;static_cast<uint32_t>(m_received_size) < m_len_char; ){
+        m_res = static_cast<int>(recv(sockfd, str_buffer, static_cast<long unsigned int>(m_len_char), 0));
         if(m_res == -1){
             perror("Unable to receive message.\n");
             return EXIT_FAILURE;
@@ -46,7 +51,7 @@ int Listener::reception(int sockfd , char** str_buffer , size_t* current_size_bu
         m_received_size += m_res;
         m_str_parser += m_res;
     }
-    (*str_buffer)[m_len_char+1] = '\0';
+    (str_buffer)[m_len_char+1] = '\0';
     return EXIT_SUCCESS;
 }
 
@@ -84,4 +89,8 @@ int Listener::envoie_msg(int sockfd , std::string msg){
         return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;
+}
+
+char* Listener::get_buffer(){
+    return str_buffer;
 }

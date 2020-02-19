@@ -7,23 +7,22 @@
 #include "../includes/constant.hpp"
 #include "../cpl_proto/user.pb.h"
 #include "../includes/connected_player.hpp"
+#include "../includes/database.hpp"
 
-int client_thread(int socket_client){
-    Listener yolo;
+int client_thread(int socket_client, DataBase* db ){
+    Listener yolo(socket_client);
     ConnectedPlayer usr;
 
     usr.set_pseudo("michel");
-    char *str_buffer = new char[INIT_SIZE_BUFFER];
-    size_t currrent_size_buffer = INIT_SIZE_BUFFER;
     int res;
     std::string msg;
 
     while(1){
-        res = yolo.reception(socket_client, &str_buffer, &currrent_size_buffer);
+        res = yolo.reception();
         if (res == EXIT_FAILURE){
             break;
         }
-        printf("%s \n", str_buffer);
+        printf("%s \n", yolo.get_buffer());
         usr.SerializeToString(&msg);
         res = yolo.envoie_msg(socket_client, msg);
         if (res == EXIT_FAILURE){
@@ -32,6 +31,5 @@ int client_thread(int socket_client){
     }
 
     close(socket_client);
-    delete[] str_buffer;
     return EXIT_SUCCESS;
 }
