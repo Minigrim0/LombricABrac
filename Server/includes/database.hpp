@@ -17,7 +17,6 @@ class DataBase{
         bool catch_error();
         static int callback(void *data, int argc, char **argv, char **azColName);
         bool get_las() const;
-        std::string get_last_out() const;
 
         // User operations
         UserConnect get_user(std::string username);
@@ -54,6 +53,7 @@ class DataBase{
         sqlite3* m_db; // The database object itself
 
         char* m_zErrMsg;
+        std::string* m_data;
         int m_rc;
         bool m_is_open; // Identifier to know if the databse could be opened or not
         std::string m_sql_request;

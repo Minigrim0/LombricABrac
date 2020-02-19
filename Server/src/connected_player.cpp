@@ -21,8 +21,8 @@ bool ConnectedPlayer::register_user(DataBase* db, std::string passwd){
 
 bool ConnectedPlayer::check_passwd(DataBase* db, std::string passwd) const{
     passwd = hash_passwd(passwd);
-    db->get_passwd(pseudo());
-    std::string stored_passwd = db->get_last_out();
+    std::string stored_passwd;
+    db->get_passwd(pseudo(), &stored_passwd);
 
     return db->get_las();
 }

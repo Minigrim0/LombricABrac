@@ -51,17 +51,18 @@ bool DataBase::get_las() const{
     return m_rc;
 }
 
-std::string DataBase::get_last_out() const{
-    return "";
-}
 
 // User operations
 UserConnect DataBase::get_user(std::string username){
+    m_stringStream.str("");
+    m_stringStream.clear();
     m_sql_request = "SELECT id, username, victory_amount from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
 std::string DataBase::get_passwd(std::string username){
+    m_stringStream.str("");
+    m_stringStream.clear();
     m_sql_request = "SELECT password from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
