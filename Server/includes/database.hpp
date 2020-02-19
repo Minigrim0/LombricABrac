@@ -41,13 +41,12 @@ class DataBase{
         void get_all_messages(int user_id);
 
         // Friendship operations
-        void add_friend(std::string sender, std::string receiver);
-        void get_friend_list(std::string username); // Get friend list only for those who accepted
-        void get_all_friend_list(std::string username); // Get every friend, even those who you didn't accept yet
-        void get_friend_invites(std::string username); // Get only the friend that are waiting to be accepted
+        void add_friend(int sender_id, int receiver_id);
+        void get_friend_list(int user_id); // Get friend list only for those who accepted
+        void get_all_friend_list(int user_id); // Get every friend, even those who you didn't accept yet
+        void get_friend_invites(int user_id); // Get only the friend that are waiting to be accepted
         void accept_friend_invite(int id);
-        void remove_friend(std::string username);
-        void remove_friend_invite(int id); // Remove a friend request
+        void remove_friend(int id);
 
     private:
         sqlite3* m_db; // The database object itself

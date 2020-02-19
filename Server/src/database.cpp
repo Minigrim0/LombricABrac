@@ -65,7 +65,9 @@ void DataBase::get_passwd(std::string username){
 }
 
 void DataBase::register_user(std::string username, std::string password){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "INSERT INTO users (username,password,victory_amount)";
     m_stringStream << "VALUES (" << username << ", " << password << ", 0);";
     m_sql_request = m_stringStream.str();
@@ -76,7 +78,9 @@ void DataBase::register_user(std::string username, std::string password){
 
 // Lombrics Operations
 void DataBase::add_lombric(int user_id, std::string lombric_name){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "INSERT INTO worms (name,owner_id)";
     m_stringStream << "VALUES (" << lombric_name << ", " << user_id << ", 0);";
     m_sql_request = m_stringStream.str();
@@ -85,7 +89,9 @@ void DataBase::add_lombric(int user_id, std::string lombric_name){
 }
 
 void DataBase::set_lombric_name(int lombric_id, std::string name){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "UPDATE worms SET name=" << name << " WHERE id=" << lombric_id << ";";
     m_sql_request = m_stringStream.str();
 
@@ -93,7 +99,9 @@ void DataBase::set_lombric_name(int lombric_id, std::string name){
 }
 
 void DataBase::get_lombrics(int owner_id){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "SELECT name FROM worms WHERE owner_id=" << owner_id << ";";
     m_sql_request = m_stringStream.str();
 
@@ -111,7 +119,9 @@ void DataBase::get_rank(int index, int size){}
 
 // Message operations
 void DataBase::send_message(int sender_id, int receiver_id, std::string message){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "INSERT INTO messages (sender_id, receiver_id, content) ";
     m_stringStream << "VALUES (" << sender_id << ", " << receiver_id << ", '" << message << "'); ;";
     m_sql_request = m_stringStream.str();
@@ -120,7 +130,9 @@ void DataBase::send_message(int sender_id, int receiver_id, std::string message)
 }
 
 void DataBase::get_received_messages(int user_id){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "SELECT content, sender_id FROM messages ";
     m_stringStream << "WHERE receiver_id=" << user_id << " ORDER BY timestamp;";
     m_sql_request = m_stringStream.str();
@@ -129,7 +141,9 @@ void DataBase::get_received_messages(int user_id){
 }
 
 void DataBase::get_sent_messages(int user_id){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "SELECT content, receiver_id FROM messages ";
     m_stringStream << "WHERE sender_id=" << user_id << " ORDER BY timestamp;";
     m_sql_request = m_stringStream.str();
@@ -138,7 +152,9 @@ void DataBase::get_sent_messages(int user_id){
 }
 
 void DataBase::get_all_messages(int user_id){
+    m_stringStream.str("");
     m_stringStream.clear();
+
     m_stringStream << "SELECT content, receiver_id, sender_id FROM messages ";
     m_stringStream << "WHERE sender_id=" << user_id << " OR receiver_id=" << user_id;
     m_stringStream << " ORDER BY timestamp;";
@@ -148,10 +164,66 @@ void DataBase::get_all_messages(int user_id){
 }
 
 // Friendship operations
-void DataBase::add_friend(std::string sender, std::string receiver){}
-void DataBase::get_friend_list(std::string username){}
-void DataBase::get_all_friend_list(std::string username){}
-void DataBase::get_friend_invites(std::string username){}
-void DataBase::accept_friend_invite(int id){}
-void DataBase::remove_friend(std::string username){}
-void DataBase::remove_friend_invite(int id){}
+void DataBase::add_friend(int sender_id, int receiver_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "INSERT INTO friends (sender_id, receiver_id, accepted)";
+    m_stringStream << " VALUES (" << sender_id << ", " << receiver_id << ", false);";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::get_friend_list(int user_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT * FROM friends";
+    m_stringStream << " WHERE (sender_id=" << user_id << " AND accepted=true) OR (receiver_id=" << user_id << " AND accepted=true);";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::get_all_friend_list(int user_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT * FROM friends";
+    m_stringStream << " WHERE sender_id=" << user_id << " OR receiver_id=" << user_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::get_friend_invites(int user_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT * FROM friends";
+    m_stringStream << " WHERE receiver_id=" << user_id << " AND accepted=false;";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::accept_friend_invite(int id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "UPDATE friends SET accepted=true WHERE id=" << id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
+
+void DataBase::remove_friend(int id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "DELETE FROM friends WHERE id=" << id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+}
