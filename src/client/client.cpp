@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false),infoGame(nullptr){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -390,9 +390,34 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 	std::string* reponse = waitAnswers(GAME_INFO_R,m);
 
-	Lomb_r obj;
+	infoPartie_p obj;
 	obj.ParseFromString(*reponse);
 
+	//struct map_s carte
+	gameInfo->carte.mur = new uint32_t[static_cast<uint32_t>(obj.mur_size())];
+	for (int i=0;i<obj.mur_size();i++){
+		gameInfo->carte.mur[i] = obj.mur(i);
+	}
+
+	gameInfo->carte.largeur = obj.largeur(); 
+	gameInfo->carte.hauteur = obj.hauteur(); 
+
+	//struct versListe
+	gameInfo->versListe = std::vector<vers_s>(static_cast<uint32_t>(obj.lomb_size()));
+	for (int i=0;i<obj.lomb_size();i++){
+		uint32_t index = static_cast<uint32_t>(i);
+		gameInfo->versListe[index].id = obj.lomb(i).id_lomb();
+		gameInfo->versListe[index].vie = obj.lomb(i).vie();
+		gameInfo->versListe[index].pos_x = obj.lomb(i).pos_x();
+		gameInfo->versListe[index].pos_y = obj.lomb(i).pos_y();
+	}
+
+	//struct armes
+	gameInfo->armes.size = static_cast<uint32_t>(obj.id_arme_size());
+	gameInfo->armes.WeaponsIds = new uint32_t[static_cast<uint32_t>(gameInfo->armes.size)];
+	for (int i=0;i<obj.id_arme_size();i++){
+		gameInfo->armes.WeaponsIds[i] = obj.id_arme(i);
+	}
 }
 
 int main(){}

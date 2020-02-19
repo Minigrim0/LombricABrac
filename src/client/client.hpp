@@ -39,38 +39,38 @@ on créé une structure une structure invitation car l'affichage les affiche tou
 si c'est une invitation à une partie ou un ajout d'amis
 */
 struct invitation{
-	int type;//peut prendre INVIT_PARTY ou INVIT_FRIEND comme valeur
+	uint32_t type;//peut prendre INVIT_PARTY ou INVIT_FRIEND comme valeur
 	std::string text;//texte à afficher
 };
 
 struct invitationTable{
-	int size;
+	uint32_t size;
 	invitation* table;
 };
 
 struct map_s{
-	int largeur;
-	int hauteur;
-	int* mur;
+	uint32_t largeur;
+	uint32_t hauteur;
+	uint32_t* mur;
 };
 
 struct vers_s{
-	int id;
-	int vie;
-	int pos_x;
-	int pos_y;
+	uint32_t id;
+	uint32_t vie;
+	uint32_t pos_x;
+	uint32_t pos_y;
 };
 
 struct projectile_s{
-	int pos_x;
-	int pos_y;
-	int speed_x;
-	int speed_y;
+	uint32_t pos_x;
+	uint32_t pos_y;
+	uint32_t speed_x;
+	uint32_t speed_y;
 };
 
 struct armeTable_s{
-	int size;
-	int* WeaponsIds;
+	uint32_t size;
+	uint32_t* WeaponsIds;
 };
 
 struct infoPartie_s{
@@ -94,7 +94,6 @@ private:
 	int client_socket;
 	bool started;
 	bool changed;
-	infoPartie_s* infoGame;
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
