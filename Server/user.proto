@@ -91,7 +91,7 @@ message History_r{
 }
 
 message Get_rank{
-  uint32 id_first_player = 1;
+  string first_player = 1;
   uint32 nbr_player = 2;
 }
 
