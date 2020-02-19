@@ -4,6 +4,8 @@
 #include <iostream>
 #include <sstream>
 #include "../lib/sqlite3.h"
+#include "../cpl_proto/user.pb.h"
+
 
 class DataBase{
     public:
@@ -18,35 +20,35 @@ class DataBase{
         std::string get_last_out() const;
 
         // User operations
-        void get_user(std::string username);
-        void get_passwd(std::string username);
-        void register_user(std::string username, std::string passwd);
+        UserConnect get_user(std::string username);
+        std::string get_passwd(std::string username);
+        bool register_user(std::string username, std::string passwd);
 
         // Lombrics Operations
-        void add_lombric(int user_id, std::string lombric_name);
-        void set_lombric_name(int lombric_id, std::string username);
-        void get_lombrics(int owner_id);
+        bool add_lombric(int user_id, std::string lombric_name);
+        bool set_lombric_name(int lombric_id, std::string username);
+        Lomb_r get_lombrics(int owner_id);
 
         // Game history operations
-        void get_history(std::string username, int index, int size);
-        void add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
+        History_r get_history(std::string username, int index, int size);
+        bool add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
 
         // Game rank operations
-        void get_rank(int index, int size);
+        Rank_r get_rank(int index, int size);
 
         // Message operations
-        void send_message(int sender_id, int receiver_id, std::string message);
-        void get_received_messages(int user_id);
-        void get_sent_messages(int user_id);
-        void get_all_messages(int user_id);
+        bool send_message(int sender_id, int receiver_id, std::string message);
+        Chat_r get_received_messages(int user_id);
+        Chat_r get_sent_messages(int user_id);
+        Chat_r get_all_messages(int user_id);
 
         // Friendship operations
-        void add_friend(int sender_id, int receiver_id);
-        void get_friend_list(int user_id); // Get friend list only for those who accepted
-        void get_all_friend_list(int user_id); // Get every friend, even those who you didn't accept yet
-        void get_friend_invites(int user_id); // Get only the friend that are waiting to be accepted
-        void accept_friend_invite(int id);
-        void remove_friend(int id);
+        bool add_friend(int sender_id, int receiver_id);
+        Fri_ls_r get_friend_list(int user_id); // Get friend list only for those who accepted
+        Fri_ls_r get_all_friend_list(int user_id); // Get every friend, even those who you didn't accept yet
+        Fri_ls_r get_friend_invites(int user_id); // Get only the friend that are waiting to be accepted
+        bool accept_friend_invite(int id);
+        bool remove_friend(int id);
 
     private:
         sqlite3* m_db; // The database object itself

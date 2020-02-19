@@ -1,6 +1,8 @@
 #include <iostream>
 #include <sstream>
+
 #include "../includes/database.hpp"
+#include "../cpl_proto/user.pb.h"
 
 DataBase::DataBase(std::string db_path):m_is_open(false){
     m_rc = sqlite3_open(db_path.c_str(), &m_db);
@@ -54,17 +56,17 @@ std::string DataBase::get_last_out() const{
 }
 
 // User operations
-void DataBase::get_user(std::string username){
+UserConnect DataBase::get_user(std::string username){
     m_sql_request = "SELECT id, username, victory_amount from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_passwd(std::string username){
+std::string DataBase::get_passwd(std::string username){
     m_sql_request = "SELECT password from users where username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::register_user(std::string username, std::string password){
+bool DataBase::register_user(std::string username, std::string password){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -77,7 +79,7 @@ void DataBase::register_user(std::string username, std::string password){
 
 
 // Lombrics Operations
-void DataBase::add_lombric(int user_id, std::string lombric_name){
+bool DataBase::add_lombric(int user_id, std::string lombric_name){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -88,7 +90,7 @@ void DataBase::add_lombric(int user_id, std::string lombric_name){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::set_lombric_name(int lombric_id, std::string name){
+bool DataBase::set_lombric_name(int lombric_id, std::string name){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -98,7 +100,7 @@ void DataBase::set_lombric_name(int lombric_id, std::string name){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_lombrics(int owner_id){
+Lomb_r DataBase::get_lombrics(int owner_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -108,17 +110,21 @@ void DataBase::get_lombrics(int owner_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
+
 // Game history operations
-void DataBase::get_history(std::string username, int index, int size){
+History_r DataBase::get_history(std::string username, int index, int size){
 
 }
-void DataBase::add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points){}
+
+bool DataBase::add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points){}
+
 
 // Game rank operations
-void DataBase::get_rank(int index, int size){}
+Rank_r DataBase::get_rank(int index, int size){}
+
 
 // Message operations
-void DataBase::send_message(int sender_id, int receiver_id, std::string message){
+bool DataBase::send_message(int sender_id, int receiver_id, std::string message){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -129,7 +135,7 @@ void DataBase::send_message(int sender_id, int receiver_id, std::string message)
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_received_messages(int user_id){
+Chat_r DataBase::get_received_messages(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -140,7 +146,7 @@ void DataBase::get_received_messages(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_sent_messages(int user_id){
+Chat_r DataBase::get_sent_messages(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -151,7 +157,7 @@ void DataBase::get_sent_messages(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_all_messages(int user_id){
+Chat_r DataBase::get_all_messages(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -163,8 +169,9 @@ void DataBase::get_all_messages(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
+
 // Friendship operations
-void DataBase::add_friend(int sender_id, int receiver_id){
+bool DataBase::add_friend(int sender_id, int receiver_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -175,7 +182,7 @@ void DataBase::add_friend(int sender_id, int receiver_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_friend_list(int user_id){
+Fri_ls_r DataBase::get_friend_list(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -186,7 +193,7 @@ void DataBase::get_friend_list(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_all_friend_list(int user_id){
+Fri_ls_r DataBase::get_all_friend_list(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -197,7 +204,7 @@ void DataBase::get_all_friend_list(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::get_friend_invites(int user_id){
+Fri_ls_r DataBase::get_friend_invites(int user_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -208,7 +215,7 @@ void DataBase::get_friend_invites(int user_id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::accept_friend_invite(int id){
+bool DataBase::accept_friend_invite(int id){
     m_stringStream.str("");
     m_stringStream.clear();
 
@@ -218,7 +225,7 @@ void DataBase::accept_friend_invite(int id){
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 }
 
-void DataBase::remove_friend(int id){
+bool DataBase::remove_friend(int id){
     m_stringStream.str("");
     m_stringStream.clear();
 
