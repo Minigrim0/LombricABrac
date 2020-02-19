@@ -6,6 +6,6 @@
 #include "connected_player.hpp"
 
 void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...);
-void handle_instruction(int msg_type, Listener* yolo, DataBase* db, ConnectedPlayer* usr);
+void handle_instruction(int msg_type, Listener* la_poste, DataBase* db, ConnectedPlayer* usr);
 
 #endif

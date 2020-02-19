@@ -10,7 +10,7 @@
 #include "../includes/database.hpp"
 
 int client_thread(int socket_client, DataBase* db ){
-    Listener yolo(socket_client);
+    Listener la_poste(socket_client);
     ConnectedPlayer usr;
 
     usr.set_pseudo("michel");
@@ -18,13 +18,13 @@ int client_thread(int socket_client, DataBase* db ){
     std::string msg;
 
     while(1){
-        res = yolo.reception();
+        res = la_poste.reception();
         if (res == EXIT_FAILURE){
             break;
         }
-        printf("%s \n", yolo.get_buffer());
+        printf("%s \n", la_poste.get_buffer());
         usr.SerializeToString(&msg);
-        res = yolo.envoie_msg(socket_client, msg);
+        res = la_poste.envoie_msg(socket_client, msg);
         if (res == EXIT_FAILURE){
             break;
         }
