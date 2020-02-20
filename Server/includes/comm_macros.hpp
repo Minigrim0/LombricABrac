@@ -10,8 +10,6 @@
 */
 
 // <-- Pre-menu -->
-#define RG_S 1 // : (uint8_t str) (uint8_t str) -> Register : username password
-#define RG_R 2 // : bool -> Register // : Résultat (réussi/raté)
 #define CON_S 3 // : (uint8_t str) (uint8_t str) -> Connexion : username password
 #define CON_R 4 // : bool -> Connexion // : Résultat (réussi/raté)
 
@@ -26,7 +24,7 @@
 #define JOIN_R 10// : true //join reussi
 
 // <-- Menu lombric -->
-#define GET_LOMB 11// : //request le nom des lombrics
+#define GAT_LOMB 11// : //request le nom des lombrics
 #define LOMB_R 12// : (uint8_t str)*8 //réponse a get_lomb envoi le nom de tous les lombrics
 #define LOMB_MOD 13// : int (uint8_t str) //modif_nom_lomb id_lomb new_nom_lomb
 
