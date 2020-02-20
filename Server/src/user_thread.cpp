@@ -14,8 +14,6 @@ int client_thread(int socket_client, DataBase* db){
     ConnectedPlayer usr;
     usr.set_pseudo("michel");
 
-    DataBase db("lab.db");
-
     int res;
     std::string msg;
 
