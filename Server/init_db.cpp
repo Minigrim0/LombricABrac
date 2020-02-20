@@ -97,7 +97,9 @@ int main(int argc, char** argv) {
 
     if(fill_db){
         sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
-             "VALUES (1, 2, 3, 4, 50, 20, 40, 50); ";
+              "VALUES (1, 2, 3, 4, 50, 20, 40, 50);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
+              "VALUES (1, 2, 3, 4, 20, 10, 30, 100);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
@@ -149,8 +151,10 @@ int main(int argc, char** argv) {
         id             INTEGER PRIMARY KEY AUTOINCREMENT,\
         sender_id      INTEGER,\
         receiver_id    INTEGER,\
-        accepted        BOOL,\
-        timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
+        accepted       BOOL,\
+        timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\
+        FOREIGN KEY(sender_id)   REFERENCES users(id) \
+        FOREIGN KEY(receiver_id) REFERENCES users(id) \
     );";
 
     rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
