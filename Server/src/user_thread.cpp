@@ -9,7 +9,7 @@
 #include "../includes/connected_player.hpp"
 #include "../includes/database.hpp"
 
-int client_thread(int socket_client, DataBase* db ){
+int client_thread(int socket_client, DataBase* db){
     Listener la_poste(socket_client);
     ConnectedPlayer usr;
     usr.set_pseudo("michel");
@@ -21,13 +21,13 @@ int client_thread(int socket_client, DataBase* db ){
 
     while(1){
         res = la_poste.reception();
-        if (res == EXIT_FAILURE){
+        if(res == EXIT_FAILURE){
             break;
         }
         printf("%s \n", la_poste.get_buffer());
         usr.SerializeToString(&msg);
         res = la_poste.envoie_msg(socket_client, msg);
-        if (res == EXIT_FAILURE){
+        if(res == EXIT_FAILURE){
             break;
         }
     }
