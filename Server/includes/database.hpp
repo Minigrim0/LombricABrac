@@ -8,11 +8,12 @@
 
 #define DT_USR 1 // Datatype UserConnect
 #define DT_STR 2 // Datatype String
-#define DT_LOM 3 // Datatype Lomb_r
-#define DT_HIS 4 // Datatype History_r
-#define DT_RAN 5 // Datatype Rank_r
-#define DT_CHA 6 // Datatype Chat_r
-#define DT_FRI 7 // Datatype Fri_ls_r
+#define DT_INT 3 // Datatype Int
+#define DT_LOM 4 // Datatype Lomb_r
+#define DT_HIS 5 // Datatype History_r
+#define DT_RAN 6 // Datatype Rank_r
+#define DT_CHA 7 // Datatype Chat_r
+#define DT_FRI 8 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -27,6 +28,7 @@ class DataBase{
 
         // User operations
         int get_user(std::string username, UserConnect* userconnect);
+        int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
         int register_user(std::string username, std::string passwd);
 
@@ -36,7 +38,7 @@ class DataBase{
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
 
         // Game history operations
-        int get_history(std::string username, int index, int size, History_r* history_r);
+        int get_history(int user_id, int index, int size, History_r* history_r);
         int add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
 
         // Game rank operations
@@ -53,8 +55,8 @@ class DataBase{
         int get_friend_list(int user_id, Fri_ls_r* fri_ls_r); // Get friend list only for those who accepted
         int get_all_friend_list(int user_id, Fri_ls_r* fri_ls_r); // Get every friend, even those who you didn't accept yet
         int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
-        int accept_friend_invite(int id);
-        int remove_friend(int id);
+        int accept_friend_invite(int user_id, int friend_id);
+        int remove_friend(int user_id, int friend_id);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

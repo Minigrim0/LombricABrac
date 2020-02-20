@@ -39,7 +39,6 @@ bool DataBase::catch_error(){
 }
 
 int DataBase::callback(void *data_container, int argc, char **argv, char **azColName){
-    fprintf(stderr, "data type : %i\n", m_data_type);
 
     switch(m_data_type){
         case DT_USR:
@@ -52,6 +51,9 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
         case DT_STR:
             *static_cast<std::string*>(data_container) = argv[0];
             break;
+        case DT_INT:
+            *static_cast<int*>(data_container) = std::stoi(argv[0]);
+            break;
         case DT_LOM:
             static_cast<Lomb_r*>(data_container)->set_lomb_1(argv[0]);
             static_cast<Lomb_r*>(data_container)->set_lomb_2(argv[1]);
@@ -62,21 +64,69 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
             static_cast<Lomb_r*>(data_container)->set_lomb_7(argv[6]);
             static_cast<Lomb_r*>(data_container)->set_lomb_8(argv[7]);
             break;
-        case DT_HIS:
+        case DT_HIS:{
+            History *history = static_cast<History_r*>(data_container)->add_history();
+
+            for(int i=0;i<argc;i++){
+                if(strcmp(azColName[i], "user_1_id") == 0){
+                    history->set_pseudo_1(argv[i]);
+                }
+                else if(strcmp(azColName[i], "user_2_id") == 0){
+                    history->set_pseudo_2(argv[i]);
+                }
+                else if(strcmp(azColName[i], "user_3_id") == 0){
+                    history->set_pseudo_3(argv[i]);
+                }
+                else if(strcmp(azColName[i], "user_4_id") == 0){
+                    history->set_pseudo_4(argv[i]);
+                }
+                else if(strcmp(azColName[i], "user_1_points") == 0){
+                    history->set_point_1(std::stoi(argv[i]));
+                }
+                else if(strcmp(azColName[i], "user_2_points") == 0){
+                    history->set_point_2(std::stoi(argv[i]));
+                }
+                else if(strcmp(azColName[i], "user_3_points") == 0){
+                    history->set_point_3(std::stoi(argv[i]));
+                }
+                else if(strcmp(azColName[i], "user_4_points") == 0){
+                    history->set_point_4(std::stoi(argv[i]));
+                }
+                else if(strcmp(azColName[i], "timestamp") == 0){
+                    history->set_date(std::stoi(argv[i]));
+                }
+            }
             break;
+        }
         case DT_RAN:
+            for(int i = 0; i<argc; i++){
+                if(strcmp(azColName[i], "username") == 0){
+                    std::string *username = static_cast<Rank_r*>(data_container)->add_user();
+                    *username = argv[i];
+                }
+                else if(strcmp(azColName[i], "victory_amount") == 0){
+                    static_cast<Rank_r*>(data_container)->add_point(std::stoi(argv[i]));
+                }
+            }
             break;
         case DT_CHA:
+            for(int i = 0; i<argc; i++){
+                if(strcmp(azColName[i], "content") == 0){
+                    Chat *chat = static_cast<Chat_r*>(data_container)->add_msgs();
+                    chat->set_msg(argv[i]);
+                }
+            }
             break;
         case DT_FRI:
+            for(int i = 0; i<argc; i++){
+                std::string* str = static_cast<Fri_ls_r*>(data_container)->add_user();
+                *str = argv[i];
+            }
             break;
         default:
-            std::cout << "Error, datatype not recognised" << std::endl;
+            std::cout << "> Error, datatype not recognised" << std::endl;
     }
 
-
-
-    printf("--------\n");
     return 0;
 }
 
@@ -92,7 +142,7 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
 
     m_data_type = DT_USR;
 
-    m_sql_request = "SELECT id, username, victory_amount from users where username='" + username + "';";
+    m_sql_request = "SELECT id, username, victory_amount FROM users WHERE username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, userconnect, &m_zErrMsg);
 
     return m_rc;
@@ -104,7 +154,7 @@ int DataBase::get_passwd(std::string username, std::string* password){
 
     m_data_type = DT_STR;
 
-    m_sql_request = "SELECT password from users where username='" + username + "';";
+    m_sql_request = "SELECT password FROM users WHERE username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, password, &m_zErrMsg);
 
     return m_rc;
@@ -119,6 +169,18 @@ int DataBase::register_user(std::string username, std::string password){
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::get_user_id(std::string username, int* id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_sql_request = "SELECT id FROM users WHERE username='" + username + "';";
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, id, &m_zErrMsg);
 
     return m_rc;
 }
@@ -166,8 +228,24 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
 
 
 // Game history operations
-int DataBase::get_history(std::string username, int index, int size, History_r* history_r){
+int DataBase::get_history(int user_id, int index, int size, History_r* history_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT * FROM history WHERE (user_1_id="
+                   << user_id
+                   << " OR user_2_id="
+                   << user_id
+                   << " OR user_3_id="
+                   << user_id
+                   << " OR user_4_id="
+                   << user_id << ") ORDER BY timestamp DESC LIMIT "
+                   << index << ", " << size << ";";
+    m_sql_request = m_stringStream.str();
+
     m_data_type = DT_HIS;
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, history_r, &m_zErrMsg);
 
     return m_rc;
 }
@@ -176,9 +254,10 @@ int DataBase::add_history_entry(int player1, int player2, int player3, int playe
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) ";
-    m_stringStream << "VALUES (" << player1 << ", " << player2 << ", " << player3 << ", " << player4 << ", ";
-    m_stringStream << player1_points << ", " << player2_points << ", " << player3_points << ", " << player4_points << "); ";
+    m_stringStream << "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "
+                   << "VALUES (" << player1 << ", " << player2 << ", " << player3 << ", " << player4 << ", "
+                   << player1_points << ", " << player2_points << ", " << player3_points << ", " << player4_points << "); ";
+    m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 
@@ -188,7 +267,16 @@ int DataBase::add_history_entry(int player1, int player2, int player3, int playe
 
 // Game rank operations
 int DataBase::get_rank(int index, int size, Rank_r* rank_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT username, victory_amount FROM users ORDER BY victory_amount DESC LIMIT ";
+    m_stringStream << index << ", " << size << ";";
+    m_sql_request = m_stringStream.str();
+
     m_data_type = DT_RAN;
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, rank_r, &m_zErrMsg);
 
     return m_rc;
 }
@@ -277,8 +365,12 @@ int DataBase::get_friend_list(int user_id, Fri_ls_r* fri_ls_r){
 
     m_data_type = DT_FRI;
 
-    m_stringStream << "SELECT * FROM friends";
-    m_stringStream << " WHERE (sender_id=" << user_id << " AND accepted=true) OR (receiver_id=" << user_id << " AND accepted=true);";
+    m_stringStream << "SELECT username FROM friends, users WHERE friends.sender_id="
+                   << user_id
+                   << " AND users.id=friends.receiver_id and accepted=true;"
+                   << "SELECT username FROM friends, users WHERE friends.receiver_id="
+                   << user_id
+                   << " AND users.id=friends.sender_id and accepted=true;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, fri_ls_r, &m_zErrMsg);
@@ -292,8 +384,12 @@ int DataBase::get_all_friend_list(int user_id, Fri_ls_r* fri_ls_r){
 
     m_data_type = DT_FRI;
 
-    m_stringStream << "SELECT * FROM friends";
-    m_stringStream << " WHERE sender_id=" << user_id << " OR receiver_id=" << user_id << ";";
+    m_stringStream << "SELECT username FROM friends, users WHERE friends.sender_id="
+                   << user_id
+                   << " AND users.id=friends.receiver_id;"
+                   << "SELECT username FROM friends, users WHERE friends.receiver_id="
+                   << user_id
+                   << " AND users.id=friends.sender_id;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, fri_ls_r, &m_zErrMsg);
@@ -307,8 +403,9 @@ int DataBase::get_friend_invites(int user_id, Fri_ls_r* fri_ls_r){
 
     m_data_type = DT_FRI;
 
-    m_stringStream << "SELECT * FROM friends";
-    m_stringStream << " WHERE receiver_id=" << user_id << " AND accepted=false;";
+    m_stringStream << "SELECT username FROM friends, users WHERE friends.receiver_id="
+                   << user_id
+                   << " AND users.id=friends.sender_id and accepted=false;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, fri_ls_r, &m_zErrMsg);
@@ -316,11 +413,13 @@ int DataBase::get_friend_invites(int user_id, Fri_ls_r* fri_ls_r){
     return m_rc;
 }
 
-int DataBase::accept_friend_invite(int id){
+int DataBase::accept_friend_invite(int user_id, int friend_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "UPDATE friends SET accepted=true WHERE id=" << id << ";";
+    m_stringStream << "UPDATE friends SET accepted=true WHERE (receiver_id=" << user_id << " AND sender_id=" << friend_id << ")";
+    m_stringStream << "  OR (sender_id=" << user_id << " AND receiver_id=" << friend_id << ");";
+
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
@@ -328,11 +427,12 @@ int DataBase::accept_friend_invite(int id){
     return m_rc;
 }
 
-int DataBase::remove_friend(int id){
+int DataBase::remove_friend(int user_id, int friend_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "DELETE FROM friends WHERE id=" << id << ";";
+    m_stringStream << "DELETE FROM friends WHERE (receiver_id=" << user_id << " AND sender_id=" << friend_id << ") OR (";
+    m_stringStream << "sender_id=" << user_id << " AND receiver_id=" << friend_id << ");";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
