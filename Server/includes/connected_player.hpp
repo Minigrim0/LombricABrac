@@ -13,15 +13,20 @@ class ConnectedPlayer: public UserConnect{
 
         // Getters
         bool is_auth() const;
+        int get_id() const;
+
+        void set_id(int id);
 
         // Others
         bool register_user(DataBase* db, std::string passwd);
         bool check_passwd(DataBase* db, std::string passwd) const;
+        bool auth(DataBase* db);
 
         std::string hash_passwd(std::string passwd) const;
 
     private:
         bool m_is_auth;
+        int m_id;
 };
 
 #endif
