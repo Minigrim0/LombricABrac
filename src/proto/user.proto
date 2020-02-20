@@ -149,6 +149,20 @@ message infoPartie_p{
   repeated uint32 id_arme = 5;
 }
 
+message history{
+  repeated string user = 1;
+  uint32 first = 2;
+  uint32 nb_games = 3;
+}
+
+message del_friend{
+  string pseudo = 1;
+}
+
+message friend_p{
+  repeated string friends = 1;
+}
+
 message Create_room{
   string pseudo = 1;
 }
