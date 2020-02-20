@@ -4,11 +4,14 @@
 
 class Listener{
     public:
-        Listener();
+        Listener(int socket_client);
         ~Listener();
 
-        int reception(int sockfd , char** str_buffer, size_t* currrent_size_buffer);
-        int envoie_msg(int sockfd , std::string msg);
+        int reception_type();
+        int reception();
+        int envoie_bool(int type_msg ,int boolint);
+        int envoie_msg(int type_msg , std::string msg);
+        char* get_buffer();
 
     private:
         char* m_str_parser;
@@ -17,6 +20,9 @@ class Listener{
         uint32_t m_len_char;
         uint32_t m_packet_size;
         uint32_t m_sent_size;
+        char *str_buffer;
+        size_t current_size_buffer;
+        int sockfd;
 };
 
 #endif

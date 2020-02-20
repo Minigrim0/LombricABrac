@@ -5,7 +5,9 @@
 
 ConnectedPlayer::ConnectedPlayer()
 :UserConnect(),
-m_is_auth(false){}
+m_is_auth(false),
+m_id(-1)
+{}
 
 ConnectedPlayer::~ConnectedPlayer(){}
 
@@ -13,18 +15,25 @@ bool ConnectedPlayer::is_auth() const{
     return m_is_auth;
 }
 
+int ConnectedPlayer::get_id() const{
+    return m_id;
+}
+
+void ConnectedPlayer::set_id(int id){
+    m_id = id;
+}
+
 bool ConnectedPlayer::register_user(DataBase* db, std::string passwd){
     passwd = hash_passwd(passwd);
-    db->register_user(pseudo(), passwd);
-    return db->get_las();
+    return db->register_user(pseudo(), passwd) == SQLITE_OK;
 }
 
 bool ConnectedPlayer::check_passwd(DataBase* db, std::string passwd) const{
     passwd = hash_passwd(passwd);
-    db->get_passwd(pseudo());
-    std::string stored_passwd = db->get_last_out();
+    std::string stored_passwd;
+    db->get_passwd(pseudo(), &stored_passwd);
 
-    return db->get_las();
+    return stored_passwd == passwd;
 }
 
 std::string ConnectedPlayer::hash_passwd(std::string passwd) const{

@@ -2,7 +2,18 @@
     #define sql_parser_hpp
 
 #include <iostream>
+#include <sstream>
 #include "../lib/sqlite3.h"
+#include "../cpl_proto/user.pb.h"
+
+#define DT_USR 1 // Datatype UserConnect
+#define DT_STR 2 // Datatype String
+#define DT_INT 3 // Datatype Int
+#define DT_LOM 4 // Datatype Lomb_r
+#define DT_HIS 5 // Datatype History_r
+#define DT_RAN 6 // Datatype Rank_r
+#define DT_CHA 7 // Datatype Chat_r
+#define DT_FRI 8 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -14,45 +25,50 @@ class DataBase{
         bool catch_error();
         static int callback(void *data, int argc, char **argv, char **azColName);
         bool get_las() const;
-        std::string get_last_out() const;
 
         // User operations
-        void get_user(std::string username);
-        void get_passwd(std::string username);
-        bool verify_user(std::string username, std::string passwd) const;
-        void register_user(std::string username, std::string passwd);
+        int get_user(std::string username, UserConnect* userconnect);
+        int get_user_id(std::string username, int* id);
+        int get_passwd(std::string username, std::string* password);
+        int register_user(std::string username, std::string passwd);
 
         // Lombrics Operations
-        void set_lombric_name(int id, std::string uesrname);
-        void get_lombrics(std::string username);
+        int add_lombric(int user_id, std::string lombric_name);
+        int set_lombric_name(int lombric_id, std::string username);
+        int get_lombrics(int owner_id, Lomb_r* lomb_r);
 
         // Game history operations
-        void get_history(std::string username, int index, int size);
-        void add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
+        int get_history(int user_id, int index, int size, History_r* history_r);
+        int add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
 
         // Game rank operations
-        void get_rank(int index, int size);
+        int get_rank(int index, int size, Rank_r* rank_r);
 
         // Message operations
-        void send_message(std::string sender, std::string receiver, std::string message);
-        void get_messages(std::string username);
+        int send_message(int sender_id, int receiver_id, std::string message);
+        int get_received_messages(int user_id, Chat_r* chat_r);
+        int get_sent_messages(int user_id, Chat_r* chat_r);
+        int get_all_messages(int user_id, Chat_r* chat_r);
 
         // Friendship operations
-        void add_friend(std::string sender, std::string receiver);
-        void get_friend_list(std::string username); // Get friend list only for those who accepted
-        void get_all_friend_list(std::string username); // Get every friend, even those who you didn't accept yet
-        void get_friend_invites(std::string username); // Get only the friend that are waiting to be accepted
-        void accept_friend_invite(int id);
-        void remove_friend(std::string username);
-        void remove_friend_invite(int id); // Remove a friend request
+        int add_friend(int sender_id, int receiver_id);
+        int get_friend_list(int user_id, Fri_ls_r* fri_ls_r); // Get friend list only for those who accepted
+        int get_all_friend_list(int user_id, Fri_ls_r* fri_ls_r); // Get every friend, even those who you didn't accept yet
+        int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
+        int accept_friend_invite(int user_id, int friend_id);
+        int remove_friend(int user_id, int friend_id);
 
     private:
+        static uint8_t m_data_type; // The type of data the callback has to deal with
+
+        int m_rc; // The return value of the last sqlite3_exec() call
+        bool m_is_open; // Identifier to define wether the db is opened or not
+
         sqlite3* m_db; // The database object itself
 
-        char* m_zErrMsg;
-        int m_rc;
-        bool m_is_open; // Identifier to know if the databse could be opened or not
-        std::string m_sql_request;
+        char* m_zErrMsg; // The error message in case there a problem
+        std::string m_sql_request; // The last performed request
+        std::ostringstream m_stringStream; // Object used to properly concatenate requests
 };
 
 #endif

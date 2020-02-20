@@ -9,6 +9,7 @@
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/constant.hpp"
+#include "includes/database.hpp"
 #include "cpl_proto/user.pb.h"
 
 int main(int argc, char **argv){
@@ -45,6 +46,8 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
+    DataBase db("lab.db");
+
     while(1) {
         int socket_client;
         struct sockaddr_in adresse_client;
@@ -58,7 +61,7 @@ int main(int argc, char **argv){
             continue;
         }
 
-        std::thread thread_obj(client_thread, socket_client);
+        std::thread thread_obj(client_thread, socket_client , &db);
         thread_obj.detach();
     }
     google::protobuf::ShutdownProtobufLibrary();
