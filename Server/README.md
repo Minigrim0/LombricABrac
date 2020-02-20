@@ -22,13 +22,25 @@ Type the following :
 ```
 
 #### **Initialize data base**
-Type the following :
+
+Without filling it :
 ```
     make init_db
     ./init_db
 ```
 
+With some random useless data in it :
+```
+    make init_db
+    ./init_db true
+```
+
 #### **Clean**
 ```
     make clean
+```
+
+#### **Fresh start**
+```
+    make clean all
 ```
