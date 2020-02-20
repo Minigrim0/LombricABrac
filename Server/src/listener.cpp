@@ -67,7 +67,6 @@ int Listener::reception(){
 }
 
 int Listener::envoie_bool(int type_msg ,int boolint){
-
     m_res = 0;
 
     m_packet_size = htonl(type_msg);
@@ -76,13 +75,15 @@ int Listener::envoie_bool(int type_msg ,int boolint){
         perror("Unable to send message size.\n");
         return EXIT_FAILURE;
     }
-    
+
     m_packet_size = htonl(boolint);
     m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
     if(m_res == -1){
         perror("Unable to send message size.\n");
         return EXIT_FAILURE;
     }
+
+    return EXIT_SUCCESS;
 }
 
 int Listener::envoie_msg(int type_msg , std::string msg){
