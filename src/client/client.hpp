@@ -34,6 +34,7 @@ struct stringTable{
 	std::string* table;
 };
 
+
 /*
 on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier 
 si c'est une invitation à une partie ou un ajout d'amis
@@ -111,7 +112,9 @@ public:
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
-	bool createRoom(std::string host);
+	stringTable* getFriendList();//revoie la liste d'amis
+	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
+	bool createRoom(std::string host);//créqtion d'une room
 	void sendInvitation(std::string destinataire);//invite un amis à une partie
 	bool joinPartie(std::string host);//join la partie de host
 
@@ -127,7 +130,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	stringTable* get_history(std::string* user, int first_game, int nbr_games);
+	stringTable* get_history(std::string* user, uint32_t first_game, uint32_t nbr_games);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	// pas sur 

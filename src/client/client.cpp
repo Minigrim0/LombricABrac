@@ -169,6 +169,44 @@ void Client::chatSend(std::string m, std::string destinataire){
 	sendMutex.unlock();
 }
 
+stringTable* Client::getFriendList(){
+	message m{};
+	
+	stringTable* res = new stringTable;
+	
+	m.type = FRI_LS_S;
+	m.text = "";
+
+	std::string* reponse = waitAnswers(FRI_LS_R,m);
+
+	friend_p obj;
+	obj.ParseFromString(*reponse);
+
+
+	res->size = obj.friends_size();  
+	res->table = new std::string[res->size];
+	for (int i=0;i<res->size;i++){
+		res->table[static_cast<uint32_t>(i)] = obj.friends(i);
+	}
+
+	delete reponse;
+	return res;
+}
+
+void Client::delFriend(std::string destinataire){
+	message m{};
+
+	del_friend obj;
+	obj.set_pseudo(destinataire);
+
+	obj.SerializeToString(&m.text);
+	m.type = FRI_RMV;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 bool Client::createRoom(std::string host){
 	message m{};
 
@@ -331,11 +369,32 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 
 }
 
-/*
-std::string* Client::get_history(std::string* user, uint32_t first_game, uint32_t nbr_games){
-	//???????????????????
+stringTable* Client::get_history(std::string* user, uint32_t first_game, uint32_t nbr_games){
+	//utilise ou les params??????
+	//????? Warning
+
+	message m{};
+	
+	stringTable* res = new stringTable;
+	
+	m.type = GET_HISTORY;
+	m.text = "";
+
+	std::string* reponse = waitAnswers(HISTORY_R,m);
+
+	history obj;
+	obj.ParseFromString(*reponse);
+
+
+	res->size = obj.partie_size();  
+	res->table = new std::string[res->size];
+	for (int i=0;i<res->size;i++){
+		res->table[static_cast<uint32_t>(i)] = obj.partie(i);
+	}
+
+	delete reponse;
+	return res;
 }
-*/
 
 bool Client::gameStarted(){
 	return started;
