@@ -33,12 +33,16 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
     }
 }
 
+
 void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
     if(msg_type == CON_S){
         la_poste->reception();
         usr->ParseFromString(la_poste->get_buffer());
-        if(usr->isregister() == true){ // si joueur a deja un compte
-            if(db->verify_user(usr->pseudo(),usr->password())){ // test indentifiant + password
+        if(usr->isregister()){ // si joueur a deja un compte
+            if(usr->check_passwd(db, usr->password())){ // test indentifiant + password
+                int user_id;
+                db->get_user_id(usr->pseudo(), &user_id);
+                usr->set_id(user_id);
                 la_poste->envoie_bool(CON_R,1);
             }
             else{
@@ -47,8 +51,11 @@ void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlaye
         }
         else{
             db->register_user(usr->pseudo(),usr->password());
+            int user_id;
+            db->get_user_id(usr->pseudo(), &user_id);
+            usr->set_id(user_id);
+            la_poste->envoie_bool(CON_R,1);
         }
-        
     }
     else if(usr->is_auth()){
         switch(msg_type){
@@ -56,27 +63,31 @@ void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlaye
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
-                db->send_message(usr->pseudo(),chat_ob.pseudo(),chat_ob.msg());
+                int receiver_id;db->get_user_id(chat_ob.pseudo(), &receiver_id);
+                db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
             case CHAT_R:{
-                db->get_messages(usr->pseudo());
+                Chat_r chat_r;
+                db->get_all_messages(usr->get_id(), &chat_r);
+                break;
             }
             //case INVI_S:{
             //    Invitation invit;
             //    la_poste->reception();
             //    invit.ParseFromString(la_poste->get_buffer());
             //    db->send_invitation(usr->pseudo(),invit.pseudo());
-            //} 
+            //}
             //case GET_LOMB:{
             //    db->get_lombrics(usr->pseudo());
-            //    
+            //
             //}
             case LOMB_MOD:{
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
                 db->set_lombric_name(modif.id_lomb(),modif.name_lomb());
+                break;
             }
             //case GET_HISTORY:{
             //    Get_history r_history;
@@ -96,26 +107,32 @@ void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlaye
                 Fri_add fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                db->add_friend(usr->pseudo(),fri.user());
+                int friend_id;db->get_user_id(fri.user(), &friend_id);
+                db->add_friend(usr->get_id(), friend_id);
+                break;
             }
             case FRI_ACCEPT:{
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                db->accept_friend_invite(usr->pseudo(),fri.user());
+                int friend_id;db->get_user_id(fri.user(), &friend_id);
+                db->accept_friend_invite(usr->get_id(), friend_id);
+                break;
             }
             case FRI_LS_S:{
                 Fri_ls_r fri;
-                fri = db->get_friend_list(usr->pseudo());
+                db->get_friend_list(usr->get_id(), &fri);
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
+                break;
             }
             case FRI_RMV:{
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                db->remove_friend(fri.user());
+                int friend_id;db->get_user_id(fri.user(), &friend_id);
+                db->remove_friend(usr->get_id(), friend_id);
+                break;
             }
         }
-
     }
 }
