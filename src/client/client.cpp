@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), FriendRequest(){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -49,9 +49,44 @@ void* Client::run(){
 				waitMutex.unlock();//notify la fct qui attendait cette réponse
 				reponseAttendue = 0;
 			}
+			else{
+				switch (msg.type){
+					case CHAT_R:
+						chatRcv(msg);
+						break;
+					case INVI_R:
+						invitFriendRcv(msg);
+						break;
+				}
+			}
 		}
 	}
 	return nullptr;
+}
+
+void Client::chatRcv(message& m){
+	Chat obj;
+	obj.ParseFromString(m.text);
+	messageRcv.push_back({obj.pseudo(), obj.msg()});
+}
+
+std::vector<chat_r> Client::getMsg(){
+	std::vector<chat_r> res = messageRcv;
+	messageRcv.clear();
+	return res;
+}
+
+void Client::invitFriendRcv(message& m){
+	Invitation obj;
+	obj.ParseFromString(m.text);
+	FriendRequest.push_back({obj.pseudo()});
+}
+
+
+std::vector<std::string> Client::getFriendReq(){
+	std::vector<std::string> res = FriendRequest;
+	FriendRequest.clear();
+	return res;
 }
 
 void Client::sendMessage(message& msg){

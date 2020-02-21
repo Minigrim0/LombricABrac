@@ -29,6 +29,11 @@ struct lombricPos
 	int pos_y;
 };
 
+struct chat_r{
+	std::string username;
+	std::string text; 
+};
+
 struct stringTable{
 	int size;
 	std::string* table;
@@ -112,9 +117,18 @@ private:
 	int client_socket;
 	bool started;
 	bool changed;
+	std::vector<chat_r> messageRcv;	
+	std::vector<std::string> FriendRequest;	
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
+
+	//méthodes sur les messages inattendus
+	void chatRcv(message& m);
+	std::vector<chat_r> getMsg();
+	void invitFriendRcv(message& m);
+	std::vector<std::string> getFriendReq();
+
 public:
 	Client(char* ip, uint16_t port);
 	void* run();
