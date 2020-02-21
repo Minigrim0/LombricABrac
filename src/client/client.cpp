@@ -13,6 +13,7 @@ Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),re
 	//init du sockaddr du client
 	client_addr.sin_family = AF_INET;
 	client_addr.sin_port=htons(0);
+
 	client_addr.sin_addr.s_addr=htonl(INADDR_ANY);
 
 	client_socket=socket(PF_INET,SOCK_STREAM,0);
@@ -169,17 +170,17 @@ void Client::chatSend(std::string m, std::string destinataire){
 	sendMutex.unlock();
 }
 
-stringTable* Client::getFriendList(){
+stringTable* Client::getFriendList(std::string username){
 	message m{};
 	
 	stringTable* res = new stringTable;
 	
 	m.type = FRI_LS_S;
-	m.text = "";
+	m.text = username;
 
 	std::string* reponse = waitAnswers(FRI_LS_R,m);
 
-	friend_p obj;
+	friend_p obj_r;
 	obj.ParseFromString(*reponse);
 
 
@@ -369,16 +370,13 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 
 }
 
-stringTable* Client::get_history(std::string* user, uint32_t first_game, uint32_t nbr_games){
-	//utilise ou les params??????
-	//????? Warning
-
+stringTable* Client::get_history(std::string* user){
 	message m{};
 	
 	stringTable* res = new stringTable;
 	
 	m.type = GET_HISTORY;
-	m.text = "";
+	m.text = user;
 
 	std::string* reponse = waitAnswers(HISTORY_R,m);
 

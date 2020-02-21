@@ -112,7 +112,7 @@ public:
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
-	stringTable* getFriendList();//revoie la liste d'amis
+	stringTable* getFriendList(std::string username);//revoie la liste d'amis
 	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
 	bool createRoom(std::string host);//créqtion d'une room
 	void sendInvitation(std::string destinataire);//invite un amis à une partie
@@ -130,7 +130,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	stringTable* get_history(std::string* user, uint32_t first_game, uint32_t nbr_games);//renvoie l'histoirique des parties
+	stringTable* get_history(std::string* user);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	// pas sur 
