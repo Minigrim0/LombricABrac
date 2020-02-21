@@ -34,6 +34,16 @@ struct stringTable{
 	std::string* table;
 };
 
+struct gameHistory{
+	std::string* pseudo;
+	std::uint32_t* point;
+	std::uint32_t date;
+};
+
+struct historyTable{
+	int size;
+	gameHistory* table;
+};
 
 /*
 on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier 
@@ -49,20 +59,20 @@ struct invitationTable{
 	invitation* table;
 };
 
-struct map_s{
+struct map_s{ //info sur la map
 	uint32_t largeur;
 	uint32_t hauteur;
 	uint32_t* mur;
 };
 
-struct vers_s{
+struct vers_s{ //état d'un vers
 	uint32_t id;
 	uint32_t vie;
 	uint32_t pos_x;
 	uint32_t pos_y;
 };
 
-struct projectile_s{
+struct projectile_s{ //info sur les projectiles
 	uint32_t pos_x;
 	uint32_t pos_y;
 	uint32_t speed_x;
@@ -104,9 +114,6 @@ public:
 
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée
-	//va disparaitre:
-	//bool connection(std::string username, std::string password);//demande de connection
-	bool createAcount(std::string username, std::string password);//demande de création de compte
 	
 	//méthode utilisées dans le chat
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
@@ -130,7 +137,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	stringTable* get_history(std::string user);//renvoie l'histoirique des parties
+	historyTable* get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	// pas sur 

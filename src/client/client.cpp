@@ -63,9 +63,9 @@ void Client::sendMessage(message& msg){
 	size = static_cast<uint32_t>(msg.text.length());
 	size = htonl(size);
 
-	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0));
-	res = static_cast<int>(send(client_socket, &size, sizeof(size), 0));
-	while (sent_size<size){
+	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
+	res = static_cast<int>(send(client_socket, &size, sizeof(size), 0));//envoie la taille du message
+	while (sent_size<size){ //envoie tout le message (string)
 		res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
 		sent_size += static_cast<uint32_t>(res);
         parser += res;
@@ -81,7 +81,7 @@ void Client::readMessage(){
 	if(res==-1){
 
 	}
-	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0));
+	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0)); // recois la taille du message
 	if (res==-1){
 
 	}
@@ -91,7 +91,7 @@ void Client::readMessage(){
 	char* parser = buffer;
 	buffer[size] = '\0';
 
-	while (size>0){
+	while (size>0){ //recois tout le message 
 		int r = static_cast<int>(recv(client_socket, parser, size, 0));
 		size -= static_cast<uint32_t>(r);
 		parser += r;
@@ -126,38 +126,20 @@ bool Client::connection(std::string username, std::string password, bool inscrip
 	obj.set_password(password);
 	obj.set_isregister(inscription);
 
-	obj.SerializeToString(&m.text);
+	obj.SerializeToString(&m.text); //convertis stucture en string
 	m.type = CON_S;
 
-	std::string* reponse = waitAnswers(CON_R, m);
+	std::string* reponse = waitAnswers(CON_R, m); //envoie le message au serveur et attends la réponse
 
 	bool res = (*reponse)[0];
 
 	delete reponse;
 	return res;
 }
-
-bool Client::createAcount(std::string username, std::string password){
-	message m{};
-	//construction de la structure
-	UserRegister obj;
-	obj.set_pseudo(username);
-	obj.set_password(password);
-
-	obj.SerializeToString(&m.text);
-	m.type = RG_S;
-
-	std::string* reponse = waitAnswers(RG_R, m);
-
-	bool res = (*reponse)[0];
-
-	delete reponse;
-	return res;
-}
-
 void Client::chatSend(std::string m, std::string destinataire){
 	message msg{};
 
+	//construction de la structure
 	Chat obj;
 	obj.set_pseudo(destinataire);
 	obj.set_msg(m);
@@ -180,14 +162,14 @@ stringTable* Client::getFriendList(std::string username){
 
 	std::string* reponse = waitAnswers(FRI_LS_R,m);
 
-	friend_p obj;
-	obj.ParseFromString(*reponse);
+	Fri_ls_r obj;
+	obj.ParseFromString(*reponse); //reconvertit le string recu en struct
 
-
-	res->size = obj.friends_size();  
+	//remplis la struct à renvoyer à l'affichage
+	res->size = obj.user_size();  
 	res->table = new std::string[res->size];
 	for (int i=0;i<res->size;i++){
-		res->table[static_cast<uint32_t>(i)] = obj.friends(i);
+		res->table[static_cast<uint32_t>(i)] = obj.user(i);
 	}
 
 	delete reponse;
@@ -197,8 +179,8 @@ stringTable* Client::getFriendList(std::string username){
 void Client::delFriend(std::string destinataire){
 	message m{};
 
-	del_friend obj;
-	obj.set_pseudo(destinataire);
+	Fri_rmv obj;
+	obj.set_user(destinataire);
 
 	obj.SerializeToString(&m.text);
 	m.type = FRI_RMV;
@@ -370,24 +352,42 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 
 }
 
-stringTable* Client::get_history(std::string user){
+historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
 	message m{};
 	
-	stringTable* res = new stringTable;
+	//construction de la struct du joueur qui demande son historique
+	Get_history obj_s;  
+	obj_s.set_pseudo(user);
+	obj_s.set_first_game(first_game);
+	obj_s.set_nbr_game(nbr_game);
 	
 	m.type = GET_HISTORY;
-	m.text = user;
+	obj_s.SerializeToString(&m.text); 
 
-	std::string* reponse = waitAnswers(HISTORY_R,m);
+	std::string* reponse = waitAnswers(HISTORY_R,m); //envoie strucr et recois l'historique
 
-	history obj;
-	obj.ParseFromString(*reponse);
+	History_r obj_r; //obj dans lequel on place la struct que le serveur envoie
+	obj_r.ParseFromString(*reponse); 
+
+	//création et remplissage de la struct de l'historique à envoyer à l'affichage
+	historyTable* res = new historyTable;
+	res->size = obj_r.history_size();  
+	res->table = new gameHistory[res->size];
 
 
-	res->size = obj.partie_size();  
-	res->table = new std::string[res->size];
+	res->table->pseudo = new std::string[static_cast<uint32_t>(obj_r.history(0).pseudo_size())];
+	res->table->point = new uint32_t[static_cast<uint32_t>(obj_r.history(0).point_size())];
 	for (int i=0;i<res->size;i++){
-		res->table[static_cast<uint32_t>(i)] = obj.partie(i);
+		//les pseudos des joueurs de la partie
+		for (int j=0;j<4;i++){
+			res->table[static_cast<uint32_t>(i)].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(i);
+		}
+		//les points
+		for (int j=0;j<4;i++){
+			res->table[static_cast<uint32_t>(i)].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(i);
+		}
+		//la date
+		res->table[static_cast<uint32_t>(i)].date = obj_r.history(i).date();
 	}
 
 	delete reponse;
@@ -448,9 +448,9 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 	std::string* reponse = waitAnswers(GAME_INFO_R,m);
 
 	infoPartie_p obj;
-	obj.ParseFromString(*reponse);
+	obj.ParseFromString(*reponse); //struct recue par le serveur
 
-	//struct map_s carte
+	//remplis le tableau des murs
 	gameInfo->carte.mur = new uint32_t[static_cast<uint32_t>(obj.mur_size())];
 	for (int i=0;i<obj.mur_size();i++){
 		gameInfo->carte.mur[i] = obj.mur(i);
@@ -459,7 +459,7 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 	gameInfo->carte.largeur = obj.largeur(); 
 	gameInfo->carte.hauteur = obj.hauteur(); 
 
-	//struct versListe
+	//remplis le vecteur des lombris
 	gameInfo->versListe = std::vector<vers_s>(static_cast<uint32_t>(obj.lomb_size()));
 	for (int i=0;i<obj.lomb_size();i++){
 		uint32_t index = static_cast<uint32_t>(i);
@@ -469,7 +469,7 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 		gameInfo->versListe[index].pos_y = obj.lomb(i).pos_y();
 	}
 
-	//struct armes
+	//remplis le vecteur des projectiles
 	gameInfo->armes.size = static_cast<uint32_t>(obj.id_arme_size());
 	gameInfo->armes.WeaponsIds = new uint32_t[static_cast<uint32_t>(gameInfo->armes.size)];
 	for (int i=0;i<obj.id_arme_size();i++){
