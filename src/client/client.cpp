@@ -180,7 +180,7 @@ stringTable* Client::getFriendList(std::string username){
 
 	std::string* reponse = waitAnswers(FRI_LS_R,m);
 
-	friend_p obj_r;
+	friend_p obj;
 	obj.ParseFromString(*reponse);
 
 
@@ -370,7 +370,7 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 
 }
 
-stringTable* Client::get_history(std::string* user){
+stringTable* Client::get_history(std::string user){
 	message m{};
 	
 	stringTable* res = new stringTable;

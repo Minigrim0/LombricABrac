@@ -130,7 +130,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
 
 	//méthode pour l'historique
-	stringTable* get_history(std::string* user);//renvoie l'histoirique des parties
+	stringTable* get_history(std::string user);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	// pas sur 
