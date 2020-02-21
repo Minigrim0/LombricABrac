@@ -6,11 +6,6 @@ message UserConnect{
   string password = 3;
 }
 
-message UserRegister{
-  string pseudo = 1;
-  string password = 2;
-}
-
 message Chat{
   string pseudo = 1;
   string msg = 2;
@@ -76,15 +71,9 @@ message Get_history{
 }
 
 message History{
-  string pseudo_1 = 1;
-  string pseudo_2 = 2;
-  string pseudo_3 = 3;
-  string pseudo_4 = 4;
-  uint32 pouint32_1 = 5;
-  uint32 pouint32_2 = 6;
-  uint32 pouint32_3 = 7;
-  uint32 pouint32_4 = 8;
-  uint32 date = 9;
+  repeated string pseudo = 1;
+  repeated uint32 point = 2;
+  uint32 date = 3;
 }
 
 message History_r{
@@ -147,20 +136,6 @@ message infoPartie_p{
   repeated uint32 mur = 3;
   repeated Lombric lomb = 4;
   repeated uint32 id_arme = 5;
-}
-
-message history{
-  repeated string user = 1;
-  uint32 first = 2;
-  uint32 nb_games = 3;
-}
-
-message del_friend{
-  string pseudo = 1;
-}
-
-message friend_p{
-  repeated string friends = 1;
 }
 
 message Create_room{
