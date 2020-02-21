@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include "../lib/sqlite3.h"
+#include "../lib/bcrypt.h"
 #include "../cpl_proto/user.pb.h"
 
 #define DT_USR 1 // Datatype UserConnect
@@ -46,9 +47,9 @@ class DataBase{
 
         // Message operations
         int send_message(int sender_id, int receiver_id, std::string message);
-        int get_received_messages(int user_id, Chat_r* chat_r);
-        int get_sent_messages(int user_id, Chat_r* chat_r);
-        int get_all_messages(int user_id, Chat_r* chat_r);
+        int get_received_messages(int user_id, Chat_r* chat_r); // ?
+        int get_sent_messages(int user_id, Chat_r* chat_r); // ?
+        int get_all_messages(int user_id, Chat_r* chat_r); // ?
 
         // Friendship operations
         int add_friend(int sender_id, int receiver_id);
@@ -69,6 +70,9 @@ class DataBase{
         char* m_zErrMsg; // The error message in case there a problem
         std::string m_sql_request; // The last performed request
         std::ostringstream m_stringStream; // Object used to properly concatenate requests
+
+        char salt[BCRYPT_HASHSIZE]; //salt for hash function
+        char hash[BCRYPT_HASHSIZE]; // store the hash of passw 
 };
 
 #endif

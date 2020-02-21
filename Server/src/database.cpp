@@ -3,6 +3,7 @@
 
 #include "../includes/database.hpp"
 #include "../cpl_proto/user.pb.h"
+#include "../lib/bcrypt.h"
 
 // Static attribute must be declared before class methods
 uint8_t DataBase::m_data_type;
@@ -163,9 +164,11 @@ int DataBase::get_passwd(std::string username, std::string* password){
 int DataBase::register_user(std::string username, std::string password){
     m_stringStream.str("");
     m_stringStream.clear();
+    bcrypt_gensalt(12,salt);
+    bcrypt_hashpw(password.c_str(),salt,hash);
 
     m_stringStream << "INSERT INTO users (username,password,victory_amount)";
-    m_stringStream << "VALUES (" << username << ", " << password << ", 0);";
+    m_stringStream << "VALUES (" << username << ", " << hash << ", 0);";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
