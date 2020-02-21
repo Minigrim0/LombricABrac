@@ -45,6 +45,13 @@ struct historyTable{
 	gameHistory* table;
 };
 
+struct playerRank
+{
+	int size;
+	std::string* pseudo;
+	uint32_t* points;
+};
+
 /*
 on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier 
 si c'est une invitation à une partie ou un ajout d'amis
@@ -140,7 +147,7 @@ public:
 	historyTable* get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
-	// pas sur 
+	playerRank* getRank(uint32_t nbr_players);
 
 	//méthodes pour la partie
 	bool gameStarted();

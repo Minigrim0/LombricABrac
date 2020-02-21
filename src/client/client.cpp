@@ -379,15 +379,45 @@ historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_
 	res->table->point = new uint32_t[static_cast<uint32_t>(obj_r.history(0).point_size())];
 	for (int i=0;i<res->size;i++){
 		//les pseudos des joueurs de la partie
+		uint32_t index_table = static_cast<uint32_t>(i);
 		for (int j=0;j<4;i++){
-			res->table[static_cast<uint32_t>(i)].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(i);
+			res->table[index_table].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(i);
 		}
 		//les points
 		for (int j=0;j<4;i++){
-			res->table[static_cast<uint32_t>(i)].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(i);
+			res->table[index_table].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(i);
 		}
 		//la date
-		res->table[static_cast<uint32_t>(i)].date = obj_r.history(i).date();
+		res->table[index_table].date = obj_r.history(i).date();
+	}
+
+	delete reponse;
+	return res;
+}
+
+playerRank* Client::getRank(uint32_t nbr_players){
+	message m{};
+
+	Get_rank obj_s;  
+	obj_s.set_nbr_player(nbr_players);
+	
+	m.type = GET_RANK;
+	obj_s.SerializeToString(&m.text); 
+
+	std::string* reponse = waitAnswers(RANK_R,m); //envoie strucr et recois l'historique
+
+	Rank_r obj_r; //obj dans lequel on place la struct que le serveur envoie
+	obj_r.ParseFromString(*reponse); 
+
+	playerRank* res = new playerRank;
+	res->size = obj_r.user_size(); 
+	res->pseudo = new std::string[res->size];
+	res->points = new uint32_t[res->size];
+
+	for (int i=0;i<res->size;i++){
+		uint32_t index = static_cast<uint32_t>(i);
+		res->pseudo[index] = obj_r.user(i);
+		res->points[index] = obj_r.point(i);
 	}
 
 	delete reponse;
