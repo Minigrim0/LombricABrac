@@ -67,26 +67,26 @@ void* Client::run(){
 void Client::chatRcv(message& m){
 	Chat obj;
 	obj.ParseFromString(m.text);
-	messageRcv.push_back({obj.pseudo(), obj.msg()});
+	messageRcv.push_back({obj.pseudo(), obj.msg()}); //ajoute message recu dans le vecteur
 }
 
 std::vector<chat_r> Client::getMsg(){
 	std::vector<chat_r> res = messageRcv;
-	messageRcv.clear();
-	return res;
+	messageRcv.clear(); //vide vecteur
+	return res; // renvoie le vecteur de messages recus 
 }
 
 void Client::invitFriendRcv(message& m){
 	Invitation obj;
 	obj.ParseFromString(m.text);
-	FriendRequest.push_back({obj.pseudo()});
+	FriendRequest.push_back({obj.pseudo()}); //ajoute demande d'ami dans le vecteur
 }
 
 
 std::vector<std::string> Client::getFriendReq(){
 	std::vector<std::string> res = FriendRequest;
-	FriendRequest.clear();
-	return res;
+	FriendRequest.clear(); //vide vecteur
+	return res; //renvoie le vecteur de demandes d'amis
 }
 
 void Client::sendMessage(message& msg){
