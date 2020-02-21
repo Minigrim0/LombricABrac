@@ -81,13 +81,12 @@ message History_r{
 }
 
 message Get_rank{
-  uint32 id_first_player = 1;
-  uint32 nbr_player = 2;
+  uint32 nbr_player = 1;
 }
 
 message Rank_r{
    repeated string user = 1;
-   repeated uint32 pouint32 = 2;
+   repeated uint32 point = 2;
 }
 
 message Fri_add{
