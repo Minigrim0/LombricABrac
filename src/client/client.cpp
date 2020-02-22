@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), invitations(){
+Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),reponseAttendue(0),client_socket(),started(false),changed(false),messageRcv(),invitations(),thisGame(nullptr){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -80,6 +80,40 @@ std::vector<invitation> Client::getInvitations(){
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
+}
+
+void Client::lombChanged(message &m){
+	Lombric obj;
+	obj.ParseFromString(m.text);
+	for (int i=0;i<static_cast<int>(thisGame->versListe.size());i++){
+		uint32_t index = static_cast<uint32_t>(i);
+		if (obj.id_lomb() == thisGame->versListe[index].id){ //vers modifié est trouvé
+			//update infos du vers
+			thisGame->versListe[index].pos_x = obj.pos_x();
+			thisGame->versListe[index].pos_y = obj.pos_y();
+			thisGame->versListe[index].vie = obj.vie();
+			break;
+		}
+	}
+	changed = true; //modification d'un lombric
+}
+
+void Client::mursChanged(message &m){
+	map obj;
+	obj.ParseFromString(m.text);
+	thisGame->carte.largeur = obj.largeur();
+	thisGame->carte.hauteur = obj.hauteur();
+	//remplis le vecteur avec tous les murs
+	//thisGame->carte.mur.clear() pas necessaire je pense
+	thisGame->carte.mur = std::vector<uint32_t>(static_cast<uint32_t>(obj.mur_size()));
+	for (int i=0;i<obj.mur_size();i++){
+		thisGame->carte.mur[static_cast<uint32_t>(i)] = obj.mur(i);
+	}
+	changed = true; //modifications sur la map
+}
+
+void Client::newProjectile(message &m){
+	//ds la fct shoot on donnes des params diff que la struct projectile_s?? OK???
 }
 
 void Client::sendMessage(message& msg){
@@ -419,11 +453,11 @@ historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_
 		//les pseudos des joueurs de la partie
 		uint32_t index_table = static_cast<uint32_t>(i);
 		for (int j=0;j<4;i++){
-			res->table[index_table].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(i);
+			res->table[index_table].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(j);
 		}
 		//les points
 		for (int j=0;j<4;i++){
-			res->table[index_table].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(i);
+			res->table[index_table].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(j);
 		}
 		//la date
 		res->table[index_table].date = obj_r.history(i).date();
@@ -518,10 +552,10 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 	infoPartie_p obj;
 	obj.ParseFromString(*reponse); //struct recue par le serveur
 
-	//remplis le tableau des murs
-	gameInfo->carte.mur = new uint32_t[static_cast<uint32_t>(obj.mur_size())];
+	//remplis le vecteur des murs
+	gameInfo->carte.mur = std::vector<uint32_t>(static_cast<uint32_t>(obj.mur_size()));
 	for (int i=0;i<obj.mur_size();i++){
-		gameInfo->carte.mur[i] = obj.mur(i);
+		gameInfo->carte.mur[static_cast<uint32_t>(i)] = obj.mur(i);
 	}
 
 	gameInfo->carte.largeur = obj.largeur(); 
@@ -543,6 +577,8 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 	for (int i=0;i<obj.id_arme_size();i++){
 		gameInfo->armes.WeaponsIds[i] = obj.id_arme(i);
 	}
+
+	thisGame = gameInfo;
 }
 
 

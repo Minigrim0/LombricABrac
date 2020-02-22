@@ -65,7 +65,7 @@ struct invitation{
 struct map_s{ //info sur la map
 	uint32_t largeur;
 	uint32_t hauteur;
-	uint32_t* mur;
+	std::vector<uint32_t> mur;
 };
 
 struct vers_s{ //état d'un vers
@@ -110,6 +110,7 @@ private:
 	bool changed;
 	std::vector<chat_r> messageRcv;	
 	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)	
+	infoPartie_s* thisGame;
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
@@ -117,9 +118,13 @@ private:
 	//méthodes sur les messages inattendus
 	void chatRcv(message& m);
 	void invite(message& m);
+	void lombChanged(message &m);
+	void mursChanged(message &m);
+	void newProjectile(message &m);
 	
 public:
 	Client(char* ip, uint16_t port);
+	~Client(){delete thisGame;}
 	void* run();
 
 	//méthode utilisées dans le pré-menu
