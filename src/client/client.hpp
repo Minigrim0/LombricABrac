@@ -116,10 +116,8 @@ private:
 
 	//méthodes sur les messages inattendus
 	void chatRcv(message& m);
-	std::vector<chat_r> getMsg(); //renvoie le vecteur de messages (nom + msg)
 	void invite(message& m);
-	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
-
+	
 public:
 	Client(char* ip, uint16_t port);
 	void* run();
@@ -168,4 +166,9 @@ public:
 	void inline acceptInvitation(invitation* inv);//en fonction de l'invitation acceptée, envoi le bon message au serveur
 
 	void getGameInfo(infoPartie_s* gameInfo);
+
+	//méthodes sur les messages inattendus
+	std::vector<chat_r> getMsg(); //renvoie le vecteur de messages (nom + msg)
+	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
+
 };
