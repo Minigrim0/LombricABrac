@@ -29,7 +29,7 @@ Without filling it :
     ./init_db
 ```
 
-With some random useless data in it :
+With some random use(ful)less data in it :
 ```
     make init_db
     ./init_db true
@@ -46,7 +46,7 @@ With some random useless data in it :
 ```
 
 
-## Database methods
+## Database messages methods
 ### ```int send_message(int sender_id, int receiver_id, std::string message);```
 Sends a message to the user with the receiver_id, from the user with sender_id
 
