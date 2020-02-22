@@ -18,10 +18,6 @@
 #include <list>
 #include <vector>
 
-
-#define INVIT_PARTY 1   //invitation à une partie
-#define INVIT_FRIEND 2  //quand ajout d'amis
-
 struct lombricPos
 {
 	int id_lomb;
@@ -62,13 +58,8 @@ on créé une structure une structure invitation car l'affichage les affiche tou
 si c'est une invitation à une partie ou un ajout d'amis
 */
 struct invitation{
-	uint32_t type;//peut prendre INVIT_PARTY ou INVIT_FRIEND comme valeur
+	uint32_t type;//peut prendre INVI_R ou FRI_RCV comme valeur
 	std::string text;//texte à afficher
-};
-
-struct invitationTable{
-	uint32_t size;
-	invitation* table;
 };
 
 struct map_s{ //info sur la map
@@ -118,7 +109,7 @@ private:
 	bool started;
 	bool changed;
 	std::vector<chat_r> messageRcv;	
-	std::vector<std::string> FriendRequest;	
+	std::vector<invitation> invitations;	
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
@@ -126,8 +117,8 @@ private:
 	//méthodes sur les messages inattendus
 	void chatRcv(message& m);
 	std::vector<chat_r> getMsg();
-	void invitFriendRcv(message& m);
-	std::vector<std::string> getFriendReq();
+	void invite(message& m);
+	std::vector<invitation> getInvitations();
 
 public:
 	Client(char* ip, uint16_t port);
@@ -172,9 +163,7 @@ public:
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
 	bool endTour();//fin du tour
-
-	invitationTable* getInvitation();//renvoie le tableau des dernières invitations reçues
-
+	
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void inline acceptInvitation(invitation* inv);//en fonction de l'invitation acceptée, envoi le bon message au serveur
 

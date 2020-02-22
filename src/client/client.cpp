@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), FriendRequest(){
+Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), invitations(){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -45,19 +45,16 @@ void* Client::run(){
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			readMessage();
-			if (reponseAttendue == static_cast<int>(msg.type)){
-				std::cout << "réponse reçue" << std::endl;
+			if (reponseAttendue == msg.type){
 				waitMutex.unlock();//notify la fct qui attendait cette réponse
 				reponseAttendue = 0;
 			}
 			else{
-				switch (msg.type){
-					case CHAT_R:
-						chatRcv(msg);
-						break;
-					case INVI_R:
-						invitFriendRcv(msg);
-						break;
+				if (msg.type == CHAT_R){
+					chatRcv(msg);
+				}
+				else if (msg.type == INVI_R || msg.type == FRI_RCV){
+					invite(msg);
 				}
 			}
 		}
@@ -77,16 +74,16 @@ std::vector<chat_r> Client::getMsg(){
 	return res; // renvoie le vecteur de messages recus 
 }
 
-void Client::invitFriendRcv(message& m){
+void Client::invite(message& m){
 	Invitation obj;
 	obj.ParseFromString(m.text);
-	FriendRequest.push_back({obj.pseudo()}); //ajoute demande d'ami dans le vecteur
+	invitations.push_back({m.type, obj.pseudo()}); //ajoute demande d'ami dans le vecteur
 }
 
 
-std::vector<std::string> Client::getFriendReq(){
-	std::vector<std::string> res = FriendRequest;
-	FriendRequest.clear(); //vide vecteur
+std::vector<invitation> Client::getInvitations(){
+	std::vector<invitation> res = invitations;
+	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
 }
 
@@ -553,13 +550,14 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 #include <thread>
 int main(){
+	/*
 	Client c("127.0.0.1", 4444);
 	std::thread t (&Client::run,&c);
 
 	bool res = true;
 	res = c.connection("Simon", "Password", true);
 	std::cout << res << std::endl;
-	t.join();
+	t.join();*/
 }
 
 
