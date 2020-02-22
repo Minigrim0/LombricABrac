@@ -103,7 +103,7 @@ private:
 	};
 	message msg;
 	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
-	std::mutex waitMutex;//mutex qui permet d'attedre la réponse à un message
+	std::mutex msgMutex;
 	uint8_t reponseAttendue;
 	int client_socket;
 	bool started;
@@ -150,7 +150,7 @@ public:
 	historyTable* get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
-	playerRank* getRank(uint32_t nbr_players);
+	playerRank getRank(uint32_t nbr_players);
 
 	//méthodes pour la partie
 	bool gameStarted();

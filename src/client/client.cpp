@@ -1,6 +1,6 @@
 #include "client.hpp"
 
-Client::Client(char* adresse, uint16_t port):msg({}), sendMutex(),waitMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), invitations(){
+Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),reponseAttendue(0),client_socket(),started(false),changed(false), messageRcv(), invitations(){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -45,17 +45,11 @@ void* Client::run(){
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			readMessage();
-			if (reponseAttendue == msg.type){
-				waitMutex.unlock();//notify la fct qui attendait cette réponse
-				reponseAttendue = 0;
+			if (msg.type == CHAT_R){
+				chatRcv(msg);
 			}
-			else{
-				if (msg.type == CHAT_R){
-					chatRcv(msg);
-				}
-				else if (msg.type == INVI_R || msg.type == FRI_RCV){
-					invite(msg);
-				}
+			else if (msg.type == INVI_R || msg.type == FRI_RCV){
+				invite(msg);
 			}
 		}
 	}
@@ -90,14 +84,15 @@ std::vector<invitation> Client::getInvitations(){
 void Client::sendMessage(message& msg){
 	int res;
 	uint32_t size;
+	uint32_t packet_size;
 	uint32_t sent_size = 0;
 	const char* parser = msg.text.c_str();
 	
 	size = static_cast<uint32_t>(msg.text.length());
-	size = htonl(size);
+	packet_size = htonl(size);
 
 	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
-	res = static_cast<int>(send(client_socket, &size, sizeof(size), 0));//envoie la taille du message
+	res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
 	while (sent_size<size){ //envoie tout le message (string)
 		res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
 		sent_size += static_cast<uint32_t>(res);
@@ -111,6 +106,7 @@ void Client::readMessage(){
 	uint32_t size;//taille du message
 	int res;
 
+	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
 
@@ -118,9 +114,8 @@ void Client::readMessage(){
 	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0)); // recois la taille du message
 	if (res==-1){
 
-	}
+	}	
 	size = ntohl(size);
-
 	char* buffer = new char[size+1];
 	char* parser = buffer;
 	buffer[size] = '\0';
@@ -134,11 +129,13 @@ void Client::readMessage(){
 	msg.text = static_cast<std::string>(buffer); 
 	std::cout << "Reçu: " << msg.text << " & type : " << static_cast<int>(msg.type) << std::endl;
 	delete buffer;
+	msgMutex.unlock();
 }
 
 std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	std::string* res = new std::string;
 	sendMutex.lock();
+	msgMutex.lock();
 
 	reponseAttendue = typeAttendu;
 	sendMessage(m);
@@ -151,7 +148,8 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	std::cout << "Unlocked" << std::endl;
 
 	*res = msg.text;
-	waitMutex.unlock();
+	//waitMutex.unlock();
+	msgMutex.unlock();
 	sendMutex.unlock();
 	return res;
 
@@ -435,7 +433,7 @@ historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_
 	return res;
 }
 
-playerRank* Client::getRank(uint32_t nbr_players){
+playerRank Client::getRank(uint32_t nbr_players){
 	message m{};
 
 	Get_rank obj_s;  
@@ -461,7 +459,7 @@ playerRank* Client::getRank(uint32_t nbr_players){
 	}
 
 	delete reponse;
-	return res;
+	return *res;
 }
 
 bool Client::gameStarted(){
@@ -549,14 +547,14 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 
 #include <thread>
-int main(){/*
+int main(){
 	Client c("127.0.0.1", 4444);
 	std::thread t (&Client::run,&c);
 
 	bool res = true;
 	res = c.connection("Simon", "Password", true);
 	std::cout << res << std::endl;
-	t.join();*/
+	t.join();
 }
 
 
