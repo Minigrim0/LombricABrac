@@ -137,6 +137,12 @@ message infoPartie_p{
   repeated uint32 id_arme = 5;
 }
 
+message map{
+  uint32 largeur = 1;
+  uint32 hauteur = 2;
+  repeated uint32 mur = 3;
+}
+
 message Create_room{
   string pseudo = 1;
 }
