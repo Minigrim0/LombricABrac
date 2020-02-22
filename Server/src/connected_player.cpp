@@ -35,3 +35,7 @@ bool ConnectedPlayer::check_passwd(DataBase* db, std::string passwd) const{
 
     return (bcrypt_checkpw(passwd.c_str(),stored_passwd.c_str()) == 0);
 }
+
+std::string ConnectedPlayer::hash_passwd(std::string password) const{
+    return password;
+}
