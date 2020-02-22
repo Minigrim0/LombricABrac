@@ -45,7 +45,8 @@ void* Client::run(){
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			readMessage();
-			if (reponseAttendue == msg.type){
+			if (reponseAttendue == static_cast<int>(msg.type)){
+				std::cout << "réponse reçue" << std::endl;
 				waitMutex.unlock();//notify la fct qui attendait cette réponse
 				reponseAttendue = 0;
 			}
@@ -104,7 +105,8 @@ void Client::sendMessage(message& msg){
 		res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
 		sent_size += static_cast<uint32_t>(res);
         parser += res;
-	}	
+	}
+	std::cout << "send: " << msg.text << " & type : " << static_cast<int>(msg.type) << std::endl; 
 }
 
 void Client::readMessage(){
@@ -133,6 +135,8 @@ void Client::readMessage(){
 	}
 
 	msg.text = static_cast<std::string>(buffer); 
+	std::cout << "Reçu: " << msg.text << " & type : " << static_cast<int>(msg.type) << std::endl;
+	delete buffer;
 }
 
 std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
@@ -142,8 +146,12 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	reponseAttendue = typeAttendu;
 	sendMessage(m);
 
-	waitMutex.lock();//saura toujours le verrouiller
-	waitMutex.lock();//bloc le verrouillage (sorte de wait)
+	//waitMutex.lock();//saura toujours le verrouiller
+	//std::cout << "waitMutex locked" << std::endl;
+	//waitMutex.lock();//bloc le verrouillage (sorte de wait)
+	while(msg.type != typeAttendu);
+
+	std::cout << "Unlocked" << std::endl;
 
 	*res = msg.text;
 	waitMutex.unlock();
@@ -542,6 +550,16 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 	}
 }
 
-int main(){}
+
+#include <thread>
+int main(){
+	Client c("127.0.0.1", 4444);
+	std::thread t (&Client::run,&c);
+
+	bool res = true;
+	res = c.connection("Simon", "Password", true);
+	std::cout << res << std::endl;
+	t.join();
+}
 
 
