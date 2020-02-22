@@ -56,11 +56,14 @@ Returns the list of the messages received by the user with user_id
 ### ```int get_sent_messages(int user_id, Chat_r* chat_r);```
 Returns the list of the messages sent by the user with user_id
 
-
 ### ```int get_all_messages(int user_id, Chat_r* chat_r);```
 Returns the list of all the sent or received messages of the user with user_id
 
-### TODO
-* method to gather the messages sent to a specific user
-* method to gather the messages received from a specific user
-* method to gather the messages exchanged with a specific user (received or sent)
+### ```int get_messages_sent_to(int sender_id, int receiver_id, Chat_r* chat_r);```
+method to gather the messages sent to a specific user
+
+### ```int get_messages_received_from(int receiver_id, int sender_id, Chat_r* chat_r);```
+method to gather the messages received from a specific user
+
+### ```int get_convo(int user1_id, int user2_id, Chat_r* chat_r);```
+method to gather the messages exchanged with a specific user (received or sent)
