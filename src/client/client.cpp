@@ -53,6 +53,7 @@ void* Client::run(){
 			}
 		}
 	}
+	
 	return nullptr;
 }
 
@@ -101,6 +102,7 @@ void Client::sendMessage(message& msg){
 	std::cout << "send: " << msg.text << " & type : " << static_cast<int>(msg.type) << std::endl; 
 }
 
+
 void Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
@@ -109,11 +111,11 @@ void Client::readMessage(){
 	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
-
+		close(client_socket);
 	}
 	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0)); // recois la taille du message
 	if (res==-1){
-
+		close(client_socket);
 	}	
 	size = ntohl(size);
 	char* buffer = new char[size+1];
@@ -135,7 +137,6 @@ void Client::readMessage(){
 std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	std::string* res = new std::string;
 	sendMutex.lock();
-	msgMutex.lock();
 
 	reponseAttendue = typeAttendu;
 	sendMessage(m);
@@ -143,7 +144,7 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	//waitMutex.lock();//saura toujours le verrouiller
 	//std::cout << "waitMutex locked" << std::endl;
 	//waitMutex.lock();//bloc le verrouillage (sorte de wait)
-	while(msg.type != typeAttendu);
+	while(msg.type != typeAttendu){msgMutex.lock();};
 
 	std::cout << "Unlocked" << std::endl;
 
@@ -152,7 +153,6 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	msgMutex.unlock();
 	sendMutex.unlock();
 	return res;
-
 }
 
 
@@ -556,5 +556,3 @@ int main(){
 	std::cout << res << std::endl;
 	t.join();
 }
-
-
