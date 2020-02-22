@@ -501,10 +501,10 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
 }
 
 void Client::acceptInvitation(invitation* inv){
-	if(inv->type == INVIT_PARTY){
+	if(inv->type == INVI_R){
 		joinPartie(inv->text);
 	}
-	else if(inv->type == INVIT_FRIEND){
+	else if(inv->type == FRI_RCV){
 		addJoueur(inv->text);
 	}
 }
@@ -549,8 +549,7 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 
 #include <thread>
-int main(){
-	/*
+int main(){/*
 	Client c("127.0.0.1", 4444);
 	std::thread t (&Client::run,&c);
 

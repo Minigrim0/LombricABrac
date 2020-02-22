@@ -109,16 +109,16 @@ private:
 	bool started;
 	bool changed;
 	std::vector<chat_r> messageRcv;	
-	std::vector<invitation> invitations;	
+	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)	
 	void sendMessage(message& m);
 	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue 
 
 	//méthodes sur les messages inattendus
 	void chatRcv(message& m);
-	std::vector<chat_r> getMsg();
+	std::vector<chat_r> getMsg(); //renvoie le vecteur de messages (nom + msg)
 	void invite(message& m);
-	std::vector<invitation> getInvitations();
+	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
 
 public:
 	Client(char* ip, uint16_t port);
