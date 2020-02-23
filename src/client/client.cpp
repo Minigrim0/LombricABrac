@@ -91,7 +91,7 @@ std::vector<chat_r> Client::getConvo(std::string username){
 	obj.SerializeToString(&m.text); //convertis stucture en string
 	m.type = GET_CONVO;
 
-	std::string* reponse = waitAnswers(CONVO_R, m); //envoie le message au serveur et attends la réponse
+	std::string* reponse = waitAnswers(CHAT_R, m); //envoie le message au serveur et attends la réponse
 
 	convo_r obj_r;
 	std::vector<chat_r> res;
@@ -133,9 +133,10 @@ void Client::mursChanged(message &m){
 	changed = true; //modifications sur la map
 }
 
+/*
 void Client::newProjectile(message &m){
 	//ds la fct shoot on donnes des params diff que la struct projectile_s?? OK???
-}
+}*/
 
 void Client::sendMessage(message& msg){
 	int res;
@@ -353,7 +354,7 @@ stringTable Client::getLombricsName(){
 	res->size = 8;
 	res->table = new std::string[8];//on va recevoir 8 noms de lombrics
 	
-	m.type = GAT_LOMB;
+	m.type = GET_LOMB;
 	m.text = "";
 
 	std::string* reponse = waitAnswers(LOMB_R,m);
@@ -619,12 +620,12 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 
 #include <thread>
-int main(){
+int main(){/*
 	Client c("127.0.0.1", 4444);
 	std::thread t (&Client::run,&c);
 
 	bool res = true;
 	res = c.connection("Simon", "Password", true);
 	std::cout << res << std::endl;
-	t.join();
+	t.join();*/
 }

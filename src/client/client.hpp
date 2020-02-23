@@ -120,7 +120,7 @@ private:
 	void invite(message& m);
 	void lombChanged(message &m);
 	void mursChanged(message &m);
-	void newProjectile(message &m);
+	//void newProjectile(message &m);
 	
 public:
 	Client(char* ip, uint16_t port);
