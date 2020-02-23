@@ -442,7 +442,20 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 	sendMutex.lock();
 	sendMessage(m);
 	sendMutex.unlock();
+}
 
+void Client::set_nbr_equipes(uint32_t nbr_equipes){
+	message m{};
+
+	Nbr_eq_mod obj;
+	obj.set_nbr_eq(nbr_equipes);
+
+	obj.SerializeToString(&m.text);
+	m.type = NB_EQ_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }
 
 historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){

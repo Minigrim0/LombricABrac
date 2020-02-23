@@ -150,6 +150,7 @@ public:
 	void setTime(uint32_t time);//durée partie
 	void setTimeRound(uint32_t time_round);//durée par tours
 	void set_nrb_lombrics(uint32_t nbr_lomb);//nombre lombrics
+	void set_nbr_equipes(uint32_t nbr_equipes);
 
 	//méthode pour l'historique
 	historyTable* get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
