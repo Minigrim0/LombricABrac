@@ -24,11 +24,13 @@
 #define JOIN_R 10// : true //join reussi
 
 // <-- Menu lombric -->
-#define GAT_LOMB 11// : //request le nom des lombrics
+#define GET_LOMB 11// : //request le nom des lombrics
 #define LOMB_R 12// : (uint8_t str)*8 //réponse a get_lomb envoi le nom de tous les lombrics
 #define LOMB_MOD 13// : int (uint8_t str) //modif_nom_lomb id_lomb new_nom_lomb
 
 // <-- Room --> //à envoyer quand quelqu'un rejoint une partie pour recevoir les info
+#define ADD_ROOM_S 43// : //creation d'un room
+#define ADD_ROOM_R 44// : //réponse creation d'un room
 #define USR_ADD 14// : (uint8_t str) //user_join_party user
 #define MAP_MOD 15// : int //map_partie id_map si host
 #define TIME_MOD 16// : int //durée nbr_min si host
@@ -64,5 +66,7 @@
 #define END_TIME 38// : //fin timer debut mort subite
 #define END_GAME 39// : int short int int short int //score_rank score_rank_gagner rank score_rank_gagner
 #define END_TOUR 40// : uint8_t //fin du round lomb_current
+#define GET_GAME_INFO 41// : //demande les infos de début de partie
+#define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
 
 #endif

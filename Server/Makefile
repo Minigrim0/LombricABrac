@@ -1,7 +1,7 @@
 COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf` # -Wsuggest-override -Wconversion -Wsign-conversion
 LINKER_FLAGS=-pthread -ldl -lpthread
 EXECUTABLE=server
-LIBS=lib/sqlite3.o
+LIBS=lib/sqlite3.o lib/bcrypt.o  lib/crypt_blowfish.o  lib/crypt_gensalt.o  lib/wrapper.o
 CXX=g++ -ggdb -ldl
 
 SOURCES=$(wildcard src/*.cpp)
@@ -51,11 +51,21 @@ lib/sqlite3.o: lib/sqlite3.c
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
 	@gcc -c $^ -o $@
 
+lib/bcrypt.o: lib/bcrypt.c $(wildcard lib/crypt_blowfish/*.c)
+	@echo "\e[1;33m >> $^ -> $@\e[0m"
+	@gcc -c $^ && mv *.o lib/
+
+
 clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
 	rm -f cpl_proto/*
+
+hard_clean: clean
+	@echo "\e[0;33m=========== Cleaning libs =============\e[0m"
+	rm -f lib/*.o
+
 
 run: all
 	@echo "\e[0;31m================= Run ================\e[0m"
