@@ -1,3 +1,9 @@
 *.hpp.gch
 *.o
 server
+client
+.vscode
+init_db
+*.db
+Server/supdata.log
+cpl_proto/
