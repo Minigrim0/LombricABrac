@@ -143,6 +143,14 @@ message map{
   repeated uint32 mur = 3;
 }
 
+message convo_s{
+  string pseudo = 1;
+}
+
+message convo_r{
+  repeated Chat msg = 1;
+}
+
 message Create_room{
   string pseudo = 1;
 }
