@@ -345,6 +345,56 @@ int DataBase::get_all_messages(int user_id, Chat_r* chat_r){
     return m_rc;
 }
 
+int DataBase::get_messages_sent_to(int sender_id, int receiver_id, Chat_r* chat_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_CHA;
+
+    m_stringStream << "SELECT content, receiver_id, sender_id FROM messages ";
+    m_stringStream << "WHERE sender_id=" << sender_id << " AND receiver_id=" << receiver_id;
+    m_stringStream << " ORDER BY timestamp;";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, chat_r, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::get_messages_received_from(int receiver_id, int sender_id, Chat_r* chat_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_CHA;
+
+    m_stringStream << "SELECT content, receiver_id, sender_id FROM messages ";
+    m_stringStream << "WHERE sender_id=" << sender_id << " OR receiver_id=" << receiver_id;
+    m_stringStream << " ORDER BY timestamp;";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, chat_r, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::get_convo(int user1_id, int user2_id, Chat_r* chat_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_CHA;
+
+    m_stringStream << "SELECT content, receiver_id, sender_id FROM messages ";
+    m_stringStream << "WHERE (sender_id=" << user1_id << " AND receiver_id=";
+    m_stringStream << user2_id << ") OR (sender_id=" << user2_id;
+    m_stringStream << " AND receiver_id=" << user1_id;
+    m_stringStream << ") ORDER BY timestamp;";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, chat_r, &m_zErrMsg);
+
+    return m_rc;
+}
+
 
 // Friendship operations
 int DataBase::add_friend(int sender_id, int receiver_id){

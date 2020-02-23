@@ -47,9 +47,13 @@ class DataBase{
 
         // Message operations
         int send_message(int sender_id, int receiver_id, std::string message);
-        int get_received_messages(int user_id, Chat_r* chat_r); // ?
-        int get_sent_messages(int user_id, Chat_r* chat_r); // ?
-        int get_all_messages(int user_id, Chat_r* chat_r); // ?
+        int get_received_messages(int user_id, Chat_r* chat_r);
+        int get_sent_messages(int user_id, Chat_r* chat_r);
+        int get_all_messages(int user_id, Chat_r* chat_r);
+        int get_messages_sent_to(int sender_id, int receiver_id, Chat_r* chat_r);
+        int get_messages_received_from(int receiver_id, int sender_id, Chat_r* chat_r);
+        int get_convo(int user1_id, int user2_id, Chat_r* chat_r);
+
 
         // Friendship operations
         int add_friend(int sender_id, int receiver_id);
