@@ -25,7 +25,6 @@ void ConnectedPlayer::set_id(int id){
 }
 
 bool ConnectedPlayer::register_user(DataBase* db, std::string passwd){
-    passwd = hash_passwd(passwd);
     return db->register_user(pseudo(), passwd) == SQLITE_OK;
 }
 
@@ -34,8 +33,4 @@ bool ConnectedPlayer::check_passwd(DataBase* db, std::string passwd) const{
     db->get_passwd(pseudo(), &stored_passwd);
 
     return (bcrypt_checkpw(passwd.c_str(),stored_passwd.c_str()) == 0);
-}
-
-std::string ConnectedPlayer::hash_passwd(std::string password) const{
-    return password;
 }
