@@ -38,6 +38,7 @@
 #define TIME_MOD 16// : int //durée nbr_min si host
 #define TIME_ROUND_MOD 17// : uint8_t //durée par tour si host
 #define NB_LOMB_MOD 18// : int //nombre lombric par joueur si host
+#define NB_EQ_MOD 45// : // nombre équipes si host
 #define JOIN_GROUP_S 19// : uint8_t //id_groupe
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
 
@@ -70,7 +71,7 @@
 #define END_TOUR 40// : uint8_t //fin du round lomb_current
 #define GET_GAME_INFO 41// : //demande les infos de début de partie
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
-#define GET_CONVO 43// : //recois tous les message d'une convo
-#define CONVO_R 43
+#define GET_CONVO 43// : //demande tous les message d'une convo
+#define CONVO_R 44// : //recois tous les message d'une convo
 
 #endif
