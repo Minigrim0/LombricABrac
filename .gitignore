@@ -1,7 +1,7 @@
 *.hpp.gch
 *.o
 server
-client
+a.out
 .vscode
 init_db
 *.db
