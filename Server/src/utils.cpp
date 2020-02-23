@@ -68,12 +68,13 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
-            //case CHAT_R:{
-            //    Chat_r chat_r;
-            //    db->get_all_messages(usr->get_id(), &chat_r);
-            //    la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
-            //    break;
-            //}
+            case CHAT_R:{
+                Chat_r chat_r;
+                //int friend_id;db->get_user_id(fri.user(), &friend_id);
+                //db->get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
+                la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
+                break;
+            }
             //case INVI_S:{
             //    Invitation invit;
             //    la_poste->reception();
