@@ -1,0 +1,10 @@
+image: registry.gitlab.com/infof209-1920/groupe-5:lastest
+
+
+before_script:
+  - apt-get update
+
+compile:
+  script:
+  - cd src/client
+  - make

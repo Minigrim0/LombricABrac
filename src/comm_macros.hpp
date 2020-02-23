@@ -1,5 +1,5 @@
 #ifndef COMM_MACROS_HPP
-    #define COMM_MACROS_HPP
+#define COMM_MACROS_HPP
 
 /*
     File : comm_macros.hpp
@@ -37,6 +37,7 @@
 #define TIME_MOD 16// : int //durée nbr_min si host
 #define TIME_ROUND_MOD 17// : uint8_t //durée par tour si host
 #define NB_LOMB_MOD 18// : int //nombre lombric par joueur si host
+#define NB_EQ_MOD 45// : // nombre équipes si host
 #define JOIN_GROUP_S 19// : uint8_t //id_groupe
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
 
