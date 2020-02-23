@@ -10,14 +10,13 @@
 */
 
 // <-- Pre-menu -->
-#define RG_S 1 // : (uint8_t str) (uint8_t str) -> Register : username password
-#define RG_R 2 // : bool -> Register // : Résultat (réussi/raté)
-#define CON_S 3 // : (uint8_t str) (uint8_t str) -> Connexion : username password
-#define CON_R 4 // : bool -> Connexion // : Résultat (réussi/raté)
+#define CON_S 1 // : (uint8_t str) (uint8_t str) -> Connexion : username password
+#define CON_R 2 // : bool -> Connexion // : Résultat (réussi/raté)
 
 // <-- Chat -->
-#define CHAT_S 5// : (int char) (uint8_t str) -> Envoyer : msg destinataire
-#define CHAT_R 6// : (int char) (uint8_t str) -> Recevoir : msg Envoyeur
+#define CHAT_S 3// : (int char) (uint8_t str) -> Envoyer : msg destinataire
+#define CHAT_R 4// : (int char) (uint8_t str) -> Recevoir : msg Envoyeur
+#define GET_CONVO 5// : //recois tous les message d'une convo
 
 // <-- Invitation -->
 #define INVI_S 7// : (uint8_t str) //envoi_invitation user(destinataire)
@@ -26,7 +25,7 @@
 #define JOIN_R 10// : true //join reussi
 
 // <-- Menu lombric -->
-#define GAT_LOMB 11// : //request le nom des lombrics
+#define GET_LOMB 11// : //request le nom des lombrics
 #define LOMB_R 12// : (uint8_t str)*8 //réponse a get_lomb envoi le nom de tous les lombrics
 #define LOMB_MOD 13// : int (uint8_t str) //modif_nom_lomb id_lomb new_nom_lomb
 
@@ -71,7 +70,5 @@
 #define END_TOUR 40// : uint8_t //fin du round lomb_current
 #define GET_GAME_INFO 41// : //demande les infos de début de partie
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
-#define GET_CONVO 43// : //demande tous les message d'une convo
-#define CONVO_R 44// : //recois tous les message d'une convo
 
 #endif

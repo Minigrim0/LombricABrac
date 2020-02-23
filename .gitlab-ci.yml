@@ -6,5 +6,12 @@ before_script:
 
 compile:
   script:
-  - cd src/client
+  - echo "TESTING SERVER"
+  - cd Server
+  - make
+  - make init_db
+  - ./init_db true
+  - make client
+  - echo "TESTING CLIENT"
+  - cd ../src/client
   - make
