@@ -134,14 +134,14 @@ public:
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
-	stringTable* getFriendList(std::string username);//revoie la liste d'amis
+	stringTable getFriendList(std::string username);//revoie la liste d'amis
 	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
 	bool createRoom(std::string host);//créqtion d'une room
 	void sendInvitation(std::string destinataire);//invite un amis à une partie
 	bool joinPartie(std::string host);//join la partie de host
 
 	//méthodes du menu lombric
-	stringTable* getLombricsName();//renvoie un tableau de 8 strings
+	stringTable getLombricsName();//renvoie un tableau de 8 strings
 	void setLombricName(uint32_t id, std::string name);//change le nom d'un lombric
 
 	//méthodes du salon d'attente
@@ -173,7 +173,7 @@ public:
 	void getGameInfo(infoPartie_s* gameInfo);
 
 	//méthodes sur les messages inattendus
-	std::vector<chat_r> getMsg(); //renvoie le vecteur de messages (nom + msg)
+	std::vector<chat_r> getNewMsg(); //renvoie le vecteur de messages (nom + msg)
 	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
-
+	std::vector<chat_r> getConvo(std::string username);
 };

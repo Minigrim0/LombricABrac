@@ -63,7 +63,7 @@ void Client::chatRcv(message& m){
 	messageRcv.push_back({obj.pseudo(), obj.msg()}); //ajoute message recu dans le vecteur
 }
 
-std::vector<chat_r> Client::getMsg(){
+std::vector<chat_r> Client::getNewMsg(){
 	std::vector<chat_r> res = messageRcv;
 	messageRcv.clear(); //vide vecteur
 	return res; // renvoie le vecteur de messages recus 
@@ -80,6 +80,27 @@ std::vector<invitation> Client::getInvitations(){
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
+}
+
+std::vector<chat_r> Client::getConvo(std::string username){
+	message m{};
+	//construction de la structure
+	convo_s obj;
+	obj.set_pseudo(username);
+
+	obj.SerializeToString(&m.text); //convertis stucture en string
+	m.type = GET_CONVO;
+
+	std::string* reponse = waitAnswers(CONVO_R, m); //envoie le message au serveur et attends la réponse
+
+	convo_r obj_r;
+	std::vector<chat_r> res;
+	for (int i=0;i<obj_r.msg_size();i++){
+		res.push_back({obj_r.msg(i).pseudo(), obj_r.msg(i).msg()});
+	}
+
+	delete reponse;
+	return res;
 }
 
 void Client::lombChanged(message &m){
@@ -224,7 +245,7 @@ void Client::chatSend(std::string m, std::string destinataire){
 	sendMutex.unlock();
 }
 
-stringTable* Client::getFriendList(std::string username){
+stringTable Client::getFriendList(std::string username){
 	message m{};
 	
 	stringTable* res = new stringTable;
@@ -245,7 +266,7 @@ stringTable* Client::getFriendList(std::string username){
 	}
 
 	delete reponse;
-	return res;
+	return *res;
 }
 
 void Client::delFriend(std::string destinataire){
@@ -325,7 +346,7 @@ void Client::setLombricName(uint32_t id, std::string name){
 	sendMutex.unlock();
 }
 
-stringTable* Client::getLombricsName(){
+stringTable Client::getLombricsName(){
 	message m{};
 	
 	stringTable* res = new stringTable;
@@ -350,7 +371,7 @@ stringTable* Client::getLombricsName(){
 	res->table[7] = obj.lomb_8();
 
 	delete reponse;
-	return res;
+	return *res;
 }
 
 void Client::addJoueur(std::string user){
