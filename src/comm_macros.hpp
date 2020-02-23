@@ -70,5 +70,7 @@
 #define END_TOUR 40// : uint8_t //fin du round lomb_current
 #define GET_GAME_INFO 41// : //demande les infos de début de partie
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
+#define GET_CONVO 43// : //recois tous les message d'une convo
+#define CONVO_R 43
 
 #endif
