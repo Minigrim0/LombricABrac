@@ -2,6 +2,7 @@
 
 #include "../includes/connected_player.hpp"
 #include "../includes/database.hpp"
+#include "../lib/bcrypt.h"
 
 ConnectedPlayer::ConnectedPlayer()
 :UserConnect(),
@@ -24,18 +25,12 @@ void ConnectedPlayer::set_id(int id){
 }
 
 bool ConnectedPlayer::register_user(DataBase* db, std::string passwd){
-    passwd = hash_passwd(passwd);
     return db->register_user(pseudo(), passwd) == SQLITE_OK;
 }
 
 bool ConnectedPlayer::check_passwd(DataBase* db, std::string passwd) const{
-    passwd = hash_passwd(passwd);
     std::string stored_passwd;
     db->get_passwd(pseudo(), &stored_passwd);
 
-    return stored_passwd == passwd;
-}
-
-std::string ConnectedPlayer::hash_passwd(std::string passwd) const{
-    return passwd;
+    return (bcrypt_checkpw(passwd.c_str(),stored_passwd.c_str()) == 0);
 }

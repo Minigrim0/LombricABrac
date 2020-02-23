@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <cstdarg>
 
+#include "../includes/utils.hpp"
 #include "../includes/comm_macros.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
@@ -34,7 +35,7 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
+void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
     if(msg_type == CON_S){
         la_poste->reception();
         usr->ParseFromString(la_poste->get_buffer());
@@ -67,21 +68,24 @@ void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlaye
                 db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
-            case CHAT_R:{
-                Chat_r chat_r;
-                db->get_all_messages(usr->get_id(), &chat_r);
-                break;
-            }
+            //case CHAT_R:{
+            //    Chat_r chat_r;
+            //    db->get_all_messages(usr->get_id(), &chat_r);
+            //    la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
+            //    break;
+            //}
             //case INVI_S:{
             //    Invitation invit;
             //    la_poste->reception();
             //    invit.ParseFromString(la_poste->get_buffer());
             //    db->send_invitation(usr->pseudo(),invit.pseudo());
             //}
-            //case GET_LOMB:{
-            //    db->get_lombrics(usr->pseudo());
-            //
-            //}
+            case GET_LOMB:{
+                Lomb_r lomb_r;
+                db->get_lombrics(usr->get_id(), &lomb_r);
+                la_poste->envoie_msg(LOMB_R, lomb_r.SerializeAsString());
+                break;
+            }
             case LOMB_MOD:{
                 Lomb_mod modif;
                 la_poste->reception();
@@ -89,18 +93,22 @@ void handle_case(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlaye
                 db->set_lombric_name(modif.id_lomb(),modif.name_lomb());
                 break;
             }
-            //case GET_HISTORY:{
-            //    Get_history r_history;
-            //    la_poste->reception();
-            //    r_history.ParseFromString(la_poste->get_buffer());
-            //    History_r history_list = db->get_history(r_history.pseudo(), r_history.first_game(), r_history.nbr_game());
-            //    la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
-            //}
+            case GET_HISTORY:{
+                Get_history r_history;
+                la_poste->reception();
+                r_history.ParseFromString(la_poste->get_buffer());
+                History_r history_list;
+                int user_r_id;db->get_user_id(r_history.pseudo(), &user_r_id);
+                db->get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
+                la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
+                break;
+            }
             //case GET_RANK:{
             //    Get_rank r_rank;
             //    la_poste->reception();
             //    r_rank.ParseFromString(la_poste->get_buffer());
-            //    Rank_r rank_list = db->get_rank(r_rank.first_player(),r_rank.nbr_player());
+            //    Rank_r rank_list;
+            //    db->get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
             //    la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
             //}
             case FRI_ADD:{
