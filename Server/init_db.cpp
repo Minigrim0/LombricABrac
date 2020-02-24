@@ -82,6 +82,7 @@ int main(int argc, char** argv) {
         user_2_points  SMALLINT,\
         user_3_points  SMALLINT,\
         user_4_points  SMALLINT,\
+        finished       BOOLEAN, \
         timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
     );";
 
