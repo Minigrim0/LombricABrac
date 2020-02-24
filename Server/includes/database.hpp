@@ -29,6 +29,7 @@ class DataBase{
 
         // User operations
         int get_user(std::string username, UserConnect* userconnect);
+        int get_user(int user_id, UserConnect* userconnect);
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
         int register_user(std::string username, std::string passwd);
@@ -63,6 +64,10 @@ class DataBase{
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
 
+
+        //Games operations
+        int create_game(Game* game_struct);
+
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with
 
@@ -76,7 +81,7 @@ class DataBase{
         std::ostringstream m_stringStream; // Object used to properly concatenate requests
 
         char salt[BCRYPT_HASHSIZE]; //salt for hash function
-        char hash[BCRYPT_HASHSIZE]; // store the hash of passw 
+        char hash[BCRYPT_HASHSIZE]; // store the hash of passw
 };
 
 #endif

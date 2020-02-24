@@ -149,10 +149,20 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
     return m_rc;
 }
 
-int DataBase::get_passwd(std::string username, std::string* password){
+int DataBase::get_user(int user_id, UserConnect* userconnect){
     m_stringStream.str("");
     m_stringStream.clear();
+    m_stringStream << "SELECT id, username, victory_amount FROM users WHERE id='" << user_id << "';";
+    m_sql_request = m_stringStream.str();
 
+    m_data_type = DT_USR;
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, userconnect, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::get_passwd(std::string username, std::string* password){
     m_data_type = DT_STR;
 
     m_sql_request = "SELECT password FROM users WHERE username='" + username + "';";
@@ -486,6 +496,20 @@ int DataBase::remove_friend(int user_id, int friend_id){
 
     m_stringStream << "DELETE FROM friends WHERE (receiver_id=" << user_id << " AND sender_id=" << friend_id << ") OR (";
     m_stringStream << "sender_id=" << user_id << " AND receiver_id=" << friend_id << ");";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::create_game(Game* game_struct){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) ";
+    m_stringStream << "VALUES (" << game_struct->player1_id() << ", " << game_struct->player2_id() << ", " << game_struct->player3_id() << ", " << game_struct->player4_id();
+    m_stringStream << ", " << game_struct->points_1() << ", " << game_struct->points_2() << ", " << game_struct->points_3() << ", " << game_struct->points_4() << ");";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
