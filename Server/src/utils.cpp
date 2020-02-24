@@ -9,6 +9,23 @@
 #include "../cpl_proto/user.pb.h"
 #include "../includes/connected_player.hpp"
 
+int match_queue[5];
+int nb_waiting_players;
+std::mutex mu;
+std::condition_variable cv;
+
+void add_me_to_queue(int user_id){
+    match_queue_mut.lock();
+    match_queue[nb_waiting_players] = user_id;
+    nb_waiting_players++;
+    match_queue_mut.unlock();
+    std::cout << "Nokeromheruilhgeri" << std::endl;
+
+    {
+        std::lock_guard<std::mutex> lk(mu);
+    }
+    cv.notify_all();
+}
 
 // Depending on the value of res, indicate an error, with the error message provided,
 // and closes given pipes before exiting the program
