@@ -55,6 +55,10 @@ message Nbr_lomb_mod{
   uint32 nbr_lomb = 1;
 }
 
+message Nbr_eq_mod{
+  uint32 nbr_eq = 1;
+}
+
 message Join_groupe_s{
   uint32 id = 1;
 }
@@ -71,10 +75,17 @@ message Get_history{
 }
 
 message History{
-  repeated string pseudo = 1;
-  repeated uint32 point = 2;
-  uint32 date = 3;
+  string pseudo_1 = 1;
+  string pseudo_2 = 2;
+  string pseudo_3 = 3;
+  string pseudo_4 = 4;
+  uint32 point_1 = 5;
+  uint32 point_2 = 6;
+  uint32 point_3 = 7;
+  uint32 point_4 = 8;
+  uint32 date = 9;
 }
+
 
 message History_r{
   repeated History history = 1; //Sais pas si ça fonctionne comme ça
