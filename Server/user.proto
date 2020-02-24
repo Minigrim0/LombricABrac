@@ -161,3 +161,16 @@ message map{
 message Create_room{
   string pseudo = 1;
 }
+
+message Game {
+    uint32 player1_id = 1;
+    uint32 player2_id = 2;
+    uint32 player3_id = 3;
+    uint32 player4_id = 4;
+    uint32 points_1 = 5;
+    uint32 points_2 = 6;
+    uint32 points_3 = 7;
+    uint32 points_4 = 8;
+    uint32 game_id = 9;
+    bool is_running = 10;
+}
