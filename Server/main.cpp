@@ -12,6 +12,15 @@
 #include "includes/database.hpp"
 #include "cpl_proto/user.pb.h"
 
+int match_making_thread(){
+    std::cout << "Bonjour j'attends" << std::endl;
+    std::unique_lock<std::mutex> lk(mu);
+    cv.wait(lk, []{return nb_waiting_players == 4;});
+    std::cout << "...enough player. i == 1" << std::endl;
+    return EXIT_SUCCESS;
+}
+
+
 int main(int argc, char **argv){
     struct sockaddr_in server_address;
 
@@ -48,6 +57,9 @@ int main(int argc, char **argv){
 
     DataBase db("lab.db");
 
+    std::thread tobj(match_making_thread);
+    tobj.detach();
+
     while(1) {
         int socket_client;
         struct sockaddr_in adresse_client;
@@ -62,6 +74,7 @@ int main(int argc, char **argv){
         }
 
         std::thread thread_obj(client_thread, socket_client , &db);
+        std::cout << "New user joined" << std::endl;
         thread_obj.detach();
     }
     google::protobuf::ShutdownProtobufLibrary();
