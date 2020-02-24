@@ -1,9 +1,9 @@
-*.hpp.gch
+*.gch
 *.o
 server
 a.out
 .vscode
 init_db
 *.db
-Server/supdata.log
+supdata.log
 cpl_proto/
