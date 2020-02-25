@@ -24,6 +24,10 @@ void ConnectedPlayer::set_id(int id){
     m_id = id;
 }
 
+void ConnectedPlayer::set_auth(bool auth){
+    m_is_auth = auth;
+}
+
 bool ConnectedPlayer::register_user(DataBase* db, std::string passwd){
     return db->register_user(pseudo(), passwd) == SQLITE_OK;
 }

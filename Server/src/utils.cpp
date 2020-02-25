@@ -52,43 +52,55 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
+void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
     if(msg_type == CON_S){
+        std::cout << "con_s" << std::endl;
         la_poste->reception();
+        std::cout << "con_s bien reçu" << std::endl;
         usr->ParseFromString(la_poste->get_buffer());
+        std::cout << usr->DebugString() << std::endl;
         if(usr->isregister()){ // si joueur a deja un compte
-            if(usr->check_passwd(db, usr->password())){ // test indentifiant + password
+            if(usr->check_passwd(db, usr->password())){
+                std::cout << "bon pass" << std::endl; // test indentifiant + password
                 int user_id;
                 db->get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
+                usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
             }
             else{
+                std::cout << "mauvais pass" << std::endl;
                 la_poste->envoie_bool(CON_R,0);
             }
         }
         else{
-            db->register_user(usr->pseudo(),usr->password());
+            int res = db->register_user(usr->pseudo(),usr->password());
+            std::cout << res << std::endl;
             int user_id;
             db->get_user_id(usr->pseudo(), &user_id);
             usr->set_id(user_id);
+            usr->set_auth(true);
             la_poste->envoie_bool(CON_R,1);
         }
     }
     else if(usr->is_auth()){
         switch(msg_type){
             case CHAT_S:{
+                std::cout << "chat_s" << std::endl;
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
+                std::cout << chat_ob.DebugString() << std::endl;
                 int receiver_id;db->get_user_id(chat_ob.pseudo(), &receiver_id);
                 db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
-            case CHAT_R:{
+            case GET_CONVO:{
+                std::cout << "get_convo" << std::endl;
+                convo_s request_convo;
                 Chat_r chat_r;
-                //int friend_id;db->get_user_id(fri.user(), &friend_id);
-                //db->get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
+                int friend_id;db->get_user_id(request_convo.pseudo(), &friend_id);
+                db->get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
                 la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
                 break;
             }
@@ -99,12 +111,14 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
             //    db->send_invitation(usr->pseudo(),invit.pseudo());
             //}
             case GET_LOMB:{
+                std::cout << "get_lomb" << std::endl;
                 Lomb_r lomb_r;
                 db->get_lombrics(usr->get_id(), &lomb_r);
                 la_poste->envoie_msg(LOMB_R, lomb_r.SerializeAsString());
                 break;
             }
             case LOMB_MOD:{
+                std::cout << "lomb_mob" << std::endl;
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
@@ -112,6 +126,7 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 break;
             }
             case GET_HISTORY:{
+                std::cout << "get_history" << std::endl;
                 Get_history r_history;
                 la_poste->reception();
                 r_history.ParseFromString(la_poste->get_buffer());
@@ -121,15 +136,19 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
                 break;
             }
-            //case GET_RANK:{
-            //    Get_rank r_rank;
-            //    la_poste->reception();
-            //    r_rank.ParseFromString(la_poste->get_buffer());
-            //    Rank_r rank_list;
-            //    db->get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
-            //    la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
-            //}
+            case GET_RANK:{
+                std::cout << "get_rank" << std::endl;
+                Get_rank r_rank;
+                la_poste->reception();
+                r_rank.ParseFromString(la_poste->get_buffer());
+                Rank_r rank_list;
+                int user_id;db->get_user_id(r_rank.first_player(), &user_id);
+                db->get_rank(user_id,r_rank.nbr_player(), &rank_list);
+                la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
+                break;
+            }
             case FRI_ADD:{
+                std::cout << "fri_add" << std::endl;
                 Fri_add fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -138,6 +157,7 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 break;
             }
             case FRI_ACCEPT:{
+                std::cout << "fri_accept" << std::endl;
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -146,12 +166,14 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 break;
             }
             case FRI_LS_S:{
+                std::cout << "fri_ls_s" << std::endl;
                 Fri_ls_r fri;
                 db->get_friend_list(usr->get_id(), &fri);
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
                 break;
             }
             case FRI_RMV:{
+                std::cout << "fri_rmv" << std::endl;
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());

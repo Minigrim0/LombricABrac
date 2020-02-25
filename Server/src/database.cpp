@@ -40,7 +40,6 @@ bool DataBase::catch_error(){
 }
 
 int DataBase::callback(void *data_container, int argc, char **argv, char **azColName){
-
     switch(m_data_type){
         case DT_USR:
             for(int i = 0; i<argc; i++){
@@ -178,11 +177,10 @@ int DataBase::register_user(std::string username, std::string password){
     bcrypt_hashpw(password.c_str(),salt,hash);
 
     m_stringStream << "INSERT INTO users (username,password,victory_amount)";
-    m_stringStream << "VALUES (" << username << ", " << hash << ", 0);";
+    m_stringStream << "VALUES ('" << username << "', '" << hash << "', 0);";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
-
     return m_rc;
 }
 
