@@ -12,7 +12,6 @@ int game_thread(){
     bool game_running;
     int current_step = STEP_ROOM;
 
-
     while(game_running){
         switch(current_step){
             case STEP_ROOM:

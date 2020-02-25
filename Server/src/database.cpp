@@ -218,9 +218,6 @@ int DataBase::set_lombric_name(int lombric_id, int user_id, std::string name){
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 
-    std::cout << m_zErrMsg << std::endl;
-    std::cout << "DB out : " << m_rc << std::endl;
-
     return m_rc;
 }
 

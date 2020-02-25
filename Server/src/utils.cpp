@@ -81,7 +81,7 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 la_poste->envoie_bool(CON_R, 0);
             }
             else{
-                int res = db->register_user(usr->pseudo(),usr->password());
+                db->register_user(usr->pseudo(),usr->password());
                 int user_id;
                 db->get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
