@@ -188,6 +188,7 @@ int main(int argc, char** argv) {
     std::cout << "----- Creating Lombrics Table -----" << std::endl << ">> ";
     sql = "CREATE TABLE worms(\
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
+        id_lomb        INTEGER,\
         name           CHAR(40) NOT NULL,\
         owner_id       INTEGER  NOT NULL\
     );";
@@ -203,14 +204,14 @@ int main(int argc, char** argv) {
     }
 
     if(fill_db){
-        sql = "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Michel', 1); " \
-             "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Patrice', 1); "     \
-             "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Josh', 1);" \
-             "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Fred', 1);";
+        sql = "INSERT INTO worms (id_lomb, name, owner_id) "  \
+             "VALUES (0, 'Michel', 1); " \
+             "INSERT INTO worms (id_lomb, name,owner_id) "  \
+             "VALUES (1, 'Patrice', 1); "     \
+             "INSERT INTO worms (id_lomb, name,owner_id)" \
+             "VALUES (2, 'Josh', 1);" \
+             "INSERT INTO worms (id_lomb, name,owner_id)" \
+             "VALUES (3, 'Fred', 1);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 

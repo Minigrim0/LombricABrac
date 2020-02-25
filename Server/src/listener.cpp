@@ -93,16 +93,15 @@ int Listener::envoie_bool(uint8_t type_msg ,uint8_t boolint){
     return EXIT_SUCCESS;
 }
 
-int Listener::envoie_msg(int type_msg , std::string msg){
+int Listener::envoie_msg(uint8_t type_msg , std::string msg){
 
     m_res = 0;
     const char *cmsg = msg.c_str();
     m_len_char = static_cast<uint32_t>(strlen(cmsg));
 
-    m_packet_size = htonl(type_msg);
-    m_res = static_cast<int>(send(sockfd, &m_packet_size, sizeof(uint32_t), 0));
+    m_res = static_cast<int>(send(sockfd, &type_msg, sizeof(uint8_t), 0));
     if(m_res == -1){
-        perror("Unable to send message size.\n");
+        perror("Unable to send message type.\n");
         return EXIT_FAILURE;
     }
 
