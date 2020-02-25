@@ -9,9 +9,11 @@
 #include "../cpl_proto/user.pb.h"
 #include "../includes/connected_player.hpp"
 
-int match_queue[5];
+int match_queue[5] = {0, 0, 0, 0, 0};
+DataBase db("lab.db");
 int nb_waiting_players;
 std::mutex mu;
+std::mutex DataBase_mutex;
 std::condition_variable cv;
 
 void add_me_to_queue(int user_id){
@@ -19,12 +21,23 @@ void add_me_to_queue(int user_id){
     match_queue[nb_waiting_players] = user_id;
     nb_waiting_players++;
     match_queue_mut.unlock();
-    std::cout << "Nokeromheruilhgeri" << std::endl;
 
     {
         std::lock_guard<std::mutex> lk(mu);
     }
     cv.notify_all();
+}
+
+int get_first_from_queue(){
+    int user_id;
+
+    match_queue_mut.lock();
+    user_id = match_queue[0];
+    nb_waiting_players--;
+    for(int a=0;a<5;a++)
+        match_queue[a] = match_queue[a+1];
+    match_queue_mut.unlock();
+    return user_id;
 }
 
 // Depending on the value of res, indicate an error, with the error message provided,
@@ -52,14 +65,15 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, ConnectedPlayer* usr){
+void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr){
     if(msg_type == CON_S){
         la_poste->reception();
         usr->ParseFromString(la_poste->get_buffer());
+        DataBase_mutex.lock();
         if(usr->isregister()){ // si joueur a deja un compte
-            if(usr->check_passwd(db, usr->password())){ // test indentifiant + password
+            if(usr->check_passwd(&db, usr->password())){ // test indentifiant + password
                 int user_id;
-                db->get_user_id(usr->pseudo(), &user_id);
+                db.get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
                 la_poste->envoie_bool(CON_R,1);
             }
@@ -68,21 +82,23 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
             }
         }
         else{
-            db->register_user(usr->pseudo(),usr->password());
+            db.register_user(usr->pseudo(),usr->password());
             int user_id;
-            db->get_user_id(usr->pseudo(), &user_id);
+            db.get_user_id(usr->pseudo(), &user_id);
             usr->set_id(user_id);
             la_poste->envoie_bool(CON_R,1);
         }
+        DataBase_mutex.unlock();
     }
     else if(usr->is_auth()){
+        DataBase_mutex.lock();
         switch(msg_type){
             case CHAT_S:{
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
-                int receiver_id;db->get_user_id(chat_ob.pseudo(), &receiver_id);
-                db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
+                int receiver_id;db.get_user_id(chat_ob.pseudo(), &receiver_id);
+                db.send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
             case CHAT_R:{
@@ -100,7 +116,7 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
             //}
             case GET_LOMB:{
                 Lomb_r lomb_r;
-                db->get_lombrics(usr->get_id(), &lomb_r);
+                db.get_lombrics(usr->get_id(), &lomb_r);
                 la_poste->envoie_msg(LOMB_R, lomb_r.SerializeAsString());
                 break;
             }
@@ -108,7 +124,7 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
-                db->set_lombric_name(modif.id_lomb(),modif.name_lomb());
+                db.set_lombric_name(modif.id_lomb(),modif.name_lomb());
                 break;
             }
             case GET_HISTORY:{
@@ -116,8 +132,8 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 la_poste->reception();
                 r_history.ParseFromString(la_poste->get_buffer());
                 History_r history_list;
-                int user_r_id;db->get_user_id(r_history.pseudo(), &user_r_id);
-                db->get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
+                int user_r_id;db.get_user_id(r_history.pseudo(), &user_r_id);
+                db.get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
                 la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
                 break;
             }
@@ -133,21 +149,21 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 Fri_add fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                int friend_id;db->get_user_id(fri.user(), &friend_id);
-                db->add_friend(usr->get_id(), friend_id);
+                int friend_id;db.get_user_id(fri.user(), &friend_id);
+                db.add_friend(usr->get_id(), friend_id);
                 break;
             }
             case FRI_ACCEPT:{
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                int friend_id;db->get_user_id(fri.user(), &friend_id);
-                db->accept_friend_invite(usr->get_id(), friend_id);
+                int friend_id;db.get_user_id(fri.user(), &friend_id);
+                db.accept_friend_invite(usr->get_id(), friend_id);
                 break;
             }
             case FRI_LS_S:{
                 Fri_ls_r fri;
-                db->get_friend_list(usr->get_id(), &fri);
+                db.get_friend_list(usr->get_id(), &fri);
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
                 break;
             }
@@ -155,10 +171,11 @@ void handle_instruction(int msg_type, Listener* la_poste , DataBase* db, Connect
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                int friend_id;db->get_user_id(fri.user(), &friend_id);
-                db->remove_friend(usr->get_id(), friend_id);
+                int friend_id;db.get_user_id(fri.user(), &friend_id);
+                db.remove_friend(usr->get_id(), friend_id);
                 break;
             }
         }
+        DataBase_mutex.unlock();
     }
 }

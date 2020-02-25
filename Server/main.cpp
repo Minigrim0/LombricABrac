@@ -8,6 +8,7 @@
 
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
+#include "includes/game_thread.hpp"
 #include "includes/constant.hpp"
 #include "includes/database.hpp"
 #include "cpl_proto/user.pb.h"
@@ -16,8 +17,12 @@ int match_making_thread(){
     while(1){
         std::unique_lock<std::mutex> lk(mu);
         cv.wait(lk, []{return nb_waiting_players == 4;});
-        std::cout << "...enough player. i == 1" << std::endl;
     }
+    std::thread thread_obj(game_thread);
+    thread_obj.detach();
+    /*for(int a=0;a<4;a++){
+
+    }*/
 
     return EXIT_SUCCESS;
 }
@@ -57,8 +62,6 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    DataBase db("lab.db");
-
     std::thread tobj(match_making_thread);
     tobj.detach();
 
@@ -75,7 +78,7 @@ int main(int argc, char **argv){
             continue;
         }
 
-        std::thread thread_obj(client_thread, socket_client , &db);
+        std::thread thread_obj(client_thread, socket_client);
         std::cout << "New user joined" << std::endl;
         thread_obj.detach();
     }

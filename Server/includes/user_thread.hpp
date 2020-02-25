@@ -3,6 +3,6 @@
 
 #include "database.hpp"
 
-int client_thread(int socket_client,DataBase* db);
+int client_thread(int socket_client);
 
 #endif
