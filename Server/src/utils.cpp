@@ -90,8 +90,9 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
-                std::cout << chat_ob.DebugString() << std::endl;
                 int receiver_id;db->get_user_id(chat_ob.pseudo(), &receiver_id);
+                std::cout << chat_ob.DebugString() << std::endl;
+                std::cout << chat_ob.msg() << std::endl;
                 db->send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
@@ -128,8 +129,12 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
             case GET_HISTORY:{
                 std::cout << "get_history" << std::endl;
                 Get_history r_history;
+                std::cout << "a" << std::endl;
                 la_poste->reception();
+                std::cout << "b" << std::endl;
                 r_history.ParseFromString(la_poste->get_buffer());
+                std::cout << "c" << std::endl;
+                std::cout << "r_history" << r_history.DebugString() << std::endl;
                 History_r history_list;
                 int user_r_id;db->get_user_id(r_history.pseudo(), &user_r_id);
                 db->get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
