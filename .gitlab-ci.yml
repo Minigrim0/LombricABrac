@@ -2,7 +2,7 @@ image: registry.gitlab.com/infof209-1920/groupe-5:lastest
 
 before_script:
     - export SUDO=0
-    - apt install cmake
+    - apt install -y cmake
 
 compile:
   script:
