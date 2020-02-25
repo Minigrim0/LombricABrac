@@ -18,7 +18,7 @@ Listener::~Listener(){
 }
 
 uint8_t Listener::reception_type(){
-    m_res = static_cast<int>(recv(sockfd, &type_msg, sizeof(uint32_t), 0));
+    m_res = static_cast<int>(recv(sockfd, &type_msg, sizeof(uint8_t), 0));
     if(m_res == -1){
         perror("Failed receive message\n");
         return EXIT_FAILURE;
