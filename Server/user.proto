@@ -28,14 +28,7 @@ message Join{
 }
 
 message Lomb_r{
-  string Lomb_1 = 1;
-  string Lomb_2 = 2;
-  string Lomb_3 = 3;
-  string Lomb_4 = 4;
-  string Lomb_5 = 5;
-  string Lomb_6 = 6;
-  string Lomb_7 = 7;
-  string Lomb_8 = 8;
+  repeated string Lombs = 1;
 }
 
 message Lomb_mod{
@@ -95,13 +88,13 @@ message History_r{
 }
 
 message Get_rank{
-  string first_player = 1;
+  uint32 first_player = 1;
   uint32 nbr_player = 2;
 }
 
 message Rank_r{
    repeated string user = 1;
-   repeated uint32 point = 2;
+   repeated uint32 point = 2 [packed=true];
 }
 
 message Fri_add{
@@ -160,17 +153,4 @@ message map{
 
 message Create_room{
   string pseudo = 1;
-}
-
-message Game {
-    uint32 player1_id = 1;
-    uint32 player2_id = 2;
-    uint32 player3_id = 3;
-    uint32 player4_id = 4;
-    uint32 points_1 = 5;
-    uint32 points_2 = 6;
-    uint32 points_3 = 7;
-    uint32 points_4 = 8;
-    uint32 game_id = 9;
-    bool is_running = 10;
 }

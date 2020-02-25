@@ -96,7 +96,6 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
     else if(usr->is_auth()){
         switch(msg_type){
             case CHAT_S:{
-                std::cout << "chat_s" << std::endl;
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
@@ -107,7 +106,6 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 break;
             }
             case GET_CONVO:{
-                std::cout << "get_convo" << std::endl;
                 convo_s request_convo;
                 Chat_r chat_r;
                 la_poste->reception();
@@ -124,29 +122,22 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
             //    db->send_invitation(usr->pseudo(),invit.pseudo());
             //}
             case GET_LOMB:{
-                std::cout << "get_lomb" << std::endl;
                 Lomb_r lomb_r;
                 db->get_lombrics(usr->get_id(), &lomb_r);
                 la_poste->envoie_msg(LOMB_R, lomb_r.SerializeAsString());
                 break;
             }
             case LOMB_MOD:{
-                std::cout << "lomb_mob" << std::endl;
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
-                db->set_lombric_name(modif.id_lomb(),modif.name_lomb());
+                db->set_lombric_name(modif.id_lomb(), usr->get_id(), modif.name_lomb());
                 break;
             }
             case GET_HISTORY:{
-                std::cout << "get_history" << std::endl;
                 Get_history r_history;
-                std::cout << "a" << std::endl;
                 la_poste->reception();
-                std::cout << "b" << std::endl;
                 r_history.ParseFromString(la_poste->get_buffer());
-                std::cout << "c" << std::endl;
-                std::cout << "r_history" << r_history.DebugString() << std::endl;
                 History_r history_list;
                 int user_r_id;db->get_user_id(r_history.pseudo(), &user_r_id);
                 db->get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
@@ -154,18 +145,16 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 break;
             }
             case GET_RANK:{
-                std::cout << "get_rank" << std::endl;
                 Get_rank r_rank;
                 la_poste->reception();
                 r_rank.ParseFromString(la_poste->get_buffer());
                 Rank_r rank_list;
-                int user_id;db->get_user_id(r_rank.first_player(), &user_id);
-                db->get_rank(user_id,r_rank.nbr_player(), &rank_list);
+                db->get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
+                std::cout << rank_list.DebugString() << std::endl;
                 la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
                 break;
             }
             case FRI_ADD:{
-                std::cout << "fri_add" << std::endl;
                 Fri_add fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -174,7 +163,6 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 break;
             }
             case FRI_ACCEPT:{
-                std::cout << "fri_accept" << std::endl;
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -183,7 +171,6 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 break;
             }
             case FRI_LS_S:{
-                std::cout << "fri_ls_s" << std::endl;
                 Fri_ls_r fri;
                 db->get_friend_list(usr->get_id(), &fri);
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());

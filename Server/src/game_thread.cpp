@@ -9,20 +9,11 @@
 
 int game_thread(){
 
-    Game current_game;
+    bool game_running;
     int current_step = STEP_ROOM;
 
-    current_game.set_is_running(true);
-    current_game.set_player1_id(-1);
-    current_game.set_player2_id(-1);
-    current_game.set_player3_id(-1);
-    current_game.set_player4_id(-1);
-    current_game.set_points_1(0);
-    current_game.set_points_2(0);
-    current_game.set_points_3(0);
-    current_game.set_points_4(0);
 
-    while(current_game.is_running()){
+    while(game_running){
         switch(current_step){
             case STEP_ROOM:
                 std::cout << "You're in the room" << std::endl;
@@ -35,7 +26,7 @@ int game_thread(){
                 break;
             default:
                 std::cout << "An error occured" << std::endl;
-                current_game.set_is_running(false);
+                game_running = false;
         }
     }
 

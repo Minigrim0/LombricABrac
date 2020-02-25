@@ -43,7 +43,6 @@ int Listener::reception(){
     }
 
     m_len_char = ntohl(m_packet_size);
-    std::cout << "len :" << m_len_char << std::endl;
     if( static_cast<long unsigned int>(m_len_char+1) > current_size_buffer ){
         delete[] str_buffer;
         str_buffer = new char[m_len_char+1];
@@ -98,7 +97,7 @@ int Listener::envoie_bool(uint8_t type_msg ,uint8_t boolint){
     return EXIT_SUCCESS;
 }
 
-int Listener::envoie_msg(uint8_t type_msg , std::string msg){
+int Listener::envoie_msg(uint8_t type_msg, std::string msg){
 
     m_res = 0;
     const char *cmsg = msg.c_str();
