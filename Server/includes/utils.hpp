@@ -13,6 +13,9 @@ extern int match_queue[5];
 extern int nb_waiting_players;
 extern std::mutex mu;
 extern std::condition_variable cv;
+extern std::mutex DataBase_mutex;
+extern DataBase db;
+
 
 static Semaphore sem;
 static std::mutex match_queue_mut;

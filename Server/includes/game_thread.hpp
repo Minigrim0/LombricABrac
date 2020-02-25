@@ -7,6 +7,6 @@
 #define STEP_GAME 1
 #define STEP_ENDSCREEN 2
 
-int game_thread(DataBase* db);
+int game_thread();
 
 #endif
