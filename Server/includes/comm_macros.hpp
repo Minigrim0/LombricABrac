@@ -40,6 +40,7 @@
 #define NB_EQ_MOD 45// : // nombre équipes si host
 #define JOIN_GROUP_S 19// : uint8_t //id_groupe
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
+#define START 45
 
 // <-- Menu historique -->
 #define GET_HISTORY 21// : (uint8_t str) int short int //user first_game(de la page) nbr_game
