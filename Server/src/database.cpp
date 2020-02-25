@@ -178,6 +178,7 @@ int DataBase::register_user(std::string username, std::string password){
 
     m_stringStream << "INSERT INTO users (username,password,victory_amount)";
     m_stringStream << "VALUES ('" << username << "', '" << hash << "', 0);";
+
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
@@ -198,12 +199,12 @@ int DataBase::get_user_id(std::string username, int* id){
 
 
 // Lombrics Operations
-int DataBase::add_lombric(int user_id, std::string lombric_name){
+int DataBase::add_lombric(int user_id, int lombric_id, std::string lombric_name){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "INSERT INTO worms (name,owner_id)";
-    m_stringStream << "VALUES (" << lombric_name << ", " << user_id << ", 0);";
+    m_stringStream << "INSERT INTO worms (id_lomb, name, owner_id) ";
+    m_stringStream << "VALUES (" << lombric_id << ", '" << lombric_name << "', " << user_id << ");";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
@@ -299,7 +300,7 @@ int DataBase::send_message(int sender_id, int receiver_id, std::string message){
     m_stringStream.clear();
 
     m_stringStream << "INSERT INTO messages (sender_id, receiver_id, content) ";
-    m_stringStream << "VALUES (" << sender_id << ", " << receiver_id << ", '" << message << "'); ;";
+    m_stringStream << "VALUES (" << sender_id << ", " << receiver_id << ", '" << message << "');";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);

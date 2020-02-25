@@ -7,7 +7,7 @@
 #include "../includes/utils.hpp"
 #include "../cpl_proto/user.pb.h"
 
-int game_thread(int user1_id, int user2_id, int user3_id, int user4_id, DataBase* db){
+int game_thread(){
 
     Game current_game;
     int current_step = STEP_ROOM;

@@ -74,13 +74,23 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
             }
         }
         else{
-            int res = db->register_user(usr->pseudo(),usr->password());
-            std::cout << res << std::endl;
-            int user_id;
-            db->get_user_id(usr->pseudo(), &user_id);
-            usr->set_id(user_id);
-            usr->set_auth(true);
-            la_poste->envoie_bool(CON_R,1);
+            int id;
+            db->get_user_id(usr->pseudo(), &id);
+            if(id > 0){ // A user with the same pseudonym exists
+                std::cout << "Existing user with same pseudo id = " << id << std::endl;
+                la_poste->envoie_bool(CON_R, 0);
+            }
+            else{
+                int res = db->register_user(usr->pseudo(),usr->password());
+                int user_id;
+                db->get_user_id(usr->pseudo(), &user_id);
+                usr->set_id(user_id);
+                usr->set_auth(true);
+                for(int i=0;i<8;i++){
+                    db->add_lombric(user_id, i, "anélonyme");
+                }
+                la_poste->envoie_bool(CON_R, 1);
+            }
         }
     }
     else if(usr->is_auth()){
@@ -100,6 +110,8 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , DataBase* db, Con
                 std::cout << "get_convo" << std::endl;
                 convo_s request_convo;
                 Chat_r chat_r;
+                la_poste->reception();
+                request_convo.ParseFromString(la_poste->get_buffer());
                 int friend_id;db->get_user_id(request_convo.pseudo(), &friend_id);
                 db->get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
                 la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
