@@ -7,10 +7,10 @@ class Listener{
         Listener(int socket_client);
         ~Listener();
 
-        int reception_type();
+        uint8_t reception_type();
         int reception();
         int envoie_bool(int type_msg ,int boolint);
-        int envoie_msg(int type_msg , std::string msg);
+        int envoie_msg(uint8_t type_msg , std::string msg);
         char* get_buffer();
 
     private:

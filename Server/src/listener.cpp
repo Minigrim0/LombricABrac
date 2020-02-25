@@ -17,7 +17,7 @@ Listener::~Listener(){
     close(sockfd);
 }
 
-int Listener::reception_type(){
+uint8_t Listener::reception_type(){
     m_res = static_cast<int>(recv(sockfd, &m_packet_size, sizeof(uint32_t), 0));
     if(m_res == -1){
         perror("Failed receive message\n");
@@ -25,7 +25,7 @@ int Listener::reception_type(){
     }
 
     m_len_char = ntohl(m_packet_size);
-    return m_len_char;
+    return static_cast<uint8_t>(m_len_char);
 }
 
 int Listener::reception(){
@@ -86,7 +86,7 @@ int Listener::envoie_bool(int type_msg ,int boolint){
     return EXIT_SUCCESS;
 }
 
-int Listener::envoie_msg(int type_msg , std::string msg){
+int Listener::envoie_msg(uint8_t type_msg , std::string msg){
 
     m_res = 0;
     const char *cmsg = msg.c_str();
