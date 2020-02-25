@@ -12,12 +12,9 @@ int client_thread(int socket_client, DataBase* db){
     ConnectedPlayer usr;
 
     while(1){
-        la_poste.reception();
+        la_poste.reception_type();
         int type = atoi(la_poste.get_buffer());
         handle_instruction(type,&la_poste,db,&usr);
-        if(type == 85){
-            add_me_to_queue(usr.get_id());
-        }
     }
 
     close(socket_client);

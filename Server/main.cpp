@@ -13,10 +13,12 @@
 #include "cpl_proto/user.pb.h"
 
 int match_making_thread(){
-    std::cout << "Bonjour j'attends" << std::endl;
-    std::unique_lock<std::mutex> lk(mu);
-    cv.wait(lk, []{return nb_waiting_players == 4;});
-    std::cout << "...enough player. i == 1" << std::endl;
+    while(1){
+        std::unique_lock<std::mutex> lk(mu);
+        cv.wait(lk, []{return nb_waiting_players == 4;});
+        std::cout << "...enough player. i == 1" << std::endl;
+    }
+
     return EXIT_SUCCESS;
 }
 
