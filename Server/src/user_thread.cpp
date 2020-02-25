@@ -16,7 +16,7 @@ int client_thread(int socket_client){
         if(type == EXIT_FAILURE){
             break;
         }
-        handle_instruction(type,&la_poste,db,&usr);
+        handle_instruction(type, &la_poste, &usr);
     }
     close(socket_client);
     return EXIT_SUCCESS;
