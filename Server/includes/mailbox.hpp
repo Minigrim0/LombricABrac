@@ -1,6 +1,6 @@
 #include <iostream>
 
-#define MAX_MAILS 100
+#define MAX_MAILS 4
 #define MAX_SIZE_MAILS 100
 
 class MailBox{

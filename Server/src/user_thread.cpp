@@ -7,7 +7,7 @@
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
 
-int client_thread(int socket_client, DataBase* db){
+int client_thread(int socket_client){
     Listener la_poste(socket_client);
     ConnectedPlayer usr;
 
