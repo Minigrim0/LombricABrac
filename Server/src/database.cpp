@@ -40,7 +40,6 @@ bool DataBase::catch_error(){
 }
 
 int DataBase::callback(void *data_container, int argc, char **argv, char **azColName){
-
     switch(m_data_type){
         case DT_USR:
             for(int i = 0; i<argc; i++){
@@ -55,16 +54,11 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
         case DT_INT:
             *static_cast<int*>(data_container) = std::stoi(argv[0]);
             break;
-        case DT_LOM:
-            static_cast<Lomb_r*>(data_container)->set_lomb_1(argv[0]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_2(argv[1]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_3(argv[2]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_4(argv[3]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_5(argv[4]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_6(argv[5]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_7(argv[6]);
-            static_cast<Lomb_r*>(data_container)->set_lomb_8(argv[7]);
+        case DT_LOM:{
+            std::string *lomb = static_cast<Lomb_r*>(data_container)->add_lombs();
+            *lomb = argv[0];
             break;
+        }
         case DT_HIS:{
             History *history = static_cast<History_r*>(data_container)->add_history();
 
@@ -178,11 +172,11 @@ int DataBase::register_user(std::string username, std::string password){
     bcrypt_hashpw(password.c_str(),salt,hash);
 
     m_stringStream << "INSERT INTO users (username,password,victory_amount)";
-    m_stringStream << "VALUES (" << username << ", " << hash << ", 0);";
+    m_stringStream << "VALUES ('" << username << "', '" << hash << "', 0);";
+
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
-
     return m_rc;
 }
 
@@ -200,12 +194,12 @@ int DataBase::get_user_id(std::string username, int* id){
 
 
 // Lombrics Operations
-int DataBase::add_lombric(int user_id, std::string lombric_name){
+int DataBase::add_lombric(int user_id, int lombric_id, std::string lombric_name){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "INSERT INTO worms (name,owner_id)";
-    m_stringStream << "VALUES (" << lombric_name << ", " << user_id << ", 0);";
+    m_stringStream << "INSERT INTO worms (id_lomb, name, owner_id) ";
+    m_stringStream << "VALUES (" << lombric_id << ", '" << lombric_name << "', " << user_id << ");";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
@@ -213,12 +207,14 @@ int DataBase::add_lombric(int user_id, std::string lombric_name){
     return m_rc;
 }
 
-int DataBase::set_lombric_name(int lombric_id, std::string name){
+int DataBase::set_lombric_name(int lombric_id, int user_id, std::string name){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "UPDATE worms SET name=" << name << " WHERE id=" << lombric_id << ";";
+    m_stringStream << "UPDATE worms SET name='" << name << "' WHERE owner_id=" << user_id << " AND id_lomb=" << lombric_id << ";";
     m_sql_request = m_stringStream.str();
+
+    std::cout << m_sql_request << std::endl;
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
 
@@ -289,6 +285,8 @@ int DataBase::get_rank(int index, int size, Rank_r* rank_r){
 
     m_data_type = DT_RAN;
 
+    std::cout << m_sql_request << " - " << std::endl;
+
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, rank_r, &m_zErrMsg);
 
     return m_rc;
@@ -301,7 +299,7 @@ int DataBase::send_message(int sender_id, int receiver_id, std::string message){
     m_stringStream.clear();
 
     m_stringStream << "INSERT INTO messages (sender_id, receiver_id, content) ";
-    m_stringStream << "VALUES (" << sender_id << ", " << receiver_id << ", '" << message << "'); ;";
+    m_stringStream << "VALUES (" << sender_id << ", " << receiver_id << ", '" << message << "');";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
@@ -496,20 +494,6 @@ int DataBase::remove_friend(int user_id, int friend_id){
 
     m_stringStream << "DELETE FROM friends WHERE (receiver_id=" << user_id << " AND sender_id=" << friend_id << ") OR (";
     m_stringStream << "sender_id=" << user_id << " AND receiver_id=" << friend_id << ");";
-    m_sql_request = m_stringStream.str();
-
-    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
-
-    return m_rc;
-}
-
-int DataBase::create_game(Game* game_struct){
-    m_stringStream.str("");
-    m_stringStream.clear();
-
-    m_stringStream << "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) ";
-    m_stringStream << "VALUES (" << game_struct->player1_id() << ", " << game_struct->player2_id() << ", " << game_struct->player3_id() << ", " << game_struct->player4_id();
-    m_stringStream << ", " << game_struct->points_1() << ", " << game_struct->points_2() << ", " << game_struct->points_3() << ", " << game_struct->points_4() << ");";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);

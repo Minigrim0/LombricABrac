@@ -10,7 +10,7 @@
 */
 
 // <-- Pre-menu -->
-#define CON_S 1 // : (uint8_t str) (uint8_t str) -> Connexion : username password
+#define CON_S 46 // : (uint8_t str) (uint8_t str) -> Connexion : username password
 #define CON_R 2 // : bool -> Connexion // : Résultat (réussi/raté)
 
 // <-- Chat -->

@@ -10,11 +10,11 @@
 #include "../includes/connected_player.hpp"
 
 int match_queue[5] = {0, 0, 0, 0, 0};
-DataBase db("lab.db");
 int nb_waiting_players;
 std::mutex mu;
-std::mutex DataBase_mutex;
 std::condition_variable cv;
+std::mutex DataBase_mutex;
+DataBase db("lab.db");
 
 void add_me_to_queue(int user_id){
     match_queue_mut.lock();
@@ -65,28 +65,46 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr){
+void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr){
+    DataBase_mutex.lock();
     if(msg_type == CON_S){
+        std::cout << "con_s" << std::endl;
         la_poste->reception();
+        std::cout << "con_s bien reçu" << std::endl;
         usr->ParseFromString(la_poste->get_buffer());
-        DataBase_mutex.lock();
+        std::cout << usr->DebugString() << std::endl;
         if(usr->isregister()){ // si joueur a deja un compte
-            if(usr->check_passwd(&db, usr->password())){ // test indentifiant + password
+            if(usr->check_passwd(&db, usr->password())){
+                std::cout << "bon pass" << std::endl; // test indentifiant + password
                 int user_id;
                 db.get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
+                usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
             }
             else{
+                std::cout << "mauvais pass" << std::endl;
                 la_poste->envoie_bool(CON_R,0);
             }
         }
         else{
-            db.register_user(usr->pseudo(),usr->password());
-            int user_id;
-            db.get_user_id(usr->pseudo(), &user_id);
-            usr->set_id(user_id);
-            la_poste->envoie_bool(CON_R,1);
+            int id;
+            db.get_user_id(usr->pseudo(), &id);
+            if(id > 0){ // A user with the same pseudonym exists
+                std::cout << "Existing user with same pseudo id = " << id << std::endl;
+                la_poste->envoie_bool(CON_R, 0);
+            }
+            else{
+                db.register_user(usr->pseudo(),usr->password());
+                int user_id;
+                db.get_user_id(usr->pseudo(), &user_id);
+                usr->set_id(user_id);
+                usr->set_auth(true);
+                for(int i=0;i<8;i++){
+                    db.add_lombric(user_id, i, "anélonyme");
+                }
+                la_poste->envoie_bool(CON_R, 1);
+            }
         }
         DataBase_mutex.unlock();
     }
@@ -98,13 +116,18 @@ void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr)
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
                 int receiver_id;db.get_user_id(chat_ob.pseudo(), &receiver_id);
+                std::cout << chat_ob.DebugString() << std::endl;
+                std::cout << chat_ob.msg() << std::endl;
                 db.send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 break;
             }
-            case CHAT_R:{
+            case GET_CONVO:{
+                convo_s request_convo;
                 Chat_r chat_r;
-                //int friend_id;db->get_user_id(fri.user(), &friend_id);
-                //db->get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
+                la_poste->reception();
+                request_convo.ParseFromString(la_poste->get_buffer());
+                int friend_id;db.get_user_id(request_convo.pseudo(), &friend_id);
+                db.get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
                 la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
                 break;
             }
@@ -112,7 +135,8 @@ void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr)
             //    Invitation invit;
             //    la_poste->reception();
             //    invit.ParseFromString(la_poste->get_buffer());
-            //    db->send_invitation(usr->pseudo(),invit.pseudo());
+            //    db.send_invitation(usr->pseudo(),invit.pseudo());
+            //    break;
             //}
             case GET_LOMB:{
                 Lomb_r lomb_r;
@@ -124,7 +148,7 @@ void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr)
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
-                db.set_lombric_name(modif.id_lomb(),modif.name_lomb());
+                db.set_lombric_name(modif.id_lomb(), usr->get_id(), modif.name_lomb());
                 break;
             }
             case GET_HISTORY:{
@@ -137,14 +161,16 @@ void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr)
                 la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
                 break;
             }
-            //case GET_RANK:{
-            //    Get_rank r_rank;
-            //    la_poste->reception();
-            //    r_rank.ParseFromString(la_poste->get_buffer());
-            //    Rank_r rank_list;
-            //    db->get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
-            //    la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
-            //}
+            case GET_RANK:{
+                Get_rank r_rank;
+                la_poste->reception();
+                r_rank.ParseFromString(la_poste->get_buffer());
+                Rank_r rank_list;
+                db.get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
+                std::cout << rank_list.DebugString() << std::endl;
+                la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
+                break;
+            }
             case FRI_ADD:{
                 Fri_add fri;
                 la_poste->reception();
@@ -168,6 +194,7 @@ void handle_instruction(int msg_type, Listener* la_poste , ConnectedPlayer* usr)
                 break;
             }
             case FRI_RMV:{
+                std::cout << "fri_rmv" << std::endl;
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());

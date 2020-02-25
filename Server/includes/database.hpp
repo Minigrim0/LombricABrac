@@ -35,8 +35,8 @@ class DataBase{
         int register_user(std::string username, std::string passwd);
 
         // Lombrics Operations
-        int add_lombric(int user_id, std::string lombric_name);
-        int set_lombric_name(int lombric_id, std::string username);
+        int add_lombric(int user_id, int lombric_id, std::string lombric_name);
+        int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
 
         // Game history operations
@@ -63,10 +63,6 @@ class DataBase{
         int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
-
-
-        //Games operations
-        int create_game(Game* game_struct);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

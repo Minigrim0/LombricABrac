@@ -9,7 +9,7 @@ class Listener{
 
         uint8_t reception_type();
         int reception();
-        int envoie_bool(int type_msg ,int boolint);
+        int envoie_bool(uint8_t type_msg ,uint8_t boolint);
         int envoie_msg(uint8_t type_msg , std::string msg);
         char* get_buffer();
 
@@ -23,6 +23,7 @@ class Listener{
         char *str_buffer;
         size_t current_size_buffer;
         int sockfd;
+        uint8_t type_msg;
 };
 
 #endif
