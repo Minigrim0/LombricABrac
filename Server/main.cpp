@@ -5,6 +5,7 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <thread>
+#include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
@@ -13,16 +14,17 @@
 #include "includes/database.hpp"
 #include "cpl_proto/user.pb.h"
 
-int match_making_thread(){
-    while(1){
-        std::unique_lock<std::mutex> lk(mu);
-        cv.wait(lk, []{return nb_waiting_players == 4;});
-    }
-    std::thread thread_obj(game_thread);
-    thread_obj.detach();
-    /*for(int a=0;a<4;a++){
+int broker_thread(){
+    zmq::context_t context;
 
-    }*/
+    zmq::socket_t socket_pub(context, zmq::socket_type::pub);
+    zmq::socket_t socket_sub(context, zmq::socket_type::sub);
+    socket_sub.bind("inproc://all");
+
+    while(true){
+        
+    }
+
 
     return EXIT_SUCCESS;
 }
@@ -62,7 +64,7 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    std::thread tobj(match_making_thread);
+    std::thread tobj(broker_thread);
     tobj.detach();
 
     while(1) {
