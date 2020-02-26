@@ -24,7 +24,7 @@ uint8_t Listener::reception_type(){
         return EXIT_FAILURE;
     }
     else if(m_res == 0){
-        perror("Client closed socket.\n");
+        std::cerr << "Client closed socket." << std::endl;
         return EXIT_FAILURE;
     }
 

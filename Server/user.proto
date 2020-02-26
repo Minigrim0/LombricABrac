@@ -153,3 +153,9 @@ message infoPartie_p{
 message Create_room{
   string pseudo = 1;
 }
+
+message ZMQ_msg{
+  uint32 receiver_id = 1;
+  uint32 type_message = 2;
+  string message = 3;
+}

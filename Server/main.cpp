@@ -5,24 +5,32 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <thread>
+#include <chrono>
+#include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/game_thread.hpp"
 #include "includes/constant.hpp"
 #include "includes/database.hpp"
+#include "includes/zhelpers.hpp"
 #include "cpl_proto/user.pb.h"
 
-int match_making_thread(){
-    while(1){
-        std::unique_lock<std::mutex> lk(mu);
-        cv.wait(lk, []{return nb_waiting_players == 4;});
-    }
-    std::thread thread_obj(game_thread);
-    thread_obj.detach();
-    /*for(int a=0;a<4;a++){
 
-    }*/
+int broker_thread(){
+    zmq::context_t context(1);
+    zmq::socket_t subscriber (context, ZMQ_SUB);
+    subscriber.connect("tcp://localhost:5563");
+    subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
+
+    while(true){
+        std::string address = s_recv(subscriber);
+        std::string contents = s_recv(subscriber);
+
+        std::cout << "[" << address << "] " << contents << std::endl;
+    }
+
+    std::cout << "finished" << std::endl;
 
     return EXIT_SUCCESS;
 }
@@ -62,7 +70,11 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-    std::thread tobj(match_making_thread);
+    pub_mutex.lock();
+    publisher.bind("tcp://*:5563");
+    pub_mutex.unlock();
+
+    std::thread tobj(broker_thread);
     tobj.detach();
 
     while(1) {

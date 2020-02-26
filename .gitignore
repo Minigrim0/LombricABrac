@@ -7,3 +7,5 @@ init_db
 *.db
 supdata.log
 cpl_proto/
+cppzmq/
+libzmq/

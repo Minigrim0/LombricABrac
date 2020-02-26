@@ -8,6 +8,7 @@
 #include "semaphore.hpp"
 #include "database.hpp"
 #include "connected_player.hpp"
+#include "zhelpers.hpp"
 
 extern int match_queue[5];
 extern int nb_waiting_players;
@@ -15,7 +16,9 @@ extern std::mutex mu;
 extern std::condition_variable cv;
 extern std::mutex DataBase_mutex;
 extern DataBase db;
-
+extern std::mutex pub_mutex;
+extern zmq::context_t context;
+extern zmq::socket_t publisher;
 
 static Semaphore sem;
 static std::mutex match_queue_mut;

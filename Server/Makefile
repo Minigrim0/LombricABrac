@@ -1,5 +1,5 @@
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf` # -Wsuggest-override -Wconversion -Wsign-conversion
-LINKER_FLAGS=-pthread -ldl -lpthread
+COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
+LINKER_FLAGS=-pthread -ldl -lpthread -lzmq
 EXECUTABLE=server
 LIBS=lib/sqlite3.o lib/bcrypt.o  lib/crypt_blowfish.o  lib/crypt_gensalt.o  lib/wrapper.o
 CXX=g++ -ggdb -ldl
@@ -31,6 +31,8 @@ init_db: init_db.cpp $(LIBS)
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 pre:
+	@echo "\e[0;32m============ Verifying deps ===========\e[0m"
+	@./install_zmq.sh
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
 $(EXECUTABLE): main.cpp $(OBJECTS) $(PROTO_BUILDS) $(LIBS)
