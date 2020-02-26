@@ -13,18 +13,14 @@ info Salon_Attente::run(info information)
   int y=4, x=4;
   int x_arrow1, x_arrow2,x_arrow3, x_arrow4, touch;
   string titre= "Salon d'attente";
-  string equipe[8]= {"Equipe 1:","Equipe 2:","Equipe 3:","Equipe 4:","Equipe 5:","Equipe 6:","Equipe 7:","Equipe 8:"};
+  vector<string> equipe = information.client->getNewPlayers();
   string name[8]={"ismarocon","alexise","gamerhack32","israel","ismaoul","goku","nanache","jiren"};
   string arrow = "-> ";
   string bouttonPlay = "Lancer partie";
   string bouttonLeave = "Annuler";
   string bouttonSetting = "Option";
   string bouttonInvit = "Inviter srhab";
-  for (int i=0;i<8;i++)
-  {
-    a[i].pseudo=name[i];
-    a[i].equipe=i+1;
-  }
+
   initscr();
   curs_set(FALSE);
   WINDOW *win;
@@ -38,7 +34,7 @@ info Salon_Attente::run(info information)
   len_str= static_cast<int>(equipe[0].size());
   for (int i=0;i<8;i++)
   {
-    print_string_window(win,y+decalage,x,equipe[i]);
+    print_string_window(win,y+decalage,x,equipe[static_cast<unsigned int>(i)]);
     print_string_window(win,y+decalage,len_str+x+1,a[i].pseudo);
     decalage+=2;
   }
@@ -144,7 +140,7 @@ info Salon_Attente::run(info information)
         }
         if (x== x_arrow4 && information.ishost)
         {
-          //startGame();
+          information.Client->startGame();
           information.id=2;
           break;
         }

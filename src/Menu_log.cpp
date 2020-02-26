@@ -97,7 +97,7 @@ info Menu_log_in::run(info information)
         if (information.id==11)
         {
           bool connected;
-          connected=connection(ok[0],ok[1],FALSE);
+          connected=information.client->connection(ok[0],ok[1],FALSE);
           if (connected)
           {
             string pseudo= string(ok[0]);
@@ -114,7 +114,7 @@ info Menu_log_in::run(info information)
         if (information.id==12)
         {
           bool isenregistrer;
-          isenregistrer=connection(ok[0],ok[1],TRUE);
+          isenregistrer=information.client->connection(ok[0],ok[1],TRUE);
           if (isenregistrer)
           {
           string pseudo= string(ok[0]);

@@ -42,7 +42,7 @@ info discuter::run(info information)
     len_str=15;
     while(1)
     {
-      vector<chat_r> recu=getConvo(information.friends); //recu=getconvo(username);
+      vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
       int size= static_cast<int>(recu.size());
       string total[size];
       for (unsigned i=0;i<static_cast<unsigned>(5);i++ )
@@ -79,7 +79,7 @@ info discuter::run(info information)
           if (chara==10)
           {
             string envoyer_msg= string(str);
-            chatSend(envoyer_msg, information.friends);
+            information.client->chatSend(envoyer_msg, information.friends);
             break;
           }
 

@@ -88,7 +88,7 @@ info Warning_del_friend_window::run(info information)
       }
       if (x == x_arrow2)
       {
-        delFriend(information.friends);
+        information.client->delFriend(information.friends);
         information.id = 25;
         break;
       }
