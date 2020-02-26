@@ -15,6 +15,10 @@ message Chat_r{
   repeated Chat msgs = 1;
 }
 
+message Chat_broker{
+  uint32 usr_id = 1;
+}
+
 message convo_s{
   string pseudo = 1;
 }
@@ -124,7 +128,7 @@ message Lomb_pos{
   uint32 pos_y = 3;
 }
 
-message Projectile{
+message Tir{
   uint32 id_arme = 1;
   uint32 force = 2;
   double angle = 3;

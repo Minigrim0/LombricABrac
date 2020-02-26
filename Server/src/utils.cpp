@@ -131,6 +131,16 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 std::cout << chat_ob.DebugString() << std::endl;
                 std::cout << chat_ob.msg() << std::endl;
                 db.send_message(usr->get_id(), receiver_id, chat_ob.msg());
+                Chat_broker chat_br;
+                chat_br.set_usr_id(usr->get_id());
+                ZMQ_msg msg;
+                msg.set_receiver_id(receiver_id);
+                msg.set_type_message(CHAT_BROKER);
+                msg.set_message(chat_br.SerializeAsString());
+                pub_mutex.lock();
+                s_sendmore_b(publisher, "all");
+                s_send_b(publisher, msg.SerializeAsString());
+                pub_mutex.unlock();
                 break;
             }
             case GET_CONVO:{
@@ -206,13 +216,29 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case FRI_RMV:{
-                std::cout << "fri_rmv" << std::endl;
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
                 db.remove_friend(usr->get_id(), friend_id);
                 break;
+            }
+            case ADD_ROOM_S:{
+                Create_room room;
+                //la_poste->reception();
+                //room.ParseFromString(la_poste->get_buffer());
+                room.set_pseudo("Paul");
+                int owner_id;db.get_user_id(room.pseudo(), &owner_id);
+                Create_room_id room_id;
+                room_id.set_usr_id(owner_id);
+                ZMQ_msg msg;
+                msg.set_receiver_id(0);
+                msg.set_type_message(ADD_ROOM_S);
+                msg.set_message(room_id.SerializeAsString());
+                pub_mutex.lock();
+                s_sendmore_b(publisher, "all");
+                s_send_b(publisher, msg.SerializeAsString());
+                pub_mutex.unlock();
             }
         }
     }
