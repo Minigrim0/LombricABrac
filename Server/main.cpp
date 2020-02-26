@@ -16,20 +16,21 @@
 #include "includes/zhelpers.hpp"
 #include "cpl_proto/user.pb.h"
 
-int broker_thread(){
 
+int broker_thread(){
     zmq::context_t context(1);
     zmq::socket_t subscriber (context, ZMQ_SUB);
     subscriber.connect("tcp://localhost:5563");
-    subscriber.setsockopt( ZMQ_SUBSCRIBE, "all", 1);
+    subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
 
-    std::cout << "subscriber ready" << std::endl;
-    while(1){
+    while(true){
         std::string address = s_recv(subscriber);
-        std::string contents = s_recv (subscriber);
+        std::string contents = s_recv(subscriber);
 
         std::cout << "[" << address << "] " << contents << std::endl;
     }
+
+    std::cout << "finished" << std::endl;
 
     return EXIT_SUCCESS;
 }
@@ -69,21 +70,12 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
-
-    zmq::context_t context(1);
-    zmq::socket_t publisher(context, ZMQ_PUB);
+    pub_mutex.lock();
     publisher.bind("tcp://*:5563");
+    pub_mutex.unlock();
 
     std::thread tobj(broker_thread);
     tobj.detach();
-
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    std::cout << "Sending" << std::endl;
-    s_sendmore_b(publisher, "A");
-    s_send_b(publisher, "We don't want to see this");
-    s_sendmore_b(publisher, "all");
-    s_send_b(publisher, "We would like to see this");
 
     while(1) {
         int socket_client;

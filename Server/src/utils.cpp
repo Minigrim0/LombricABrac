@@ -8,6 +8,8 @@
 #include "../includes/database.hpp"
 #include "../cpl_proto/user.pb.h"
 #include "../includes/connected_player.hpp"
+#include "../includes/zhelpers.hpp"
+
 
 int match_queue[5] = {0, 0, 0, 0, 0};
 int nb_waiting_players;
@@ -15,6 +17,11 @@ std::mutex mu;
 std::condition_variable cv;
 std::mutex DataBase_mutex;
 DataBase db("lab.db");
+
+std::mutex pub_mutex;
+zmq::context_t context(1);
+zmq::socket_t publisher(context, ZMQ_PUB);
+
 
 void add_me_to_queue(int user_id){
     match_queue_mut.lock();
@@ -66,7 +73,9 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 
 
 void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr){
+    std::cout << "locking db" << std::endl;
     DataBase_mutex.lock();
+    std::cout << "User is_auth : " << usr->is_auth() << std::endl;
     if(msg_type == CON_S){
         std::cout << "con_s" << std::endl;
         la_poste->reception();
@@ -106,12 +115,11 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* 
                 la_poste->envoie_bool(CON_R, 1);
             }
         }
-        DataBase_mutex.unlock();
     }
     else if(usr->is_auth()){
-        DataBase_mutex.lock();
         switch(msg_type){
             case CHAT_S:{
+                std::cout << "Sending message" << std::endl;
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
@@ -203,6 +211,6 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* 
                 break;
             }
         }
-        DataBase_mutex.unlock();
     }
+    DataBase_mutex.unlock();
 }
