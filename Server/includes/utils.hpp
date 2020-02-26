@@ -10,6 +10,8 @@
 #include "connected_player.hpp"
 #include "zhelpers.hpp"
 
+#define CHAT_BROKER 100
+
 extern int match_queue[5];
 extern int nb_waiting_players;
 extern std::mutex mu;

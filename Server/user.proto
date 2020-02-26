@@ -15,6 +15,10 @@ message Chat_r{
   repeated Chat msgs = 1;
 }
 
+message Chat_broker{
+  uint32 usr_id = 1;
+}
+
 message convo_s{
   string pseudo = 1;
 }
@@ -152,6 +156,10 @@ message infoPartie_p{
 
 message Create_room{
   string pseudo = 1;
+}
+
+message Create_room_id{
+  uint32 usr_id = 1;
 }
 
 message ZMQ_msg{
