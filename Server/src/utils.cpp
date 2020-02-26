@@ -72,7 +72,7 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr){
+int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr){
     std::cout << "locking db" << std::endl;
     DataBase_mutex.lock();
     std::cout << "User is_auth : " << usr->is_auth() << std::endl;
@@ -90,6 +90,8 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* 
                 usr->set_id(user_id);
                 usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
+                DataBase_mutex.unlock();
+                return 3;
             }
             else{
                 std::cout << "mauvais pass" << std::endl;
@@ -113,6 +115,8 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* 
                     db.add_lombric(user_id, i, "anélonyme");
                 }
                 la_poste->envoie_bool(CON_R, 1);
+                DataBase_mutex.unlock();
+                return 3;
             }
         }
     }
@@ -213,4 +217,5 @@ void handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* 
         }
     }
     DataBase_mutex.unlock();
+    return 0;
 }

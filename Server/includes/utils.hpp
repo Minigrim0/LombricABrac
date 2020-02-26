@@ -26,6 +26,6 @@ static std::mutex match_queue_mut;
 void add_me_to_queue(int user_id);
 
 void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...);
-void handle_instruction(uint8_t msg_type, Listener* la_poste, ConnectedPlayer* usr);
+int handle_instruction(uint8_t msg_type, Listener* la_poste, ConnectedPlayer* usr);
 
 #endif
