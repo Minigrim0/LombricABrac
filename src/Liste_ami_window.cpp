@@ -43,7 +43,7 @@ info Liste_ami_window::run(info information)
   string tab2[18]={"Alexis", "ismaroco", "Bgita du 32", "Squeezie", "Campeed", "Ahrika", "ReveillePasMonJnoun", "Bassem", "Coronavirus", "Hiv", "Terrence", "Morty", "popop", "####", "momo", "liberezlacrim", "lache un like", "abonne toi"};
   vector<invitation> invit;
   stringTable liste_ami;
-  liste_ami=getFriendList();
+  liste_ami=information.client->getFriendList();
   playerRank rank;
   string tableau_joueur[18];
   uint32_t points_ranger[18];
@@ -53,7 +53,7 @@ info Liste_ami_window::run(info information)
   }
   if (information.id==23)
   {
-    invit=getInvitations();
+    invit=information.client->getInvitations();
 
     len_tab=static_cast<int>(invit.size());
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";

@@ -60,7 +60,7 @@ info Menu_invite_amis::run(info information)
 
       case 10:
         string nom_du_joueur= string(str);
-        addFriend(nom_joueur);
+        information.client->addFriend(nom_joueur);
         boucle=0;
         information.id=2;
         break;

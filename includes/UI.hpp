@@ -3,6 +3,7 @@
 #include <string>
 #include <ncurses.h>
 #include <iostream>
+#include "client.hpp"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ typedef struct info{
   string username;
   string friends;
   int id;
+  Client *client;
 }info;
 
 

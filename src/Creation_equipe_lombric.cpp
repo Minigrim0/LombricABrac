@@ -115,7 +115,7 @@ info Menu_creation_equipe_lombric::run(info information)
         for (uint32_t i=1;i<9;i++)
         {
           string str= string(name[i]);
-          setLombricName(i,str);
+          information.client->setLombricName(i,str);
         }
         information.id=2;
         boucle=0;

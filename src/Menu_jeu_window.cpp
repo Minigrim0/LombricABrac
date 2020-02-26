@@ -30,7 +30,7 @@ info Menu_jeu_window::run(info information)
   refresh();
   wrefresh(win);
   print_string_window(win, 1, (max_x/2)-6, msg1);
-  vector<chat_r> new_msg=getNewMsg(); //new_msg=getnewmsg()
+  vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
   int size_vector= static_cast<int>(new_msg.size());
   string fini[size_vector];
   draw(3,1,"Derniers messages reçus:");
