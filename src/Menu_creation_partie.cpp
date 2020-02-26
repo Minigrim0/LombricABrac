@@ -11,7 +11,6 @@ using namespace std;
 info Menu_creation_partie::run(info information)
 {
   information.ishost=TRUE;
-  createRoom(information.username);
   int largeur,len_str;
   bool setting_one = TRUE;
   bool setting_two = TRUE;
@@ -187,6 +186,7 @@ info Menu_creation_partie::run(info information)
         else
         {
 
+          information.client->createRoom(information.username);
           information.client->setTimeRound(nombre3);//durée par tours
           information.client->set_nrb_lombrics(nombre2);//nombre lombrics
           information.client->set_nbr_equipes(nombre1);
