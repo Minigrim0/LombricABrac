@@ -1,5 +1,6 @@
 #Copie heuteuse du travail qui n'est pas le mien mais c'est très joli
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override `pkg-config --cflags --libs protobuf`
+#Mais l'auteur original a modifié ce magnifique makefile et t'excuse d'utiliser son travail
+COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
 LINKER_FLAGS=-pthread -ldl -lpthread -lncurses
 EXECUTABLE=lombricABrac
 CXX=g++ -ggdb -ldl
@@ -14,9 +15,14 @@ all: pre $(EXECUTABLE)
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(OBJECTS) $(LIBS)
+$(EXECUTABLE): main.cpp $(OBJECTS) $(LIBS) build/user.pb.o
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+
+build/user.pb.o:
+	protoc -I=proto --cpp_out=proto/src proto/user.proto
+	$(CXX) $(COMPILER_FLAGS) -c proto/src/*
+	mv user.pb.o build/user.pb.o
 
 build/%.o: src/%.cpp
 	@mkdir -p build
@@ -40,10 +46,5 @@ valrun: all
 
 mrproper: clean
 	rm -f $(EXECUTABLE)
-
-buildproto:
-	protoc -I=proto --cpp_out=proto/src proto/user.proto
-	$(CXX) $(COMPILER_FLAGS) -c proto/src/*
-	mv user.pb.o build/user.pb.o
 
 .PHONY: clean mrproper
