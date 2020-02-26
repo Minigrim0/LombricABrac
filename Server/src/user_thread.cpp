@@ -22,7 +22,7 @@ int client_thread(int socket_client){
     s_send_b(publisher, zmqmsg.SerializeAsString());
     pub_mutex.unlock();
 
-    zmqmsg.set_receiver_id(1); //Messages wit hreceiver id 0 are for the broker itself
+    zmqmsg.set_receiver_id(1); //Messages wit hreceiver id 1 are to be redirected by the broker
 
     pub_mutex.lock();
     s_sendmore_b(publisher, "all");
