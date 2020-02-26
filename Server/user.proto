@@ -155,11 +155,11 @@ message infoPartie_p{
 }
 
 message Create_room{
-  string pseudo = 1;
+  uint32 usr_id = 1;
 }
 
 message Create_room_id{
-  uint32 usr_id = 1;
+  uint32 room_id = 1;
 }
 
 message ZMQ_msg{

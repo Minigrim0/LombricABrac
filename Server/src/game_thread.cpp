@@ -8,7 +8,7 @@
 #include "../includes/utils.hpp"
 #include "../cpl_proto/user.pb.h"
 
-int game_thread(){
+int game_thread(std::string chan_sub){
 
     bool game_running;
     int current_step = STEP_ROOM;

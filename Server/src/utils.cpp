@@ -223,20 +223,20 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
             case ADD_ROOM_S:{
                 Create_room room;
-                la_poste->reception();
-                room.ParseFromString(la_poste->get_buffer());
-                int owner_id;db.get_user_id(room.pseudo(), &owner_id);
-                Create_room_id room_id;
-                room_id.set_usr_id(owner_id);
+                room.set_usr_id(usr->get_id());
                 ZMQ_msg msg;
                 msg.set_receiver_id(0);
                 msg.set_type_message(ADD_ROOM_S);
-                msg.set_message(room_id.SerializeAsString());
+                msg.set_message(room.SerializeAsString());
                 pub_mutex.lock();
                 s_sendmore_b(publisher, "all");
                 s_send_b(publisher, msg.SerializeAsString());
                 pub_mutex.unlock();
+                break;
             }
+            //case ADD_ROOM_R:{
+            //    //faut set le pub sur partie
+            //}
             case CHAT_BROKER:{
                 Chat_broker chat_broker;
                 chat_broker.ParseFromString(zmq_msg);

@@ -10,6 +10,7 @@
 #include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
+#include "includes/comm_macros.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/game_thread.hpp"
 #include "includes/constant.hpp"
@@ -39,6 +40,30 @@ int broker_thread(){
         std::cout << zmqmsg.receiver_id() << std::endl;
         if(zmqmsg.receiver_id() == 0){
             std::cout << "Broker is going to interpret this message" << std::endl;
+            switch ( zmqmsg.type_message() )
+            {
+            case ADD_ROOM_S:{
+                std::string chan_sub = "id_partie";//id_partie a get en db
+                std::thread tobj(game_thread,chan_sub);
+                tobj.detach();
+                ZMQ_msg partie_r;
+                Create_room owner_usr;
+                Create_room_id room_id;
+                owner_usr.ParseFromString(zmqmsg.message());
+                partie_r.set_receiver_id(owner_usr.usr_id());
+                room_id.set_room_id(40);//id partie
+                partie_r.set_type_message(ADD_ROOM_R);
+                partie_r.set_message(room_id.SerializeAsString());
+                pub_mutex.lock();
+                stream << "users/" << zmqmsg.receiver_id() << "/broker" << std::endl;
+                s_sendmore_b(publisher, stream.str());
+                s_send_b(publisher, zmqmsg.SerializeAsString());
+                pub_mutex.unlock();
+                break;
+            }
+            default:
+                break;
+            }
         }
         else{
             pub_mutex.lock();

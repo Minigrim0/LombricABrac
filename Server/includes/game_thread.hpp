@@ -7,6 +7,6 @@
 #define STEP_GAME 1
 #define STEP_ENDSCREEN 2
 
-int game_thread();
+int game_thread(std::string chan_sub);
 
 #endif
