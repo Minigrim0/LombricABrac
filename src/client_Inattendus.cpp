@@ -18,7 +18,6 @@ void Client::invite(message& m){
 	invitations.push_back({m.type, obj.pseudo()}); //ajoute demande d'ami dans le vecteur
 }
 
-
 std::vector<invitation> Client::getInvitations(){
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
@@ -108,6 +107,18 @@ void Client::changeNbrLombs(message& m){
 
 paramsPartie Client::getParamsPartie(){
 	return currentParams;
+}
+
+std::vector<lombricPos> Client::getNewLombPos(){
+	std::vector<lombricPos> res = movedLomb;
+	movedLomb.clear(); //vide vecteur
+	return res; // renvoie le vecteur de messages recus
+}
+
+std::vector<infoArme> Client::getNewWeapons(){
+	std::vector<infoArme> res = newWeaponUsed;
+	newWeaponUsed.clear(); //vide vecteur
+	return res; // renvoie le vecteur de messages recus
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre

@@ -36,6 +36,22 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
 	sendMutex.unlock();
 }
 
+void Client::updatePos(uint32_t id, uint32_t x, uint32_t y){
+	message m{};
+
+	Lomb_pos obj;
+	obj.set_id_lomb(id);
+	obj.set_pos_x(x);
+	obj.set_pos_y(y);
+
+	obj.SerializeToString(&m.text);
+	m.type = POS_LOMB_S;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 infoPartie_s* Client::getGameInfo(){
   /*
 	m.type = GET_GAME_INFO;
