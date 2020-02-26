@@ -70,7 +70,7 @@
 #endif
 
 //  Provide random number from 0..(num-1)
-#define within(num) (int) ((float)((num) * random ()) / (RAND_MAX + 1.0))
+#define within(num) static_cast<int>(static_cast<float>((num) * random ()) / (RAND_MAX + 1.0))
 
 //  Receive 0MQ string from socket and convert into C string
 //  Caller must free returned string.
@@ -85,7 +85,7 @@ s_recv(void *socket, int flags = 0) {
 		return nullptr;           //  Context terminated, exit
 
 	size_t size = zmq_msg_size(&message);
-	char *string = (char*)malloc(size + 1);
+	char *string = static_cast<char*>(malloc(size + 1));
 	memcpy(string, zmq_msg_data(&message), size);
 	zmq_msg_close(&message);
 	string[size] = 0;
@@ -134,7 +134,7 @@ s_send_b(zmq::socket_t & socket, const std::string & string, int flags = 0) {
     zmq::message_t message(string.size());
     memcpy (message.data(), string.data(), string.size());
 
-    bool rc = socket.send (message, flags);
+    bool rc = socket.send(message, flags);
     return (rc);
 }
 
@@ -191,10 +191,10 @@ s_dump (zmq::socket_t & socket)
         std::cout << "[" << std::setfill('0') << std::setw(3) << size << "]";
         for (char_nbr = 0; char_nbr < size; char_nbr++) {
             if (is_text)
-                std::cout << (char)data [char_nbr];
+                std::cout << static_cast<char>(data [char_nbr]);
             else
                 std::cout << std::setfill('0') << std::setw(2)
-                   << std::hex << (unsigned int) data [char_nbr];
+                   << std::hex << static_cast<unsigned int>(data [char_nbr]);
         }
         std::cout << std::endl;
 
@@ -274,7 +274,7 @@ s_clock (void)
 #else
     struct timeval tv;
     gettimeofday (&tv, NULL);
-    return (int64_t) (tv.tv_sec * 1000 + tv.tv_usec / 1000);
+    return static_cast<int64_t>(tv.tv_sec * 1000 + tv.tv_usec / 1000);
 #endif
 }
 
