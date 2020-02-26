@@ -1,5 +1,6 @@
 *.hpp.gch
 *.o
+lombricABrac
 server
 client
 .vscode
