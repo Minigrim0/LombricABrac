@@ -10,12 +10,12 @@
 #include <string>
 #include <sstream>
 
-#include <time.h>
-#include <assert.h>
-#include <stdlib.h>        // random()  RAND_MAX
-#include <stdio.h>
-#include <stdarg.h>
-#include <signal.h>
+#include <ctime>
+#include <cassert>
+#include <cstdlib>        // random()  RAND_MAX
+#include <cstdio>
+#include <cstdarg>
+#include <csignal>
 #if (!defined(WIN32))
 #   include <sys/time.h>
 #   include <unistd.h>
@@ -319,6 +319,7 @@ s_console (const char *format, ...)
 static int s_interrupted = 0;
 inline static void s_signal_handler (int signal_value)
 {
+    std::cout << "s_signal_handler : " << signal_value << std::endl;
     s_interrupted = 1;
 }
 
