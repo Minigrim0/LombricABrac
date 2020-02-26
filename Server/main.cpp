@@ -6,6 +6,7 @@
 #include <cstring>
 #include <thread>
 #include <chrono>
+#include <sstream>
 #include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
@@ -19,18 +20,35 @@
 
 int broker_thread(){
     zmq::context_t context(1);
-    zmq::socket_t subscriber (context, ZMQ_SUB);
+    zmq::socket_t subscriber(context, ZMQ_SUB);
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
 
+    ZMQ_msg zmqmsg;
+    std::ostringstream stream;
+
     while(true){
+        stream.str("");
+        stream.clear();
+
         std::string address = s_recv(subscriber);
         std::string contents = s_recv(subscriber);
 
-        std::cout << "[" << address << "] " << contents << std::endl;
+        zmqmsg.ParseFromString(contents);
+        std::cout << "Broker got [" << address << "] " << zmqmsg.DebugString() << std::endl;
+        std::cout << zmqmsg.receiver_id() << std::endl;
+        if(zmqmsg.receiver_id() == 0){
+            std::cout << "Broker is going to interpret this message" << std::endl;
+        }
+        else{
+            pub_mutex.lock();
+            stream << "users/" << zmqmsg.receiver_id() << "/broker" << std::endl;
+            s_sendmore_b(publisher, stream.str());
+            s_send_b(publisher, zmqmsg.SerializeAsString());
+            pub_mutex.unlock();
+            std::cout << "Broker redirected this message to : " << stream.str() << std::endl;
+        }
     }
-
-    std::cout << "finished" << std::endl;
 
     return EXIT_SUCCESS;
 }

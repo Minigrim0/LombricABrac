@@ -13,10 +13,20 @@ int client_thread(int socket_client){
     Listener la_poste(socket_client);
     ConnectedPlayer usr;
 
-    //std::cout << "Sending" << std::endl;
+    ZMQ_msg zmqmsg;
+    zmqmsg.set_receiver_id(0); //Messages wit hreceiver id 0 are for the broker itself
+    zmqmsg.set_type_message(0);
+
     pub_mutex.lock();
     s_sendmore_b(publisher, "all");
-    s_send_b(publisher, "We would like to see this");
+    s_send_b(publisher, zmqmsg.SerializeAsString());
+    pub_mutex.unlock();
+
+    zmqmsg.set_receiver_id(1); //Messages wit hreceiver id 0 are for the broker itself
+
+    pub_mutex.lock();
+    s_sendmore_b(publisher, "all");
+    s_send_b(publisher, zmqmsg.SerializeAsString());
     pub_mutex.unlock();
 
     while(1){
