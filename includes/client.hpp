@@ -75,6 +75,12 @@ struct nextTour{
 	bool tour;//true si notre tour
 };
 
+struct infoArme{
+	uint32_t index;
+	uint32_t force;
+	uint32_t angle;
+};
+
 
 class Client{
 private:
@@ -93,6 +99,8 @@ private:
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
 	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
 	std::vector<std::string> newPlayers;//vecteurs de tous les nouveau joueurs dans le salon d'attente
+	std::vector<lombricPos> movedLomb;//vecteur des lombrics déplacés
+	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 	void sendMessage(message& m);//envoie le type, la taille et le string
@@ -106,6 +114,7 @@ private:
 	void nvJoueur(message& m);//joueur est arrivé dans le salon d'attente
 	//void newProjectile(message &m);
 	void notifyStarted(message& m);
+
 
 	//réponse aux invitations
 	void acceptFriend(std::string username, bool ok); //accepte ou refuse demande amis
@@ -156,7 +165,7 @@ public:
 	bool isStarted();//renvoie si la partie a commencer (bool)
 	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric (joueur)
 	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
-	lombricPos updatePosLombs();//renvoir nouvelle position du lombric bougé (spectateur)
+	void updatePos(uint32_t id, uint32_t x, uint32_t y);
 	Map* getMap();
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
@@ -172,5 +181,6 @@ public:
 	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
 	std::vector<chat_r> getConvo(std::string username);//renvoie tous les messages avec un amis choisi
 	std::vector<std::string> getNewPlayers();//revoie les nouveau joueurs dans le salon d'attente
-
+	std::vector<lombricPos> getNewLombPos();//renvoie un vecteur des lombrics bougés
+	std::vector<infoArme> getNewWeapons();//renvoie un vecteur des nouvelles armes utilisées
 };
