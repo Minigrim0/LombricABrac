@@ -140,7 +140,7 @@ info Salon_Attente::run(info information)
         }
         if (x== x_arrow4 && information.ishost)
         {
-          information.Client->isStarded();
+          information.Client->startGame();
           information.id=2;
           break;
         }
