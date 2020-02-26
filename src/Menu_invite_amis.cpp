@@ -62,12 +62,12 @@ info Menu_invite_amis::run(info information)
         string nom_du_joueur(str);
         information.client->addFriend(nom_du_joueur);
         boucle=0;
-        information.id=2;
+        information.id=32;
         break;
       }
       case 263:{
         boucle=0;
-        information.id=2;
+        information.id=32;
         break;
       }
 

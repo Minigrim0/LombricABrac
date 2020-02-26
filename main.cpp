@@ -25,6 +25,7 @@ salon attente = 28;
 creer/changer equipe de lombric=29
 envoyer demande de jeu=30
 envoyer demande d'amis = 31
+ami_window = 32
 warning pop up = 5
 Wait_window = 70
 warning leave = 60 (quand il se deconncete  == -1 retourne au login )
@@ -49,9 +50,12 @@ int main(int argc, char** argv)
   Wait_window wait_window;
   Menu_invite_amis demande_amis;
   Historique_window historique_window;
+  Ami_window ami_window;
   info information;
   information.id=1;
   information.ishost=FALSE;
+  information.notif = 0;
+  information.notif_invit = 0;
   information = enter_window.run(information);
 
   information.client = new Client(argv[1], strtol(argv[2],NULL,10));
@@ -126,6 +130,10 @@ int main(int argc, char** argv)
     if (information.id==31)
     {//appel la window demande d'amis
       information= demande_amis.run(information);
+    }
+    if (information.id ==32)
+    {//lance ami_window pour consulter les options concernants les amis
+      information = ami_window.run(information);
     }
     if (information.id == 53)
     {//lance le warning avec "Historique vide."

@@ -3,6 +3,7 @@
 #include <string>
 #include <ncurses.h>
 #include <iostream>
+#include <vector>
 #include "client.hpp"
 
 using namespace std;
@@ -13,6 +14,9 @@ typedef struct info{
   string username;
   string friends;
   int id;
+  int notif;
+  int notif_invit;
+  vector<invitation> vec_invit;
   Client *client;
 }info;
 
@@ -133,6 +137,12 @@ public:
 };
 
 class Warning_del_friend_window: public Window
+{
+public:
+  info run(info information) override;
+};
+
+class Ami_window: public Window
 {
 public:
   info run(info information) override;

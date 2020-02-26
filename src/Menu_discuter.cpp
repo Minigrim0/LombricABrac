@@ -20,12 +20,12 @@ info discuter::run(info information)
     int len_str_msg_annulation=static_cast<int>(msg_annulation.size());
     int len_str_intro1=static_cast<int>(intro1.size());
     int len_str_intro2=static_cast<int>(intro2.size());
-    char str[15];
+    char str[38];
     initscr();
     WINDOW *msg_envoyer,*confirmer,*message;
     getmaxyx(stdscr,len_str,largeur);
     message=newwin(4,50,14,largeur/2 -len_str_intro2/2);
-    msg_envoyer= newwin(3,20,20,largeur/2 -10);
+    msg_envoyer= newwin(3,40,20,largeur/2 -20);
     confirmer= newwin(4,50,23,largeur/2 -len_str_msg_annulation/2);
     box(msg_envoyer,0,0);
     refresh();
@@ -39,7 +39,7 @@ info discuter::run(info information)
     wrefresh(msg_envoyer);
     keypad(confirmer,TRUE);
     keypad(message,TRUE);
-    len_str=15;
+    len_str=38;
     while(1)
     {
       vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
@@ -67,7 +67,7 @@ info discuter::run(info information)
         echo();
         effacer_caractere_window(message,1,1,len_str_intro1);
         effacer_caractere_window(message,2,1,len_str_intro2);
-        mvwgetnstr(msg_envoyer,1,1,str,15);
+        mvwgetnstr(msg_envoyer,1,1,str,38);
         curs_set(FALSE);// enleve le curseur
         print_string_window(confirmer,1,1,msg_confirmation);
         print_string_window(confirmer,2,1,msg_annulation);
@@ -92,7 +92,7 @@ info discuter::run(info information)
       }
       if (ok==263)
       {
-        information.id=2;
+        information.id=32;
         break;
       }
 
