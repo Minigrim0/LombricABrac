@@ -15,8 +15,6 @@ int client_thread(int socket_client){
 
     //std::cout << "Sending" << std::endl;
     pub_mutex.lock();
-    s_sendmore_b(publisher, "A");
-    s_send_b(publisher, "We don't want to see this");
     s_sendmore_b(publisher, "all");
     s_send_b(publisher, "We would like to see this");
     pub_mutex.unlock();
