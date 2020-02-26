@@ -55,9 +55,9 @@ int broker_thread(){
                 partie_r.set_type_message(ADD_ROOM_R);
                 partie_r.set_message(room_id.SerializeAsString());
                 pub_mutex.lock();
-                stream << "users/" << zmqmsg.receiver_id() << "/broker" << std::endl;
+                stream << "users/" << partie_r.receiver_id() << "/broker" << std::endl;
                 s_sendmore_b(publisher, stream.str());
-                s_send_b(publisher, zmqmsg.SerializeAsString());
+                s_send_b(publisher, partie_r.SerializeAsString());
                 pub_mutex.unlock();
                 break;
             }
