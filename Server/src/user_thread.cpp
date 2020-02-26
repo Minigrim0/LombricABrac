@@ -31,7 +31,7 @@ int client_thread(int socket_client){
 
     while(1){
         uint8_t type = la_poste.reception_type();
-        if(type == EXIT_FAILURE){
+       if(type == EXIT_FAILURE){
             break;
         }
         handle_instruction(type, &la_poste, &usr);
