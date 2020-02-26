@@ -72,10 +72,8 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 }
 
 
-int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr){
-    std::cout << "locking db" << std::endl;
+int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr, std::string zmq_msg){
     DataBase_mutex.lock();
-    std::cout << "User is_auth : " << usr->is_auth() << std::endl;
     if(msg_type == CON_S){
         std::cout << "con_s" << std::endl;
         la_poste->reception();
@@ -225,9 +223,8 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
             case ADD_ROOM_S:{
                 Create_room room;
-                //la_poste->reception();
-                //room.ParseFromString(la_poste->get_buffer());
-                room.set_pseudo("Paul");
+                la_poste->reception();
+                room.ParseFromString(la_poste->get_buffer());
                 int owner_id;db.get_user_id(room.pseudo(), &owner_id);
                 Create_room_id room_id;
                 room_id.set_usr_id(owner_id);
@@ -239,6 +236,16 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 s_sendmore_b(publisher, "all");
                 s_send_b(publisher, msg.SerializeAsString());
                 pub_mutex.unlock();
+            }
+            case CHAT_BROKER:{
+                Chat_broker chat_broker;
+                chat_broker.ParseFromString(zmq_msg);
+                convo_s convo;
+                UserConnect usrcnt;
+                db.get_user(chat_broker.usr_id(), &usrcnt);
+                convo.set_pseudo(usrcnt.pseudo());
+                la_poste->envoie_msg(NOTIF, convo.SerializeAsString());
+                break;
             }
         }
     }
