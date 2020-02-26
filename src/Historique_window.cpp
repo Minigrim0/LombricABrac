@@ -27,7 +27,7 @@ info Historique_window::run(info information)
 
   //gameHistory tableau_joueur;
   historyTable historique;
-  historique = information.client->*(get_history(information.username, 1, 10));//renvoie l'histoirique des parties
+  historique = information.client->get_history(information.username, 1, 10);//renvoie l'histoirique des parties
   int size_history;
   size_history = historique.size;
   string joueur;
@@ -65,7 +65,7 @@ info Historique_window::run(info information)
     if ((y+n) >= max_y-1)
     {
       at_end_tab = FALSE;
-      i += len_tab;
+      i += size_history;
     }
     else
     {
@@ -107,7 +107,7 @@ info Historique_window::run(info information)
             if (i == nbr_printed-1 && key == 0)
             {
               at_start_tab = TRUE;
-              i += len_tab;
+              i += size_history;
             }
           }
           y = posStart_arrow +4;
@@ -134,10 +134,10 @@ info Historique_window::run(info information)
           {
             print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
             n+=4;
-            if (i == len_tab- 1)
+            if (i == size_history- 1)
             {
               at_end_tab = TRUE;
-              i += len_tab;
+              i += size_history;
             }
           }
           y = posEnd_arrow -4;

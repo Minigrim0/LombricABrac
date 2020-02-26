@@ -42,8 +42,8 @@ mrproper: clean
 	rm -f $(EXECUTABLE)
 
 buildproto:
-	protoc -I=proto --cpp_out=proto proto/user.proto
-	mv proto/user.pb.h includes/user.pb.hpp
-	mv proto/user.pb.cc src/user.pb.cpp
+	protoc -I=proto --cpp_out=proto/src proto/user.proto
+	$(CXX) $(COMPILER_FLAGS) -c proto/src/*
+	mv user.pb.o build/user.pb.o
 
 .PHONY: clean mrproper

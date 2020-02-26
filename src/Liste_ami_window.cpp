@@ -60,7 +60,7 @@ info Liste_ami_window::run(info information)
   }
   if (information.id==24)
   {
-    rank=getRank(10);
+    rank=information.client->getRank(10);
     len_tab=10;
     msg1= "Classement des 10 meilleurs joueurs (Appyuez sur RETURN pour revenir en arriére)";
     uint32_t max=0;
@@ -291,7 +291,7 @@ info Liste_ami_window::run(info information)
         }
         if (information.id==30)
         {
-          addToGame(tab[i_save]);
+          information.client->addToGame(tab[i_save]);
           information.id=28;
           break;
         }
@@ -300,13 +300,13 @@ info Liste_ami_window::run(info information)
         {
           if (invit[static_cast<unsigned int>(i_save)].type==INVI_R)
           {
-            acceptInvitation(invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(&invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 28;
             break;
           }
           if (invit[static_cast<unsigned int>(i_save)].type==FRI_RCV)
           {
-            acceptInvitation(invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(&invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 2;
             break;
           }

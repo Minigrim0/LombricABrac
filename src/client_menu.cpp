@@ -106,7 +106,7 @@ stringTable Client::getLombricsName(){
 
 
 
-historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
+historyTable Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
 	message m{};
 
 	//construction de la struct du joueur qui demande son historique
@@ -124,28 +124,28 @@ historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_
 	obj_r.ParseFromString(*reponse);
 
 	//création et remplissage de la struct de l'historique à envoyer à l'affichage
-	historyTable* res = new historyTable;
-	res->size = obj_r.history_size();
-	res->table = new gameHistory[res->size];
+	historyTable res;
+	res.size = obj_r.history_size();
+	res.table = new gameHistory[res.size];
 
-	for (int i=0;i<res->size;i++){
+	for (int i=0;i<res.size;i++){
 		//les pseudos des joueurs de la partie
 		uint32_t index_table = static_cast<uint32_t>(i);
-		res->table[index_table].size = 4;
-		res->table[index_table].pseudo = new std::string[4];
-		res->table[index_table].point = new uint32_t[4];
+		res.table[index_table].size = 4;
+		res.table[index_table].pseudo = new std::string[4];
+		res.table[index_table].point = new uint32_t[4];
 
-		res->table[index_table].pseudo[static_cast<uint32_t>(0)] = obj_r.history(i).pseudo_1();
-		res->table[index_table].pseudo[static_cast<uint32_t>(1)] = obj_r.history(i).pseudo_2();
-		res->table[index_table].pseudo[static_cast<uint32_t>(2)] = obj_r.history(i).pseudo_3();
-		res->table[index_table].pseudo[static_cast<uint32_t>(3)] = obj_r.history(i).pseudo_4();
+		res.table[index_table].pseudo[static_cast<uint32_t>(0)] = obj_r.history(i).pseudo_1();
+		res.table[index_table].pseudo[static_cast<uint32_t>(1)] = obj_r.history(i).pseudo_2();
+		res.table[index_table].pseudo[static_cast<uint32_t>(2)] = obj_r.history(i).pseudo_3();
+		res.table[index_table].pseudo[static_cast<uint32_t>(3)] = obj_r.history(i).pseudo_4();
 		//les points des joueurs de la partie
-		res->table[index_table].point[static_cast<uint32_t>(0)] = obj_r.history(i).point_1();
-		res->table[index_table].point[static_cast<uint32_t>(1)] = obj_r.history(i).point_2();
-		res->table[index_table].point[static_cast<uint32_t>(2)] = obj_r.history(i).point_3();
-		res->table[index_table].point[static_cast<uint32_t>(3)] = obj_r.history(i).point_4();
+		res.table[index_table].point[static_cast<uint32_t>(0)] = obj_r.history(i).point_1();
+		res.table[index_table].point[static_cast<uint32_t>(1)] = obj_r.history(i).point_2();
+		res.table[index_table].point[static_cast<uint32_t>(2)] = obj_r.history(i).point_3();
+		res.table[index_table].point[static_cast<uint32_t>(3)] = obj_r.history(i).point_4();
 		//la date
-		res->table[index_table].date = obj_r.history(i).date();
+		res.table[index_table].date = obj_r.history(i).date();
 	}
 
 	delete reponse;

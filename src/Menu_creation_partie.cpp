@@ -189,7 +189,7 @@ info Menu_creation_partie::run(info information)
           information.client->createRoom(information.username);
           information.client->setTimeRound(nombre3);//durée par tours
           information.client->set_nrb_lombrics(nombre2);//nombre lombrics
-          information.client->set_nbr_equipes(nombre1);
+          //information.client->set_nbr_equipes(nombre1);
           information.id=28;
           break;
         }

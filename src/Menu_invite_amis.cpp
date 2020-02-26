@@ -58,16 +58,18 @@ info Menu_invite_amis::run(info information)
     switch(key)
     {
 
-      case 10:
-        string nom_du_joueur= string(str);
-        information.client->addFriend(nom_joueur);
+      case 10:{
+        string nom_du_joueur(str);
+        information.client->addFriend(nom_du_joueur);
         boucle=0;
         information.id=2;
         break;
-      case 263:
+      }
+      case 263:{
         boucle=0;
         information.id=2;
         break;
+      }
 
       default:
         break;

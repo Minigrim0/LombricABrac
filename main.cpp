@@ -2,8 +2,10 @@
 #include <unistd.h>
 #include <string>
 #include <iostream>
-#include "includes/UI.hpp"
 #include <vector>
+#include <thread>
+
+#include "includes/UI.hpp"
 
 using namespace std;
 /*
@@ -31,7 +33,7 @@ quitter  = -1
 
 */
 
-int main()
+int main(int argc, char** argv)
 {
   //system("resize -s 30 100");
   Menu_jeu_window menu_window;
@@ -51,6 +53,9 @@ int main()
   information.id=1;
   information.ishost=FALSE;
   information = enter_window.run(information);
+
+  information.client = new Client(argv[1], strtol(argv[2],NULL,10));
+  std::thread t(&Client::run,information.client);
 
   while(1)
   {
@@ -173,6 +178,10 @@ int main()
     if (information.id == 61)
     {//lance la window vérification supprimer ami
       information = del_friend_window.run(information);
+    }
+    if( information.id == 80){
+      Window* gameWin = new Partie(information.client);
+      information = gameWin->run(information);
     }
 
   }

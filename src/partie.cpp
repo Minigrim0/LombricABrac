@@ -46,7 +46,7 @@ mustDrawWall(false){
 
 }
 
-int Partie::run(int id)
+info Partie::run(info information)
 {
   bool run = true;
   clear();
@@ -153,7 +153,7 @@ int Partie::run(int id)
   delwin(overlayWin);
   endwin();
   cout << "End" << endl;
-  return id;//pour le moment du moins
+  return information;//pour le moment du moins
 }
 
 void Partie::drawMap(){

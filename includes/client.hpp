@@ -3,7 +3,7 @@
 
 #define _DEFAULT_SOURCE 1
 
-#include "user.pb.hpp"
+#include "../proto/src/user.pb.h"
 #include "comm_macros.hpp"
 #include "infoPartie.hpp"
 
@@ -147,7 +147,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
 
 	//méthode pour l'historique
-	historyTable* get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
+	historyTable get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	playerRank getRank(uint32_t nbr_players);//renvoie le classement des nbr_players meilleurs joueurs
@@ -164,7 +164,7 @@ public:
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
-	void inline acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
+	void acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
 	infoPartie_s* getGameInfo();//renvoie les info(struct infoPartie_s) de la partie
 
 	//méthodes sur les messages inattendus

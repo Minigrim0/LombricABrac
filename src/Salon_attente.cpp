@@ -35,7 +35,7 @@ info Salon_Attente::run(info information)
   for (int i=0;i<8;i++)
   {
     print_string_window(win,y+decalage,x,equipe[static_cast<unsigned int>(i)]);
-    print_string_window(win,y+decalage,len_str+x+1,a[i].pseudo);
+    //print_string_window(win,y+decalage,len_str+x+1,a[i].pseudo);
     decalage+=2;
   }
   //print le boutton anuller
@@ -140,8 +140,8 @@ info Salon_Attente::run(info information)
         }
         if (x== x_arrow4 && information.ishost)
         {
-          information.Client->startGame();
-          information.id=2;
+          information.client->startGame();
+          information.id=80;
           break;
         }
       }
