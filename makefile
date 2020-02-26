@@ -1,7 +1,7 @@
 #Copie heuteuse du travail qui n'est pas le mien mais c'est très joli
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override
+COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override `pkg-config --cflags --libs protobuf`
 LINKER_FLAGS=-pthread -ldl -lpthread -lncurses
-EXECUTABLE=partieUI
+EXECUTABLE=lombricABrac
 CXX=g++ -ggdb -ldl
 
 SOURCES=$(wildcard src/*.cpp)
@@ -40,5 +40,10 @@ valrun: all
 
 mrproper: clean
 	rm -f $(EXECUTABLE)
+
+buildproto:
+	protoc -I=proto --cpp_out=proto proto/user.proto
+	mv proto/user.pb.h includes/user.pb.hpp
+	mv proto/user.pb.cc src/user.pb.cpp
 
 .PHONY: clean mrproper
