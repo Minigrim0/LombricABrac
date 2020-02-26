@@ -137,22 +137,25 @@ message Lombric{
   uint32 vie = 4;
 }
 
-message infoPartie_p{
-  uint32 largeur = 1;
-  uint32 hauteur = 2;
-  repeated uint32 mur = 3;
-  repeated Lombric lomb = 4;
-  repeated uint32 id_arme = 5;
+message End_tour{
+  repeated uint32 id_lomb_mort = 1;
 }
 
-message map{
-  uint32 largeur = 1;
-  uint32 hauteur = 2;
-  repeated uint32 mur = 3;
+message Next_lombric{
+  uint32 id_lomb = 1;
+  bool is_yours = 2;
+}
+
+message infoPartie_p{
+  repeated Lombric lomb = 1;
 }
 
 message Create_room{
   string pseudo = 1;
+}
+
+message Create_room_id{
+  uint32 usr_id = 1;
 }
 
 message ZMQ_msg{
