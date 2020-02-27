@@ -26,12 +26,11 @@ int client_thread(int socket_client){
     uint8_t type = 0;
     int res;
     while(1){
+        type = 0;
         if(usr.is_auth()){
-            std::cout << "Listening on zmq" << std::endl;
             std::string address = s_recv(subscriber);
 
             if(zmq_errno() == EAGAIN){ // The receive just timed out
-                std::cout << "ZMQ timed out" << std::endl;
                 type = 0;
             }
             else{ // We got a message from the Broker
