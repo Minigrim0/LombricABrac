@@ -26,6 +26,9 @@ cpl_proto/%.pb.cpp: %.proto
 client: client_test.cpp
 	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
 
+map: map.cpp
+	@$(CXX) $^ $(COMPILER_FLAGS) -o $@	
+
 init_db: init_db.cpp $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
