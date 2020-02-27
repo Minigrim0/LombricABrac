@@ -10,42 +10,13 @@
 #include "../includes/connected_player.hpp"
 #include "../includes/zhelpers.hpp"
 
-
-int match_queue[5] = {0, 0, 0, 0, 0};
-int nb_waiting_players;
 std::mutex mu;
 std::condition_variable cv;
 std::mutex DataBase_mutex;
 DataBase db("lab.db");
-
 std::mutex pub_mutex;
 zmq::context_t context(1);
 zmq::socket_t publisher(context, ZMQ_PUB);
-
-
-void add_me_to_queue(int user_id){
-    match_queue_mut.lock();
-    match_queue[nb_waiting_players] = user_id;
-    nb_waiting_players++;
-    match_queue_mut.unlock();
-
-    {
-        std::lock_guard<std::mutex> lk(mu);
-    }
-    cv.notify_all();
-}
-
-int get_first_from_queue(){
-    int user_id;
-
-    match_queue_mut.lock();
-    user_id = match_queue[0];
-    nb_waiting_players--;
-    for(int a=0;a<5;a++)
-        match_queue[a] = match_queue[a+1];
-    match_queue_mut.unlock();
-    return user_id;
-}
 
 // Depending on the value of res, indicate an error, with the error message provided,
 // and closes given pipes before exiting the program
@@ -273,9 +244,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 s_send_b(publisher, msg.SerializeAsString());
                 pub_mutex.unlock();
                 break;
-            }
-            case ADD_ROOM_R:{
-                //faut set le pub sur partie
             }
             case CHAT_BROKER:{
                 Chat_broker chat_broker;
