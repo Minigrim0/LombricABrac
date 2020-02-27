@@ -21,9 +21,6 @@ extern std::mutex pub_mutex;
 extern zmq::context_t context;
 extern zmq::socket_t publisher;
 
-static Semaphore sem;
-static std::mutex match_queue_mut;
-
 void add_me_to_queue(int user_id);
 
 void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...);
