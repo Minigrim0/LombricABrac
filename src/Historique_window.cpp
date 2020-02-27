@@ -27,7 +27,7 @@ info Historique_window::run(info information)
 
   //gameHistory tableau_joueur;
   historyTable historique;
-  historique = information.client->get_history(information.username, 1, 10);//renvoie l'histoirique des parties
+  historique = information.client->get_history(information.username, 0, 10);//renvoie l'histoirique des parties
   int size_history;
   size_history = historique.size;
   string joueur;

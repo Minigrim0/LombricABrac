@@ -115,7 +115,7 @@ info Menu_creation_equipe_lombric::run(info information)
     switch(clav)
     {
       case 10:
-        for (uint32_t i=1;i<9;i++)
+        for (uint32_t i=1;i<8;i++)
         {
           string str= string(name[i]);
           information.client->setLombricName(i,str);

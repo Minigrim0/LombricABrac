@@ -52,36 +52,10 @@ info Liste_ami_window::run(info information)
     rank=information.client->getRank(10);
     len_tab=10;
     msg1= "Classement des 10 meilleurs joueurs (Appyuez sur RETURN pour revenir en arriére)";
-    uint32_t max=0;
-    int index=0;
-    int taille_tableau=0;
-    uint32_t fin = 4294967295;
-    while(1)
+    for (int i=0;i<len_tab;i++)
     {
-      max=0;
-      if (taille_tableau==10)
-      {
-        break;
-      }
-      for (int i=0;i<10;i++)
-        {
-        if (rank.points[i]!=fin)
-          {
-            if (rank.points[i]>=max)
-            {
-              max= rank.points[i];
-              index=i;
-            }
-          }
-        }
-      h = to_string(rank.points[index]);
-      tableau_joueur[taille_tableau]= rank.pseudo[index] + ' ' + h;
-      points_ranger[taille_tableau]=rank.points[index];
-      rank.points[index]=fin;
-      taille_tableau++;
+      rank.pseudo[i]= "Pseudo : " + rank.pseudo[i]+ " score: "; //+ to_string(rank.points[i]);
     }
-    rank.pseudo=tableau_joueur;
-    rank.points=points_ranger;
   }
   if (information.id==30)
   {

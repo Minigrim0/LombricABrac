@@ -25,7 +25,7 @@ info discuter::run(info information)
     initscr();
     WINDOW *msg_envoyer,*confirmer,*message;
     getmaxyx(stdscr,len_str,largeur);
-    message=newwin(4,50,14,largeur/2 -len_str_intro2/2);
+    message=newwin(4,50,14,largeur/2 -len_str_intro1/2);
     msg_envoyer= newwin(3,40,20,largeur/2 -20);
     confirmer= newwin(4,50,23,largeur/2 -len_str_msg_annulation/2);
     box(msg_envoyer,0,0);
