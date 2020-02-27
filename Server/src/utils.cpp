@@ -142,9 +142,12 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case GET_CONVO:{
+                std::cout << "Getting convo" << std::endl;
                 convo_s request_convo;
                 Chat_r chat_r;
+                std::cout << "Starting reception" << std::endl;
                 la_poste->reception();
+                std::cout << "Done" << std::endl;
                 request_convo.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(request_convo.pseudo(), &friend_id);
                 db.get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
@@ -200,6 +203,14 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case FRI_ACCEPT:{
+                la_poste->reception();
+                Invitation_r invs;
+                Fri_ls_r list_asks;
+                db.get_friend_invites(usr->get_id(), &list_asks);
+                la_poste->envoie_msg(GET_ALL_INVIT, list_asks.SerializeAsString());
+                break;
+            }
+            case GET_ALL_INVIT:{
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -217,7 +228,9 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
+                std::cout << "Friend bdstr : " << fri.DebugString() << std::endl;
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
+                std::cout << "Friend id : " << friend_id << std::endl;
                 db.remove_friend(usr->get_id(), friend_id);
                 break;
             }

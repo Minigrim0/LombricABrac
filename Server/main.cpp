@@ -43,6 +43,7 @@ int broker_thread(){
             switch ( zmqmsg.type_message() )
             {
             case ADD_ROOM_S:{
+                std::cout << "Creating new room" << std::endl;
                 std::string chan_sub = "id_partie";//id_partie a get en db
                 std::thread tobj(game_thread,chan_sub);
                 tobj.detach();
@@ -66,6 +67,8 @@ int broker_thread(){
                 s_sendmore_b(publisher, stream.str());
                 s_send_b(publisher, partie_r.SerializeAsString());
                 pub_mutex.unlock();
+
+                std::cout << "Sent room id to the client thread : " << room_id.room_id() << std::endl;
                 break;
             }
             default:

@@ -27,9 +27,11 @@ int client_thread(int socket_client){
     int res;
     while(1){
         if(usr.is_auth()){
+            std::cout << "Listening on zmq" << std::endl;
             std::string address = s_recv(subscriber);
 
             if(zmq_errno() == EAGAIN){ // The receive just timed out
+                std::cout << "ZMQ timed out" << std::endl;
                 type = 0;
             }
             else{ // We got a message from the Broker
@@ -44,13 +46,11 @@ int client_thread(int socket_client){
         }
 
         if(type == 0){
-            std::cout << "Listening for client" << std::endl;
             type = la_poste.reception_type();
-            std::cout << "type : " << static_cast<int>(type) << std::endl;
-
             if(type == EXIT_FAILURE){
                 break;
             }
+            std::cout << "type : " << static_cast<int>(type) << std::endl;
         }
 
         if(type != 0){
@@ -64,5 +64,6 @@ int client_thread(int socket_client){
         }
     }
     close(socket_client);
+    std::cout << "Closing thread for client " << usr.get_id() << std::endl;
     return EXIT_SUCCESS;
 }

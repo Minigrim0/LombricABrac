@@ -14,10 +14,11 @@ int game_thread(std::string chan_sub){
     int current_step = STEP_ROOM;
     Game current_game;
 
+    std::cout << "room started" << std::endl;
+
     while(game_running){
         switch(current_step){
             case STEP_ROOM:
-                std::cout << "You're in the room" << std::endl;
                 break;
             case STEP_GAME:
                 std::cout << "You're in the game" << std::endl;

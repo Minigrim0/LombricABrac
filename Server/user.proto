@@ -25,6 +25,12 @@ message convo_s{
 
 message Invitation{
   string pseudo = 1;
+  bool type = 2; // True = invitation pour une partie, False = invitation d'ami
+  uint32 game_id = 3;
+}
+
+message Invitation_r{
+    repeated Invitation invits = 1;
 }
 
 message Join{
