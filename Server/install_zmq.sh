@@ -1,3 +1,4 @@
+#!/bin/bash
 echo "\e[0;32mChecking for installed zeromq\e[0m";
 if [ ! -d "lib/libzmq/" ]; then
     cd lib;
@@ -9,13 +10,14 @@ if [ ! -d "lib/libzmq/" ]; then
     else
         sudo make -j4 install;
     fi
-    cd ../../;
+    cd ../../../;
 else
     echo "\e[0;34mzmq seems to be installed\e[0m"
 fi
 
-echo "\e[0;32mChecking for installed cppzeromq\e[0m";
+echo "\e[0;32mChecking for installed cppzmq\e[0m";
 if [ ! -d "lib/cppzmq/" ]; then
+    cd lib;
     git clone https://github.com/zeromq/cppzmq cppzmq && cd cppzmq;
     mkdir build && cd build;
     cmake ..;
@@ -24,7 +26,7 @@ if [ ! -d "lib/cppzmq/" ]; then
     else
         sudo make -j4 install;
     fi
-    cd ../../;
+    cd ../../../;
 else
     echo "\e[0;34mcppzmq seems to be installed\e[0m"
 fi

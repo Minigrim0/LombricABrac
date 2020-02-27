@@ -43,13 +43,13 @@ int broker_thread(){
             switch ( zmqmsg.type_message() )
             {
             case ADD_ROOM_S:{
-                std::cout << "Creating new room" << std::endl;
+                Create_room owner_usr;
+                owner_usr.ParseFromString(zmqmsg.message());
                 std::string chan_sub = "id_partie";//id_partie a get en db
-                std::thread tobj(game_thread,chan_sub);
+                std::thread tobj(game_thread,chan_sub,owner_usr.usr_id());
                 tobj.detach();
 
                 ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
-                Create_room owner_usr;
                 Create_room_id room_id;
                 owner_usr.ParseFromString(zmqmsg.message());
 

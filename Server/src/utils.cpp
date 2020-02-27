@@ -270,9 +270,9 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 pub_mutex.unlock();
                 break;
             }
-            //case ADD_ROOM_R:{
-            //    //faut set le pub sur partie
-            //}
+            case ADD_ROOM_R:{
+                //faut set le pub sur partie
+            }
             case CHAT_BROKER:{
                 Chat_broker chat_broker;
                 chat_broker.ParseFromString(zmq_msg);
