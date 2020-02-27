@@ -93,6 +93,7 @@ private:
 	message msg;
 	std::mutex sendMutex;//mutex pour éviter aue plusieurs messages soient envoyés em même temps
 	std::mutex msgMutex;
+	std::mutex mutexPartie;
 	uint8_t reponseAttendue;
 	int client_socket;
 	bool started;//partie à commencée
@@ -102,6 +103,7 @@ private:
 	std::vector<std::string> newPlayers;//vecteurs de tous les nouveau joueurs dans le salon d'attente
 	std::vector<lombricPos> movedLomb;//vecteur des lombrics déplacés
 	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
+	std::vector<std::string> tableUpdate;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 	void sendMessage(message& m);//envoie le type, la taille et le string
@@ -179,9 +181,10 @@ public:
 
 	//méthodes sur les messages inattendus
 	std::vector<chat_r> getNewMsg(); //renvoie le vecteur de messages (nom + msg)
-	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom)
+	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom). MESSAGE INATTENDU
 	std::vector<chat_r> getConvo(std::string username);//renvoie tous les messages avec un amis choisi
 	std::vector<std::string> getNewPlayers();//revoie les nouveau joueurs dans le salon d'attente
 	std::vector<lombricPos> getNewLombPos();//renvoie un vecteur des lombrics bougés
 	std::vector<infoArme> getNewWeapons();//renvoie un vecteur des nouvelles armes utilisées
+	std::vector<std::string> getTableUpdate();
 };

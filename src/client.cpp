@@ -78,15 +78,25 @@ void* Client::run(){
 			else if (msg.type == START){
 				notifyStarted(msg);
 			}
+			else if (msg.type == SHOOT){
+				mutexPartie.lock();
+				tableUpdate.push_back(msg.text);
+				res = readMessage();
+				if (res == EXIT_FAILURE){
+					break;
+				}
+				tableUpdate.push_back(msg.text);
+				res = readMessage();
+				if (res == EXIT_FAILURE){
+					break;
+				}
+				tableUpdate.push_back(msg.text);
+				mutexPartie.unlock();
+			}
 			else if (msg.type == POS_LOMB_R){
 				Lomb_pos obj;
 				obj.ParseFromString(msg.text);
 				movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
-			}
-			else if (msg.type == SHOOT){
-				Tir obj;
-				obj.ParseFromString(msg.text);
-				newWeaponUsed.push_back({obj.id_arme(),obj.angle(),obj.force()});
 			}
 		}
 	}

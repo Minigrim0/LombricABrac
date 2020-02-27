@@ -71,10 +71,10 @@ void Client::addFriend(std::string user){
 
 
 void Client::acceptInvitation(invitation* inv, bool ok){
-	if(!inv->type){
+	if(inv->type){
 		joinPartie(inv->text, ok);
 	}
-	else if(inv->type){
+	else if(!inv->type){
 		acceptFriend(inv->text, ok);
 	}
 }

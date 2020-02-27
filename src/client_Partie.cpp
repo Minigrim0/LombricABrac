@@ -20,6 +20,16 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
 	sendMutex.unlock();
 }
 
+std::vector<std::string> Client::getTableUpdate(){
+	std::vector<std::string> res;
+	if (mutexPartie.try_lock()){
+		res = tableUpdate;
+		tableUpdate.clear();
+		mutexPartie.unlock();
+	}
+	return res;
+}
+
 void Client::updatePos(uint32_t id, uint32_t x, uint32_t y){
 	message m{};
 
