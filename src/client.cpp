@@ -46,7 +46,11 @@ void* Client::run(){
 		}
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
-			readMessage();
+			res = readMessage();
+			if (res == EXIT_FAILURE){
+				std::cout << "ok" << std::endl;
+				break;
+			}
 
 			/*Messages inattendus:*/
 			if (msg.type == CHAT_R){
@@ -87,6 +91,7 @@ void* Client::run(){
 		}
 	}
 
+	close(client_socket);
 	return nullptr;
 }
 
@@ -109,29 +114,28 @@ void Client::sendMessage(message& msg){
 			sent_size += static_cast<uint32_t>(res);
 	        parser += res;
 		}
-		std::cout << "send: " << msg.text << " & type : " << static_cast<int>(msg.type) << std::endl;
 	}
 }
 
 
-void Client::readMessage(){
+int Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
-	std::cout << "Début de réception" << std::endl;
 	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
 		close(client_socket);
 	}
-	std::cout << "Type: " << static_cast<int>(msg.type) << std::endl;
 	res = static_cast<int>(recv(client_socket, &size, sizeof(size), 0)); // recois la taille du message
 	if (res==-1){
-		close(client_socket);
+		return EXIT_FAILURE;
+	}
+	else if (res==0){
+		return EXIT_FAILURE;
 	}
 
 	size = ntohl(size);
-	std::cout << "taille: " << size << std::endl;
 	char* buffer = new char[size+1];
 	char* parser = buffer;
 	buffer[size] = '\0';
@@ -143,9 +147,9 @@ void Client::readMessage(){
 	}
 
 	msg.text = static_cast<std::string>(buffer);
-	std::cout << "Reçu: " << msg.text << " & type : " << static_cast<int>(msg.type)<< std::endl;
 	delete buffer;
 	msgMutex.unlock();
+	return EXIT_SUCCESS;
 }
 
 std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){

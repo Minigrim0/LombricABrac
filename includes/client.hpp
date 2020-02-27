@@ -104,7 +104,7 @@ private:
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 	void sendMessage(message& m);//envoie le type, la taille et le string
-	void readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
+	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue
 
 	//méthodes sur les messages inattendus
@@ -163,7 +163,6 @@ public:
 
 	//méthodes pour la partie
 	bool isStarted();//renvoie si la partie a commencer (bool)
-	void pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y);//move lombric (joueur)
 	void shoot(uint32_t id_arme, uint32_t force, double angle);//utilisation arme à projectile
 	void updatePos(uint32_t id, uint32_t x, uint32_t y);
 	Map* getMap();

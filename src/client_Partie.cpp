@@ -4,22 +4,6 @@ bool Client::isStarted(){
 	return started;
 }
 
-void Client::pos_lomb(uint32_t id_lomb, uint32_t pos_x, uint32_t pos_y){
-	message m{};
-
-	Lomb_pos obj;
-	obj.set_id_lomb(id_lomb);
-	obj.set_pos_x(pos_x);
-	obj.set_pos_y(pos_y);
-
-	obj.SerializeToString(&m.text);
-	m.type = POS_LOMB_S;
-
-	sendMutex.lock();
-	sendMessage(m);
-	sendMutex.unlock();
-}
-
 void Client::shoot(uint32_t id_arme, uint32_t force, double angle){
 	message m{};
 
