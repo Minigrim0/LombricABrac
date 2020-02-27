@@ -49,7 +49,8 @@ int client_thread(int socket_client){
             if(type == EXIT_FAILURE){
                 break;
             }
-            std::cout << "type : " << static_cast<int>(type) << std::endl;
+            if(type != 0)
+                std::cout << "type : " << static_cast<int>(type) << std::endl;
         }
 
         if(type != 0){
@@ -59,6 +60,7 @@ int client_thread(int socket_client){
                 std::ostringstream stream;
                 stream << "users/" << usr.get_id() << "/broker";
                 subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+                std::cout << "User " << usr.get_id() << " connected to " << stream.str() << std::endl;
             }
         }
     }
