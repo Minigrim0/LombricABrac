@@ -15,6 +15,7 @@
 #define DT_RAN 6 // Datatype Rank_r
 #define DT_CHA 7 // Datatype Chat_r
 #define DT_FRI 8 // Datatype Fri_ls_r
+#define DT_RID 9 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -63,6 +64,10 @@ class DataBase{
         int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
+
+        // Create game
+        int create_room(int owner_id);
+        int get_last_room_id(Create_room_id *room_id);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

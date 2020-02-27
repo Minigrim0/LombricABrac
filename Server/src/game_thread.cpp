@@ -19,6 +19,8 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, chan_sub.c_str(), strlen(chan_sub.c_str()));
 
+    std::cout << "room started" << std::endl;
+
     while(game_running){
         switch(current_step){
             case STEP_ROOM:{
