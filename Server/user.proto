@@ -60,6 +60,10 @@ message Nbr_lomb_mod{
   uint32 nbr_lomb = 1;
 }
 
+message Nbr_eq_mod{
+  uint32 nbr_eq = 1;
+}
+
 message Join_groupe_s{
   uint32 id = 1;
 }
@@ -134,6 +138,19 @@ message Tir{
   double angle = 3;
 }
 
+message Projectiles{
+  uint32 id_projectile = 1;
+  repeated uint32 block = 2;
+}
+
+message List_Projectiles{
+  repeated Projectiles list_proj = 1;
+}
+
+message Degats_lombric{
+  repeated Lombric lomb_upt = 1;
+}
+
 message Lombric{
   uint32 id_lomb = 1;
   uint32 pos_x = 2;
@@ -152,6 +169,11 @@ message Next_lombric{
 
 message infoPartie_p{
   repeated Lombric lomb = 1;
+}
+
+message infoRoom{
+  repeated Lombric lomb = 1;
+  
 }
 
 message Create_room{
