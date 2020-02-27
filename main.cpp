@@ -191,7 +191,16 @@ int main(int argc, char** argv)
     {//lance la window vérification supprimer ami
       information = del_friend_window.run(information);
     }
-    if( information.id == 80){
+    if (information.id == 62)
+    {//lance pop up pseuod existant
+      information = popup_window.run(information);
+    }
+    if (information.id == 51)
+    {//lance pop up pseudo ou mot de passe incorrect
+      information = popup_window.run(information);
+    }
+    if( information.id == 80)
+    {
       Window* gameWin = new Partie(information.client);
       information = gameWin->run(information);
     }

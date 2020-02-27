@@ -14,8 +14,9 @@ info discuter::run(info information)
     //string msg[6]={"bonjour","charmante","it's over height thousands","shit","ok"};
     string msg_confirmation= "Appuyer sur ENTER pour confirmer l'envoie.";
     string msg_annulation= "Appuyer sur RETURN pour annuler l'envoie.";
-    string intro1="Appyuez sur ENTER si vous voulez ecrire.";
-    string intro2="Appyuez SUR RETURN si vous voulez quitter.";
+    string intro1="Appuyez sur ENTER si vous voulez ecrire.";
+    string intro2="Appuyez SUR RETURN si vous voulez quitter.";
+    string intro3= "Appuyer sur 'r' pour refresh les messages";
     int len_str_msg_confirmation=static_cast<int>(msg_confirmation.size());
     int len_str_msg_annulation=static_cast<int>(msg_annulation.size());
     int len_str_intro1=static_cast<int>(intro1.size());
@@ -25,7 +26,7 @@ info discuter::run(info information)
     initscr();
     WINDOW *msg_envoyer,*confirmer,*message;
     getmaxyx(stdscr,len_str,largeur);
-    message=newwin(4,50,14,largeur/2 -len_str_intro1/2);
+    message=newwin(4,50,15,largeur/2 -len_str_intro1/2);
     msg_envoyer= newwin(3,40,20,largeur/2 -20);
     confirmer= newwin(4,50,23,largeur/2 -len_str_msg_annulation/2);
     box(msg_envoyer,0,0);
@@ -36,6 +37,9 @@ info discuter::run(info information)
 
     len_str= static_cast<int>(msg1.size());
     draw(19,largeur/2 - len_str/2,msg1.c_str());
+
+    len_str= static_cast<int>(intro3.size());
+    draw(13,largeur/2 -len_str/2,intro3.c_str());
     refresh();
     wrefresh(msg_envoyer);
     keypad(confirmer,TRUE);
@@ -51,10 +55,21 @@ info discuter::run(info information)
         total[static_cast<int>(i)]= recu[i].username+ ": "+ recu[i].text;
       }
       int decalage=0;
-      for (int i=0;i<size;i++ )
+      if (size>5)
       {
-        draw(3+decalage,5,total[i].c_str());
-        decalage+=2;
+        for (int i=size-6;i<size;i++ )
+        {
+          draw(3+decalage,5,total[i].c_str());
+          decalage+=2;
+        }
+      }
+      else
+      {
+        for (int i=0;i<size;i++ )
+        {
+          draw(3+decalage,5,total[i].c_str());
+          decalage+=2;
+        }
       }
       print_string_window(message,1,1,intro1);
       print_string_window(message,2,1,intro2);
@@ -68,6 +83,8 @@ info discuter::run(info information)
         echo();
         effacer_caractere_window(message,1,1,len_str_intro1);
         effacer_caractere_window(message,2,1,len_str_intro2);
+        char str[39];
+        bzero(str,39);
         mvwgetnstr(msg_envoyer,1,1,str,38);
         curs_set(FALSE);// enleve le curseur
         print_string_window(confirmer,1,1,msg_confirmation);
@@ -95,6 +112,10 @@ info discuter::run(info information)
       {
         information.id=32;
         break;
+      }
+      if (ok=='r')
+      {
+        continue;
       }
 
 

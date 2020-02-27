@@ -49,7 +49,7 @@ info Warning_popup_window::run(info information)
 
   else
   {
-    if (information.id==51)
+    if (information.id==51 || information.id == 62)
     {
       information.id=1;
     }

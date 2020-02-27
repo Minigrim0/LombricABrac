@@ -75,10 +75,13 @@ info Menu_log_in::run(info information)
     }
     if (chara==263)
     {
-      decalage--;
-      str2[decalage]= ' ';
-      effacer_caractere_window(mot_de_passe,1,1+decalage,1);
-      taille_mdp_max+=1;
+      if (decalage!=0)
+      {
+        decalage--;
+        str2[decalage]= ' ';
+        effacer_caractere_window(mot_de_passe,1,1+decalage,1);
+        taille_mdp_max+=1;
+      }
     }
     else
     {
@@ -134,14 +137,14 @@ info Menu_log_in::run(info information)
           isenregistrer=information.client->connection(ok[0],ok[1],false);
           if (isenregistrer)
           {
-          string pseudo= string(ok[0]);
-          information.username=pseudo;
+            string pseudo= string(ok[0]);
+            information.username=pseudo;
             information.id=2;
             break;
           }
           else
           {
-            information.id=51;
+            information.id=62;
             break;
           }
         }

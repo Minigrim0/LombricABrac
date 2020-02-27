@@ -19,7 +19,6 @@ info Menu_jeu_window::run(info information)
   string msg1 = "LOMBRIC A BRAC";
   string tab[8] = {" Trouver une partie "," Créer une partie "," Créer/Modifier équipe "," Voir ses invitations  "," Classement "," Ami(s) ", " Historique ", " Se déconnecter "};
   string arrow = "-> ";
-  int i;
   initscr(); //iitizlse la fenetre et set up la mémoire
   noecho(); // ne echo aucune touche du clzvier
 
@@ -33,7 +32,7 @@ info Menu_jeu_window::run(info information)
   print_string_window(win, 1, (max_x/2)-6, msg1);
 
 
-  for (i = 0; i < 8; i++)
+  for (int i = 0; i < 8; i++)
   {
     print_string_window(win, y+n, (max_x/2)-4, tab[i]);
     n+=2;
@@ -51,13 +50,15 @@ info Menu_jeu_window::run(info information)
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
     if (new_msg.size() != 0)
     {
+      //cout<<new_msg[static_cast<unsigned int>(0)].text;
       information.notif=1;
       tab[5] = " Ami(s) * ";
       n=0;
-      for (i = 0; i < 8; i++)
+      for (int i = 0; i < 8; i++)
       {
         print_string_window(win, new_y+n, (max_x/2)-4, tab[i]);
         n+=2;
+        refresh();
       }
     }
     /*vector<invitation> testok= information.client->getInvitations();

@@ -26,6 +26,7 @@ info Menu_creation_equipe_lombric::run(info information)
   bzero(lombric6, 19);
   bzero(lombric7, 19);
   bzero(lombric8, 19);
+  stringTable lombric_name;
   string titre= "Creation d'une equipe de lombric";
   string annulation= "Pour revenir en arriere, appuyez sur RETURN";
   string msg_confirme_equipe= "Appuyez sur ENTER pour confirmer";
@@ -71,6 +72,26 @@ info Menu_creation_equipe_lombric::run(info information)
   draw(7,largeur/2 +10,msg_lombric6);
   draw(11,largeur/2 +10,msg_lombric7);
   draw(15,largeur/2 +10,msg_lombric8);
+  char* name[9]= {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8};
+
+  int decalage1=0;
+  int decalage2=0;
+  lombric_name= information.client->getLombricsName();
+  for (int i=0;i<lombric_name.size;i++)
+  {
+    if (decalage1<=16)
+    {
+      len_str= static_cast<int>(lombric_name.table[i].size());
+      draw(5+decalage1,1,lombric_name.table[i].c_str());
+      decalage1+=4;
+    }
+    else
+    {
+      len_str= static_cast<int>(lombric_name.table[i].size());
+      draw(4+decalage2,largeur/2 +12,lombric_name.table[i].c_str());
+      decalage2+=4;
+    }
+  }
 
 
   refresh();
@@ -93,13 +114,10 @@ info Menu_creation_equipe_lombric::run(info information)
   mvwgetnstr(win_lombric8,1,1,lombric8,15);
   //mvwgetnstr(win_nom_equipe,1,1,nom_equipe,15);
 
-  char* name[9]= {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8};
-
 
 
   len_str= static_cast<int>(msg_confirme_equipe.size());
   draw(24,largeur/2- len_str/2,msg_confirme_equipe.c_str());
-
   len_str= static_cast<int>(annulation.size());
   draw(26,largeur/2 -len_str/2, annulation.c_str());
 
@@ -115,7 +133,7 @@ info Menu_creation_equipe_lombric::run(info information)
     switch(clav)
     {
       case 10:
-        for (uint32_t i=1;i<8;i++)
+        for (uint32_t i=0;i<8;i++)
         {
           string str= string(name[i]);
           information.client->setLombricName(i,str);
