@@ -156,12 +156,14 @@ private:
 
   uint32_t weaponIndex; //id de l'arme
 
-  int force;
-
-  int angle;
-
   bool tour; // true si c'est à notre tour de jouer
   tour_s tourParam;
+
+  time_t t0;//reset à chaque début de tour
+  uint32_t spentTime;//temps écoulé depuis le début du tour
+  nextTour infoTour;//pour savoir à qui c'est de jouer
+  paramsPartie gameParam;//parametre de la partie (surtout le temps qui nous intéresse)
+  std::vector<uint32_t> deadLombrics;//liste des ids des lombrics mort à communiquer avec le client
 
   uint32_t camX, camY; // position actuelle de la caméra (pour navigier dans la carte)
 
@@ -192,4 +194,5 @@ public:
   info run(info information) override;
   virtual ~Partie();
 };
+
 #endif

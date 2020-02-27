@@ -9,11 +9,12 @@ force(0),
 angle(0),
 degat(d){}
 
+
+
 void Arme::calculDirVect(double* res){
 	res[0] = cos(angle*PI/180);
 	res[1] = -sin(angle*PI/180);
 }
-
 
 //définition de LanceMissile
 LanceMissile::LanceMissile(std::string n, int i, int initS, int d, int rayon): Arme(n, i, initS, d), radius(rayon){}

@@ -24,6 +24,7 @@ public:
 	void getPos(int *pos);//rempli le tableau pos des coordonnées x et y
 	void setPos(int* newPos);
 	void setMovement(double speedX, double speedY, double gravity, int type=PARABOLLE);//type = type de mouvement (default=PARABOLLE)
+	bool isInMovement();
 	void deleteMovement();
 
 	//update return false si le sprite est 'mort' (plus de vie/doit exploser,...)

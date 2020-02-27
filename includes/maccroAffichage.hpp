@@ -26,6 +26,9 @@
 
 #define GRAVITY 25
 
+//nbre de secondes durant lesquelles le joueur peut encore se déplacer après avoir tiré
+#define EXTRA_TIME 5
+
 //controle Désolé mon calvier est en qwertz, courage à vous pour les controles
 #define MOVE_FORWARD KEY_RIGHT
 #define MOVE_BACKWARD KEY_LEFT
@@ -34,7 +37,7 @@
 #define MOVE_CAM_LEFT 'a'
 #define MOVE_CAM_RIGHT 'd'
 #define MOVE_CAM_UP 'w'
-#define MOVE_CAM_DOWN 's' 
+#define MOVE_CAM_DOWN 's'
 	//gestion de la puissance de l'arme
 #define UP_POWER KEY_UP
 #define DOWN_POWER KEY_DOWN
@@ -43,12 +46,12 @@
 #define DOWN_ANGLE '1'
 	//gestion du choix d'arme
 #define NEXT_WEAPON 'y'
-#define SHOOT '\n'
+#define USE_WEAPON '\n'
 
 #define EXIT 'q'
 
 
 //TAILLE DES WINDOW
-#define OVERLAY_WIDTH 20 //taille fixée pour l'overlay 
+#define OVERLAY_WIDTH 20 //taille fixée pour l'overlay
 
 #endif
