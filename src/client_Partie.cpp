@@ -57,7 +57,7 @@ infoPartie_s* Client::getGameInfo(){
   return thisGame;
 }
 
-nextTour Client::endTour(std::vector<uint32_t> deadLombrics){
+void Client::endTour(std::vector<uint32_t> deadLombrics){
   message m{};
 
   End_tour obj;
@@ -67,11 +67,7 @@ nextTour Client::endTour(std::vector<uint32_t> deadLombrics){
   obj.SerializeToString(&m.text);
 	m.type = END_TOUR;
 
-  std::string* reponse = waitAnswers(END_TOUR, m); //envoie le message au serveur et attends la réponse
-
-  Next_lombric obj_r;
-  obj_r.ParseFromString(*reponse);
-
-	delete reponse;
-	return {obj_r.id_lomb(), obj_r.is_yours()};
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock()
 }

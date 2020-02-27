@@ -171,7 +171,7 @@ public:
 	Map* getMap();
 	bool endTime();//fin du temps
 	bool endGame();//fin de la partie
-	nextTour endTour(std::vector<uint32_t> deadLombrics);//fin du tour
+	void endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 	std::vector<invitation> afficheAllInvits();
 
