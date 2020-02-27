@@ -50,7 +50,6 @@ int broker_thread(){
                 tobj.detach();
 
                 ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
-                Create_room owner_usr;
                 Create_room_id room_id;
                 owner_usr.ParseFromString(zmqmsg.message());
 
