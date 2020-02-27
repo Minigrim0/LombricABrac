@@ -118,6 +118,9 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
                 *str = argv[i];
             }
             break;
+        case DT_RID:
+            static_cast<Create_room_id*>(data_container)->set_room_id(atoi(argv[0]));
+            break;
         default:
             std::cout << "> Error, datatype not recognised" << std::endl;
     }
@@ -496,7 +499,34 @@ int DataBase::remove_friend(int user_id, int friend_id){
     m_stringStream << "sender_id=" << user_id << " AND receiver_id=" << friend_id << ");";
     m_sql_request = m_stringStream.str();
 
+    std::cout << m_sql_request << std::endl;
+
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::create_room(int owner_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "INSERT INTO history (user_1_id, user_1_points, finished) VALUES";
+    m_stringStream << "(" << owner_id << ", " << 0 << ", " << false << ");";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+
+    return m_rc;
+}
+
+int DataBase::get_last_room_id(Create_room_id *room_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT id FROM history ORDER BY DESC LIMIT 0, 1;";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
 
     return m_rc;
 }

@@ -23,13 +23,14 @@ int client_thread(int socket_client){
     subscriber.connect("tcp://localhost:5563");
 
     ZMQ_msg zmqmsg;
-    uint8_t type;
+    uint8_t type = 0;
     int res;
     while(1){
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
+
             if(zmq_errno() == EAGAIN){ // The receive just timed out
-                std::cout << "ZMQ timeout" << std::endl;
+                type = 0;
             }
             else{ // We got a message from the Broker
                 std::string contents = s_recv(subscriber);
@@ -42,20 +43,24 @@ int client_thread(int socket_client){
             }
         }
 
-        type = la_poste.reception_type();
-        if(type == EXIT_FAILURE){
-            break;
+        if(type == 0){
+            std::cout << "Listening for client" << std::endl;
+            type = la_poste.reception_type();
+            std::cout << "type : " << static_cast<int>(type) << std::endl;
+
+            if(type == EXIT_FAILURE){
+                break;
+            }
         }
 
-        res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
-        if(res == 3){
-            //User connected
-            std::ostringstream stream;
-            stream << "users/" << usr.get_id() << "/broker";
-            subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-        }
-        else if(res == 0){
-            std::cout << "Timed out" << std::endl;
+        if(type != 0){
+            res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+            if(res == 3){
+                //User connected
+                std::ostringstream stream;
+                stream << "users/" << usr.get_id() << "/broker";
+                subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+            }
         }
     }
     close(socket_client);

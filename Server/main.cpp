@@ -46,14 +46,21 @@ int broker_thread(){
                 std::string chan_sub = "id_partie";//id_partie a get en db
                 std::thread tobj(game_thread,chan_sub);
                 tobj.detach();
-                ZMQ_msg partie_r;
+
+                ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
                 Create_room owner_usr;
                 Create_room_id room_id;
                 owner_usr.ParseFromString(zmqmsg.message());
+
+                DataBase_mutex.lock();
+                db.create_room(owner_usr.usr_id());
+                db.get_last_room_id(&room_id);
+                DataBase_mutex.unlock();
+
                 partie_r.set_receiver_id(owner_usr.usr_id());
-                room_id.set_room_id(40);//id partie
                 partie_r.set_type_message(ADD_ROOM_R);
                 partie_r.set_message(room_id.SerializeAsString());
+
                 pub_mutex.lock();
                 stream << "users/" << partie_r.receiver_id() << "/broker" << std::endl;
                 s_sendmore_b(publisher, stream.str());
