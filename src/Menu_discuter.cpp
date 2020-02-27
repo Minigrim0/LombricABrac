@@ -46,12 +46,12 @@ info discuter::run(info information)
       vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
       int size= static_cast<int>(recu.size());
       string total[size];
-      for (unsigned i=0;i<static_cast<unsigned>(5);i++ )
+      for (unsigned int i=0;i<static_cast<unsigned int>(size);i++ )
       {
         total[static_cast<int>(i)]= recu[i].username+ ": "+ recu[i].text;
       }
       int decalage=0;
-      for (int i=0;i<5;i++ )
+      for (int i=0;i<size;i++ )
       {
         draw(3+decalage,5,total[i].c_str());
         decalage+=2;

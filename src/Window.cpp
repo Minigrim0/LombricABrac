@@ -97,6 +97,7 @@ void Window::draw(int pos_y,int pos_x, string msg)
 {
   move(pos_y,pos_x);
   printw(msg.c_str());
+  refresh();
 }
 
 int Window::envoyer_info_client()

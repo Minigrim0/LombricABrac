@@ -30,12 +30,12 @@ info Liste_ami_window::run(info information)
   string msg1="Voici votre liste d'amis (Appuyer sur RETURN pour revenir en arrère)";
   string msg2;
   stringTable liste_ami;
-  liste_ami=information.client->getFriendList();
   playerRank rank;
   string tableau_joueur[18];
   uint32_t points_ranger[18];
   if (information.id==25 || information.id==30 || information.id==27)
   {
+    liste_ami=information.client->getFriendList();
     msg2= "Appuyer sur ENTER pour delete un ami.";
     len_tab=liste_ami.size;
   }
@@ -311,7 +311,8 @@ info Liste_ami_window::run(info information)
     {
         if (information.id==27)
         {
-          information.username=liste_ami.table[i_save];
+          clear();
+          information.friends=liste_ami.table[i_save];
           information.id=2;
           information=msg_envoyer.run(information);
           break;
