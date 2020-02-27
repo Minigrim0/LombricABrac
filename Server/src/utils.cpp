@@ -73,11 +73,12 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 
 
 int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr, std::string zmq_msg){
+    std::cout << "lock" << std::endl;
     DataBase_mutex.lock();
     if(msg_type == CON_S){
-        std::cout << "con_s" << std::endl;
+        std::cout << "con_s start" << std::endl;
         la_poste->reception();
-        std::cout << "con_s bien reçu" << std::endl;
+        std::cout << "con_s done" << std::endl;
         usr->ParseFromString(la_poste->get_buffer());
         std::cout << usr->DebugString() << std::endl;
         if(usr->isregister()){ // si joueur a deja un compte
@@ -88,6 +89,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 usr->set_id(user_id);
                 usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
+                std::cout << "unlock" << std::endl;
                 DataBase_mutex.unlock();
                 return 3;
             }
@@ -97,7 +99,8 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
         }
         else{
-            int id;
+            std::cout << "Creating user" << std::endl;
+            int id = 0;
             db.get_user_id(usr->pseudo(), &id);
             if(id > 0){ // A user with the same pseudonym exists
                 std::cout << "Existing user with same pseudo id = " << id << std::endl;
@@ -113,6 +116,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     db.add_lombric(user_id, i, "anélonyme");
                 }
                 la_poste->envoie_bool(CON_R, 1);
+                std::cout << "unlock" << std::endl;
                 DataBase_mutex.unlock();
                 return 3;
             }
@@ -285,6 +289,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
         }
     }
+    std::cout << "unlock" << std::endl;
     DataBase_mutex.unlock();
     return 0;
 }
