@@ -36,52 +36,55 @@ int broker_thread(){
         std::string contents = s_recv(subscriber);
 
         zmqmsg.ParseFromString(contents);
-        std::cout << "Broker got [" << address << "] " << zmqmsg.DebugString() << std::endl;
-        std::cout << zmqmsg.receiver_id() << std::endl;
+        std::cout << "Broker got [" << address << "] '" << contents << "' ";
         if(zmqmsg.receiver_id() == 0){
-            std::cout << "Broker is going to interpret this message" << std::endl;
-            switch ( zmqmsg.type_message() )
-            {
-            case ADD_ROOM_S:{
-                Create_room owner_usr;
-                owner_usr.ParseFromString(zmqmsg.message());
-                std::string chan_sub = "id_partie";//id_partie a get en db
-                std::thread tobj(game_thread,chan_sub,owner_usr.usr_id());
-                tobj.detach();
+            std::cout << "---interpreting---> local" << std::endl;
+            switch(zmqmsg.type_message()){
+                case ADD_ROOM_S:{
+                    Create_room owner_usr;
+                    owner_usr.ParseFromString(zmqmsg.message());
+                    Create_room_id room_id;
 
-                ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
-                Create_room_id room_id;
-                owner_usr.ParseFromString(zmqmsg.message());
+                    DataBase_mutex.lock();
+                    db.create_room(owner_usr.usr_id());
+                    db.get_last_room_id(&room_id);
+                    DataBase_mutex.unlock();
 
-                DataBase_mutex.lock();
-                db.create_room(owner_usr.usr_id());
-                db.get_last_room_id(&room_id);
-                DataBase_mutex.unlock();
+                    stream.str("");
+                    stream.clear();
+                    stream << "room/" << room_id.room_id() << "/client";
+                    std::string chan_sub = stream.str(); //id_partie a get en db
+                    std::thread tobj(game_thread,chan_sub,owner_usr.usr_id());
+                    tobj.detach();
 
-                partie_r.set_receiver_id(owner_usr.usr_id());
-                partie_r.set_type_message(ADD_ROOM_R);
-                partie_r.set_message(room_id.SerializeAsString());
+                    ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
+                    owner_usr.ParseFromString(zmqmsg.message());
 
-                pub_mutex.lock();
-                stream << "users/" << partie_r.receiver_id() << "/broker" << std::endl;
-                s_sendmore_b(publisher, stream.str());
-                s_send_b(publisher, partie_r.SerializeAsString());
-                pub_mutex.unlock();
+                    partie_r.set_receiver_id(owner_usr.usr_id());
+                    partie_r.set_type_message(ADD_ROOM_R);
+                    partie_r.set_message(stream.str());
 
-                std::cout << "Sent room id to the client thread : " << room_id.room_id() << std::endl;
-                break;
-            }
-            default:
-                break;
+                    stream.str("");
+                    stream.clear();
+                    pub_mutex.lock();
+                    stream << "users/" << partie_r.receiver_id() << "/broker" << std::endl;
+                    s_sendmore_b(publisher, stream.str());
+                    s_send_b(publisher, partie_r.SerializeAsString());
+                    pub_mutex.unlock();
+
+                    break;
+                }
+                default:
+                    break;
             }
         }
         else{
             pub_mutex.lock();
-            stream << "users/" << zmqmsg.receiver_id() << "/broker" << std::endl;
+            stream << "users/" << zmqmsg.receiver_id() << "/broker";
             s_sendmore_b(publisher, stream.str());
             s_send_b(publisher, zmqmsg.SerializeAsString());
             pub_mutex.unlock();
-            std::cout << "Broker redirected this message to : " << stream.str() << std::endl;
+            std::cout << "---transfered---> [" << stream.str() << "]" << std::endl;
         }
     }
 
