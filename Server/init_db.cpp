@@ -189,7 +189,7 @@ int main(int argc, char** argv) {
     sql = "CREATE TABLE worms(\
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
         id_lomb        INTEGER,\
-        name           CHAR(40) NOT NULL,\
+        name           CHAR(20) NOT NULL,\
         owner_id       INTEGER  NOT NULL\
     );";
 
