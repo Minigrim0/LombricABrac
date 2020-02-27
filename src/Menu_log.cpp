@@ -79,13 +79,14 @@ info Menu_log_in::run(info information)
       str2[decalage]= ' ';
       effacer_caractere_window(mot_de_passe,1,1+decalage,1);
       taille_mdp_max+=1;
-      wrefresh(mot_de_passe);
     }
-    str2[decalage]= static_cast<char>(chara);
-    print_string_window(mot_de_passe,1,1+decalage,"*");
-    decalage++;
-    taille_mdp_max-=1;
-    wrefresh(mot_de_passe);
+    else
+    {
+      str2[decalage]= static_cast<char>(chara);
+      print_string_window(mot_de_passe,1,1+decalage,"*");
+      decalage++;
+      taille_mdp_max-=1;
+    }
   }
   char *ok[2]={str,str2};
   curs_set(FALSE);

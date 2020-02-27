@@ -131,9 +131,20 @@ info Liste_ami_window::run(info information)
       }
     if (information.id==23)
     {
-      print_string_window(win, y+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
-      n+=2;
-      nbr_printed++;
+      if (information.vec_invit[static_cast<unsigned int>(i)].type == TRUE )
+      {
+        string invit_jeu = "Invitation de jeu -> " + information.vec_invit[static_cast<unsigned int>(i)].text;
+        print_string_window(win, y+n, (max_x/2), invit_jeu);
+        n+=2;
+        nbr_printed++;
+      }
+      if (information.vec_invit[static_cast<unsigned int>(i)].type == FALSE)
+      {
+        string invit_ami = "Demande d'ami -> " + information.vec_invit[static_cast<unsigned int>(i)].text;
+        print_string_window(win, y+n, (max_x/2), invit_ami);
+        n+=2;
+        nbr_printed++;
+      }
     }
     if (information.id==24)
     {
@@ -332,13 +343,13 @@ info Liste_ami_window::run(info information)
 
         if (information.id==23)
         {
-          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==INVI_R)
+          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==TRUE)
           {
             information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 28;
             break;
           }
-          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==FRI_RCV)
+          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==FALSE)
           {
             information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 2;
