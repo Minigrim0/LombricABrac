@@ -38,6 +38,8 @@ public:
 	}
 	inline int getForce(){return force;}
 	inline int getAngle(){return angle;}
+	inline void setForce(int f){force=f;}
+	inline void setAngle(int a){angle=a;}
 	inline std::string getName(){return name;}
 	inline int getId(){return id;}
 	inline int getDegat(){return degat;}

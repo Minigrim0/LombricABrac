@@ -30,8 +30,12 @@ info Menu_log_in::run(info information)
   mvwprintw(titre,1,1,msg_titre.c_str());
 
   //on print les msg
-  draw((hauteur/2)-7,(largeur/2)-13,msg_id.c_str());
-  draw((hauteur/2)-2,(largeur/2)-18,msg_mdp.c_str());
+  len_str=static_cast<int>(msg_id.size());
+  draw((hauteur/2)-7,(largeur/2)-(len_str/2),msg_id.c_str());
+
+  len_str=static_cast<int>(msg_mdp.size());
+  draw((hauteur/2)-2,(largeur/2)-(len_str/2),msg_mdp.c_str());
+
 
 
   //on cree les autres sous-window

@@ -23,6 +23,10 @@ void Sprite::setMovement(double speedX, double speedY, double gravity, int type 
 	movement = new PhysicsObject(posX,posY,speedX, speedY, type, gravity);
 }
 
+bool Sprite::isInMovement(){
+	return static_cast<bool>(movement);
+}
+
 void Sprite::deleteMovement(){
 	delete movement;
 	movement = nullptr;

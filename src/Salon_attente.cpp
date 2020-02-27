@@ -3,6 +3,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <string>
+#include <vector>
 #include "../includes/UI.hpp"
 
 
@@ -12,14 +13,12 @@ info Salon_Attente::run(info information)
   int max_x,len_str,max_y,decalage=0;
   int y=4, x=4;
   int x_arrow1, x_arrow2,x_arrow3, x_arrow4, touch;
-  string titre= "Salon d'attente";
-  vector<string> equipe = information.client->getNewPlayers();
-  string name[8]={"ismarocon","alexise","gamerhack32","israel","ismaoul","goku","nanache","jiren"};
+  string titre= "Salon d'attente (Appuyer sur 'r' pour refresh)";
   string arrow = "-> ";
   string bouttonPlay = "Lancer partie";
   string bouttonLeave = "Annuler";
   string bouttonSetting = "Option";
-  string bouttonInvit = "Inviter srhab";
+  string bouttonInvit = "Inviter amis";
 
   initscr();
   curs_set(FALSE);
@@ -31,13 +30,6 @@ info Salon_Attente::run(info information)
   wrefresh(win);
   len_str=static_cast<int>(titre.size());
   print_string_window(win,1,(max_x/2)-len_str/2,titre);
-  len_str= static_cast<int>(equipe[0].size());
-  for (int i=0;i<8;i++)
-  {
-    print_string_window(win,y+decalage,x,equipe[static_cast<unsigned int>(i)]);
-    //print_string_window(win,y+decalage,len_str+x+1,a[i].pseudo);
-    decalage+=2;
-  }
   //print le boutton anuller
   print_string_window(win,max_y-3,x, bouttonLeave);
 
@@ -72,6 +64,13 @@ info Salon_Attente::run(info information)
   keypad(win, TRUE);
   while(1)
   {
+    vector<string> equipe = information.client->getNewPlayers();
+    for (int i=0;i<4;i++)
+    {
+      print_string_window(win,y+decalage,x,equipe[static_cast<unsigned int>(i)]);
+      //print_string_window(win,y+decalage,len_str+x+1,a[i].pseudo);
+      decalage+=2;
+    }
     touch = wgetch(win);
     switch (touch)
       {
@@ -120,7 +119,10 @@ info Salon_Attente::run(info information)
         default:
           break;
       }
-
+      if (touch =='r')
+      {
+        continue;
+      }
       if (touch == 10)
       {
         if ( x == x_arrow1)

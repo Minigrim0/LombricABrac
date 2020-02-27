@@ -9,17 +9,6 @@ using namespace std;
 
 
 
-#include <ncurses.h>
-#include <unistd.h>
-#include <string>
-#include <iostream>
-#include <vector>
-#include "../includes/UI.hpp"
-
-using namespace std;
-
-
-
 info Liste_ami_window::run(info information)
 {
   int x = 4, y = 4, max_x = 0, max_y = 0;
@@ -39,9 +28,8 @@ info Liste_ami_window::run(info information)
   at_start_tab = TRUE;
   string h;
   string msg1="Voici votre liste d'amis (Appuyer sur RETURN pour revenir en arrère)";
+  string msg2;
   string tab[18]={"Alex", "ismaroco", "Bg du 32", "Squeezie", "Campeed", "Ahrika", "ReveillePasMonJnoun", "Bassem", "Coronavirus", "Hiv", "Terrence", "Morty", "popop", "####", "momo", "liberezlacrim", "lache un like", "abonne toi"};
-  string tab2[18]={"Alexis", "ismaroco", "Bgita du 32", "Squeezie", "Campeed", "Ahrika", "ReveillePasMonJnoun", "Bassem", "Coronavirus", "Hiv", "Terrence", "Morty", "popop", "####", "momo", "liberezlacrim", "lache un like", "abonne toi"};
-  vector<invitation> invit;
   stringTable liste_ami;
   liste_ami=information.client->getFriendList();
   playerRank rank;
@@ -49,14 +37,15 @@ info Liste_ami_window::run(info information)
   uint32_t points_ranger[18];
   if (information.id==25 || information.id==30 || information.id==27)
   {
+    msg2= "Appuyer sur ENTER pour delete un ami.";
     len_tab=liste_ami.size;
   }
   if (information.id==23)
   {
-    invit=information.client->getInvitations();
-
-    len_tab=static_cast<int>(invit.size());
+    information.notif_invit=0;
+    len_tab=static_cast<int>(information.vec_invit.size());
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";
+    msg2="Appuyer sur ENTER pour accepter l'invitation ou sur 'q' pour renier.";
   }
   if (information.id==24)
   {
@@ -98,8 +87,13 @@ info Liste_ami_window::run(info information)
   {
     msg1="Voici votre liste d'amis (Appuyer sur ENTER pour inviter la personne)";
   }
+  if (information.id == 27)
+  {
+    msg2= "Appuyer sur ENTER pour choisir un ami.";
+    information.notif=0;
+  }
+
   string arrow = "-> ";
-  string msg2="Appuyer sur ENTER pour delete un ami";
   len_str=static_cast<int>(msg1.size());
   initscr(); //iitizlse la fenetre et set up la mémoire
   noecho(); // ne echo aucune touche du clzvier
@@ -112,11 +106,10 @@ info Liste_ami_window::run(info information)
 
   //print le titre
   print_string_window(win, y-3, (max_x/2)-(len_str/2), msg1);
-  if (information.id==25)
+  if (information.id==25 || information.id == 23 || information.id == 27)
   {
     len_str=static_cast<int>(msg2.size());
     print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
-    refresh();
   }
 
 
@@ -138,7 +131,7 @@ info Liste_ami_window::run(info information)
       }
     if (information.id==23)
     {
-      print_string_window(win, y+n, (max_x/2), invit[static_cast<unsigned int>(i)].text);
+      print_string_window(win, y+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
       n+=2;
       nbr_printed++;
     }
@@ -175,7 +168,16 @@ info Liste_ami_window::run(info information)
           n = 0;
           key--;
           wclear(win);
+
+          len_str=static_cast<int>(msg1.size());
           print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
+
+          if (information.id==25 || information.id ==23 || information.id == 27)
+          {
+            len_str=static_cast<int>(msg2.size());
+            print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
+          }
+
           for (i = key; i < nbr_printed+key; i++)
           {
             if (information.id==25 || information.id==30 || information.id==27)
@@ -185,7 +187,7 @@ info Liste_ami_window::run(info information)
             }
             if (information.id==23)
             {
-              print_string_window(win, y_save+n, (max_x/2), invit[static_cast<unsigned int>(i)].text);
+              print_string_window(win, y_save+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
               n+=2;
             }
             if (information.id==24)
@@ -222,7 +224,16 @@ info Liste_ami_window::run(info information)
           n =0;
           key++;
           wclear(win);
+
+          len_str=static_cast<int>(msg1.size());
           print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
+
+          if (information.id==25 || information.id ==23 || information.id == 27)
+          {
+            len_str=static_cast<int>(msg2.size());
+            print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
+          }
+
           for (i = key; i < nbr_printed+key; i++)
           {
             if (information.id==25 || information.id==30 || information.id==27)
@@ -233,7 +244,7 @@ info Liste_ami_window::run(info information)
 
             if (information.id==23)
             {
-              print_string_window(win, y_save+n, (max_x/2), invit[static_cast<unsigned int>(i)].text);
+              print_string_window(win, y_save+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
               n+=2;
             }
             if (information.id==24)
@@ -271,16 +282,38 @@ info Liste_ami_window::run(info information)
         information.id=28;
         break;
       }
-      else
+      if (information.id == 24)
       {
         information.id = 2;
         break;
       }
+      if (information.id == 23)
+      {
+        information.id = 2;
+        break;
+      }
+      else
+      {
+        information.id = 32;
+        break;
+      }
+    }
+    if (touch == 'q')
+    {
+      vector<invitation>::iterator i_double_save;
+      i_double_save = information.vec_invit.begin();
+      information.vec_invit.erase(i_double_save +i_save);
+      information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], FALSE);
+      information.id =2;
+      break;
     }
     if (touch == 10)
     {
         if (information.id==27)
         {
+          information.username=tab[i_save];
+          information.id=2;
+          information=msg_envoyer.run(information);
           break;
         }
         if (information.id==25)
@@ -298,15 +331,15 @@ info Liste_ami_window::run(info information)
 
         if (information.id==23)
         {
-          if (invit[static_cast<unsigned int>(i_save)].type==INVI_R)
+          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==INVI_R)
           {
-            information.client->acceptInvitation(&invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 28;
             break;
           }
-          if (invit[static_cast<unsigned int>(i_save)].type==FRI_RCV)
+          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==FRI_RCV)
           {
-            information.client->acceptInvitation(&invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
             information.id = 2;
             break;
           }
@@ -316,12 +349,6 @@ info Liste_ami_window::run(info information)
   }
   clear();
   endwin(); //retourne au terminal usuelle et desallou la mémoires
-  if (information.id==27)
-  {
-    information.username=tab[i_save];
-    information.id=2;
-    information=msg_envoyer.run(information);
-  }
   return information;
 }
 

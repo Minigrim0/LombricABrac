@@ -12,7 +12,9 @@ info Menu_entrer::run(info information)
   int hauteur,largeur,infini=1,pos_y=1,pos_x=1;
   string arrow= "-> ";
   int len_arrow;
+  int len_str;
   string texte[3]= {"Se connecter","S'enregistrer","Quitter"};
+  string msg1 = "LOMBRIC A BRAC";
   initscr();
   noecho();
   curs_set(FALSE);
@@ -22,7 +24,9 @@ info Menu_entrer::run(info information)
   keypad(win, TRUE);
   refresh();
   box(win,0,0); //on cree des bords
-  mvwprintw(win,1,(largeur/2)-2,"WORMS 2K20");
+  len_str = static_cast<int>(msg1.size());
+  print_string_window(win,1,(largeur/2)-(len_str/2),msg1);
+
   int decalage=0;
 
   len_arrow = static_cast<int>(arrow.size());

@@ -18,6 +18,8 @@ Partie::Partie(Client* c)
 gameInfo(c->getGameInfo()),
 weaponIndex(0),
 tour(false),
+infoTour({0, false}),
+gameParam(c->getParamsPartie()),
 camX(0),
 camY(0),
 screenWidth(0),
@@ -55,16 +57,67 @@ info Partie::run(info information)
     //gestion du resize de la fenêtre
     resize();
     updateSprites(false);//update la positions des sprites à cahque itérations
-    if(mustRefreshOverlay and tour){//gestion du refresh de l'overlay
-      writeOverlay();
-      mustRefreshOverlay = false;
-    }
 
     if(mustDrawWall){
       drawMap();
     }
 
-    tour = true;//pour tester
+    //si la structure infoTour est vide-> il faut prendre les infos
+    //du prochain tour
+    if(!infoTour.id){
+      spentTime = 0;
+      infoTour = cli->endTour(deadLombrics);
+      deadLombrics.clear();
+      t0 = time(NULL);
+      mustRefreshOverlay = true;
+      gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,infoTour.id));
+    }
+
+    //update du time
+    uint32_t tempTime = static_cast<uint32_t>(difftime(time(NULL),t0));
+    //on refresh seulement quand le temps a changé
+    //si le spendTime == gameParam.time_round -> plus besoin d'update on attends la fin du tour
+    if (tempTime != spentTime && spentTime!=gameParam.time_round){
+      spentTime = tempTime;
+      mustRefreshOverlay = true;
+      if(spentTime >= gameParam.time_round){//alors c'est la fin du tour
+        infoTour.tour = false;
+        spentTime = gameParam.time_round;
+      }
+    }
+
+    //synchronisation avec le serveur des déplacements des autres lombrics
+    if(!infoTour.tour){
+      std::vector<lombricPos> movedLombs = cli->getNewLombPos();
+      for (auto lombPos = movedLombs.begin();lombPos!=movedLombs.end();++lombPos){
+        int pos[2];
+        Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,(*lombPos).id_lomb));
+        lomb->getPos(pos);
+        drawMur(pos[0], pos[1]);
+        pos[0] = static_cast<int>((*lombPos).pos_x);
+        pos[1] = static_cast<int>((*lombPos).pos_y);
+        lomb->setPos(pos);//définit les nouvelles coordonnées du lombric
+      }
+    }
+
+    //synchronisation avec le serveur des pour l'utilisation des armes
+    if(!infoTour.tour){
+      std::vector<infoArme> armesUsed = cli->getNewWeapons();
+      //en théorie, il ne peut avoir qu'une seula arme utilisée par tour
+      for (auto armeInf = armesUsed.begin();armeInf!=armesUsed.end();++armeInf){
+        Arme* a = gameInfo->armesVector[armeInf->index];
+        a->setForce(static_cast<int>(armeInf->force));
+        a->setAngle(static_cast<int>(armeInf->angle));
+        a->shoot(gameInfo);
+        spentTime = gameParam.time_round;
+      }
+    }
+
+
+    if(mustRefreshOverlay){//gestion du refresh de l'overlay
+      writeOverlay();
+      mustRefreshOverlay = false;
+    }
 
     int input=wgetch(gameWin);//lit le caractere (sans attente)
     switch (input)
@@ -109,12 +162,20 @@ info Partie::run(info information)
         moveCurrentLombric(JUMP);
         break;
 
-      case SHOOT://on créé un projectile juste pour tester
-        gameInfo->armesVector[weaponIndex]->shoot(gameInfo);
-        mustRefreshOverlay = true;
+      case USE_WEAPON://on créé un projectile juste pour tester
+        if(infoTour.tour){
+          int force = gameInfo->armesVector[weaponIndex]->getForce();
+          int angle = gameInfo->armesVector[weaponIndex]->getAngle();
+          cli->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(force), static_cast<uint32_t>(angle));
+
+          gameInfo->armesVector[weaponIndex]->shoot(gameInfo);
+          mustRefreshOverlay = true;
+          spentTime = gameParam.time_round;//force la fin du tour
+
+        }
         break;
       case NEXT_WEAPON:
-        if(tour and gameInfo->armesVector.size()){
+        if(infoTour.tour && gameInfo->armesVector.size()){
           weaponIndex = ++weaponIndex % static_cast<uint32_t>(gameInfo->armesVector.size());
           mustRefreshOverlay = true;
         }
@@ -125,7 +186,6 @@ info Partie::run(info information)
         break;
       case DOWN_POWER:
         gameInfo->armesVector[weaponIndex]->addForce(-5);
-        if(force<0){force=100;}
         mustRefreshOverlay = true;
         break;
       case UP_ANGLE:
@@ -134,7 +194,6 @@ info Partie::run(info information)
         break;
       case DOWN_ANGLE:
         gameInfo->armesVector[weaponIndex]->addAngle(-5);
-        if(angle<0){angle=360;}
         mustRefreshOverlay = true;
         break;
 
@@ -188,14 +247,23 @@ void Partie::updateSprites(bool first=false){
   int newPos[2];
   int oldPos[2];
 
+  bool isMovement = false;//mis à vrai s'il y a un seul sprite en mouvement
+
   auto s = gameInfo->spriteVector.begin();
   while(s != gameInfo->spriteVector.end()){
     (*s)->getPos(oldPos);
     bool alive = (*s)->update(gameInfo->carte);
     (*s)->getPos(newPos);
 
+    uint32_t id = (*s)->getId();
+    isMovement |= (*s)->isInMovement();//un suel lombric en mouvement -> isMovement = true
     if(!alive){//le sprite doit mourir, on le supprime
       //Sprite* q = *s;
+      isMovement = true;
+      if(id){//c'est un vers qui vient de mourrir
+        deadLombrics.push_back(id);
+      }
+
       (*s)->deathMove(gameInfo);
       mustDrawWall = true;
       mustRefreshOverlay = true;
@@ -210,6 +278,9 @@ void Partie::updateSprites(bool first=false){
       ++s;
     }
   }
+  if(!isMovement && spentTime >= gameParam.time_round){//si le temps est écoulé et que plus qucun sprite est en mouvemnt
+    infoTour.id = 0;//fin du tour
+  }
 }
 
 void Partie::drawSprite(Sprite* s, int* oldPos, int* newPos){
@@ -220,19 +291,26 @@ void Partie::drawSprite(Sprite* s, int* oldPos, int* newPos){
 }
 
 void Partie::moveCurrentLombric(int mouvement){
-  if(gameInfo->currentWorms){//le lombrix ne peut pas se déplacer s'il subit un mouvement (chute libre par exemple)
+  if(infoTour.tour){//le lombric ne peut pas se déplacer s'il subit un mouvement (chute libre par exemple)
     int oldPos[2];
     int newPos[2];
     gameInfo->currentWorms->getPos(oldPos);
     gameInfo->currentWorms->move(mouvement, gameInfo->carte);//déplace le lombric si c'est un mouvement autorisé
     gameInfo->currentWorms->getPos(newPos);
     drawSprite(dynamic_cast<Sprite*>(gameInfo->currentWorms), oldPos, newPos);
+    if(oldPos[0] != newPos[0] || oldPos[1] != newPos[1]){//si le lombric à bougé -> il faut le dire au Client
+      uint32_t id = gameInfo->currentWorms->getId();
+      cli->updatePos(id, static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]));
+    }
   }
 }
 
 void Partie::resize(){
   uint32_t newWidth, newHeight;
-  getmaxyx(stdscr, newHeight, newWidth);//met la taille de la fenetre dans les variables
+  int l,h;
+  getmaxyx(stdscr, h, l);//met la taille de la fenetre dans les variables
+  newWidth = static_cast<uint32_t>(l);//pour éviter les warnings
+  newHeight = static_cast<uint32_t>(h);
   if(newWidth != screenWidth or newHeight != screenHeight){//la fenêtre a été resize, il faut refaire l'affichage
     clear();
     refresh();
@@ -272,7 +350,10 @@ void Partie::writeOverlay(){
   int y=1; //on commence à écrire les infos à la 2e ligne
   std::string text;
 
-  if(tour){//si c'est à notre tour -> affiche les paramètres de tirs
+  text = "Temps restant: " + std::to_string(gameParam.time_round - spentTime);
+  print_string_window(overlayWin,y++,1,text);
+
+  if(infoTour.tour){//si c'est à notre tour -> affiche les paramètres de tirs
     text = "Arme: ";
     if(!gameInfo->armesVector.size()){//si aucune arme disponible (impossible en théorie)
       text += "None";
@@ -288,7 +369,7 @@ void Partie::writeOverlay(){
     text = "Angle: " + std::to_string(gameInfo->armesVector[weaponIndex]->getAngle());
     print_string_window(overlayWin,y++,1,text);
   }else{
-    text = "Ce n'est pas à votre tour de jouer";
+    text = "Worms " + std::to_string(gameInfo->currentWorms->getId()) + " joue";
     print_string_window(overlayWin,y++,1,text);
   }
 
