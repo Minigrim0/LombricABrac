@@ -5,7 +5,6 @@
 #include <condition_variable>
 
 #include "listener.hpp"
-#include "semaphore.hpp"
 #include "database.hpp"
 #include "connected_player.hpp"
 #include "zhelpers.hpp"
