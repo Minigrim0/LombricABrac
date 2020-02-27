@@ -47,7 +47,7 @@ struct TableStruct_user_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[32]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[33]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -96,6 +96,9 @@ extern History_rDefaultTypeInternal _History_r_default_instance_;
 class Invitation;
 class InvitationDefaultTypeInternal;
 extern InvitationDefaultTypeInternal _Invitation_default_instance_;
+class Invitation_r;
+class Invitation_rDefaultTypeInternal;
+extern Invitation_rDefaultTypeInternal _Invitation_r_default_instance_;
 class Join;
 class JoinDefaultTypeInternal;
 extern JoinDefaultTypeInternal _Join_default_instance_;
@@ -165,6 +168,7 @@ template<> ::Get_rank* Arena::CreateMaybeMessage<::Get_rank>(Arena*);
 template<> ::History* Arena::CreateMaybeMessage<::History>(Arena*);
 template<> ::History_r* Arena::CreateMaybeMessage<::History_r>(Arena*);
 template<> ::Invitation* Arena::CreateMaybeMessage<::Invitation>(Arena*);
+template<> ::Invitation_r* Arena::CreateMaybeMessage<::Invitation_r>(Arena*);
 template<> ::Join* Arena::CreateMaybeMessage<::Join>(Arena*);
 template<> ::Join_groupe_r* Arena::CreateMaybeMessage<::Join_groupe_r>(Arena*);
 template<> ::Join_groupe_s* Arena::CreateMaybeMessage<::Join_groupe_s>(Arena*);
@@ -883,6 +887,8 @@ class Invitation :
 
   enum : int {
     kPseudoFieldNumber = 1,
+    kTypeFieldNumber = 2,
+    kGameIdFieldNumber = 3,
   };
   // string pseudo = 1;
   void clear_pseudo();
@@ -900,12 +906,169 @@ class Invitation :
   std::string* _internal_mutable_pseudo();
   public:
 
+  // bool type = 2;
+  void clear_type();
+  bool type() const;
+  void set_type(bool value);
+  private:
+  bool _internal_type() const;
+  void _internal_set_type(bool value);
+  public:
+
+  // uint32 game_id = 3;
+  void clear_game_id();
+  ::PROTOBUF_NAMESPACE_ID::uint32 game_id() const;
+  void set_game_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_game_id() const;
+  void _internal_set_game_id(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Invitation)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr pseudo_;
+  bool type_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 game_id_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_user_2eproto;
+};
+// -------------------------------------------------------------------
+
+class Invitation_r :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Invitation_r) */ {
+ public:
+  Invitation_r();
+  virtual ~Invitation_r();
+
+  Invitation_r(const Invitation_r& from);
+  Invitation_r(Invitation_r&& from) noexcept
+    : Invitation_r() {
+    *this = ::std::move(from);
+  }
+
+  inline Invitation_r& operator=(const Invitation_r& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Invitation_r& operator=(Invitation_r&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Invitation_r& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Invitation_r* internal_default_instance() {
+    return reinterpret_cast<const Invitation_r*>(
+               &_Invitation_r_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(Invitation_r& a, Invitation_r& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Invitation_r* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Invitation_r* New() const final {
+    return CreateMaybeMessage<Invitation_r>(nullptr);
+  }
+
+  Invitation_r* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Invitation_r>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Invitation_r& from);
+  void MergeFrom(const Invitation_r& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Invitation_r* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Invitation_r";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_user_2eproto);
+    return ::descriptor_table_user_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kInvitsFieldNumber = 1,
+  };
+  // repeated .Invitation invits = 1;
+  int invits_size() const;
+  private:
+  int _internal_invits_size() const;
+  public:
+  void clear_invits();
+  ::Invitation* mutable_invits(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Invitation >*
+      mutable_invits();
+  private:
+  const ::Invitation& _internal_invits(int index) const;
+  ::Invitation* _internal_add_invits();
+  public:
+  const ::Invitation& invits(int index) const;
+  ::Invitation* add_invits();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Invitation >&
+      invits() const;
+
+  // @@protoc_insertion_point(class_scope:Invitation_r)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Invitation > invits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_user_2eproto;
 };
@@ -953,7 +1116,7 @@ class Join :
                &_Join_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(Join& a, Join& b) {
     a.Swap(&b);
@@ -1099,7 +1262,7 @@ class Lomb_r :
                &_Lomb_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(Lomb_r& a, Lomb_r& b) {
     a.Swap(&b);
@@ -1242,7 +1405,7 @@ class Lomb_mod :
                &_Lomb_mod_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(Lomb_mod& a, Lomb_mod& b) {
     a.Swap(&b);
@@ -1388,7 +1551,7 @@ class Usr_add :
                &_Usr_add_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(Usr_add& a, Usr_add& b) {
     a.Swap(&b);
@@ -1523,7 +1686,7 @@ class Map_mod :
                &_Map_mod_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(Map_mod& a, Map_mod& b) {
     a.Swap(&b);
@@ -1651,7 +1814,7 @@ class Time_mod :
                &_Time_mod_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(Time_mod& a, Time_mod& b) {
     a.Swap(&b);
@@ -1779,7 +1942,7 @@ class Time_round_mod :
                &_Time_round_mod_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(Time_round_mod& a, Time_round_mod& b) {
     a.Swap(&b);
@@ -1907,7 +2070,7 @@ class Nbr_lomb_mod :
                &_Nbr_lomb_mod_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(Nbr_lomb_mod& a, Nbr_lomb_mod& b) {
     a.Swap(&b);
@@ -2035,7 +2198,7 @@ class Join_groupe_s :
                &_Join_groupe_s_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(Join_groupe_s& a, Join_groupe_s& b) {
     a.Swap(&b);
@@ -2163,7 +2326,7 @@ class Join_groupe_r :
                &_Join_groupe_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(Join_groupe_r& a, Join_groupe_r& b) {
     a.Swap(&b);
@@ -2309,7 +2472,7 @@ class Get_history :
                &_Get_history_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    16;
 
   friend void swap(Get_history& a, Get_history& b) {
     a.Swap(&b);
@@ -2466,7 +2629,7 @@ class History :
                &_History_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    17;
 
   friend void swap(History& a, History& b) {
     a.Swap(&b);
@@ -2710,7 +2873,7 @@ class History_r :
                &_History_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    18;
 
   friend void swap(History_r& a, History_r& b) {
     a.Swap(&b);
@@ -2847,7 +3010,7 @@ class Get_rank :
                &_Get_rank_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    19;
 
   friend void swap(Get_rank& a, Get_rank& b) {
     a.Swap(&b);
@@ -2986,7 +3149,7 @@ class Rank_r :
                &_Rank_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    20;
 
   friend void swap(Rank_r& a, Rank_r& b) {
     a.Swap(&b);
@@ -3154,7 +3317,7 @@ class Fri_add :
                &_Fri_add_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(Fri_add& a, Fri_add& b) {
     a.Swap(&b);
@@ -3289,7 +3452,7 @@ class Fri_rcv :
                &_Fri_rcv_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(Fri_rcv& a, Fri_rcv& b) {
     a.Swap(&b);
@@ -3424,7 +3587,7 @@ class Fri_accept :
                &_Fri_accept_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(Fri_accept& a, Fri_accept& b) {
     a.Swap(&b);
@@ -3570,7 +3733,7 @@ class Fri_rmv :
                &_Fri_rmv_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(Fri_rmv& a, Fri_rmv& b) {
     a.Swap(&b);
@@ -3705,7 +3868,7 @@ class Fri_ls_r :
                &_Fri_ls_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(Fri_ls_r& a, Fri_ls_r& b) {
     a.Swap(&b);
@@ -3848,7 +4011,7 @@ class Lomb_pos :
                &_Lomb_pos_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(Lomb_pos& a, Lomb_pos& b) {
     a.Swap(&b);
@@ -3998,7 +4161,7 @@ class Tir :
                &_Tir_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(Tir& a, Tir& b) {
     a.Swap(&b);
@@ -4148,7 +4311,7 @@ class Lombric :
                &_Lombric_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(Lombric& a, Lombric& b) {
     a.Swap(&b);
@@ -4309,7 +4472,7 @@ class End_tour :
                &_End_tour_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(End_tour& a, End_tour& b) {
     a.Swap(&b);
@@ -4451,7 +4614,7 @@ class Next_lombric :
                &_Next_lombric_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(Next_lombric& a, Next_lombric& b) {
     a.Swap(&b);
@@ -4590,7 +4753,7 @@ class infoPartie_p :
                &_infoPartie_p_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(infoPartie_p& a, infoPartie_p& b) {
     a.Swap(&b);
@@ -4727,7 +4890,7 @@ class Create_room :
                &_Create_room_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(Create_room& a, Create_room& b) {
     a.Swap(&b);
@@ -5262,6 +5425,89 @@ inline void Invitation::set_allocated_pseudo(std::string* pseudo) {
   }
   pseudo_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), pseudo);
   // @@protoc_insertion_point(field_set_allocated:Invitation.pseudo)
+}
+
+// bool type = 2;
+inline void Invitation::clear_type() {
+  type_ = false;
+}
+inline bool Invitation::_internal_type() const {
+  return type_;
+}
+inline bool Invitation::type() const {
+  // @@protoc_insertion_point(field_get:Invitation.type)
+  return _internal_type();
+}
+inline void Invitation::_internal_set_type(bool value) {
+  
+  type_ = value;
+}
+inline void Invitation::set_type(bool value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:Invitation.type)
+}
+
+// uint32 game_id = 3;
+inline void Invitation::clear_game_id() {
+  game_id_ = 0u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Invitation::_internal_game_id() const {
+  return game_id_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 Invitation::game_id() const {
+  // @@protoc_insertion_point(field_get:Invitation.game_id)
+  return _internal_game_id();
+}
+inline void Invitation::_internal_set_game_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  
+  game_id_ = value;
+}
+inline void Invitation::set_game_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_game_id(value);
+  // @@protoc_insertion_point(field_set:Invitation.game_id)
+}
+
+// -------------------------------------------------------------------
+
+// Invitation_r
+
+// repeated .Invitation invits = 1;
+inline int Invitation_r::_internal_invits_size() const {
+  return invits_.size();
+}
+inline int Invitation_r::invits_size() const {
+  return _internal_invits_size();
+}
+inline void Invitation_r::clear_invits() {
+  invits_.Clear();
+}
+inline ::Invitation* Invitation_r::mutable_invits(int index) {
+  // @@protoc_insertion_point(field_mutable:Invitation_r.invits)
+  return invits_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Invitation >*
+Invitation_r::mutable_invits() {
+  // @@protoc_insertion_point(field_mutable_list:Invitation_r.invits)
+  return &invits_;
+}
+inline const ::Invitation& Invitation_r::_internal_invits(int index) const {
+  return invits_.Get(index);
+}
+inline const ::Invitation& Invitation_r::invits(int index) const {
+  // @@protoc_insertion_point(field_get:Invitation_r.invits)
+  return _internal_invits(index);
+}
+inline ::Invitation* Invitation_r::_internal_add_invits() {
+  return invits_.Add();
+}
+inline ::Invitation* Invitation_r::add_invits() {
+  // @@protoc_insertion_point(field_add:Invitation_r.invits)
+  return _internal_add_invits();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Invitation >&
+Invitation_r::invits() const {
+  // @@protoc_insertion_point(field_list:Invitation_r.invits)
+  return invits_;
 }
 
 // -------------------------------------------------------------------
@@ -7209,6 +7455,8 @@ inline void Create_room::set_allocated_pseudo(std::string* pseudo) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

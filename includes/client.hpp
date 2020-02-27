@@ -58,8 +58,9 @@ on créé une structure une structure invitation car l'affichage les affiche tou
 si c'est une invitation à une partie ou un ajout d'amis
 */
 struct invitation{
-	uint32_t type;//peut prendre INVI_R ou FRI_RCV comme valeur
+	bool type;//vrai si invitation partie, faux si demande d'ami
 	std::string text;//texte à afficher
+	uint32_t id_partie;
 };
 
 struct paramsPartie{
@@ -170,6 +171,7 @@ public:
 	bool endGame();//fin de la partie
 	nextTour endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
+	std::vector<invitation> afficheAllInvits(); 
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur

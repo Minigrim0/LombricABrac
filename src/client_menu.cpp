@@ -3,10 +3,6 @@
 bool Client::connection(std::string username, std::string password, bool inscription){
 	message m{};
 	//construction de la structure
-
-	std::cout << "Username: " << username << std::endl;
-	std::cout << "Password: " << password << std::endl;
-
 	UserConnect obj;
 	obj.set_pseudo(username);
 	obj.set_password(password);
@@ -107,7 +103,23 @@ stringTable Client::getLombricsName(){
 	return res;
 }
 
+std::vector<invitation> Client::afficheAllInvits(){
+	message m{};
+	m.type = GET_ALL_INVIT;
+	m.text = "";
 
+	std::string* reponse = waitAnswers(GET_ALL_INVIT,m);
+
+	Invitation_r obj;
+	obj.ParseFromString(*reponse);
+
+	std::vector<invitation> res;
+	for(int i=0;i<obj.invits_size();i++){
+		res.push_back({obj.invits(i).type(),obj.invits(i).pseudo(),obj.invits(i).game_id()});
+	}
+	delete reponse;
+	return res;
+}
 
 
 historyTable Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
