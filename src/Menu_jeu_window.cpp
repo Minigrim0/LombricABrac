@@ -60,7 +60,7 @@ info Menu_jeu_window::run(info information)
         n+=2;
       }
     }
-    vector<invitation> testok= information.client->getInvitations();
+    /*vector<invitation> testok= information.client->getInvitations();
 
     if (static_cast<int>(testok.size()) != 0)
     {
@@ -76,7 +76,7 @@ info Menu_jeu_window::run(info information)
       {
         information.vec_invit.push_back(testok[i]);
       }
-    }
+    }*/
     //testok=getInvitations()
 
 

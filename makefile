@@ -1,6 +1,6 @@
 #Copie heuteuse du travail qui n'est pas le mien mais c'est très joli
 #Mais l'auteur original a modifié ce magnifique makefile et t'excuse d'utiliser son travail
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wconversion -Wsign-conversion -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
+COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
 LINKER_FLAGS=-pthread -ldl -lpthread -lncurses
 EXECUTABLE=lombricABrac
 CXX=g++ -ggdb -ldl

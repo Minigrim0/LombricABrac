@@ -10,15 +10,15 @@ info Menu_creation_equipe_lombric::run(info information)
   int largeur,len_str;
   initscr();
   echo();
-  char lombric1[15];
-  char lombric2[15];
-  char lombric3[15];
-  char lombric4[15];
-  char lombric5[15];
-  char lombric6[15];
-  char lombric7[15];
-  char lombric8[15];
-  char nom_equipe[15];
+  char lombric1[19]={""};
+  char lombric2[19]={""};
+  char lombric3[19]={""};
+  char lombric4[19]={""};
+  char lombric5[19]={""};
+  char lombric6[19]={""};
+  char lombric7[19]={""};
+  char lombric8[19]={""};
+  int placer1=0,placer2=0,placer3=0,placer4=0,placer5=0,placer6=0,placer7=0,placer8=0;
   string titre= "Creation d'une equipe de lombric";
   string annulation= "Pour revenir en arriere, appuyez sur RETURN";
   string msg_confirme_equipe= "Appuyez sur ENTER pour confirmer";
@@ -45,7 +45,6 @@ info Menu_creation_equipe_lombric::run(info information)
   win_lombric6=newwin(3,20,8,largeur/2 +10);
   win_lombric7=newwin(3,20,12,largeur/2 +10);
   win_lombric8=newwin(3,20,16,largeur/2 +10);
-  win_nom_equipe=newwin(3,20,20,largeur/2 -10);
   confirmer=newwin(3,10,25,10);
 
   box(win_lombric1,0,0);
@@ -89,7 +88,51 @@ info Menu_creation_equipe_lombric::run(info information)
   mvwgetnstr(win_lombric6,1,1,lombric6,15);
   mvwgetnstr(win_lombric7,1,1,lombric7,15);
   mvwgetnstr(win_lombric8,1,1,lombric8,15);
-  mvwgetnstr(win_nom_equipe,1,1,nom_equipe,15);
+  //mvwgetnstr(win_nom_equipe,1,1,nom_equipe,15);
+  for (int i=0;i<19;i++)
+  {
+    if (lombric1[i]=="" && placer1==0)
+    {
+      placer1=1;
+      lombric1[i]='\0';
+    }
+    if (lombric2[i]=="" && placer2==0)
+    {
+      placer2=0;
+      lombric2[i]='\0';
+    }
+    if (lombric3[i]=="" && placer3==0)
+    {
+      placer3=1;
+      lombric3[i]='\0';
+    }
+    if (lombric4[i]=="" && placer4==0)
+    {
+      placer4=0;
+      lombric4[i]='\0';
+    }
+    if (lombric5[i]==""&& placer5==0)
+    {
+      placer5=1;
+      lombric5[i]='\0';
+    }
+    if (lombric6[i]==""&& placer6==0)
+    {
+      placer6=1;
+      lombric6[i]='\0';
+    }
+    if (lombric7[i]==""&& placer7==0)
+    {
+      placer7=1;
+      lombric7[i]='\0';
+    }
+    if (lombric8[i]==""&& placer8==0)
+    {
+      placer8=1;
+      lombric8[i]='\0';
+    }
+  }
+
   char* name[9]= {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8,nom_equipe};
 
 
@@ -117,7 +160,11 @@ info Menu_creation_equipe_lombric::run(info information)
           string str= string(name[i]);
           information.client->setLombricName(i,str);
         }
-        information.id=2;
+
+    if (lombric1[i]=="")
+    {
+      lombric1[i]='\0';
+    }  information.id=2;
         boucle=0;
         break;
       case 263:

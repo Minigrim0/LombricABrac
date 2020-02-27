@@ -16,6 +16,7 @@
 #include <google/protobuf/port_def.inc>
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Chat_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_History_user_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Invitation_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Lombric_user_2eproto;
 class UserConnectDefaultTypeInternal {
  public:
@@ -37,6 +38,10 @@ class InvitationDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Invitation> _instance;
 } _Invitation_default_instance_;
+class Invitation_rDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Invitation_r> _instance;
+} _Invitation_r_default_instance_;
 class JoinDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Join> _instance;
@@ -343,6 +348,21 @@ static void InitDefaultsscc_info_Invitation_user_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Invitation_user_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Invitation_user_2eproto}, {}};
 
+static void InitDefaultsscc_info_Invitation_r_user_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_Invitation_r_default_instance_;
+    new (ptr) ::Invitation_r();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::Invitation_r::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Invitation_r_user_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Invitation_r_user_2eproto}, {
+      &scc_info_Invitation_user_2eproto.base,}};
+
 static void InitDefaultsscc_info_Join_user_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -596,7 +616,7 @@ static void InitDefaultsscc_info_infoPartie_p_user_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_infoPartie_p_user_2eproto}, {
       &scc_info_Lombric_user_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_user_2eproto[32];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_user_2eproto[33];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_user_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_user_2eproto = nullptr;
 
@@ -634,6 +654,14 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_user_2eproto::offsets[] PROTOB
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Invitation, pseudo_),
+  PROTOBUF_FIELD_OFFSET(::Invitation, type_),
+  PROTOBUF_FIELD_OFFSET(::Invitation, game_id_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Invitation_r, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Invitation_r, invits_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Join, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -827,33 +855,34 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 15, -1, sizeof(::Chat_r)},
   { 21, -1, sizeof(::convo_s)},
   { 27, -1, sizeof(::Invitation)},
-  { 33, -1, sizeof(::Join)},
-  { 40, -1, sizeof(::Lomb_r)},
-  { 46, -1, sizeof(::Lomb_mod)},
-  { 53, -1, sizeof(::Usr_add)},
-  { 59, -1, sizeof(::Map_mod)},
-  { 65, -1, sizeof(::Time_mod)},
-  { 71, -1, sizeof(::Time_round_mod)},
-  { 77, -1, sizeof(::Nbr_lomb_mod)},
-  { 83, -1, sizeof(::Join_groupe_s)},
-  { 89, -1, sizeof(::Join_groupe_r)},
-  { 96, -1, sizeof(::Get_history)},
-  { 104, -1, sizeof(::History)},
-  { 118, -1, sizeof(::History_r)},
-  { 124, -1, sizeof(::Get_rank)},
-  { 131, -1, sizeof(::Rank_r)},
-  { 138, -1, sizeof(::Fri_add)},
-  { 144, -1, sizeof(::Fri_rcv)},
-  { 150, -1, sizeof(::Fri_accept)},
-  { 157, -1, sizeof(::Fri_rmv)},
-  { 163, -1, sizeof(::Fri_ls_r)},
-  { 169, -1, sizeof(::Lomb_pos)},
-  { 177, -1, sizeof(::Tir)},
-  { 185, -1, sizeof(::Lombric)},
-  { 194, -1, sizeof(::End_tour)},
-  { 200, -1, sizeof(::Next_lombric)},
-  { 207, -1, sizeof(::infoPartie_p)},
-  { 213, -1, sizeof(::Create_room)},
+  { 35, -1, sizeof(::Invitation_r)},
+  { 41, -1, sizeof(::Join)},
+  { 48, -1, sizeof(::Lomb_r)},
+  { 54, -1, sizeof(::Lomb_mod)},
+  { 61, -1, sizeof(::Usr_add)},
+  { 67, -1, sizeof(::Map_mod)},
+  { 73, -1, sizeof(::Time_mod)},
+  { 79, -1, sizeof(::Time_round_mod)},
+  { 85, -1, sizeof(::Nbr_lomb_mod)},
+  { 91, -1, sizeof(::Join_groupe_s)},
+  { 97, -1, sizeof(::Join_groupe_r)},
+  { 104, -1, sizeof(::Get_history)},
+  { 112, -1, sizeof(::History)},
+  { 126, -1, sizeof(::History_r)},
+  { 132, -1, sizeof(::Get_rank)},
+  { 139, -1, sizeof(::Rank_r)},
+  { 146, -1, sizeof(::Fri_add)},
+  { 152, -1, sizeof(::Fri_rcv)},
+  { 158, -1, sizeof(::Fri_accept)},
+  { 165, -1, sizeof(::Fri_rmv)},
+  { 171, -1, sizeof(::Fri_ls_r)},
+  { 177, -1, sizeof(::Lomb_pos)},
+  { 185, -1, sizeof(::Tir)},
+  { 193, -1, sizeof(::Lombric)},
+  { 202, -1, sizeof(::End_tour)},
+  { 208, -1, sizeof(::Next_lombric)},
+  { 215, -1, sizeof(::infoPartie_p)},
+  { 221, -1, sizeof(::Create_room)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -862,6 +891,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Chat_r_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_convo_s_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Invitation_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Invitation_r_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Join_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Lomb_r_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Lomb_mod_default_instance_),
@@ -896,41 +926,43 @@ const char descriptor_table_protodef_user_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "r\030\001 \001(\010\022\016\n\006pseudo\030\002 \001(\t\022\020\n\010password\030\003 \001("
   "\t\"#\n\004Chat\022\016\n\006pseudo\030\001 \001(\t\022\013\n\003msg\030\002 \001(\t\"\035"
   "\n\006Chat_r\022\023\n\004msgs\030\001 \003(\0132\005.Chat\"\031\n\007convo_s"
-  "\022\016\n\006pseudo\030\001 \001(\t\"\034\n\nInvitation\022\016\n\006pseudo"
-  "\030\001 \001(\t\"&\n\004Join\022\016\n\006pseudo\030\001 \001(\t\022\016\n\006accept"
-  "\030\002 \001(\010\"\027\n\006Lomb_r\022\r\n\005Lombs\030\001 \003(\t\".\n\010Lomb_"
-  "mod\022\017\n\007id_lomb\030\001 \001(\r\022\021\n\tname_Lomb\030\002 \001(\t\""
-  "\031\n\007Usr_add\022\016\n\006pseudo\030\001 \001(\t\"\025\n\007Map_mod\022\n\n"
-  "\002id\030\001 \001(\r\"\030\n\010Time_mod\022\014\n\004time\030\001 \001(\r\"\036\n\016T"
-  "ime_round_mod\022\014\n\004time\030\001 \001(\r\" \n\014Nbr_lomb_"
-  "mod\022\020\n\010nbr_lomb\030\001 \001(\r\"\033\n\rJoin_groupe_s\022\n"
-  "\n\002id\030\001 \001(\r\"+\n\rJoin_groupe_r\022\016\n\006pseudo\030\001 "
-  "\001(\t\022\n\n\002id\030\002 \001(\r\"C\n\013Get_history\022\016\n\006pseudo"
-  "\030\001 \001(\t\022\022\n\nfirst_game\030\002 \001(\r\022\020\n\010nbr_game\030\003"
-  " \001(\r\"\243\001\n\007History\022\020\n\010pseudo_1\030\001 \001(\t\022\020\n\010ps"
-  "eudo_2\030\002 \001(\t\022\020\n\010pseudo_3\030\003 \001(\t\022\020\n\010pseudo"
-  "_4\030\004 \001(\t\022\017\n\007point_1\030\005 \001(\r\022\017\n\007point_2\030\006 \001"
-  "(\r\022\017\n\007point_3\030\007 \001(\r\022\017\n\007point_4\030\010 \001(\r\022\014\n\004"
-  "date\030\t \001(\r\"&\n\tHistory_r\022\031\n\007history\030\001 \003(\013"
-  "2\010.History\"4\n\010Get_rank\022\024\n\014first_player\030\001"
-  " \001(\r\022\022\n\nnbr_player\030\002 \001(\r\")\n\006Rank_r\022\014\n\004us"
-  "er\030\001 \003(\t\022\021\n\005point\030\002 \003(\rB\002\020\001\"\027\n\007Fri_add\022\014"
-  "\n\004user\030\001 \001(\t\"\027\n\007Fri_rcv\022\014\n\004user\030\001 \001(\t\"*\n"
-  "\nFri_accept\022\016\n\006accept\030\001 \001(\010\022\014\n\004user\030\002 \001("
-  "\t\"\027\n\007Fri_rmv\022\014\n\004user\030\001 \001(\t\"\030\n\010Fri_ls_r\022\014"
-  "\n\004user\030\001 \003(\t\"9\n\010Lomb_pos\022\017\n\007id_lomb\030\001 \001("
-  "\r\022\r\n\005pos_x\030\002 \001(\r\022\r\n\005pos_y\030\003 \001(\r\"4\n\003Tir\022\017"
-  "\n\007id_arme\030\001 \001(\r\022\r\n\005force\030\002 \001(\r\022\r\n\005angle\030"
-  "\003 \001(\001\"E\n\007Lombric\022\017\n\007id_lomb\030\001 \001(\r\022\r\n\005pos"
-  "_x\030\002 \001(\r\022\r\n\005pos_y\030\003 \001(\r\022\013\n\003vie\030\004 \001(\r\" \n\010"
-  "End_tour\022\024\n\014id_lomb_mort\030\001 \003(\r\"1\n\014Next_l"
-  "ombric\022\017\n\007id_lomb\030\001 \001(\r\022\020\n\010is_yours\030\002 \001("
-  "\010\"&\n\014infoPartie_p\022\026\n\004lomb\030\001 \003(\0132\010.Lombri"
-  "c\"\035\n\013Create_room\022\016\n\006pseudo\030\001 \001(\tb\006proto3"
+  "\022\016\n\006pseudo\030\001 \001(\t\";\n\nInvitation\022\016\n\006pseudo"
+  "\030\001 \001(\t\022\014\n\004type\030\002 \001(\010\022\017\n\007game_id\030\003 \001(\r\"+\n"
+  "\014Invitation_r\022\033\n\006invits\030\001 \003(\0132\013.Invitati"
+  "on\"&\n\004Join\022\016\n\006pseudo\030\001 \001(\t\022\016\n\006accept\030\002 \001"
+  "(\010\"\027\n\006Lomb_r\022\r\n\005Lombs\030\001 \003(\t\".\n\010Lomb_mod\022"
+  "\017\n\007id_lomb\030\001 \001(\r\022\021\n\tname_Lomb\030\002 \001(\t\"\031\n\007U"
+  "sr_add\022\016\n\006pseudo\030\001 \001(\t\"\025\n\007Map_mod\022\n\n\002id\030"
+  "\001 \001(\r\"\030\n\010Time_mod\022\014\n\004time\030\001 \001(\r\"\036\n\016Time_"
+  "round_mod\022\014\n\004time\030\001 \001(\r\" \n\014Nbr_lomb_mod\022"
+  "\020\n\010nbr_lomb\030\001 \001(\r\"\033\n\rJoin_groupe_s\022\n\n\002id"
+  "\030\001 \001(\r\"+\n\rJoin_groupe_r\022\016\n\006pseudo\030\001 \001(\t\022"
+  "\n\n\002id\030\002 \001(\r\"C\n\013Get_history\022\016\n\006pseudo\030\001 \001"
+  "(\t\022\022\n\nfirst_game\030\002 \001(\r\022\020\n\010nbr_game\030\003 \001(\r"
+  "\"\243\001\n\007History\022\020\n\010pseudo_1\030\001 \001(\t\022\020\n\010pseudo"
+  "_2\030\002 \001(\t\022\020\n\010pseudo_3\030\003 \001(\t\022\020\n\010pseudo_4\030\004"
+  " \001(\t\022\017\n\007point_1\030\005 \001(\r\022\017\n\007point_2\030\006 \001(\r\022\017"
+  "\n\007point_3\030\007 \001(\r\022\017\n\007point_4\030\010 \001(\r\022\014\n\004date"
+  "\030\t \001(\r\"&\n\tHistory_r\022\031\n\007history\030\001 \003(\0132\010.H"
+  "istory\"4\n\010Get_rank\022\024\n\014first_player\030\001 \001(\r"
+  "\022\022\n\nnbr_player\030\002 \001(\r\")\n\006Rank_r\022\014\n\004user\030\001"
+  " \003(\t\022\021\n\005point\030\002 \003(\rB\002\020\001\"\027\n\007Fri_add\022\014\n\004us"
+  "er\030\001 \001(\t\"\027\n\007Fri_rcv\022\014\n\004user\030\001 \001(\t\"*\n\nFri"
+  "_accept\022\016\n\006accept\030\001 \001(\010\022\014\n\004user\030\002 \001(\t\"\027\n"
+  "\007Fri_rmv\022\014\n\004user\030\001 \001(\t\"\030\n\010Fri_ls_r\022\014\n\004us"
+  "er\030\001 \003(\t\"9\n\010Lomb_pos\022\017\n\007id_lomb\030\001 \001(\r\022\r\n"
+  "\005pos_x\030\002 \001(\r\022\r\n\005pos_y\030\003 \001(\r\"4\n\003Tir\022\017\n\007id"
+  "_arme\030\001 \001(\r\022\r\n\005force\030\002 \001(\r\022\r\n\005angle\030\003 \001("
+  "\001\"E\n\007Lombric\022\017\n\007id_lomb\030\001 \001(\r\022\r\n\005pos_x\030\002"
+  " \001(\r\022\r\n\005pos_y\030\003 \001(\r\022\013\n\003vie\030\004 \001(\r\" \n\010End_"
+  "tour\022\024\n\014id_lomb_mort\030\001 \003(\r\"1\n\014Next_lombr"
+  "ic\022\017\n\007id_lomb\030\001 \001(\r\022\020\n\010is_yours\030\002 \001(\010\"&\n"
+  "\014infoPartie_p\022\026\n\004lomb\030\001 \003(\0132\010.Lombric\"\035\n"
+  "\013Create_room\022\016\n\006pseudo\030\001 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_user_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_user_2eproto_sccs[32] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_user_2eproto_sccs[33] = {
   &scc_info_Chat_user_2eproto.base,
   &scc_info_Chat_r_user_2eproto.base,
   &scc_info_Create_room_user_2eproto.base,
@@ -945,6 +977,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_use
   &scc_info_History_user_2eproto.base,
   &scc_info_History_r_user_2eproto.base,
   &scc_info_Invitation_user_2eproto.base,
+  &scc_info_Invitation_r_user_2eproto.base,
   &scc_info_Join_user_2eproto.base,
   &scc_info_Join_groupe_r_user_2eproto.base,
   &scc_info_Join_groupe_s_user_2eproto.base,
@@ -967,10 +1000,10 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_use
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_user_2eproto_once;
 static bool descriptor_table_user_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_user_2eproto = {
-  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1400,
-  &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_sccs, descriptor_table_user_2eproto_deps, 32, 0,
+  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1476,
+  &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_sccs, descriptor_table_user_2eproto_deps, 33, 0,
   schemas, file_default_instances, TableStruct_user_2eproto::offsets,
-  file_level_metadata_user_2eproto, 32, file_level_enum_descriptors_user_2eproto, file_level_service_descriptors_user_2eproto,
+  file_level_metadata_user_2eproto, 33, file_level_enum_descriptors_user_2eproto, file_level_service_descriptors_user_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1888,12 +1921,18 @@ Invitation::Invitation(const Invitation& from)
   if (!from._internal_pseudo().empty()) {
     pseudo_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.pseudo_);
   }
+  ::memcpy(&type_, &from.type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&game_id_) -
+    reinterpret_cast<char*>(&type_)) + sizeof(game_id_));
   // @@protoc_insertion_point(copy_constructor:Invitation)
 }
 
 void Invitation::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Invitation_user_2eproto.base);
   pseudo_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&game_id_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(game_id_));
 }
 
 Invitation::~Invitation() {
@@ -1921,6 +1960,9 @@ void Invitation::Clear() {
   (void) cached_has_bits;
 
   pseudo_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  ::memset(&type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&game_id_) -
+      reinterpret_cast<char*>(&type_)) + sizeof(game_id_));
   _internal_metadata_.Clear();
 }
 
@@ -1937,6 +1979,20 @@ const char* Invitation::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID:
           auto str = _internal_mutable_pseudo();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Invitation.pseudo"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // bool type = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // uint32 game_id = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          game_id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1976,6 +2032,18 @@ failure:
         1, this->_internal_pseudo(), target);
   }
 
+  // bool type = 2;
+  if (this->type() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(2, this->_internal_type(), target);
+  }
+
+  // uint32 game_id = 3;
+  if (this->game_id() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(3, this->_internal_game_id(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -1997,6 +2065,18 @@ size_t Invitation::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_pseudo());
+  }
+
+  // bool type = 2;
+  if (this->type() != 0) {
+    total_size += 1 + 1;
+  }
+
+  // uint32 game_id = 3;
+  if (this->game_id() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_game_id());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2034,6 +2114,12 @@ void Invitation::MergeFrom(const Invitation& from) {
 
     pseudo_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.pseudo_);
   }
+  if (from.type() != 0) {
+    _internal_set_type(from._internal_type());
+  }
+  if (from.game_id() != 0) {
+    _internal_set_game_id(from._internal_game_id());
+  }
 }
 
 void Invitation::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -2059,9 +2145,202 @@ void Invitation::InternalSwap(Invitation* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   pseudo_.Swap(&other->pseudo_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
+  swap(type_, other->type_);
+  swap(game_id_, other->game_id_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Invitation::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void Invitation_r::InitAsDefaultInstance() {
+}
+class Invitation_r::_Internal {
+ public:
+};
+
+Invitation_r::Invitation_r()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Invitation_r)
+}
+Invitation_r::Invitation_r(const Invitation_r& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr),
+      invits_(from.invits_) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Invitation_r)
+}
+
+void Invitation_r::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Invitation_r_user_2eproto.base);
+}
+
+Invitation_r::~Invitation_r() {
+  // @@protoc_insertion_point(destructor:Invitation_r)
+  SharedDtor();
+}
+
+void Invitation_r::SharedDtor() {
+}
+
+void Invitation_r::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const Invitation_r& Invitation_r::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_Invitation_r_user_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void Invitation_r::Clear() {
+// @@protoc_insertion_point(message_clear_start:Invitation_r)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  invits_.Clear();
+  _internal_metadata_.Clear();
+}
+
+const char* Invitation_r::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated .Invitation invits = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ctx->ParseMessage(_internal_add_invits(), ptr);
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* Invitation_r::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Invitation_r)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated .Invitation invits = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_invits_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_invits(i), target, stream);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Invitation_r)
+  return target;
+}
+
+size_t Invitation_r::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Invitation_r)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated .Invitation invits = 1;
+  total_size += 1UL * this->_internal_invits_size();
+  for (const auto& msg : this->invits_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void Invitation_r::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Invitation_r)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Invitation_r* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<Invitation_r>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Invitation_r)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Invitation_r)
+    MergeFrom(*source);
+  }
+}
+
+void Invitation_r::MergeFrom(const Invitation_r& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Invitation_r)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  invits_.MergeFrom(from.invits_);
+}
+
+void Invitation_r::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Invitation_r)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Invitation_r::CopyFrom(const Invitation_r& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Invitation_r)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Invitation_r::IsInitialized() const {
+  return true;
+}
+
+void Invitation_r::InternalSwap(Invitation_r* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  invits_.InternalSwap(&other->invits_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata Invitation_r::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -7985,6 +8264,9 @@ template<> PROTOBUF_NOINLINE ::convo_s* Arena::CreateMaybeMessage< ::convo_s >(A
 }
 template<> PROTOBUF_NOINLINE ::Invitation* Arena::CreateMaybeMessage< ::Invitation >(Arena* arena) {
   return Arena::CreateInternal< ::Invitation >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Invitation_r* Arena::CreateMaybeMessage< ::Invitation_r >(Arena* arena) {
+  return Arena::CreateInternal< ::Invitation_r >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Join* Arena::CreateMaybeMessage< ::Join >(Arena* arena) {
   return Arena::CreateInternal< ::Join >(arena);

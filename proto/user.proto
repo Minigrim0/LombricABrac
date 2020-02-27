@@ -21,6 +21,12 @@ message convo_s{
 
 message Invitation{
   string pseudo = 1;
+  bool type = 2;
+  uint32 game_id = 3;
+}
+
+message Invitation_r{
+  repeated Invitation invits = 1;
 }
 
 message Join{

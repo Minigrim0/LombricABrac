@@ -15,7 +15,9 @@ info Menu_log_in::run(info information)
   echo();
   int taille_max_user_name=18;
   char str[19];
+  bzero(str, 19);
   char str2[19];
+  bzero(str2, 19);
   string msg_id="veuillez entrez votre pseudo :";
   string msg_mdp="veuillez entrez votre mot de passe :";
   string msg_titre= get_message_Window(information.id);
@@ -57,11 +59,13 @@ info Menu_log_in::run(info information)
 
   //on capture ce qu'on ecrit au clavier
   mvwgetnstr(user_name,1,1,str,taille_max_user_name);
+
   int taille_mdp_max=18;
   int chara;
   int decalage=0;
   noecho();
   keypad(confirmer, TRUE);
+  keypad(mot_de_passe,TRUE);
   while (taille_mdp_max>0)
   {
     chara=wgetch(mot_de_passe);
@@ -69,13 +73,20 @@ info Menu_log_in::run(info information)
     {
       break;
     }
+    if (chara==263)
+    {
+      decalage--;
+      str2[decalage]= ' ';
+      effacer_caractere_window(mot_de_passe,1,1+decalage,1);
+      taille_mdp_max+=1;
+      wrefresh(mot_de_passe);
+    }
     str2[decalage]= static_cast<char>(chara);
     print_string_window(mot_de_passe,1,1+decalage,"*");
     decalage++;
     taille_mdp_max-=1;
     wrefresh(mot_de_passe);
   }
-  str2[decalage]= '\0';
   char *ok[2]={str,str2};
   curs_set(FALSE);
   refresh();
