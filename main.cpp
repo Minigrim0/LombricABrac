@@ -5,6 +5,8 @@
 #include <vector>
 #include <thread>
 
+#include <fstream>
+
 #include "includes/UI.hpp"
 
 using namespace std;
@@ -36,7 +38,8 @@ quitter  = -1
 
 int main(int argc, char** argv)
 {
-  //system("resize -s 30 100");
+  //system("resize -s 30 100
+
   Menu_jeu_window menu_window;
   Menu_entrer enter_window;
   Menu_log_in login_window;
@@ -56,11 +59,12 @@ int main(int argc, char** argv)
   information.ishost=FALSE;
   information.notif = 0;
   information.notif_invit = 0;
-  information = enter_window.run(information);
 
   information.client = new Client(argv[1], strtol(argv[2],NULL,10));
+
   std::thread t(&Client::run,information.client);
 
+  //information = enter_window.run(information);
   while(1)
   {
     if (information.id == -1)

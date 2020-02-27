@@ -3,6 +3,10 @@
 bool Client::connection(std::string username, std::string password, bool inscription){
 	message m{};
 	//construction de la structure
+
+	std::cout << "Username: " << username << std::endl;
+	std::cout << "Password: " << password << std::endl;
+
 	UserConnect obj;
 	obj.set_pseudo(username);
 	obj.set_password(password);

@@ -45,7 +45,6 @@ mustDrawWall(false){
   init_pair(LIGHT_WALL_COLOR, COLOR_BLACK, COLOR_GREEN);
   init_pair(SOLID_WALL_COLOR, COLOR_BLACK, COLOR_RED);
 
-
 }
 
 info Partie::run(info information)
@@ -56,11 +55,13 @@ info Partie::run(info information)
   while (run){
     //gestion du resize de la fenêtre
     resize();
+
     updateSprites(false);//update la positions des sprites à cahque itérations
 
     if(mustDrawWall){
       drawMap();
     }
+
 
     //si la structure infoTour est vide-> il faut prendre les infos
     //du prochain tour
@@ -240,7 +241,8 @@ void Partie::drawMur(int pos){//dessine le pos ème mur du tableau
 }
 
 void Partie::drawMur(int x, int y){//dessine le mur en x y
-  drawMur(y*static_cast<int>(gameInfo->carte->getLargeur())+x);
+  int numColor = gameInfo->carte->getColor(x,y);
+  mvwaddch(gameWin, y, x, VIDE | COLOR_PAIR(numColor));//affiche le bloc
 }
 
 void Partie::updateSprites(bool first=false){

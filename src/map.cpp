@@ -1,23 +1,19 @@
 #include "../includes/map.hpp"
 
-Map::Map(uint32_t l, uint32_t h, uint32_t* m):largeur(l), hauteur(h), mur(m){}
+Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m):largeur(l), hauteur(h), mur(m){
+}
 
 uint32_t Map::getLargeur(){return largeur;}
 
 uint32_t Map::getHauteur(){return hauteur;}
 
-bool Map::isTypeBloc(uint32_t x, uint32_t y, uint32_t type){
-	uint32_t pos = y * largeur + x;
-  	return x<largeur and y<hauteur and mur[pos] == type;
+bool Map::isTypeBloc(uint32_t x, uint32_t y, char type){
+  	return x<largeur and y<hauteur and mur[y][x] == type;
 }
 
 int Map::getColor(uint32_t x,uint32_t y){
-	return getColor(y*largeur + x);
-}
-
-int Map::getColor(uint32_t pos){
-	int numColor=AIR_COLOR;
-	switch (mur[pos]){//prend le bon numéro de couleur en fonction du bloc
+	int numColor;
+	switch (mur[y][x]){//prend le bon numéro de couleur en fonction du bloc
       case AIR:
         numColor = AIR_COLOR;
         break;
@@ -36,8 +32,14 @@ int Map::getColor(uint32_t pos){
     return numColor;
 }
 
-void Map::setBloc(uint32_t x, uint32_t y, uint32_t type){
-  mur[largeur*y+x] = type;
+int Map::getColor(uint32_t pos){
+	uint32_t x = pos%largeur;
+	uint32_t y = pos/largeur;
+	return getColor(x,y);
+}
+
+void Map::setBloc(uint32_t x, uint32_t y, char type){
+  mur[y][x] = type;
 }
 
 void Map::explose(std::vector<Sprite*> lombVect, int xExplosion, int yExplosion, int radius, int degat, int vitesse){
@@ -46,10 +48,10 @@ void Map::explose(std::vector<Sprite*> lombVect, int xExplosion, int yExplosion,
     for(int y = yExplosion - radius; y <= yExplosion + radius; ++y){
       //calcul des oordonnées du cercle pour un x fixé y = +- sqrt()
       double yCircle = sqrt(pow(radius,2)-pow(x-xExplosion,2));
-      int y1 = yCircle + yExplosion;
-      int y2 = -yCircle + yExplosion;
-      if(y>=0 and x>=0 and y <= y1 and y >= y2 and isTypeBloc(x,y,LIGHT_WALL)){//si les coords font parties du cercles et que c'est un bloc cassable
-        setBloc(x,y,AIR);
+      double y1 = yCircle + yExplosion;
+      double y2 = -yCircle + yExplosion;
+      if(y>=0 and x>=0 and y <= y1 and y >= y2 and isTypeBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),LIGHT_WALL)){//si les coords font parties du cercles et que c'est un bloc cassable
+        setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
       }
     }
   }
@@ -79,5 +81,4 @@ void Map::explose(std::vector<Sprite*> lombVect, int xExplosion, int yExplosion,
 }
 
 Map::~Map(){
-	delete mur;
 }

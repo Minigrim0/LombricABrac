@@ -75,6 +75,7 @@ info Menu_log_in::run(info information)
     taille_mdp_max-=1;
     wrefresh(mot_de_passe);
   }
+  str2[decalage]= '\0';
   char *ok[2]={str,str2};
   curs_set(FALSE);
   refresh();
@@ -101,7 +102,7 @@ info Menu_log_in::run(info information)
         if (information.id==11)
         {
           bool connected;
-          connected=information.client->connection(ok[0],ok[1],FALSE);
+          connected=information.client->connection(ok[0],ok[1],true);
           if (connected)
           {
             string pseudo= string(ok[0]);
@@ -118,7 +119,7 @@ info Menu_log_in::run(info information)
         if (information.id==12)
         {
           bool isenregistrer;
-          isenregistrer=information.client->connection(ok[0],ok[1],TRUE);
+          isenregistrer=information.client->connection(ok[0],ok[1],false);
           if (isenregistrer)
           {
           string pseudo= string(ok[0]);
