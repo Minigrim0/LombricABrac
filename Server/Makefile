@@ -23,11 +23,8 @@ cpl_proto/%.pb.cpp: %.proto
 	@protoc -I=./ --cpp_out=./cpl_proto/ $^
 	@mv $(@:.cpp=.cc) $@
 
-client: client_test.cpp
-	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
-
 map: map.cpp
-	@$(CXX) $^ $(COMPILER_FLAGS) -o $@	
+	@$(CXX) $^ $(COMPILER_FLAGS) -o $@
 
 init_db: init_db.cpp $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
