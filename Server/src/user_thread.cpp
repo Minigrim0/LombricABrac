@@ -30,7 +30,7 @@ int client_thread(int socket_client){
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
 
-            if(zmq_errno() == EAGAIN){ // The receive just timed out
+            if(strcmp(address.c_str(), "") == 0 && zmq_errno() == EAGAIN){ // The receive just timed out
                 type = 0;
             }
             else{ // We got a message from the Broker
