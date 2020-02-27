@@ -88,7 +88,7 @@ info Menu_creation_equipe_lombric::run(info information)
   mvwgetnstr(win_lombric6,1,1,lombric6,15);
   mvwgetnstr(win_lombric7,1,1,lombric7,15);
   mvwgetnstr(win_lombric8,1,1,lombric8,15);
-  mvwgetnstr(win_nom_equipe,1,1,nom_equipe,15);
+  //mvwgetnstr(win_nom_equipe,1,1,nom_equipe,15);
   for (int i=0;i<19;i++)
   {
     if (lombric1[i]=="" && placer1==0)

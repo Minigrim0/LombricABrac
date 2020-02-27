@@ -324,7 +324,7 @@ info Liste_ami_window::run(info information)
         }
         if (information.id==30)
         {
-          information.client->addToGame(liste_ami.table[i_save];);
+          information.client->addToGame(liste_ami.table[i_save]);
           information.id=28;
           break;
         }

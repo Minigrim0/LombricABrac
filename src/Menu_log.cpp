@@ -15,7 +15,9 @@ info Menu_log_in::run(info information)
   echo();
   int taille_max_user_name=18;
   char str[19];
+  bzero(str, 19);
   char str2[19];
+  bzero(str2, 19);
   string msg_id="veuillez entrez votre pseudo :";
   string msg_mdp="veuillez entrez votre mot de passe :";
   string msg_titre= get_message_Window(information.id);
@@ -57,15 +59,7 @@ info Menu_log_in::run(info information)
 
   //on capture ce qu'on ecrit au clavier
   mvwgetnstr(user_name,1,1,str,taille_max_user_name);
-  int placer=0;
-  for (int i=0;i<19;i++)
-  {
-    if (str[i]=="" && placer==0)
-    {
-      placer=1;
-      str[i]='\0';
-    }
-  }
+
   int taille_mdp_max=18;
   int chara;
   int decalage=0;
@@ -93,7 +87,6 @@ info Menu_log_in::run(info information)
     taille_mdp_max-=1;
     wrefresh(mot_de_passe);
   }
-  str2[decalage]= '\0';
   char *ok[2]={str,str2};
   curs_set(FALSE);
   refresh();

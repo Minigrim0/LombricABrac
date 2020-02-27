@@ -21,6 +21,7 @@ info discuter::run(info information)
     int len_str_intro1=static_cast<int>(intro1.size());
     int len_str_intro2=static_cast<int>(intro2.size());
     char str[39];
+    bzero(str, 39);
     initscr();
     WINDOW *msg_envoyer,*confirmer,*message;
     getmaxyx(stdscr,len_str,largeur);
@@ -68,15 +69,6 @@ info discuter::run(info information)
         effacer_caractere_window(message,1,1,len_str_intro1);
         effacer_caractere_window(message,2,1,len_str_intro2);
         mvwgetnstr(msg_envoyer,1,1,str,38);
-        int placer=0;
-        for (int i=0;i<len_str;i++)
-        {
-          if (str[i]=="" && placer==0)
-          {
-            placer=1;
-            str[i]='\0';
-          }
-        }
         curs_set(FALSE);// enleve le curseur
         print_string_window(confirmer,1,1,msg_confirmation);
         print_string_window(confirmer,2,1,msg_annulation);

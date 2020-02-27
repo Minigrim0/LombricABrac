@@ -171,7 +171,7 @@ public:
 	bool endGame();//fin de la partie
 	nextTour endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
-	std::vector<invitation> afficheAllInvits(); 
+	std::vector<invitation> afficheAllInvits();
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
