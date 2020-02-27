@@ -57,17 +57,35 @@ info Menu_log_in::run(info information)
 
   //on capture ce qu'on ecrit au clavier
   mvwgetnstr(user_name,1,1,str,taille_max_user_name);
+  int placer=0;
+  for (int i=0;i<19;i++)
+  {
+    if (str[i]=="" && placer==0)
+    {
+      placer=1;
+      str[i]='\0';
+    }
+  }
   int taille_mdp_max=18;
   int chara;
   int decalage=0;
   noecho();
   keypad(confirmer, TRUE);
+  keypad(mot_de_passe,TRUE);
   while (taille_mdp_max>0)
   {
     chara=wgetch(mot_de_passe);
     if (chara==10)
     {
       break;
+    }
+    if (chara==263)
+    {
+      decalage--;
+      str2[decalage]= ' ';
+      effacer_caractere_window(mot_de_passe,1,1+decalage,1);
+      taille_mdp_max+=1;
+      wrefresh(mot_de_passe);
     }
     str2[decalage]= static_cast<char>(chara);
     print_string_window(mot_de_passe,1,1+decalage,"*");

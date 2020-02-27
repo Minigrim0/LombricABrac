@@ -29,7 +29,6 @@ info Liste_ami_window::run(info information)
   string h;
   string msg1="Voici votre liste d'amis (Appuyer sur RETURN pour revenir en arrère)";
   string msg2;
-  string tab[18]={"Alex", "ismaroco", "Bg du 32", "Squeezie", "Campeed", "Ahrika", "ReveillePasMonJnoun", "Bassem", "Coronavirus", "Hiv", "Terrence", "Morty", "popop", "####", "momo", "liberezlacrim", "lache un like", "abonne toi"};
   stringTable liste_ami;
   liste_ami=information.client->getFriendList();
   playerRank rank;
@@ -42,6 +41,7 @@ info Liste_ami_window::run(info information)
   }
   if (information.id==23)
   {
+    information.vec_invit = information.client->afficheAllInvits();
     information.notif_invit=0;
     len_tab=static_cast<int>(information.vec_invit.size());
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";
@@ -300,9 +300,9 @@ info Liste_ami_window::run(info information)
     }
     if (touch == 'q')
     {
-      vector<invitation>::iterator i_double_save;
+      /*vector<invitation>::iterator i_double_save;
       i_double_save = information.vec_invit.begin();
-      information.vec_invit.erase(i_double_save +i_save);
+      information.vec_invit.erase(i_double_save +i_save);*/
       information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], FALSE);
       information.id =2;
       break;
@@ -311,20 +311,20 @@ info Liste_ami_window::run(info information)
     {
         if (information.id==27)
         {
-          information.username=tab[i_save];
+          information.username=liste_ami.table[i_save];
           information.id=2;
           information=msg_envoyer.run(information);
           break;
         }
         if (information.id==25)
         {
-          information.friends=tab[i_save];
+          information.friends=liste_ami.table[i_save];
           information.id=61;
           break;
         }
         if (information.id==30)
         {
-          information.client->addToGame(tab[i_save]);
+          information.client->addToGame(liste_ami.table[i_save];);
           information.id=28;
           break;
         }
