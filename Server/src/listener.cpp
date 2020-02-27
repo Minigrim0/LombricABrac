@@ -45,7 +45,7 @@ uint8_t Listener::reception_type(){
         return type_msg;
     }
     else{
-        return 0;
+        return 95;
     }
 }
 

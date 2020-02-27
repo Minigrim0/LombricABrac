@@ -46,16 +46,18 @@ int client_thread(int socket_client){
         if(type == EXIT_FAILURE){
             break;
         }
-
-        res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
-        if(res == 3){
-            //User connected
-            std::ostringstream stream;
-            stream << "users/" << usr.get_id() << "/broker";
-            subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-        }
-        else if(res == 0){
-            std::cout << "Timed out" << std::endl;
+        else if(type!=95)
+        {
+            res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+            if(res == 3){
+                //User connected
+                std::ostringstream stream;
+                stream << "users/" << usr.get_id() << "/broker";
+                subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+            }
+            else if(res == 0){
+                std::cout << "Timed out" << std::endl;
+            }
         }
     }
     close(socket_client);

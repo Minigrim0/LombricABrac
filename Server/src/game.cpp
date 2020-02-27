@@ -43,7 +43,8 @@ uint8_t* Game::who_next(){
 
 void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
     std::ostringstream stream;
-    if(zmq_msg.type_message() == JOIN_GROUP_S){ // notifie à tout le monde que tel joueur join la game
+    if(zmq_msg.type_message() == JOIN_GROUP_S){
+        std::cout << "join_group"<< std::endl; // notifie à tout le monde que tel joueur join la game
         Join_groupe_s request;
         request.ParseFromString(zmq_msg.message());
         Join_groupe_r groupe_r;
@@ -67,6 +68,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             stream.clear();
             if(player_id[i] > 0){
                 stream << "users/" << player_id[i] << "/partie";
+                std::cout << stream.str() << std::endl;
                 s_sendmore_b(publisher, stream.str());
                 s_send_b(publisher, zmq_msg.SerializeAsString());
             }

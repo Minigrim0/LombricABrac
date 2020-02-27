@@ -10,7 +10,7 @@
 
 int game_thread(std::string chan_sub, uint32_t owner_id){
 
-    bool game_running;
+    bool game_running = true;
     int current_step = STEP_ROOM;
     Game current_game;
     
