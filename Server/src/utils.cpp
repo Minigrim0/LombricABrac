@@ -150,8 +150,17 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 std::cout << "Done" << std::endl;
                 request_convo.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(request_convo.pseudo(), &friend_id);
-                db.get_convo(usr->get_id(), friend_id, &chat_r); // Need id user
-                la_poste->envoie_msg(CHAT_R, chat_r.SerializeAsString());
+                db.get_convo(usr->get_id(), friend_id, &chat_r);
+                Chat_r final_chat;
+                for(int a=0;a<chat_r.msgs_size();a++){
+                    std::string id = chat_r.msgs(a).pseudo();
+                    UserConnect usr;db.get_user(std::atoi(id.c_str()), &usr);
+                    Chat *chat = final_chat.add_msgs();
+                    chat->set_pseudo(usr.pseudo());
+                    chat->set_msg(chat_r.msgs(a).msg());
+                }
+                std::cout << "Sending to user : " << final_chat.DebugString() << std::endl;
+                la_poste->envoie_msg(CHAT_R, final_chat.SerializeAsString());
                 break;
             }
             //case INVI_S:{
@@ -202,20 +211,34 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.add_friend(usr->get_id(), friend_id);
                 break;
             }
-            case FRI_ACCEPT:{
-                la_poste->reception();
+            case GET_ALL_INVIT:{
                 Invitation_r invs;
                 Fri_ls_r list_asks;
                 db.get_friend_invites(usr->get_id(), &list_asks);
-                la_poste->envoie_msg(GET_ALL_INVIT, list_asks.SerializeAsString());
+
+                for(int a=0;a<list_asks.user_size();a++){
+                    Invitation *inv = invs.add_invits();
+                    inv->set_pseudo(list_asks.user(a));
+                    inv->set_type(false);
+                    inv->set_game_id(0);
+                }
+
+                // Need to get the room invites
+
+                la_poste->envoie_msg(GET_ALL_INVIT, invs.SerializeAsString());
                 break;
             }
-            case GET_ALL_INVIT:{
+            case FRI_ACCEPT:{
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
-                db.accept_friend_invite(usr->get_id(), friend_id);
+                if(fri.accept()){
+                    db.accept_friend_invite(usr->get_id(), friend_id);
+                }
+                else{
+                    db.remove_friend(usr->get_id(), friend_id);
+                }
                 break;
             }
             case FRI_LS_S:{

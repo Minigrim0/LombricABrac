@@ -106,9 +106,13 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
             break;
         case DT_CHA:
             for(int i = 0; i<argc; i++){
+                Chat *chat;
                 if(strcmp(azColName[i], "content") == 0){
-                    Chat *chat = static_cast<Chat_r*>(data_container)->add_msgs();
+                    chat = static_cast<Chat_r*>(data_container)->add_msgs();
                     chat->set_msg(argv[i]);
+                }
+                if(strcmp(azColName[i], "sender_id") == 0){
+                    chat->set_pseudo(argv[i]);
                 }
             }
             break;
@@ -401,6 +405,8 @@ int DataBase::get_convo(int user1_id, int user2_id, Chat_r* chat_r){
     m_stringStream << ") ORDER BY timestamp;";
     m_sql_request = m_stringStream.str();
 
+    std::cout << m_sql_request << std::endl;
+
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, chat_r, &m_zErrMsg);
 
     return m_rc;
@@ -471,6 +477,8 @@ int DataBase::get_friend_invites(int user_id, Fri_ls_r* fri_ls_r){
                    << user_id
                    << " AND users.id=friends.sender_id and accepted=false;";
     m_sql_request = m_stringStream.str();
+
+    std::cout << "DB query : " << m_sql_request << std::endl;
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, fri_ls_r, &m_zErrMsg);
 
