@@ -103,6 +103,7 @@ private:
 	bool started;//partie à commencée
 	bool changed;//struct infoPartie_s à changé
 	bool running = true;
+
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
 	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
 	std::vector<std::string> newPlayers;//vecteurs de tous les nouveau joueurs dans le salon d'attente
@@ -138,8 +139,7 @@ private:
 public:
 	Client(char* ip, uint16_t port);
 	~Client(){delete thisGame;}
-	void* run();
-
+	int run();
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée
 	void deconnection();
@@ -151,7 +151,7 @@ public:
 	//méthodes utilisées pour les invitaions
 	stringTable getFriendList();//revoie la liste d'amis
 	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
-	bool createRoom(std::string host);//création d'une room
+	bool createRoom();//création d'une room
 	void startGame();//host lance la partie
 	void addToGame(std::string destinataire);//invite un amis à une partie
 	void addFriend(std::string user);//ajout d'un amis
@@ -200,5 +200,5 @@ public:
 
 	//thread
 	bool isRunning(){return running;};
-	void changeRunning(){running = !running;};
+	void changeRunning(){running = false;};
 };

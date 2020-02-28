@@ -32,25 +32,19 @@ void Client::deconnection(){
 }
 
 void Client::quit(){
+	//std::string test = "echo 'STP FONCTIONNE' >> out.txt";
+	//system(test.c_str());
 	changeRunning();
-	close(client_socket);
 }
 
-bool Client::createRoom(std::string host){
+bool Client::createRoom(){
 	message m{};
-
-	Create_room obj;
-	obj.set_pseudo(host);
-
-	obj.SerializeToString(&m.text);
 	m.type = ADD_ROOM_S;
+	m.text = "";
 
-	std::string* reponse = waitAnswers(ADD_ROOM_R, m);
-
-	bool res = (*reponse)[0];
-
-	delete reponse;
-	return res;
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }
 
 void Client::startGame(){

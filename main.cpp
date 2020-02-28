@@ -7,6 +7,11 @@
 
 #include <fstream>
 
+
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
+
 #include "includes/UI.hpp"
 
 using namespace std;
@@ -60,6 +65,7 @@ int main(int argc, char** argv)
   information.notif = 0;
   information.notif_invit = 0;
 
+
   information.client = new Client(argv[1], strtol(argv[2],NULL,10));
 
   std::thread t(&Client::run,information.client);
@@ -69,8 +75,8 @@ int main(int argc, char** argv)
   {
     if (information.id == -1)
     {//on quitte le programme
-      information.client->quit();
 
+      information.client->quit();
       break;
     }
     if (information.id == 1)
@@ -208,5 +214,7 @@ int main(int argc, char** argv)
     }
 
   }
+
+  t.join();
   return 0;
 }

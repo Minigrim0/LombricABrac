@@ -1,9 +1,12 @@
 #ifndef client_
 #define client_
 #include "../includes/client.hpp"
-
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
 Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),reponseAttendue(0),client_socket(),started(false),changed(false),messageRcv(),invitations(),thisGame(nullptr),currentParams({}){
 	int res;
+
 	struct sockaddr_in server_addr, client_addr;
 
 	//init du sockaddr du serveur
@@ -28,7 +31,7 @@ Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),repo
 
 }
 
-void* Client::run(){
+int Client::run(){
 	int res;
 
 	fd_set rfds;//utilisation du multiplexage
@@ -37,17 +40,23 @@ void* Client::run(){
 	while(isRunning()){
 		FD_ZERO(&rfds);
 		FD_SET(client_socket,&rfds);
-		res = select(n,&rfds,NULL,NULL,NULL);
+
+		struct timeval tv;
+		tv.tv_sec=0;
+		tv.tv_usec=500000;
+
+		res = select(n,&rfds,nullptr,nullptr,&tv);
 		if(res == -1){
-			perror("'select' failed");close(client_socket);return nullptr;
+			perror("'select' failed");close(client_socket);return 1;
 		}
+		std::string t = "echo 'on sort' >> out.txt";
+	  system(t.c_str());
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			res = readMessage();
 			if (res == EXIT_FAILURE){
 				break;
 			}
-
 			/*Messages inattendus:*/
 			if (msg.type == CHAT_R){
 				chatRcv(msg);
@@ -94,16 +103,18 @@ void* Client::run(){
 				obj.ParseFromString(msg.text);
 				movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
 			}
-		}
-		else if (msg.type == JOIN_GROUP_R){
-			Join_groupe_r obj;
-			obj.ParseFromString(msg.text);
-			inNewTeam.push_back({obj.pseudo(),obj.id()});
+			else if (msg.type == JOIN_GROUP_R){
+				Join_groupe_r obj;
+				obj.ParseFromString(msg.text);
+				inNewTeam.push_back({obj.pseudo(),obj.id()});
+			}
 		}
 	}
 
+	system("echo 'RUNNING' > out.txt");
+
 	close(client_socket);
-	return nullptr;
+	return 0;
 }
 
 void Client::sendMessage(message& msg){
@@ -126,6 +137,8 @@ void Client::sendMessage(message& msg){
 	        parser += res;
 		}
 	}
+	//std::string test = "echo 'TYPE " +std::to_string(msg.type)+"' >> out.txt";
+	//system(test.c_str());
 }
 
 
@@ -133,6 +146,8 @@ int Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
+	std::string test = "echo 'on rentre' >> out.txt";
+  system(test.c_str());
 	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
@@ -160,6 +175,8 @@ int Client::readMessage(){
 	msg.text = static_cast<std::string>(buffer);
 	delete buffer;
 	msgMutex.unlock();
+	//std::string t = "echo 'on sort' >> out.txt";
+  //system(t.c_str());
 	return EXIT_SUCCESS;
 }
 

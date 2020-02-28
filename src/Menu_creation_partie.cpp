@@ -186,7 +186,7 @@ info Menu_creation_partie::run(info information)
         else
         {
 
-          information.client->createRoom(information.username);
+          information.client->createRoom();
           information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
           information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
           //information.client->set_nbr_equipes(nombre1);

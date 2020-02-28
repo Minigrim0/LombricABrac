@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include <string>
 #include "../includes/UI.hpp"
-
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 info Menu_entrer::run(info information)
@@ -77,7 +79,8 @@ info Menu_entrer::run(info information)
           print_string_window(win,pos_y,pos_x,arrow);
         }
         break;
-      case 10:
+      case 10:{
+
         if (pos_y==(hauteur/2)+1)
         {
           infini=0;
@@ -96,9 +99,9 @@ info Menu_entrer::run(info information)
           infini=0;
           break;
         }
-
-        default:
-          break;
+      }
+      default:
+        break;
     }
   }
   clear();
