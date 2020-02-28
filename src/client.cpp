@@ -46,7 +46,6 @@ void* Client::run(){
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			res = readMessage();
 			if (res == EXIT_FAILURE){
-				std::cout << "ok" << std::endl;
 				break;
 			}
 
@@ -176,8 +175,6 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 		msgMutex.unlock();
 	}
 	while(msgReady);
-
-	std::cout << "Unlocked" << std::endl;
 
 	*res = msg.text;
 	msgMutex.unlock();

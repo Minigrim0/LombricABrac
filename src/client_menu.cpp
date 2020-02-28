@@ -1,5 +1,7 @@
 #include "../includes/client.hpp"
-
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
 bool Client::connection(std::string username, std::string password, bool inscription){
 	message m{};
 	//construction de la structure
@@ -194,7 +196,8 @@ playerRank Client::getRank(uint32_t nbr_players){
 	obj_r.ParseFromString(*reponse);
 
 	std::cout << obj_r.DebugString() << std::endl;
-	playerRank res{0,nullptr,nullptr};
+	playerRank res;
+
 	res.size = obj_r.players_size();
 	res.pseudo = new std::string[res.size];
 	res.points = new uint32_t[res.size];
@@ -202,7 +205,11 @@ playerRank Client::getRank(uint32_t nbr_players){
 	for (int i=0;i<res.size;i++){
 		uint32_t index = static_cast<uint32_t>(i);
 		res.pseudo[index] = obj_r.players(i).user();
-		res.points[index] = obj_r.players(i).point();
+		try{
+			res.points[index] = obj_r.players(i).point();
+		} catch(std::exception& e){
+			res.points[index] = 0;
+		}
 	}
 
 	delete reponse;

@@ -7,8 +7,6 @@
 
 using namespace std;
 
-
-
 info Liste_ami_window::run(info information)
 {
   int x = 4, y = 4, max_x = 0, max_y = 0;
@@ -50,11 +48,11 @@ info Liste_ami_window::run(info information)
   if (information.id==24)
   {
     rank=information.client->getRank(10);
-    len_tab=10;
+    len_tab=rank.size;
     msg1= "Classement des 10 meilleurs joueurs (Appyuez sur RETURN pour revenir en arriére)";
     for (int i=0;i<len_tab;i++)
     {
-      rank.pseudo[i]= "Pseudo : " + rank.pseudo[i]+ " score: "; //+ to_string(rank.points[i]);
+      rank.pseudo[i]= "Pseudo : " + rank.pseudo[i]+ " score: " + to_string(rank.points[i]);
     }
   }
   if (information.id==30)
