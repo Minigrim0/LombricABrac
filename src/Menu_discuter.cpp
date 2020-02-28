@@ -5,9 +5,10 @@
 #include <vector>
 #include "../includes/UI.hpp"
 
+
 info discuter::run(info information)
 {
-
+    information.notif=0;
     int largeur,len_str;
     string titre= "CHAT (appuyer sur return pour revenir en arrière)";
     string msg1= "Ecrivez votre message :";
@@ -24,11 +25,12 @@ info discuter::run(info information)
     char str[39];
     bzero(str, 39);
     initscr();
-    WINDOW *msg_envoyer,*confirmer,*message;
+    WINDOW *msg_envoyer,*confirmer,*message,*convo;
     getmaxyx(stdscr,len_str,largeur);
+    convo=newwin(15,39,3,2);
     message=newwin(4,50,15,largeur/2 -len_str_intro1/2);
     msg_envoyer= newwin(3,40,20,largeur/2 -20);
-    confirmer= newwin(4,50,23,largeur/2 -len_str_msg_annulation/2);
+    confirmer= newwin(4,50,24,largeur/2 -len_str_msg_annulation/2);
     box(msg_envoyer,0,0);
     refresh();
     wrefresh(msg_envoyer);
@@ -39,7 +41,7 @@ info discuter::run(info information)
     draw(19,largeur/2 - len_str/2,msg1.c_str());
 
     len_str= static_cast<int>(intro3.size());
-    draw(13,largeur/2 -len_str/2,intro3.c_str());
+    draw(2,largeur/2 -len_str/2,intro3.c_str());
     refresh();
     wrefresh(msg_envoyer);
     keypad(confirmer,TRUE);
@@ -59,7 +61,7 @@ info discuter::run(info information)
       {
         for (int i=size-6;i<size;i++ )
         {
-          draw(3+decalage,5,total[i].c_str());
+          print_string_window(convo,2+decalage,5,total[i]);
           decalage+=2;
         }
       }
@@ -67,7 +69,7 @@ info discuter::run(info information)
       {
         for (int i=0;i<size;i++ )
         {
-          draw(3+decalage,5,total[i].c_str());
+          print_string_window(convo,2+decalage,5,total[i]);
           decalage+=2;
         }
       }
@@ -83,8 +85,7 @@ info discuter::run(info information)
         echo();
         effacer_caractere_window(message,1,1,len_str_intro1);
         effacer_caractere_window(message,2,1,len_str_intro2);
-        char str[39];
-        bzero(str,39);
+
         mvwgetnstr(msg_envoyer,1,1,str,38);
         curs_set(FALSE);// enleve le curseur
         print_string_window(confirmer,1,1,msg_confirmation);
@@ -98,6 +99,7 @@ info discuter::run(info information)
           {
             string envoyer_msg= string(str);
             information.client->chatSend(envoyer_msg, information.friends);
+            wclear(convo);
             break;
           }
 
@@ -115,12 +117,11 @@ info discuter::run(info information)
       }
       if (ok=='r')
       {
-        continue;
+        wclear(convo);
       }
-
-
-
     }
+
+
     clear();
     endwin();
     return information;
