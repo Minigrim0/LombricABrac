@@ -92,17 +92,19 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
             }
             break;
         }
-        case DT_RAN:
+        case DT_RAN:{
+            Rank_r *rank = static_cast<Rank_r*>(data_container);
+            rankInfo *rankinf = rank->add_players();
             for(int i = 0; i<argc; i++){
                 if(strcmp(azColName[i], "username") == 0){
-                    std::string *username = static_cast<Rank_r*>(data_container)->add_user();
-                    *username = argv[i];
+                    rankinf->set_user(argv[i]);
                 }
                 else if(strcmp(azColName[i], "victory_amount") == 0){
-                    static_cast<Rank_r*>(data_container)->add_point(std::stoi(argv[i]));
+                    rankinf->set_point(std::stoi(argv[i]));
                 }
             }
             break;
+        }
         case DT_CHA:
             for(int i = 0; i<argc; i++){
                 Chat *chat;
@@ -204,6 +206,21 @@ int DataBase::get_user_id(std::string username, int* id){
     return m_rc;
 }
 
+int DataBase::connect_user(bool connected, std::string username){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_stringStream << "UPDATE users SET connected=" << connected << " WHERE username='" << username << "';";
+
+    m_sql_request = m_stringStream.str();
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
 
 // Lombrics Operations
 int DataBase::add_lombric(int user_id, int lombric_id, std::string lombric_name){
@@ -261,7 +278,7 @@ int DataBase::get_history(int user_id, int index, int size, History_r* history_r
                    << " OR user_3_id="
                    << user_id
                    << " OR user_4_id="
-                   << user_id << ") ORDER BY timestamp DESC LIMIT "
+                   << user_id << ") AND finished=true ORDER BY timestamp DESC LIMIT "
                    << index << ", " << size << ";";
     m_sql_request = m_stringStream.str();
 

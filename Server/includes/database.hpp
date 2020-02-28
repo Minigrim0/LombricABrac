@@ -34,6 +34,7 @@ class DataBase{
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
         int register_user(std::string username, std::string passwd);
+        int connect_user(bool connected, std::string username);
 
         // Lombrics Operations
         int add_lombric(int user_id, int lombric_id, std::string lombric_name);
