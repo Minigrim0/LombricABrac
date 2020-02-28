@@ -74,6 +74,6 @@
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
 #define NOTIF 47// : // Dire au client mdr t'as une notif
 #define NEXT_ROUND 50
-#define DECONNECTION 51
+#define DECO 51
 
 #endif

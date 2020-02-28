@@ -47,7 +47,7 @@ struct TableStruct_user_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[33]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[34]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -153,6 +153,9 @@ extern convo_sDefaultTypeInternal _convo_s_default_instance_;
 class infoPartie_p;
 class infoPartie_pDefaultTypeInternal;
 extern infoPartie_pDefaultTypeInternal _infoPartie_p_default_instance_;
+class rankInfo;
+class rankInfoDefaultTypeInternal;
+extern rankInfoDefaultTypeInternal _rankInfo_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Chat* Arena::CreateMaybeMessage<::Chat>(Arena*);
 template<> ::Chat_r* Arena::CreateMaybeMessage<::Chat_r>(Arena*);
@@ -187,6 +190,7 @@ template<> ::UserConnect* Arena::CreateMaybeMessage<::UserConnect>(Arena*);
 template<> ::Usr_add* Arena::CreateMaybeMessage<::Usr_add>(Arena*);
 template<> ::convo_s* Arena::CreateMaybeMessage<::convo_s>(Arena*);
 template<> ::infoPartie_p* Arena::CreateMaybeMessage<::infoPartie_p>(Arena*);
+template<> ::rankInfo* Arena::CreateMaybeMessage<::rankInfo>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 // ===================================================================
@@ -3107,6 +3111,152 @@ class Get_rank :
 };
 // -------------------------------------------------------------------
 
+class rankInfo :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:rankInfo) */ {
+ public:
+  rankInfo();
+  virtual ~rankInfo();
+
+  rankInfo(const rankInfo& from);
+  rankInfo(rankInfo&& from) noexcept
+    : rankInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline rankInfo& operator=(const rankInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline rankInfo& operator=(rankInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const rankInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const rankInfo* internal_default_instance() {
+    return reinterpret_cast<const rankInfo*>(
+               &_rankInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    20;
+
+  friend void swap(rankInfo& a, rankInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(rankInfo* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline rankInfo* New() const final {
+    return CreateMaybeMessage<rankInfo>(nullptr);
+  }
+
+  rankInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<rankInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const rankInfo& from);
+  void MergeFrom(const rankInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(rankInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "rankInfo";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_user_2eproto);
+    return ::descriptor_table_user_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kUserFieldNumber = 1,
+    kPointFieldNumber = 2,
+  };
+  // string user = 1;
+  void clear_user();
+  const std::string& user() const;
+  void set_user(const std::string& value);
+  void set_user(std::string&& value);
+  void set_user(const char* value);
+  void set_user(const char* value, size_t size);
+  std::string* mutable_user();
+  std::string* release_user();
+  void set_allocated_user(std::string* user);
+  private:
+  const std::string& _internal_user() const;
+  void _internal_set_user(const std::string& value);
+  std::string* _internal_mutable_user();
+  public:
+
+  // uint32 point = 2;
+  void clear_point();
+  ::PROTOBUF_NAMESPACE_ID::uint32 point() const;
+  void set_point(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_point() const;
+  void _internal_set_point(::PROTOBUF_NAMESPACE_ID::uint32 value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:rankInfo)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr user_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 point_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_user_2eproto;
+};
+// -------------------------------------------------------------------
+
 class Rank_r :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Rank_r) */ {
  public:
@@ -3149,7 +3299,7 @@ class Rank_r :
                &_Rank_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(Rank_r& a, Rank_r& b) {
     a.Swap(&b);
@@ -3213,63 +3363,32 @@ class Rank_r :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kUserFieldNumber = 1,
-    kPointFieldNumber = 2,
+    kPlayersFieldNumber = 1,
   };
-  // repeated string user = 1;
-  int user_size() const;
+  // repeated .rankInfo players = 1;
+  int players_size() const;
   private:
-  int _internal_user_size() const;
+  int _internal_players_size() const;
   public:
-  void clear_user();
-  const std::string& user(int index) const;
-  std::string* mutable_user(int index);
-  void set_user(int index, const std::string& value);
-  void set_user(int index, std::string&& value);
-  void set_user(int index, const char* value);
-  void set_user(int index, const char* value, size_t size);
-  std::string* add_user();
-  void add_user(const std::string& value);
-  void add_user(std::string&& value);
-  void add_user(const char* value);
-  void add_user(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& user() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_user();
+  void clear_players();
+  ::rankInfo* mutable_players(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rankInfo >*
+      mutable_players();
   private:
-  const std::string& _internal_user(int index) const;
-  std::string* _internal_add_user();
+  const ::rankInfo& _internal_players(int index) const;
+  ::rankInfo* _internal_add_players();
   public:
-
-  // repeated uint32 point = 2 [packed = true];
-  int point_size() const;
-  private:
-  int _internal_point_size() const;
-  public:
-  void clear_point();
-  private:
-  ::PROTOBUF_NAMESPACE_ID::uint32 _internal_point(int index) const;
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
-      _internal_point() const;
-  void _internal_add_point(::PROTOBUF_NAMESPACE_ID::uint32 value);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
-      _internal_mutable_point();
-  public:
-  ::PROTOBUF_NAMESPACE_ID::uint32 point(int index) const;
-  void set_point(int index, ::PROTOBUF_NAMESPACE_ID::uint32 value);
-  void add_point(::PROTOBUF_NAMESPACE_ID::uint32 value);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
-      point() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
-      mutable_point();
+  const ::rankInfo& players(int index) const;
+  ::rankInfo* add_players();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rankInfo >&
+      players() const;
 
   // @@protoc_insertion_point(class_scope:Rank_r)
  private:
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> user_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 > point_;
-  mutable std::atomic<int> _point_cached_byte_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rankInfo > players_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_user_2eproto;
 };
@@ -3317,7 +3436,7 @@ class Fri_add :
                &_Fri_add_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(Fri_add& a, Fri_add& b) {
     a.Swap(&b);
@@ -3452,7 +3571,7 @@ class Fri_rcv :
                &_Fri_rcv_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(Fri_rcv& a, Fri_rcv& b) {
     a.Swap(&b);
@@ -3587,7 +3706,7 @@ class Fri_accept :
                &_Fri_accept_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(Fri_accept& a, Fri_accept& b) {
     a.Swap(&b);
@@ -3733,7 +3852,7 @@ class Fri_rmv :
                &_Fri_rmv_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(Fri_rmv& a, Fri_rmv& b) {
     a.Swap(&b);
@@ -3868,7 +3987,7 @@ class Fri_ls_r :
                &_Fri_ls_r_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(Fri_ls_r& a, Fri_ls_r& b) {
     a.Swap(&b);
@@ -4011,7 +4130,7 @@ class Lomb_pos :
                &_Lomb_pos_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(Lomb_pos& a, Lomb_pos& b) {
     a.Swap(&b);
@@ -4161,7 +4280,7 @@ class Tir :
                &_Tir_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(Tir& a, Tir& b) {
     a.Swap(&b);
@@ -4311,7 +4430,7 @@ class Lombric :
                &_Lombric_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(Lombric& a, Lombric& b) {
     a.Swap(&b);
@@ -4472,7 +4591,7 @@ class End_tour :
                &_End_tour_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(End_tour& a, End_tour& b) {
     a.Swap(&b);
@@ -4614,7 +4733,7 @@ class Next_lombric :
                &_Next_lombric_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    30;
+    31;
 
   friend void swap(Next_lombric& a, Next_lombric& b) {
     a.Swap(&b);
@@ -4753,7 +4872,7 @@ class infoPartie_p :
                &_infoPartie_p_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    31;
+    32;
 
   friend void swap(infoPartie_p& a, infoPartie_p& b) {
     a.Swap(&b);
@@ -4890,7 +5009,7 @@ class Create_room :
                &_Create_room_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    32;
+    33;
 
   friend void swap(Create_room& a, Create_room& b) {
     a.Swap(&b);
@@ -6561,127 +6680,129 @@ inline void Get_rank::set_nbr_player(::PROTOBUF_NAMESPACE_ID::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// Rank_r
+// rankInfo
 
-// repeated string user = 1;
-inline int Rank_r::_internal_user_size() const {
-  return user_.size();
+// string user = 1;
+inline void rankInfo::clear_user() {
+  user_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline int Rank_r::user_size() const {
-  return _internal_user_size();
+inline const std::string& rankInfo::user() const {
+  // @@protoc_insertion_point(field_get:rankInfo.user)
+  return _internal_user();
 }
-inline void Rank_r::clear_user() {
-  user_.Clear();
+inline void rankInfo::set_user(const std::string& value) {
+  _internal_set_user(value);
+  // @@protoc_insertion_point(field_set:rankInfo.user)
 }
-inline std::string* Rank_r::add_user() {
-  // @@protoc_insertion_point(field_add_mutable:Rank_r.user)
-  return _internal_add_user();
+inline std::string* rankInfo::mutable_user() {
+  // @@protoc_insertion_point(field_mutable:rankInfo.user)
+  return _internal_mutable_user();
 }
-inline const std::string& Rank_r::_internal_user(int index) const {
-  return user_.Get(index);
+inline const std::string& rankInfo::_internal_user() const {
+  return user_.GetNoArena();
 }
-inline const std::string& Rank_r::user(int index) const {
-  // @@protoc_insertion_point(field_get:Rank_r.user)
-  return _internal_user(index);
+inline void rankInfo::_internal_set_user(const std::string& value) {
+  
+  user_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
 }
-inline std::string* Rank_r::mutable_user(int index) {
-  // @@protoc_insertion_point(field_mutable:Rank_r.user)
-  return user_.Mutable(index);
+inline void rankInfo::set_user(std::string&& value) {
+  
+  user_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:rankInfo.user)
 }
-inline void Rank_r::set_user(int index, const std::string& value) {
-  // @@protoc_insertion_point(field_set:Rank_r.user)
-  user_.Mutable(index)->assign(value);
-}
-inline void Rank_r::set_user(int index, std::string&& value) {
-  // @@protoc_insertion_point(field_set:Rank_r.user)
-  user_.Mutable(index)->assign(std::move(value));
-}
-inline void Rank_r::set_user(int index, const char* value) {
+inline void rankInfo::set_user(const char* value) {
   GOOGLE_DCHECK(value != nullptr);
-  user_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:Rank_r.user)
+  
+  user_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:rankInfo.user)
 }
-inline void Rank_r::set_user(int index, const char* value, size_t size) {
-  user_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:Rank_r.user)
+inline void rankInfo::set_user(const char* value, size_t size) {
+  
+  user_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:rankInfo.user)
 }
-inline std::string* Rank_r::_internal_add_user() {
-  return user_.Add();
+inline std::string* rankInfo::_internal_mutable_user() {
+  
+  return user_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Rank_r::add_user(const std::string& value) {
-  user_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:Rank_r.user)
+inline std::string* rankInfo::release_user() {
+  // @@protoc_insertion_point(field_release:rankInfo.user)
+  
+  return user_.ReleaseNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
-inline void Rank_r::add_user(std::string&& value) {
-  user_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:Rank_r.user)
-}
-inline void Rank_r::add_user(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  user_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:Rank_r.user)
-}
-inline void Rank_r::add_user(const char* value, size_t size) {
-  user_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:Rank_r.user)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-Rank_r::user() const {
-  // @@protoc_insertion_point(field_list:Rank_r.user)
-  return user_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-Rank_r::mutable_user() {
-  // @@protoc_insertion_point(field_mutable_list:Rank_r.user)
-  return &user_;
+inline void rankInfo::set_allocated_user(std::string* user) {
+  if (user != nullptr) {
+    
+  } else {
+    
+  }
+  user_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), user);
+  // @@protoc_insertion_point(field_set_allocated:rankInfo.user)
 }
 
-// repeated uint32 point = 2 [packed = true];
-inline int Rank_r::_internal_point_size() const {
-  return point_.size();
+// uint32 point = 2;
+inline void rankInfo::clear_point() {
+  point_ = 0u;
 }
-inline int Rank_r::point_size() const {
-  return _internal_point_size();
-}
-inline void Rank_r::clear_point() {
-  point_.Clear();
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Rank_r::_internal_point(int index) const {
-  return point_.Get(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::uint32 Rank_r::point(int index) const {
-  // @@protoc_insertion_point(field_get:Rank_r.point)
-  return _internal_point(index);
-}
-inline void Rank_r::set_point(int index, ::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  point_.Set(index, value);
-  // @@protoc_insertion_point(field_set:Rank_r.point)
-}
-inline void Rank_r::_internal_add_point(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  point_.Add(value);
-}
-inline void Rank_r::add_point(::PROTOBUF_NAMESPACE_ID::uint32 value) {
-  _internal_add_point(value);
-  // @@protoc_insertion_point(field_add:Rank_r.point)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
-Rank_r::_internal_point() const {
+inline ::PROTOBUF_NAMESPACE_ID::uint32 rankInfo::_internal_point() const {
   return point_;
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >&
-Rank_r::point() const {
-  // @@protoc_insertion_point(field_list:Rank_r.point)
+inline ::PROTOBUF_NAMESPACE_ID::uint32 rankInfo::point() const {
+  // @@protoc_insertion_point(field_get:rankInfo.point)
   return _internal_point();
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
-Rank_r::_internal_mutable_point() {
-  return &point_;
+inline void rankInfo::_internal_set_point(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  
+  point_ = value;
 }
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::uint32 >*
-Rank_r::mutable_point() {
-  // @@protoc_insertion_point(field_mutable_list:Rank_r.point)
-  return _internal_mutable_point();
+inline void rankInfo::set_point(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _internal_set_point(value);
+  // @@protoc_insertion_point(field_set:rankInfo.point)
+}
+
+// -------------------------------------------------------------------
+
+// Rank_r
+
+// repeated .rankInfo players = 1;
+inline int Rank_r::_internal_players_size() const {
+  return players_.size();
+}
+inline int Rank_r::players_size() const {
+  return _internal_players_size();
+}
+inline void Rank_r::clear_players() {
+  players_.Clear();
+}
+inline ::rankInfo* Rank_r::mutable_players(int index) {
+  // @@protoc_insertion_point(field_mutable:Rank_r.players)
+  return players_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rankInfo >*
+Rank_r::mutable_players() {
+  // @@protoc_insertion_point(field_mutable_list:Rank_r.players)
+  return &players_;
+}
+inline const ::rankInfo& Rank_r::_internal_players(int index) const {
+  return players_.Get(index);
+}
+inline const ::rankInfo& Rank_r::players(int index) const {
+  // @@protoc_insertion_point(field_get:Rank_r.players)
+  return _internal_players(index);
+}
+inline ::rankInfo* Rank_r::_internal_add_players() {
+  return players_.Add();
+}
+inline ::rankInfo* Rank_r::add_players() {
+  // @@protoc_insertion_point(field_add:Rank_r.players)
+  return _internal_add_players();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::rankInfo >&
+Rank_r::players() const {
+  // @@protoc_insertion_point(field_list:Rank_r.players)
+  return players_;
 }
 
 // -------------------------------------------------------------------
@@ -7455,6 +7576,8 @@ inline void Create_room::set_allocated_pseudo(std::string* pseudo) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -21,7 +21,7 @@ bool Client::connection(std::string username, std::string password, bool inscrip
 
 void Client::deconnection(){
 	message m{};
-	m.type = DECONNECTION;
+	m.type = DECO;
 	m.text = "";
 
 	sendMutex.lock();
@@ -195,14 +195,14 @@ playerRank Client::getRank(uint32_t nbr_players){
 
 	std::cout << obj_r.DebugString() << std::endl;
 	playerRank res{0,nullptr,nullptr};
-	res.size = obj_r.user_size();
+	res.size = obj_r.players_size();
 	res.pseudo = new std::string[res.size];
 	res.points = new uint32_t[res.size];
 
 	for (int i=0;i<res.size;i++){
 		uint32_t index = static_cast<uint32_t>(i);
-		res.pseudo[index] = obj_r.user(i);
-		//res.points[index] = obj_r.point(i);
+		res.pseudo[index] = obj_r.players(i).user();
+		res.points[index] = obj_r.players(i).point();
 	}
 
 	delete reponse;

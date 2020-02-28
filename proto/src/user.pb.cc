@@ -18,6 +18,7 @@ extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_History_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Invitation_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Lombric_user_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_rankInfo_user_2eproto;
 class UserConnectDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<UserConnect> _instance;
@@ -98,6 +99,10 @@ class Get_rankDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Get_rank> _instance;
 } _Get_rank_default_instance_;
+class rankInfoDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<rankInfo> _instance;
+} _rankInfo_default_instance_;
 class Rank_rDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Rank_r> _instance;
@@ -514,8 +519,9 @@ static void InitDefaultsscc_info_Rank_r_user_2eproto() {
   ::Rank_r::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Rank_r_user_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_Rank_r_user_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Rank_r_user_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Rank_r_user_2eproto}, {
+      &scc_info_rankInfo_user_2eproto.base,}};
 
 static void InitDefaultsscc_info_Time_mod_user_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -616,7 +622,21 @@ static void InitDefaultsscc_info_infoPartie_p_user_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_infoPartie_p_user_2eproto}, {
       &scc_info_Lombric_user_2eproto.base,}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_user_2eproto[33];
+static void InitDefaultsscc_info_rankInfo_user_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_rankInfo_default_instance_;
+    new (ptr) ::rankInfo();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::rankInfo::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_rankInfo_user_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_rankInfo_user_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_user_2eproto[34];
 static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_user_2eproto = nullptr;
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_user_2eproto = nullptr;
 
@@ -761,12 +781,18 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_user_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::Get_rank, first_player_),
   PROTOBUF_FIELD_OFFSET(::Get_rank, nbr_player_),
   ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::rankInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::rankInfo, user_),
+  PROTOBUF_FIELD_OFFSET(::rankInfo, point_),
+  ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Rank_r, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Rank_r, user_),
-  PROTOBUF_FIELD_OFFSET(::Rank_r, point_),
+  PROTOBUF_FIELD_OFFSET(::Rank_r, players_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Fri_add, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -870,19 +896,20 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 112, -1, sizeof(::History)},
   { 126, -1, sizeof(::History_r)},
   { 132, -1, sizeof(::Get_rank)},
-  { 139, -1, sizeof(::Rank_r)},
-  { 146, -1, sizeof(::Fri_add)},
-  { 152, -1, sizeof(::Fri_rcv)},
-  { 158, -1, sizeof(::Fri_accept)},
-  { 165, -1, sizeof(::Fri_rmv)},
-  { 171, -1, sizeof(::Fri_ls_r)},
-  { 177, -1, sizeof(::Lomb_pos)},
-  { 185, -1, sizeof(::Tir)},
-  { 193, -1, sizeof(::Lombric)},
-  { 202, -1, sizeof(::End_tour)},
-  { 208, -1, sizeof(::Next_lombric)},
-  { 215, -1, sizeof(::infoPartie_p)},
-  { 221, -1, sizeof(::Create_room)},
+  { 139, -1, sizeof(::rankInfo)},
+  { 146, -1, sizeof(::Rank_r)},
+  { 152, -1, sizeof(::Fri_add)},
+  { 158, -1, sizeof(::Fri_rcv)},
+  { 164, -1, sizeof(::Fri_accept)},
+  { 171, -1, sizeof(::Fri_rmv)},
+  { 177, -1, sizeof(::Fri_ls_r)},
+  { 183, -1, sizeof(::Lomb_pos)},
+  { 191, -1, sizeof(::Tir)},
+  { 199, -1, sizeof(::Lombric)},
+  { 208, -1, sizeof(::End_tour)},
+  { 214, -1, sizeof(::Next_lombric)},
+  { 221, -1, sizeof(::infoPartie_p)},
+  { 227, -1, sizeof(::Create_room)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -906,6 +933,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_History_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_History_r_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Get_rank_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_rankInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Rank_r_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Fri_add_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_Fri_rcv_default_instance_),
@@ -945,24 +973,25 @@ const char descriptor_table_protodef_user_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   "\n\007point_3\030\007 \001(\r\022\017\n\007point_4\030\010 \001(\r\022\014\n\004date"
   "\030\t \001(\r\"&\n\tHistory_r\022\031\n\007history\030\001 \003(\0132\010.H"
   "istory\"4\n\010Get_rank\022\024\n\014first_player\030\001 \001(\r"
-  "\022\022\n\nnbr_player\030\002 \001(\r\")\n\006Rank_r\022\014\n\004user\030\001"
-  " \003(\t\022\021\n\005point\030\002 \003(\rB\002\020\001\"\027\n\007Fri_add\022\014\n\004us"
-  "er\030\001 \001(\t\"\027\n\007Fri_rcv\022\014\n\004user\030\001 \001(\t\"*\n\nFri"
-  "_accept\022\016\n\006accept\030\001 \001(\010\022\014\n\004user\030\002 \001(\t\"\027\n"
-  "\007Fri_rmv\022\014\n\004user\030\001 \001(\t\"\030\n\010Fri_ls_r\022\014\n\004us"
-  "er\030\001 \003(\t\"9\n\010Lomb_pos\022\017\n\007id_lomb\030\001 \001(\r\022\r\n"
-  "\005pos_x\030\002 \001(\r\022\r\n\005pos_y\030\003 \001(\r\"4\n\003Tir\022\017\n\007id"
-  "_arme\030\001 \001(\r\022\r\n\005force\030\002 \001(\r\022\r\n\005angle\030\003 \001("
-  "\001\"E\n\007Lombric\022\017\n\007id_lomb\030\001 \001(\r\022\r\n\005pos_x\030\002"
-  " \001(\r\022\r\n\005pos_y\030\003 \001(\r\022\013\n\003vie\030\004 \001(\r\" \n\010End_"
-  "tour\022\024\n\014id_lomb_mort\030\001 \003(\r\"1\n\014Next_lombr"
-  "ic\022\017\n\007id_lomb\030\001 \001(\r\022\020\n\010is_yours\030\002 \001(\010\"&\n"
-  "\014infoPartie_p\022\026\n\004lomb\030\001 \003(\0132\010.Lombric\"\035\n"
-  "\013Create_room\022\016\n\006pseudo\030\001 \001(\tb\006proto3"
+  "\022\022\n\nnbr_player\030\002 \001(\r\"\'\n\010rankInfo\022\014\n\004user"
+  "\030\001 \001(\t\022\r\n\005point\030\002 \001(\r\"$\n\006Rank_r\022\032\n\007playe"
+  "rs\030\001 \003(\0132\t.rankInfo\"\027\n\007Fri_add\022\014\n\004user\030\001"
+  " \001(\t\"\027\n\007Fri_rcv\022\014\n\004user\030\001 \001(\t\"*\n\nFri_acc"
+  "ept\022\016\n\006accept\030\001 \001(\010\022\014\n\004user\030\002 \001(\t\"\027\n\007Fri"
+  "_rmv\022\014\n\004user\030\001 \001(\t\"\030\n\010Fri_ls_r\022\014\n\004user\030\001"
+  " \003(\t\"9\n\010Lomb_pos\022\017\n\007id_lomb\030\001 \001(\r\022\r\n\005pos"
+  "_x\030\002 \001(\r\022\r\n\005pos_y\030\003 \001(\r\"4\n\003Tir\022\017\n\007id_arm"
+  "e\030\001 \001(\r\022\r\n\005force\030\002 \001(\r\022\r\n\005angle\030\003 \001(\001\"E\n"
+  "\007Lombric\022\017\n\007id_lomb\030\001 \001(\r\022\r\n\005pos_x\030\002 \001(\r"
+  "\022\r\n\005pos_y\030\003 \001(\r\022\013\n\003vie\030\004 \001(\r\" \n\010End_tour"
+  "\022\024\n\014id_lomb_mort\030\001 \003(\r\"1\n\014Next_lombric\022\017"
+  "\n\007id_lomb\030\001 \001(\r\022\020\n\010is_yours\030\002 \001(\010\"&\n\014inf"
+  "oPartie_p\022\026\n\004lomb\030\001 \003(\0132\010.Lombric\"\035\n\013Cre"
+  "ate_room\022\016\n\006pseudo\030\001 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_user_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_user_2eproto_sccs[33] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_user_2eproto_sccs[34] = {
   &scc_info_Chat_user_2eproto.base,
   &scc_info_Chat_r_user_2eproto.base,
   &scc_info_Create_room_user_2eproto.base,
@@ -996,14 +1025,15 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_use
   &scc_info_Usr_add_user_2eproto.base,
   &scc_info_convo_s_user_2eproto.base,
   &scc_info_infoPartie_p_user_2eproto.base,
+  &scc_info_rankInfo_user_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_user_2eproto_once;
 static bool descriptor_table_user_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_user_2eproto = {
-  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1476,
-  &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_sccs, descriptor_table_user_2eproto_deps, 33, 0,
+  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1512,
+  &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_sccs, descriptor_table_user_2eproto_deps, 34, 0,
   schemas, file_default_instances, TableStruct_user_2eproto::offsets,
-  file_level_metadata_user_2eproto, 33, file_level_enum_descriptors_user_2eproto, file_level_service_descriptors_user_2eproto,
+  file_level_metadata_user_2eproto, 34, file_level_enum_descriptors_user_2eproto, file_level_service_descriptors_user_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -5456,6 +5486,232 @@ void Get_rank::InternalSwap(Get_rank* other) {
 
 // ===================================================================
 
+void rankInfo::InitAsDefaultInstance() {
+}
+class rankInfo::_Internal {
+ public:
+};
+
+rankInfo::rankInfo()
+  : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:rankInfo)
+}
+rankInfo::rankInfo(const rankInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      _internal_metadata_(nullptr) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  user_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (!from._internal_user().empty()) {
+    user_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.user_);
+  }
+  point_ = from.point_;
+  // @@protoc_insertion_point(copy_constructor:rankInfo)
+}
+
+void rankInfo::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_rankInfo_user_2eproto.base);
+  user_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  point_ = 0u;
+}
+
+rankInfo::~rankInfo() {
+  // @@protoc_insertion_point(destructor:rankInfo)
+  SharedDtor();
+}
+
+void rankInfo::SharedDtor() {
+  user_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+
+void rankInfo::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const rankInfo& rankInfo::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_rankInfo_user_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void rankInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:rankInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  user_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  point_ = 0u;
+  _internal_metadata_.Clear();
+}
+
+const char* rankInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // string user = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          auto str = _internal_mutable_user();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "rankInfo.user"));
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // uint32 point = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          point_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag, &_internal_metadata_, ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* rankInfo::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:rankInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string user = 1;
+  if (this->user().size() > 0) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_user().data(), static_cast<int>(this->_internal_user().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "rankInfo.user");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_user(), target);
+  }
+
+  // uint32 point = 2;
+  if (this->point() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(2, this->_internal_point(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields(), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:rankInfo)
+  return target;
+}
+
+size_t rankInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:rankInfo)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string user = 1;
+  if (this->user().size() > 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_user());
+  }
+
+  // uint32 point = 2;
+  if (this->point() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt32Size(
+        this->_internal_point());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void rankInfo::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:rankInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  const rankInfo* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<rankInfo>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:rankInfo)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:rankInfo)
+    MergeFrom(*source);
+  }
+}
+
+void rankInfo::MergeFrom(const rankInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:rankInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.user().size() > 0) {
+
+    user_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.user_);
+  }
+  if (from.point() != 0) {
+    _internal_set_point(from._internal_point());
+  }
+}
+
+void rankInfo::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:rankInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void rankInfo::CopyFrom(const rankInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:rankInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool rankInfo::IsInitialized() const {
+  return true;
+}
+
+void rankInfo::InternalSwap(rankInfo* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  user_.Swap(&other->user_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  swap(point_, other->point_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata rankInfo::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
 void Rank_r::InitAsDefaultInstance() {
 }
 class Rank_r::_Internal {
@@ -5470,8 +5726,7 @@ Rank_r::Rank_r()
 Rank_r::Rank_r(const Rank_r& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      user_(from.user_),
-      point_(from.point_) {
+      players_(from.players_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   // @@protoc_insertion_point(copy_constructor:Rank_r)
 }
@@ -5503,8 +5758,7 @@ void Rank_r::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  user_.Clear();
-  point_.Clear();
+  players_.Clear();
   _internal_metadata_.Clear();
 }
 
@@ -5515,28 +5769,16 @@ const char* Rank_r::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // repeated string user = 1;
+      // repeated .rankInfo players = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr -= 1;
           do {
             ptr += 1;
-            auto str = _internal_add_user();
-            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Rank_r.user"));
+            ptr = ctx->ParseMessage(_internal_add_players(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
-        } else goto handle_unusual;
-        continue;
-      // repeated uint32 point = 2 [packed = true];
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::PackedUInt32Parser(_internal_mutable_point(), ptr, ctx);
-          CHK_(ptr);
-        } else if (static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16) {
-          _internal_add_point(::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr));
-          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -5565,23 +5807,12 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // repeated string user = 1;
-  for (int i = 0, n = this->_internal_user_size(); i < n; i++) {
-    const auto& s = this->_internal_user(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "Rank_r.user");
-    target = stream->WriteString(1, s, target);
-  }
-
-  // repeated uint32 point = 2 [packed = true];
-  {
-    int byte_size = _point_cached_byte_size_.load(std::memory_order_relaxed);
-    if (byte_size > 0) {
-      target = stream->WriteUInt32Packed(
-          2, _internal_point(), byte_size, target);
-    }
+  // repeated .rankInfo players = 1;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_players_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(1, this->_internal_players(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5600,27 +5831,11 @@ size_t Rank_r::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string user = 1;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(user_.size());
-  for (int i = 0, n = user_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-      user_.Get(i));
-  }
-
-  // repeated uint32 point = 2 [packed = true];
-  {
-    size_t data_size = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      UInt32Size(this->point_);
-    if (data_size > 0) {
-      total_size += 1 +
-        ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-            static_cast<::PROTOBUF_NAMESPACE_ID::int32>(data_size));
-    }
-    int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(data_size);
-    _point_cached_byte_size_.store(cached_size,
-                                    std::memory_order_relaxed);
-    total_size += data_size;
+  // repeated .rankInfo players = 1;
+  total_size += 1UL * this->_internal_players_size();
+  for (const auto& msg : this->players_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -5654,8 +5869,7 @@ void Rank_r::MergeFrom(const Rank_r& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  user_.MergeFrom(from.user_);
-  point_.MergeFrom(from.point_);
+  players_.MergeFrom(from.players_);
 }
 
 void Rank_r::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
@@ -5679,8 +5893,7 @@ bool Rank_r::IsInitialized() const {
 void Rank_r::InternalSwap(Rank_r* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  user_.InternalSwap(&other->user_);
-  point_.InternalSwap(&other->point_);
+  players_.InternalSwap(&other->players_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Rank_r::GetMetadata() const {
@@ -8309,6 +8522,9 @@ template<> PROTOBUF_NOINLINE ::History_r* Arena::CreateMaybeMessage< ::History_r
 }
 template<> PROTOBUF_NOINLINE ::Get_rank* Arena::CreateMaybeMessage< ::Get_rank >(Arena* arena) {
   return Arena::CreateInternal< ::Get_rank >(arena);
+}
+template<> PROTOBUF_NOINLINE ::rankInfo* Arena::CreateMaybeMessage< ::rankInfo >(Arena* arena) {
+  return Arena::CreateInternal< ::rankInfo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Rank_r* Arena::CreateMaybeMessage< ::Rank_r >(Arena* arena) {
   return Arena::CreateInternal< ::Rank_r >(arena);

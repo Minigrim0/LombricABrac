@@ -6,7 +6,6 @@ Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),repo
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
-
 	//init du sockaddr du serveur
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port=htons(port);
@@ -35,7 +34,6 @@ void* Client::run(){
 
 	fd_set rfds;//utilisation du multiplexage
 	int n = client_socket+1;
-	//sendString("C'est le 12");
 
 	while(running){
 		FD_ZERO(&rfds);
