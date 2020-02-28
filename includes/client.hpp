@@ -82,6 +82,10 @@ struct infoArme{
 	uint32_t angle;
 };
 
+struct playerTeam{
+	std::string pseudo;
+	uint32_t id_team;
+};
 
 class Client{
 private:
@@ -98,12 +102,14 @@ private:
 	int client_socket;
 	bool started;//partie à commencée
 	bool changed;//struct infoPartie_s à changé
+	bool running = true;
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
 	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
 	std::vector<std::string> newPlayers;//vecteurs de tous les nouveau joueurs dans le salon d'attente
 	std::vector<lombricPos> movedLomb;//vecteur des lombrics déplacés
 	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
 	std::vector<std::string> tableUpdate;
+	std::vector<playerTeam> inNewTeam;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 	void sendMessage(message& m);//envoie le type, la taille et le string
@@ -137,6 +143,7 @@ public:
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée
 	void deconnection();
+	void quit();
 
 	//méthode utilisées dans le chat
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
@@ -158,6 +165,7 @@ public:
 	void setTime(uint32_t time);//défini durée partie
 	void setTimeRound(uint32_t time_round);//défini durée par tours
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
+	void changeTeam(uint32_t id_equipe);
 
 	//méthode pour l'historique
 	historyTable get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
@@ -188,4 +196,9 @@ public:
 	std::vector<lombricPos> getNewLombPos();//renvoie un vecteur des lombrics bougés
 	std::vector<infoArme> getNewWeapons();//renvoie un vecteur des nouvelles armes utilisées
 	std::vector<std::string> getTableUpdate();
+	std::vector<playerTeam> getNewTeam();
+
+	//thread
+	bool isRunning(){return running;};
+	void changeRunning(){running = !running;};
 };

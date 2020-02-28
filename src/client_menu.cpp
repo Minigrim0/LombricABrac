@@ -31,6 +31,11 @@ void Client::deconnection(){
 	sendMutex.unlock();
 }
 
+void Client::quit(){
+	changeRunning();
+	close(client_socket);
+}
+
 bool Client::createRoom(std::string host){
 	message m{};
 
@@ -214,4 +219,18 @@ playerRank Client::getRank(uint32_t nbr_players){
 
 	delete reponse;
 	return res;
+}
+
+void Client::changeTeam(uint32_t id_equipe){
+	message m{};
+
+	Join_groupe_s obj;
+	obj.set_id(id_equipe);
+
+	obj.SerializeToString(&m.text);
+	m.type = JOIN_GROUP_S;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }

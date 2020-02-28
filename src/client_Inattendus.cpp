@@ -32,7 +32,7 @@ std::vector<invitation> Client::getInvitations(){
 
 std::vector<chat_r> Client::getConvo(std::string username){
 	message m{};
-	system("echo 'GETTING CONVO' >> out.txt");
+	//system("echo 'GETTING CONVO' >> out.txt");
 	//construction de la structure
 	convo_s obj;
 	obj.set_pseudo(username);
@@ -126,6 +126,12 @@ std::vector<infoArme> Client::getNewWeapons(){
 
 paramsPartie Client::getParamsPartie(){
 	return currentParams;
+}
+
+std::vector<playerTeam> Client::getNewTeam(){
+	std::vector<playerTeam> res = inNewTeam;
+	inNewTeam.clear(); //vide vecteur
+	return res; // renvoie le vecteur de messages recus
 }
 
 

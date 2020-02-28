@@ -30,12 +30,11 @@ Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),repo
 
 void* Client::run(){
 	int res;
-	bool running = true;
 
 	fd_set rfds;//utilisation du multiplexage
 	int n = client_socket+1;
 
-	while(running){
+	while(isRunning()){
 		FD_ZERO(&rfds);
 		FD_SET(client_socket,&rfds);
 		res = select(n,&rfds,NULL,NULL,NULL);
@@ -95,6 +94,11 @@ void* Client::run(){
 				obj.ParseFromString(msg.text);
 				movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
 			}
+		}
+		else if (msg.type == JOIN_GROUP_R){
+			Join_groupe_r obj;
+			obj.ParseFromString(msg.text);
+			inNewTeam.push_back({obj.pseudo(),obj.id()});
 		}
 	}
 
