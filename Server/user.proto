@@ -106,9 +106,13 @@ message Get_rank{
   uint32 nbr_player = 2;
 }
 
+message rankInfo{
+    string user = 1;
+    uint32 point = 2;
+}
+
 message Rank_r{
-   repeated string user = 1;
-   repeated uint32 point = 2 [packed=true];
+   repeated rankInfo players = 1;
 }
 
 message Fri_add{
@@ -179,7 +183,7 @@ message infoPartie_p{
 
 message infoRoom{
   repeated Lombric lomb = 1;
-  
+
 }
 
 message Create_room{
