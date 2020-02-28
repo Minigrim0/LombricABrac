@@ -4,6 +4,7 @@
 #include <vector>
 //#include <ctime>
 #include "../cpl_proto/user.pb.h"
+#include "../includes/partie.hpp"
 
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera gerer partie 3(eau qui monte)
@@ -17,8 +18,11 @@ class Game{
         //bool check_time();
         uint8_t* who_next();
         void handle_room(ZMQ_msg zmq_msg, int* current_step);
+        void handle_game(ZMQ_msg zmq_msg, int* current_step);
 
     private:
+        Partie obj_partie;//faut set les attributs de la partie au debut du jeu
+
         uint8_t map_id;
         //int time_game;
         //time_t begin;

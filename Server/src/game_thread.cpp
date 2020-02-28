@@ -13,6 +13,7 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
     bool game_running = true;
     int current_step = STEP_ROOM;
     Game current_game;
+    ZMQ_msg zmqmsg;
     
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, ZMQ_SUB);
@@ -25,7 +26,6 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
         switch(current_step){
             case STEP_ROOM:{
                 std::cout << "You're in the room" << std::endl;
-                ZMQ_msg zmqmsg;
                 std::ostringstream stream;
                 while (current_step == STEP_ROOM)
                 {
@@ -45,7 +45,10 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
                     //if(current_game.check_time()){
                     //    //mort subite                 WIP
                     //}
-
+                    std::string address = s_recv(subscriber);
+                    std::string contents = s_recv(subscriber);
+                    zmqmsg.ParseFromString(contents);
+                    current_game.handle_game(zmqmsg ,&current_step);
                 }
                 break;
             case STEP_ENDSCREEN:
