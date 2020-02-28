@@ -5,6 +5,10 @@
 #include <vector>
 #include "../includes/UI.hpp"
 
+#include <cstdlib>
+#include <fstream>
+#include <sstream>
+
 using namespace std;
 
 info Menu_jeu_window::run(info information)
@@ -37,7 +41,7 @@ info Menu_jeu_window::run(info information)
     print_string_window(win, y+n, (max_x/2)-4, tab[i]);
     n+=2;
   }
-
+  new_y=y;
   x = (max_x/2)-7;
   posStart_arrow = y;
   posEnd_arrow = y+14;
@@ -48,8 +52,12 @@ info Menu_jeu_window::run(info information)
   while(1)
   {
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
-    if (new_msg.size() != 0)
+    int len_vec= static_cast<int>(new_msg.size());
+      system("echo $len_vec >> out.txt");
+    draw(1,1,to_string(len_vec));
+    if (len_vec !=0)
     {
+      system("echo len_vec >> out.txt");
       //cout<<new_msg[static_cast<unsigned int>(0)].text;
       information.notif=1;
       tab[5] = " Ami(s) * ";
@@ -61,6 +69,13 @@ info Menu_jeu_window::run(info information)
         refresh();
       }
     }
+      string user_notif[len_vec];
+      for (int i=0;i<len_vec;i++)
+      {
+        user_notif[i]=new_msg[static_cast<unsigned int>(i)].username;
+      }
+      information.notification=user_notif;
+
     /*vector<invitation> testok= information.client->getInvitations();
 
     if (static_cast<int>(testok.size()) != 0)
@@ -77,8 +92,8 @@ info Menu_jeu_window::run(info information)
       {
         information.vec_invit.push_back(testok[i]);
       }
-    }*/
-    //testok=getInvitations()
+    }
+    //testok=getInvitations()*/
 
 
     touch = wgetch(win);
@@ -109,6 +124,7 @@ info Menu_jeu_window::run(info information)
       if (y== posStart_arrow+14)
       {
         //leave_window
+        information.client->deconnection();
         information.id = 60;
         break;
       }

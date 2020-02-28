@@ -18,6 +18,7 @@ typedef struct info{
   int notif_invit;
   vector<invitation> vec_invit;
   Client *client;
+  string *notification;
 }info;
 
 
@@ -134,6 +135,7 @@ class discuter: public Window
 {
 public:
   info run(info information)override;
+  void effacer_caractere(int pos_y,int pos_x,int taille);
 };
 
 class Warning_del_friend_window: public Window

@@ -5,6 +5,8 @@
 #include <vector>
 #include "../includes/UI.hpp"
 
+
+
 using namespace std;
 
 
@@ -36,8 +38,22 @@ info Liste_ami_window::run(info information)
   if (information.id==25 || information.id==30 || information.id==27)
   {
     liste_ami=information.client->getFriendList();
-    msg2= "Appuyer sur ENTER pour delete un ami.";
     len_tab=liste_ami.size;
+    if (information.id==27 && information.notif==1)
+    {
+      for (int i=0;i<len_tab;i++)
+      {
+        for (int o=0;o<static_cast<int>(information.notification->size());o++)
+        {
+
+          if (liste_ami.table[i]==information.notification[o])
+          {
+            liste_ami.table[i]=information.notification[o]+ " *";
+          }
+        }
+      }
+    }
+    msg2= "Appuyer sur ENTER pour delete un ami.";
   }
   if (information.id==23)
   {
@@ -64,7 +80,6 @@ info Liste_ami_window::run(info information)
   if (information.id == 27)
   {
     msg2= "Appuyer sur ENTER pour choisir un ami.";
-    information.notif=0;
   }
 
   string arrow = "-> ";
@@ -296,8 +311,19 @@ info Liste_ami_window::run(info information)
     {
         if (information.id==27)
         {
+
           clear();
           information.friends=liste_ami.table[i_save];
+          if (information.notif==1)
+          {
+            for (int i=0;i<static_cast<int>(information.notification->size());i++)
+            {
+              if (information.notification[i]+" *"==information.friends)
+              {
+                information.friends=information.notification[i];
+              }
+            }
+          }
           information.id=2;
           information=msg_envoyer.run(information);
           break;

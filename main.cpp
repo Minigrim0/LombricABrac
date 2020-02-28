@@ -69,6 +69,8 @@ int main(int argc, char** argv)
   {
     if (information.id == -1)
     {//on quitte le programme
+      information.client->quit();
+
       break;
     }
     if (information.id == 1)
