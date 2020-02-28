@@ -111,7 +111,7 @@ int Client::run(){
 		}
 	}
 
-	system("echo 'RUNNING' > out.txt");
+	changeRunning();
 
 	close(client_socket);
 	return 0;
