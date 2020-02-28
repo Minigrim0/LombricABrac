@@ -60,6 +60,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 usr->set_id(user_id);
                 usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
+                db.connect_user(true, usr->pseudo());
                 std::cout << "unlock" << std::endl;
                 DataBase_mutex.unlock();
                 return 3;
@@ -120,9 +121,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 std::cout << "Getting convo" << std::endl;
                 convo_s request_convo;
                 Chat_r chat_r;
-                std::cout << "Starting reception" << std::endl;
                 la_poste->reception();
-                std::cout << "Done" << std::endl;
                 request_convo.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(request_convo.pseudo(), &friend_id);
                 db.get_convo(usr->get_id(), friend_id, &chat_r);
@@ -138,13 +137,13 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 la_poste->envoie_msg(CHAT_R, final_chat.SerializeAsString());
                 break;
             }
-            //case INVI_S:{
-            //    Invitation invit;
-            //    la_poste->reception();
-            //    invit.ParseFromString(la_poste->get_buffer());
-            //    db.send_invitation(usr->pseudo(),invit.pseudo());
-            //    break;
-            //}
+            case INVI_S:{
+                Invitation invit;
+                la_poste->reception();
+                invit.ParseFromString(la_poste->get_buffer());
+
+                break;
+            }
             case GET_LOMB:{
                 Lomb_r lomb_r;
                 db.get_lombrics(usr->get_id(), &lomb_r);
@@ -255,6 +254,11 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 la_poste->envoie_msg(NOTIF, convo.SerializeAsString());
                 break;
             }
+            case DECO:
+                db.connect_user(false, usr->pseudo());
+                break;
+            default:
+                std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }
     }
     std::cout << "unlock" << std::endl;
