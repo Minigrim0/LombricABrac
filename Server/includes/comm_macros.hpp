@@ -57,7 +57,7 @@
 #define FRI_RMV 28// : (uint8_t str) //friend_remove user_del
 #define FRI_LS_S 29// : //request friend list
 #define FRI_LS_R 30// : (uint8_t str) * int // all friend list of a user
-#define GET_ALL_INVIT 49 
+#define GET_ALL_INVIT 49
 
 // <-- Partie -->
 #define POS_LOMB_R 31// : uint8_t short int*2 //id_lomb pos_x pos_y
@@ -74,5 +74,6 @@
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
 #define NOTIF 47// : // Dire au client mdr t'as une notif
 #define NEXT_ROUND 50 // Id du lomb qui va jouer
+#define DECO 51
 
 #endif
