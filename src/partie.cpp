@@ -67,7 +67,7 @@ info Partie::run(info information)
     //du prochain tour
     if(!infoTour.id){
       spentTime = 0;
-      infoTour = cli->endTour(deadLombrics);
+      //infoTour = cli->endTour(deadLombrics);
       deadLombrics.clear();
       t0 = time(NULL);
       mustRefreshOverlay = true;

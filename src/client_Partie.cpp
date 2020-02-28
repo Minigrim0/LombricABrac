@@ -69,5 +69,5 @@ void Client::endTour(std::vector<uint32_t> deadLombrics){
 
 	sendMutex.lock();
 	sendMessage(m);
-	sendMutex.unlock()
+	sendMutex.unlock();
 }

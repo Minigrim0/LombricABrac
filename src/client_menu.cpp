@@ -19,6 +19,16 @@ bool Client::connection(std::string username, std::string password, bool inscrip
 	return res;
 }
 
+void Client::deconnection(){
+	message m{};
+	m.type = DECONNECTION;
+	m.text = "";
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 bool Client::createRoom(std::string host){
 	message m{};
 
