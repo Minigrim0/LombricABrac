@@ -37,6 +37,7 @@ int main(int argc, char** argv) {
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
         username       CHAR(40) NOT NULL,\
         password       CHAR(40) NOT NULL,\
+        connected      BOOL,\
         victory_amount INT\
     );";
 
