@@ -25,6 +25,7 @@ class Game{
         int time_round_game; //duréé d'un partie en sec
         uint8_t nbr_lomb;
         uint8_t nbr_eq;
+        std::vector<std::vector<uint8_t>> equipe;
         std::vector<bool> alive_lomb;
         std::vector<uint8_t> current_lomb;
         uint8_t current_player;

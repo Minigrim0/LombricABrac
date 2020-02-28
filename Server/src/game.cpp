@@ -56,6 +56,12 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
         groupe_r.set_id(request.id());
         zmq_msg.set_type_message(JOIN_GROUP_R);
         zmq_msg.set_message(groupe_r.SerializeAsString());
+        for(int i = 0; i<3 ; i++){
+            if(equipe[request.id()][i] <= 0){
+                equipe[request.id()][i] = zmq_msg.receiver_id();
+                break;
+            }
+        }
         for(int i = 0;i<4;i++){
             if(player_id[i] <= 0){
                 player_id[i] = request.id();
@@ -85,6 +91,29 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             Map_mod map_m;
             map_m.ParseFromString(zmq_msg.message());
             map_id = map_m.id();
+
+            pub_mutex.lock();
+            for(int i = 0;i<4;i++){
+                stream.str("");
+                stream.clear();
+                if(player_id[i] > 0){
+                    stream << "users/" << player_id[i] << "/partie";
+                    s_sendmore_b(publisher, stream.str());
+                    s_send_b(publisher, zmq_msg.SerializeAsString());
+                }
+                else{
+                    break;
+                }
+            }
+            pub_mutex.unlock();
+            break;
+        }
+        case NB_EQ_MOD:{
+            zmq_msg.set_type_message(NB_EQ_MOD);
+            Nbr_eq_mod eq_m;
+            eq_m.ParseFromString(zmq_msg.message());
+            nbr_eq = eq_m.nbr_eq();
+            equipe.resize(nbr_eq,std::vector<uint8_t>(3 ,0));
 
             pub_mutex.lock();
             for(int i = 0;i<4;i++){
