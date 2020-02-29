@@ -105,6 +105,7 @@ private:
 	bool started;//partie à commencée
 	bool changed;//struct infoPartie_s à changé
 	bool running = true;
+	std::string newRound = "";
 
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
 	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
@@ -199,6 +200,7 @@ public:
 	std::vector<infoArme> getNewWeapons();//renvoie un vecteur des nouvelles armes utilisées
 	std::vector<std::string> getTableUpdate();
 	std::vector<playerTeam> getNewTeam();
+	std::string getNextRound(); //infos du provhain tour
 
 	//thread
 	bool isRunning(){return running;};

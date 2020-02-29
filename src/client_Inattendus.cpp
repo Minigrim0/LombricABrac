@@ -137,6 +137,11 @@ std::vector<playerTeam> Client::getNewTeam(){
 	return res; // renvoie le vecteur de messages recus
 }
 
+std::string Client::getNextRound(){
+	std::string res = newRound;
+	newRound = "";
+	return res;
+}
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
 	started = true; // la partie à démarré

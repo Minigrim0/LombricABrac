@@ -70,11 +70,13 @@ int Client::run(){
 					//1er message: tir (armes + params)
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
 					tableUpdate.push_back(msg.text);
+
 					res = readMessage();//2e: projectile (angle, force)
 					if (res == EXIT_FAILURE){
 						break;
 					}
 					tableUpdate.push_back(msg.text);
+
 					res = readMessage();//3e: dégats au lombrics + positions
 					if (res == EXIT_FAILURE){
 						break;
@@ -105,6 +107,8 @@ int Client::run(){
 					changeTimeRound(msg);
 				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
 					changeNbrLombs(msg);
+				case NEXT_ROUND: //début de round
+					endRound = m.text;
 			}
 		}
 	}
