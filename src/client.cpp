@@ -1,5 +1,3 @@
-#ifndef client_
-#define client_
 #include "../includes/client.hpp"
 #include <cstdlib>
 #include <fstream>
@@ -49,7 +47,7 @@ int Client::run(){
 		if(res == -1){
 			perror("'select' failed");close(client_socket);return 1;
 		}
-		std::string t = "echo 'on sort' >> out.txt";
+		//std::string t = "echo 'on sort' >> out.txt";
 	  system(t.c_str());
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
@@ -58,60 +56,60 @@ int Client::run(){
 				break;
 			}
 			/*Messages inattendus:*/
-			if (msg.type == CHAT_R){
-				chatRcv(msg);
-			}
-			else if (msg.type == INVI_R || msg.type == FRI_RCV){
-				invite(msg);
-			}
-			//paramètres changés:
-			else if (msg.type == USR_ADD){
-				nvJoueur(msg);
-			}
-			else if (msg.type == MAP_MOD){
-				changeMap(msg);
-			}
-			else if (msg.type == TIME_MOD){
-				changeTime(msg);
-			}
-			else if (msg.type == TIME_ROUND_MOD){
-				changeTimeRound(msg);
-			}
-			else if (msg.type == NB_LOMB_MOD){
-				changeNbrLombs(msg);
-			}
-			else if (msg.type == START){
-				notifyStarted(msg);
-			}
-			else if (msg.type == SHOOT){
-				mutexPartie.lock();
-				tableUpdate.push_back(msg.text);
-				res = readMessage();
-				if (res == EXIT_FAILURE){
-					break;
+			switch (msg.type) {
+				case CHAT_R: //on a recu un chat
+					chatRcv(msg);
+				case INVI_R: //on a recu une invitation de partie
+					invite(msg);
+				case FRI_RCV: //on a recu une invitation d'ami
+					invite(msg);
+				case START: //L'hôte a lancé la partie
+					notifyStarted(msg);
+
+				case SHOOT: {//un joueur a tiré
+					//1er message: tir (armes + params)
+					mutexPartie.lock(); //s'assure de la reception des 3 messages
+					tableUpdate.push_back(msg.text);
+					res = readMessage();//2e: projectile (angle, force)
+					if (res == EXIT_FAILURE){
+						break;
+					}
+					tableUpdate.push_back(msg.text);
+					res = readMessage();//3e: dégats au lombrics + positions
+					if (res == EXIT_FAILURE){
+						break;
+					}
+					tableUpdate.push_back(msg.text);
+					mutexPartie.unlock();
 				}
-				tableUpdate.push_back(msg.text);
-				res = readMessage();
-				if (res == EXIT_FAILURE){
-					break;
+
+				case POS_LOMB_R: {//un lombric a bougé
+					Lomb_pos obj;
+					obj.ParseFromString(msg.text);
+					movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
 				}
-				tableUpdate.push_back(msg.text);
-				mutexPartie.unlock();
-			}
-			else if (msg.type == POS_LOMB_R){
-				Lomb_pos obj;
-				obj.ParseFromString(msg.text);
-				movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
-			}
-			else if (msg.type == JOIN_GROUP_R){
-				Join_groupe_r obj;
-				obj.ParseFromString(msg.text);
-				inNewTeam.push_back({obj.pseudo(),obj.id()});
+				case JOIN_GROUP_R: {//quelqu'un a changé d'équipe
+					Join_groupe_r obj;
+					obj.ParseFromString(msg.text);
+					inNewTeam.push_back({obj.pseudo(),obj.id()});
+				}
+
+				//paramètres changés:
+				case USR_ADD: //un joueur à été jouté dans le salon d'attente
+					nvJoueur(msg);
+				case MAP_MOD: //L'hôte a changé de map
+					changeMap(msg);
+				case TIME_MOD: //L'hôte a changé le temps de la partie
+					changeTime(msg);
+				case TIME_ROUND_MOD: //L'hôte a changé le temps d'une partie
+					changeTimeRound(msg);
+				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
+					changeNbrLombs(msg);
 			}
 		}
 	}
 
-	changeRunning();
+	quit();
 
 	close(client_socket);
 	return 0;
@@ -146,7 +144,7 @@ int Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
-	std::string test = "echo 'on rentre' >> out.txt";
+	//std::string test = "echo 'on rentre' >> out.txt";
   system(test.c_str());
 	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
@@ -157,7 +155,7 @@ int Client::readMessage(){
 	if (res==-1){
 		return EXIT_FAILURE;
 	}
-	else if (res==0){
+	else if (res==0){ //fermeture coté serveur
 		return EXIT_FAILURE;
 	}
 
@@ -190,7 +188,7 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 
 	bool msgReady;
 
-	do{
+	do{ //tant que le messages n'est pas la réponse attendue
 		msgMutex.lock();
 		msgReady = msg.type != typeAttendu;
 		msgMutex.unlock();
@@ -200,7 +198,5 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	*res = msg.text;
 	msgMutex.unlock();
 	sendMutex.unlock();
-	return res;
+	return res; //renvoie réponse attendue
 }
-
-#endif

@@ -3,10 +3,11 @@
 #include <fstream>
 #include <sstream>
 
+/*Gestion des messages innatendu*/
 
 void Client::chatRcv(message& m){
 	Chat obj;
-	obj.ParseFromString(m.text);
+	obj.ParseFromString(m.text); //convertis en struct
 	messageRcv.push_back({obj.pseudo(), obj.msg()}); //ajoute message recu dans le vecteur
 }
 
@@ -37,16 +38,16 @@ std::vector<chat_r> Client::getConvo(std::string username){
 	convo_s obj;
 	obj.set_pseudo(username);
 
-	obj.SerializeToString(&m.text); //convertis stucture en string
+	obj.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur
 	m.type = GET_CONVO;
 
 	std::string* reponse = waitAnswers(CHAT_R, m); //envoie le message au serveur et attends la réponse
 
 	Chat_r obj_r;
 	std::vector<chat_r> res;
-	obj_r.ParseFromString(*reponse);
+	obj_r.ParseFromString(*reponse);//convertis en struct
 
-	for (int i=0;i<obj_r.msgs_size();i++){
+	for (int i=0;i<obj_r.msgs_size();i++){ //remplis le vecteur de struct chat_r
 		res.push_back({obj_r.msgs(i).pseudo(), obj_r.msgs(i).msg()});
 	}
 
@@ -56,7 +57,7 @@ std::vector<chat_r> Client::getConvo(std::string username){
 
 void Client::nvJoueur(message& m){
 	Join obj;
-	obj.ParseFromString(m.text);
+	obj.ParseFromString(m.text); //convertis en struct proto-buff
 	newPlayers.push_back(obj.pseudo()); //ajoute message recu dans le vecteur
 }
 
@@ -88,6 +89,7 @@ void Client::newProjectile(message &m){
 	//ds la fct shoot on donnes des params diff que la struct projectile_s?? OK???
 }*/
 
+//remplis la structure currentParams avec les nouveaux paramètres---------------
 void Client::changeMap(message& m){
 	Map_mod obj;
 	obj.ParseFromString(m.text);
@@ -111,8 +113,9 @@ void Client::changeNbrLombs(message& m){
 	obj.ParseFromString(m.text);
 	currentParams.nbr_lombs = obj.nbr_lomb();
 }
+//------------------------------------------------------------------------------
 
-std::vector<lombricPos> Client::getNewLombPos(){
+std::vector<lombricPos> Client::getNewLombPos(){//lombrics bougés
 	std::vector<lombricPos> res = movedLomb;
 	movedLomb.clear(); //vide vecteur
 	return res; // renvoie le vecteur de messages recus
@@ -125,7 +128,7 @@ std::vector<infoArme> Client::getNewWeapons(){
 }
 
 paramsPartie Client::getParamsPartie(){
-	return currentParams;
+	return currentParams; //renvois tous les paramètres de la partie
 }
 
 std::vector<playerTeam> Client::getNewTeam(){
@@ -136,13 +139,14 @@ std::vector<playerTeam> Client::getNewTeam(){
 
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
-	started = true;
+	started = true; // la partie à démarré
 	infoPartie_p obj;
 	obj.ParseFromString(m.text); //struct recue par le serveur
 
 	infoPartie_s* gameInfo = new infoPartie_s;
 	//remplis le vecteur des murs
 
+	//Lecture de la map
 	std::string myText;
 	int hauteur;
 	int largeur;
@@ -167,7 +171,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(),LOMBRIC_SKIN,100));
 	}
 
-//remplis le vecteur des projectiles
+	//remplis le vecteur des projectiles
 	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 3));
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 

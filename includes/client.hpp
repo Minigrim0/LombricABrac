@@ -1,3 +1,5 @@
+#ifndef client_
+#define client_
 #include <iostream>
 #include <string>
 
@@ -200,5 +202,6 @@ public:
 
 	//thread
 	bool isRunning(){return running;};
-	void changeRunning(){running = false;};
 };
+
+#endif
