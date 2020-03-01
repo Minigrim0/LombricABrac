@@ -271,8 +271,8 @@ info Salon_Attente::run(info information)
           }
           if (x== x_arrow4 && information.ishost)
           {
-            //startGame();
-            information.id=2;
+            information.client->startGame();
+            information.id=80;
             break;
           }
         }
