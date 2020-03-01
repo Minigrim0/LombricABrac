@@ -75,15 +75,15 @@ int main(int argc, char** argv) {
     std::cout << "------ Creating History Table ------" << std::endl << ">> ";
     sql = "CREATE TABLE history(\
         id             INTEGER PRIMARY KEY AUTOINCREMENT,\
-        user_1_id      INTEGER,\
-        user_2_id      INTEGER,\
-        user_3_id      INTEGER,\
-        user_4_id      INTEGER,\
-        user_1_points  SMALLINT,\
-        user_2_points  SMALLINT,\
-        user_3_points  SMALLINT,\
-        user_4_points  SMALLINT,\
-        finished       BOOLEAN, \
+        user_1_id      INTEGER DEFAULT 0,\
+        user_2_id      INTEGER DEFAULT 0,\
+        user_3_id      INTEGER DEFAULT 0,\
+        user_4_id      INTEGER DEFAULT 0,\
+        user_1_points  SMALLINT DEFAULT 0,\
+        user_2_points  SMALLINT DEFAULT 0,\
+        user_3_points  SMALLINT DEFAULT 0,\
+        user_4_points  SMALLINT DEFAULT 0,\
+        finished       BOOLEAN DEFAULT FALSE, \
         timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
     );";
 
