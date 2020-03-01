@@ -51,6 +51,9 @@ int client_thread(int socket_client){
                 else if(type == INFO_ROOM){
                     la_poste.envoie_msg(INFO_ROOM, zmqmsg.message());
                 }
+                else if(type == USR_ADD){
+                    la_poste.envoie_msg(USR_ADD, zmqmsg.message());
+                }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }

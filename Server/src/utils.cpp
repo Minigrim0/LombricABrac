@@ -239,13 +239,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             case DECO:
                 db.connect_user(false, usr->pseudo());
                 break;
-            case INFO_ROOM:{
-                ZMQ_msg zmqmsg;
-                la_poste->reception();
-                zmqmsg.ParseFromString(la_poste->get_buffer());
-                la_poste->envoie_msg(zmqmsg.type_message(), zmqmsg.message());
-                break;
-            }
             default:
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }
