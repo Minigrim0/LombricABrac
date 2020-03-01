@@ -37,13 +37,7 @@ info Salon_Attente::run(info information)
   nbr_lombric = Info_salon.nbr_lomb;
   joueur_in_room = Info_salon.pseudos;
   size_repeated = joueur_in_room.size();
-  cout<<nbr_equipe;
-  cout<<"-";
-  cout<<nbr_lombric;
-  cout<<"-";
-  cout<<time_round;
-  cout<<"-";
-  cout<<map;
+
 
   //vector<string> name_joueur(4);
 
