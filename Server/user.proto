@@ -190,7 +190,7 @@ message infoRoom{
   uint32 nbr_eq = 2;
   uint32 time_round = 3;
   uint32 map = 4;
-  repeated string pseudo = 5;
+  repeated Join_groupe_r joueur = 5;
   
 }
 

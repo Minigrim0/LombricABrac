@@ -167,7 +167,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         room.set_time_round(time_round_game);
 
         for(size_t i = 0;i<m_players.size();i++){
-            room.add_pseudo(m_players[i].get_pseudo());
+            Join_groupe_r* joueur = room.add_joueur();
+            joueur->set_pseudo(m_players[i].get_pseudo());
+            joueur->set_id(m_players[i].get_id());
         }
 
         zmq_msg.set_message(room.SerializeAsString());
