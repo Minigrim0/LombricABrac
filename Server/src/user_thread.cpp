@@ -89,6 +89,10 @@ int client_thread(int socket_client){
                     std::ostringstream stream;
                     stream << "users/" << usr.get_id() << "/broker";
                     subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+                    stream.str("");
+                    stream.clear();
+                    stream << "users/" << usr.get_id() << "/room";
+                    subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
                     std::cout << "User " << usr.get_id() << " connected to " << stream.str() << std::endl;
                 }
             }
