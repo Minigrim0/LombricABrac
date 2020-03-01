@@ -14,6 +14,7 @@ using namespace std;
 info Menu_jeu_window::run(info information)
 {
   information.ishost=FALSE;
+  information.already_create = FALSE;
   int x = 4, y = 6,max_x = 0, max_y = 0;
   int new_y;
   int posStart_arrow, posEnd_arrow;

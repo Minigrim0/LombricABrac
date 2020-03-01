@@ -19,6 +19,7 @@ typedef struct info{
   vector<invitation> vec_invit;
   Client *client;
   string *notification;
+  bool already_create;
 }info;
 
 

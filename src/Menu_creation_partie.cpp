@@ -219,8 +219,11 @@ info Menu_creation_partie::run(info information)
         }
         else
         {
-
-          information.client->createRoom();
+          if (!information.already_create)
+          {
+            information.client->createRoom();
+            information.already_create = TRUE;
+          }
           information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
           information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
           information.client->setMap(static_cast<uint32_t>(nombre4));//la map
