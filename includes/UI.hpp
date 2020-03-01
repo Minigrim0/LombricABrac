@@ -156,12 +156,6 @@ public:
   info run(info information) override;
 };
 
-class Request_history_window: public Window
-{
-public:
-  info run(info information) override;
-};
-
 
 class Partie: public Window
 {
