@@ -40,8 +40,8 @@ struct stringTable{
 struct gameHistory{//infos sur une partie
 	int size;
 	std::string* pseudo;
-	std::uint32_t* point;
-	std::uint32_t date;
+	uint32_t* point;
+	std::string date;
 };
 
 struct historyTable{ //historiquede parties
@@ -70,7 +70,7 @@ struct paramsPartie{
 	uint32_t time;
 	uint32_t time_round;
 	uint32_t nbr_lombs;
-	uint32_t nbr_equipes = 4;
+	uint32_t nbr_equipes;
 };
 
 struct nextTour{
@@ -87,6 +87,14 @@ struct infoArme{
 struct playerTeam{
 	std::string pseudo;
 	uint32_t id_team;
+};
+
+struct infoRoom_s{
+	uint32_t nbr_lomb;
+	uint32_t nbr_eq;
+	uint32_t map;
+	uint32_t time_round;
+	std::vector<string> pseudos;
 };
 
 class Client{
@@ -131,13 +139,15 @@ private:
 
 	//réponse aux invitations
 	void acceptFriend(std::string username, bool ok); //accepte ou refuse demande amis
-	bool joinPartie(std::string host, bool ok);//join la partie de host
+	bool joinPartie(std::string host);//join la partie de host
 
 	//les paramètres de la partie ont changés
 	void changeMap(message& m);
 	void changeTime(message& m);
 	void changeTimeRound(message& m);
 	void changeNbrLombs(message& m);
+	void changeNbrEq(message& m);
+
 
 public:
 	Client(char* ip, uint16_t port);
@@ -186,6 +196,7 @@ public:
 	void endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 	std::vector<invitation> afficheAllInvits();
+	infoRoom_s getInfoRoom(); //infos de la room
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur

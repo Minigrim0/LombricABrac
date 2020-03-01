@@ -118,6 +118,9 @@ int Client::run(){
 				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
 					changeNbrLombs(msg);
 					break;
+				case NB_EQ_MOD: //L'hôte a changé le nombre de lombrics
+					changeNbrEq(msg);
+					break;
 				case NEXT_ROUND: //début de round
 					newRound = msg.text;
 					break;
