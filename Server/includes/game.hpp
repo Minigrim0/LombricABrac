@@ -8,22 +8,33 @@
 
 class Joueur{
     public:
-        Joueur();
+        Joueur(int nbLomb);
         ~Joueur();
 
-        uint32_t getNextLombricId();
-        void set_nb_lombs();
+        uint32_t getNextLombricId(Partie* obj_partie, int nbLomb);
+        void set_nb_lombs(uint8_t);
         void sendMessage(std::string);
 
-    private:
-        uint8_t Equipe;
-        int joueur_id;
-        std::string channel;
-        int current_lombric;
-        bool is_current_player;
+        void set_pseudo(std::string pseudo);
+        void set_equipe(uint8_t equipe);
+        void set_player_id(int id);
+        void set_current_lomb(int id);
+        void set_current_player(bool current);
 
-        std::string pseudo; // Pas obligatoire mais on sait jamais
-        std::vector<uint32_t> Lombrics;
+        inline uint32_t get_id() const{return m_player_id;};
+        inline std::string get_pseudo() const{return m_pseudo;};
+        inline bool is_current_player() const{return m_is_current_player;};
+        inline bool current_lombric() const{return m_is_current_player;};
+
+    private:
+        uint8_t m_Equipe;
+        int m_player_id;
+        std::string m_channel;
+        int m_current_lombric;
+        bool m_is_current_player;
+
+        std::string m_pseudo; // Pas obligatoire mais on sait jamais
+        std::vector<uint32_t> m_Lombrics;
 };
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera gerer partie 3(eau qui monte)
@@ -34,10 +45,10 @@ class Game{
 
         //void set_begin();
         void set_round_time();
-        void set_lomb(int nbr_player,int nb_lomb);
+        void set_lomb(uint8_t nb_lomb);
         bool check_round_time();
         //bool check_time();
-        uint8_t* who_next();
+        uint32_t who_next();
         void handle_room(ZMQ_msg zmq_msg, int* current_step);
         void handle_game(ZMQ_msg zmq_msg, int* current_step);
         void end_round();
@@ -51,15 +62,11 @@ class Game{
         time_t time_round;
         int time_round_game; //durée d'une partie en sec
 
-        uint8_t lomb[2];
-        uint32_t player_id[4];
-
-
         uint8_t nbr_eq; // Nbr equipes
         uint8_t nbr_lomb; // nombre lombric par joueur
         uint32_t owner_id;
         uint8_t current_player;
-        std::vector<Joueur> m_player;
+        std::vector<Joueur> m_players;
 
 };
 
