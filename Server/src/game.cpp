@@ -356,11 +356,20 @@ void Game::spawn_lombric(){
     std::stringstream(myText) >> hauteur >> largeur;
     std::vector<std::string> map_s(hauteur);
 
-    for (int i =0; i<hauteur; i++) {
+    for (uint32_t i =0; i<hauteur; i++) {
         std::getline (MyReadFile, map_s[i]);
     }
 
-    MyReadFile.close(); 
-    
+    MyReadFile.close();
+
     Map map(largeur,hauteur,map_s);
+
+    std::vector<Sprite*> lombs;
+    for(size_t i=0;i<m_players.size();i++){
+        for(int j=0;j<nbr_lomb;j++){
+            lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
+        }
+    }
+
+    obj_partie.setParam(&map, lombs);
 }
