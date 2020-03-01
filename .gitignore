@@ -1,9 +1,13 @@
-*.hpp.gch
+*.gch
 *.o
 server
-client
+a.out
 .vscode
 init_db
 *.db
-Server/supdata.log
+supdata.log
 cpl_proto/
+Server/lib/cppzmq/
+Server/lib/libzmq/
+Server/client
+map

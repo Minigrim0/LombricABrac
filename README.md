@@ -1,7 +1,10 @@
 # Vue d’ensemble
 
-## Requirements
-Google protocol buffers
+## Dépendances
+* Google protocol buffers
+* ZMQ
+* BCrypt
+* Sqlite3
 
 
 ## Partie Serveur
