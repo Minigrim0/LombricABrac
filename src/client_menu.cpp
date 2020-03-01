@@ -253,7 +253,7 @@ infoRoom_s Client::getInfoRoom(){
 	res.map = obj.map();
 	res.time_round = obj.time_round();
 
-	for (int i; i<obj.pseudo_size();++i){
+	for (int i=0; i<obj.pseudo_size();++i){
 		res.pseudos.push_back(obj.pseudo(i));
 	}
 
