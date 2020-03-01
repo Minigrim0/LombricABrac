@@ -99,7 +99,7 @@ message History{
 
 
 message History_r{
-  repeated History history = 1; //Sais pas si ça fonctionne comme ça
+  repeated History history = 1;
 }
 
 message Get_rank{
