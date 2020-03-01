@@ -12,7 +12,6 @@
 #define CHAT_BROKER 100
 
 extern std::mutex mu;
-extern std::condition_variable cv;
 extern std::mutex DataBase_mutex;
 extern DataBase db;
 extern std::mutex pub_mutex;

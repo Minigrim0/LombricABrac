@@ -11,7 +11,6 @@
 #include "../includes/zhelpers.hpp"
 
 std::mutex mu;
-std::condition_variable cv;
 std::mutex DataBase_mutex;
 DataBase db("lab.db");
 std::mutex pub_mutex;
