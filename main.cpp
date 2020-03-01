@@ -241,8 +241,7 @@ int main(int argc, char** argv)
       system(t.c_str());
       information = gameWin->run(information);
       t = "echo 'Après' >> out.txt";
-    system(t.c_str());
-
+      system(t.c_str());
     }
 
   }
