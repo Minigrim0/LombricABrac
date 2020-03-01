@@ -209,9 +209,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
-                std::cout << "Friend bdstr : " << fri.DebugString() << std::endl;
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
-                std::cout << "Friend id : " << friend_id << std::endl;
                 db.remove_friend(usr->get_id(), friend_id);
                 break;
             }

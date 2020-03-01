@@ -41,6 +41,7 @@ int broker_thread(){
             std::cout << "---interpreting---> local" << std::endl;
             switch(zmqmsg.type_message()){
                 case ADD_ROOM_S:{
+                    std::cout << "BROKER CREATES A ROOM" << std::endl;
                     Create_room owner_usr;
                     owner_usr.ParseFromString(zmqmsg.message());
                     Create_room_id room_id;
@@ -54,7 +55,7 @@ int broker_thread(){
                     stream.clear();
                     stream << "room/" << room_id.room_id() << "/client";
                     std::string chan_sub = stream.str(); //id_partie a get en db
-                    std::thread tobj(game_thread,chan_sub,owner_usr.usr_id());
+                    std::thread tobj(game_thread, chan_sub, owner_usr.usr_id());
                     tobj.detach();
 
                     ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
@@ -66,8 +67,11 @@ int broker_thread(){
 
                     stream.str("");
                     stream.clear();
+                    stream << "users/" << partie_r.receiver_id() << "/broker";
+
+                    std::cout << "Sending room id to client on " << stream.str() << std::endl;
+
                     pub_mutex.lock();
-                    stream << "users/" << partie_r.receiver_id() << "/broker" << std::endl;
                     s_sendmore_b(publisher, stream.str());
                     s_send_b(publisher, partie_r.SerializeAsString());
                     pub_mutex.unlock();
@@ -79,8 +83,8 @@ int broker_thread(){
             }
         }
         else{
-            pub_mutex.lock();
             stream << "users/" << zmqmsg.receiver_id() << "/broker";
+            pub_mutex.lock();
             s_sendmore_b(publisher, stream.str());
             s_send_b(publisher, zmqmsg.SerializeAsString());
             pub_mutex.unlock();

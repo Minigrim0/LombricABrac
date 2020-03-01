@@ -25,9 +25,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
     while(game_running){
         switch(current_step){
             case STEP_ROOM:{
-                std::cout << "You're in the room" << std::endl;
-                while (current_step == STEP_ROOM)
-                {
+                while (current_step == STEP_ROOM){
                     std::string address = s_recv(subscriber);
                     std::string contents = s_recv(subscriber);
 

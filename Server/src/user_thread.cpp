@@ -46,7 +46,6 @@ int client_thread(int socket_client){
                 type = zmqmsg.type_message();
                 if(type == ADD_ROOM_R){
                     is_on_game = true;
-                    la_poste.reception();
                     game_url = zmqmsg.message();
                 }
                 else{
@@ -58,6 +57,8 @@ int client_thread(int socket_client){
 
         if(type == 0){
             type = la_poste.reception_type();
+            if(type != 0)
+                std::cout << "type: " << static_cast<int>(type) << std::endl;
             if(type == EXIT_FAILURE){
                 break;
             }
@@ -77,8 +78,6 @@ int client_thread(int socket_client){
                 s_sendmore_b(publisher, game_url);
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
-
-                std::cout << "Sent " << zmqmsg.DebugString() << " to the room." << std::endl;
             }
             else{
                 if(type == JOIN_S){
