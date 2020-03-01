@@ -77,4 +77,6 @@
 #define NEXT_ROUND 50 // Id du lomb qui va jouer
 #define DECO 51
 
+#define PING 53
+
 #endif

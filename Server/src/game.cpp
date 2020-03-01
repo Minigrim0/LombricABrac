@@ -107,16 +107,15 @@ uint32_t Game::who_next(){
 void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     std::ostringstream stream;
     if(zmq_msg.type_message() == PING){
-        if(m_players.size < 4){
+        if(m_players.size() < 4){
             zmq_msg.set_message("true");
         }
-        else
-        {
+        else{
             zmq_msg.set_message("false");
         }
         stream.str("");
         stream.clear();
-        stream << "user/" << zmq_msg.receiver_id() << "/room";
+        stream << "user/" << zmq_msg.receiver_id() << "/check_room";
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
@@ -174,7 +173,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         zmq_msg.set_message(room.SerializeAsString());
         zmq_msg.set_type_message(INFO_ROOM);
 
-        stream << "users/" << zmq_msg.receiver_id() << "/partie";
+        stream << "users/" << zmq_msg.receiver_id() << "/room";
         std::cout << stream.str() << std::endl;
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
@@ -238,7 +237,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             //        stream.str("");
             //        stream.clear();
             //        if(player_id[i] > 0){
-            //            stream << "users/" << player_id[i] << "/partie";
+            //            stream << "users/" << player_id[i] << "/room";
             //            s_sendmore_b(publisher, stream.str());
             //            s_send_b(publisher, zmq_msg.SerializeAsString());
             //        }

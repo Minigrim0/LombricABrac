@@ -44,7 +44,7 @@ int client_thread(int socket_client){
 
                 zmqmsg.ParseFromString(contents);
                 type = zmqmsg.type_message();
-                if(type == ADD_ROOM_R){ //Needs to be handled here
+                if(type == ADD_ROOM_R){
                     is_on_game = true;
                     la_poste.reception();
                     game_url = zmqmsg.message();
@@ -61,8 +61,6 @@ int client_thread(int socket_client){
             if(type == EXIT_FAILURE){
                 break;
             }
-            //if(type != 0)
-            //    std::cout << "type : " << static_cast<int>(type) << std::endl;
         }
 
         if(type != 0){
@@ -83,6 +81,52 @@ int client_thread(int socket_client){
                 std::cout << "Sent " << zmqmsg.DebugString() << " to the room." << std::endl;
             }
             else{
+                if(type == JOIN_S){
+                    la_poste.reception();
+                    Join join_msg;
+                    join_msg.ParseFromString(la_poste.get_buffer());
+
+                    int room_id = 0;
+                    int owner_id = 0;
+                    db.get_user_id(join_msg.pseudo(), &owner_id);
+                    db.get_room_id_from_owner_id(owner_id, &room_id);
+
+                    ZMQ_msg zmqmsg;
+                    zmqmsg.set_type_message(PING);
+                    zmqmsg.set_message("ping");
+                    zmqmsg.set_receiver_id(usr.get_id());
+
+                    std::ostringstream stream;
+                    stream << "room/" << room_id << "/client";
+
+                    pub_mutex.lock();
+                    s_sendmore_b(publisher, stream.str());
+                    s_send_b(publisher, zmqmsg.SerializeAsString());
+                    pub_mutex.unlock();
+
+                    stream.str("");
+                    stream.clear();
+                    stream << "users/" << usr.get_id() << "/check_room";
+
+                    zmq::socket_t waiting_room(context, ZMQ_SUB);
+                    waiting_room.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+
+                    {
+                        size_t opt_value = 1000;
+                        waiting_room.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
+                    }
+                    waiting_room.connect("tcp://localhost:5563");
+                    std::string address = s_recv(waiting_room);
+                    if(address == ""){ // The room died or is full
+                        std::cout << "NO ROOM" << std::endl;
+                        la_poste.envoie_bool(JOIN_R, false);
+                    }
+                    else{ // The room responded
+                        is_on_game = true;
+                        game_url = stream.str();
+                        la_poste.envoie_bool(JOIN_R, true);
+                    }
+                }
                 res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 if(res == 3){
                     //User connected
