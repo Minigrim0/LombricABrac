@@ -5930,35 +5930,29 @@ class infoRoom :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPseudoFieldNumber = 5,
+    kJoueurFieldNumber = 5,
     kNbrLombFieldNumber = 1,
     kNbrEqFieldNumber = 2,
     kTimeRoundFieldNumber = 3,
     kMapFieldNumber = 4,
   };
-  // repeated string pseudo = 5;
-  int pseudo_size() const;
+  // repeated .Join_groupe_r joueur = 5;
+  int joueur_size() const;
   private:
-  int _internal_pseudo_size() const;
+  int _internal_joueur_size() const;
   public:
-  void clear_pseudo();
-  const std::string& pseudo(int index) const;
-  std::string* mutable_pseudo(int index);
-  void set_pseudo(int index, const std::string& value);
-  void set_pseudo(int index, std::string&& value);
-  void set_pseudo(int index, const char* value);
-  void set_pseudo(int index, const char* value, size_t size);
-  std::string* add_pseudo();
-  void add_pseudo(const std::string& value);
-  void add_pseudo(std::string&& value);
-  void add_pseudo(const char* value);
-  void add_pseudo(const char* value, size_t size);
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& pseudo() const;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_pseudo();
+  void clear_joueur();
+  ::Join_groupe_r* mutable_joueur(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Join_groupe_r >*
+      mutable_joueur();
   private:
-  const std::string& _internal_pseudo(int index) const;
-  std::string* _internal_add_pseudo();
+  const ::Join_groupe_r& _internal_joueur(int index) const;
+  ::Join_groupe_r* _internal_add_joueur();
   public:
+  const ::Join_groupe_r& joueur(int index) const;
+  ::Join_groupe_r* add_joueur();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Join_groupe_r >&
+      joueur() const;
 
   // uint32 nbr_lomb = 1;
   void clear_nbr_lomb();
@@ -6001,7 +5995,7 @@ class infoRoom :
   class _Internal;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> pseudo_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Join_groupe_r > joueur_;
   ::PROTOBUF_NAMESPACE_ID::uint32 nbr_lomb_;
   ::PROTOBUF_NAMESPACE_ID::uint32 nbr_eq_;
   ::PROTOBUF_NAMESPACE_ID::uint32 time_round_;
@@ -9191,78 +9185,43 @@ inline void infoRoom::set_map(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   // @@protoc_insertion_point(field_set:infoRoom.map)
 }
 
-// repeated string pseudo = 5;
-inline int infoRoom::_internal_pseudo_size() const {
-  return pseudo_.size();
+// repeated .Join_groupe_r joueur = 5;
+inline int infoRoom::_internal_joueur_size() const {
+  return joueur_.size();
 }
-inline int infoRoom::pseudo_size() const {
-  return _internal_pseudo_size();
+inline int infoRoom::joueur_size() const {
+  return _internal_joueur_size();
 }
-inline void infoRoom::clear_pseudo() {
-  pseudo_.Clear();
+inline void infoRoom::clear_joueur() {
+  joueur_.Clear();
 }
-inline std::string* infoRoom::add_pseudo() {
-  // @@protoc_insertion_point(field_add_mutable:infoRoom.pseudo)
-  return _internal_add_pseudo();
+inline ::Join_groupe_r* infoRoom::mutable_joueur(int index) {
+  // @@protoc_insertion_point(field_mutable:infoRoom.joueur)
+  return joueur_.Mutable(index);
 }
-inline const std::string& infoRoom::_internal_pseudo(int index) const {
-  return pseudo_.Get(index);
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Join_groupe_r >*
+infoRoom::mutable_joueur() {
+  // @@protoc_insertion_point(field_mutable_list:infoRoom.joueur)
+  return &joueur_;
 }
-inline const std::string& infoRoom::pseudo(int index) const {
-  // @@protoc_insertion_point(field_get:infoRoom.pseudo)
-  return _internal_pseudo(index);
+inline const ::Join_groupe_r& infoRoom::_internal_joueur(int index) const {
+  return joueur_.Get(index);
 }
-inline std::string* infoRoom::mutable_pseudo(int index) {
-  // @@protoc_insertion_point(field_mutable:infoRoom.pseudo)
-  return pseudo_.Mutable(index);
+inline const ::Join_groupe_r& infoRoom::joueur(int index) const {
+  // @@protoc_insertion_point(field_get:infoRoom.joueur)
+  return _internal_joueur(index);
 }
-inline void infoRoom::set_pseudo(int index, const std::string& value) {
-  // @@protoc_insertion_point(field_set:infoRoom.pseudo)
-  pseudo_.Mutable(index)->assign(value);
+inline ::Join_groupe_r* infoRoom::_internal_add_joueur() {
+  return joueur_.Add();
 }
-inline void infoRoom::set_pseudo(int index, std::string&& value) {
-  // @@protoc_insertion_point(field_set:infoRoom.pseudo)
-  pseudo_.Mutable(index)->assign(std::move(value));
+inline ::Join_groupe_r* infoRoom::add_joueur() {
+  // @@protoc_insertion_point(field_add:infoRoom.joueur)
+  return _internal_add_joueur();
 }
-inline void infoRoom::set_pseudo(int index, const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  pseudo_.Mutable(index)->assign(value);
-  // @@protoc_insertion_point(field_set_char:infoRoom.pseudo)
-}
-inline void infoRoom::set_pseudo(int index, const char* value, size_t size) {
-  pseudo_.Mutable(index)->assign(
-    reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:infoRoom.pseudo)
-}
-inline std::string* infoRoom::_internal_add_pseudo() {
-  return pseudo_.Add();
-}
-inline void infoRoom::add_pseudo(const std::string& value) {
-  pseudo_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add:infoRoom.pseudo)
-}
-inline void infoRoom::add_pseudo(std::string&& value) {
-  pseudo_.Add(std::move(value));
-  // @@protoc_insertion_point(field_add:infoRoom.pseudo)
-}
-inline void infoRoom::add_pseudo(const char* value) {
-  GOOGLE_DCHECK(value != nullptr);
-  pseudo_.Add()->assign(value);
-  // @@protoc_insertion_point(field_add_char:infoRoom.pseudo)
-}
-inline void infoRoom::add_pseudo(const char* value, size_t size) {
-  pseudo_.Add()->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_add_pointer:infoRoom.pseudo)
-}
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
-infoRoom::pseudo() const {
-  // @@protoc_insertion_point(field_list:infoRoom.pseudo)
-  return pseudo_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
-infoRoom::mutable_pseudo() {
-  // @@protoc_insertion_point(field_mutable_list:infoRoom.pseudo)
-  return &pseudo_;
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Join_groupe_r >&
+infoRoom::joueur() const {
+  // @@protoc_insertion_point(field_list:infoRoom.joueur)
+  return joueur_;
 }
 
 // -------------------------------------------------------------------
