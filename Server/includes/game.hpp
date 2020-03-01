@@ -4,7 +4,7 @@
 #include <vector>
 //#include <ctime>
 #include "../cpl_proto/user.pb.h"
-#include "../includes/partie.hpp"
+#include "../includes/partie_serv.hpp"
 
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera gerer partie 3(eau qui monte)

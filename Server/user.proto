@@ -157,6 +157,10 @@ message List_Projectiles{
   repeated Projectiles list_proj = 1;
 }
 
+message Block_Destroy{
+  repeated uint32 coord = 1;
+}
+
 message Degats_lombric{
   repeated Lombric lomb_upt = 1;
 }

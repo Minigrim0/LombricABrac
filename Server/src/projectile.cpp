@@ -1,10 +1,10 @@
 #include "../includes/sprite.hpp"
 
-Projectile_c::Projectile_c(int x, int y, double speedX, double speedY,int rayon, int degat, unsigned long skin):Sprite(x,y,skin,0),radius(rayon),dommage(degat){
-	setMovement(speedX, speedY, GRAVITY, PARABOLLE,0);
+Projectile_c::Projectile_c(int x, int y, double speedX, double speedY,int rayon, int degat,double t, unsigned long skin):Sprite(x,y,skin,0),radius(rayon),dommage(degat){
+	setMovement(speedX, speedY, GRAVITY, PARABOLLE, t);
 }
 
-bool Projectile_c::update(Map* carte, int t){
+bool Projectile_c::update(Map* carte, double t){
 	bool res = true;
 	if(movement){
 		int newPos[2];
@@ -22,7 +22,13 @@ bool Projectile_c::update(Map* carte, int t){
 	return res;
 }
 
-void Projectile_c::deathMove(Map* c, Partie* p, std::vector<Sprite*> spriteVector,int t){
-	std::vector<int> v = c->explose(spriteVector, posX, posY, radius, dommage, 10, t);
-	p->insertProj(v,0);
+
+std::vector<int> Projectile_c::deathMove(infoPartie_s* inf, double t){
+	std::vector<int> destroyedBloc = inf->carte->explose(posX, posY, radius);
+	for(auto sp = inf->spriteVector.begin(); sp != inf->spriteVector.end(); ++sp){
+		if((*sp)->getId()){//alors c'est un sprite
+			dynamic_cast<Lombric_c*>(*sp)->explosed(posX, posY, radius, dommage, 10, t);
+		}
+	}
+	return destroyedBloc;
 }

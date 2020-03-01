@@ -15,11 +15,11 @@ private:
 	double initX, initY;//position initiale
 	double initSpeedX, initSpeedY;//vitesses initiales
 	double gravity;
-	int initTime;//t0 -> temps du début du déplacement (en millisecondes)
+	double initTime;
 	int moveType;//MRU ou PARABOLLE (tir non parabolique ou tir parabolique)
 public:
-	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, int t0);
-	int* update(int* res, int currentTime);//modifie le tableau avec les coords de l'objets
+	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, double t0);
+	int* update(int* res, double t);//modifie le tableau avec les coords de l'objets, t -> temps actuel
 };
 
 #endif

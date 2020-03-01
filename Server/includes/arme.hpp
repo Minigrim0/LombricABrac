@@ -14,6 +14,12 @@ struct infoPartie_s;
 
 #define PI 3.14159265
 
+struct infoShoot{//information sur le projectile qui doit être tiré (côté client)
+	int force;
+	int angle;
+	std::vector<int> coordsToDel;//vecteur des blocs à casser durant l'explosion
+};
+
 class Arme{
 protected:
 	std::string name;
@@ -25,7 +31,14 @@ protected:
 public:
 	Arme(std::string n, int i, int initS, int d);
 	void calculDirVect(double* res);//décompose l'angle en 2 vect horizontal et vertical (entre 0 et 1)
-	virtual void shoot(Lombric_c* currentWorms, std::vector<Sprite*> spriteVector)=0;//fonction qui tire
+	/*fonction qui tire
+		info -> pour pouvoir ajir sur les sprites / map
+		t -> temps actuel
+		isClient -> pour savoir si c'est le client ou le serveur
+			Le serveur doit actualiser les dégats mais pas le client
+		projs -> utile seulement si c'est le Client, contient les infos des projectiles a créer
+	*/
+	virtual void shoot(infoPartie_s* info, double t)=0;
 	inline void addForce(int n){
 		force = (force + n) % 101;
 		if(force<0){force += 100;}
@@ -51,7 +64,7 @@ class LanceMissile:public Arme{
 	int radius;//rayon de l'explosion
 public:
 	LanceMissile(std::string n, int i, int initS, int d, int rayon);//d = degat
-	void shoot(Lombric_c* currentWorms, std::vector<Sprite*> spriteVector) override;
+	void shoot(infoPartie_s* info, double t) override;
 	~LanceMissile()=default;
 };
 
@@ -59,7 +72,7 @@ public:
 class BatteBaseball:public Arme{
 public:
 	BatteBaseball(std::string n, int i, int initS, int d);
-	void shoot(Lombric_c* currentWorms, std::vector<Sprite*> spriteVector) override;
+	void shoot(infoPartie_s* info, double t) override;
 	~BatteBaseball()=default;
 };
 

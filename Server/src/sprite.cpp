@@ -16,7 +16,7 @@ void Sprite::setPos(int *newPos){
 	posY = newPos[1];
 }
 
-void Sprite::setMovement(double speedX, double speedY, double gravity, int type, int t ){
+void Sprite::setMovement(double speedX, double speedY, double gravity, int type, double t){
 	if(movement){//s'il y a déja un mouvement, on le supprime
 		deleteMovement();
 	}

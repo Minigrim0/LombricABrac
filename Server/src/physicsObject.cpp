@@ -1,11 +1,10 @@
 #include "../includes/physicsObject.hpp"
 
-PhysicsObject::PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, int t0):initX(x), initY(y),initSpeedX(speedX),initSpeedY(speedY),gravity(grav),initTime(t0),moveType(moveT){
+PhysicsObject::PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, double t0):initX(x), initY(y),initSpeedX(speedX),initSpeedY(speedY),gravity(grav),initTime(t0),moveType(moveT){
 }
 
-int* PhysicsObject::update(int* res, int currentTime){
-	double t = currentTime - initTime;//temps écoulé en secondes
-	t /= 1000;//transforme en seconde
+int* PhysicsObject::update(int* res, double t){
+	t = (t - initTime)/1000; //temps écoulé en secondes
 
 	if(moveType == MRU){//mmouvement rectiligne uniforme
 		res[0] = static_cast<int>(initSpeedX * t + initX);
