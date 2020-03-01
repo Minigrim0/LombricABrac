@@ -294,6 +294,10 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
             std::vector<std::string> res;
             res = obj_partie.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
+            List_Projectiles list_proj;
+            Degats_lombric deg_lomb;
+            list_proj.ParseFromString(res[0]);
+            deg_lomb.ParseFromString(res[1]);
             zmq_msg.set_type_message(POS_PROJ);
             zmq_msg.set_message(list_proj.SerializeAsString());
             for(size_t i = 0;i<m_players.size();i++){
