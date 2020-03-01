@@ -165,7 +165,7 @@ public:
 	//méthodes utilisées pour les invitaions
 	stringTable getFriendList();//revoie la liste d'amis
 	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
-	bool createRoom();//création d'une room
+	void createRoom();//création d'une room
 	void startGame();//host lance la partie
 	void addToGame(std::string destinataire);//invite un amis à une partie
 	void addFriend(std::string user);//ajout d'un amis

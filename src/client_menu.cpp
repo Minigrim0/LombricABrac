@@ -35,17 +35,14 @@ void Client::quit(){
 	running = false; //arréte la boucle du thread
 }
 
-bool Client::createRoom(){
+void Client::createRoom(){
 	message m{};
 	m.type = ADD_ROOM_S;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	std::string* reponse = waitAnswers(ADD_ROOM_R, m);//m.text de la réponse
-
-	bool res = (*reponse)[0];
-
-	delete reponse;
-	return res;
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
 }
 
 void Client::startGame(){
