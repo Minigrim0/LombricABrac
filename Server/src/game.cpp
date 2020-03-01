@@ -8,6 +8,25 @@
 #include "../includes/comm_macros.hpp"
 #include "../cpl_proto/user.pb.h"
 
+
+Joueur::Joueur()
+:Lombrics(std::vector<uint32_t>())
+{
+
+}
+
+Joueur::~Joueur(){}
+
+uint32_t Joueur::getNextLombricId(){
+    Lombrics;
+}
+
+void Joueur::set_nb_lombs(uint8_t nb_lombs){
+    Lombrics.resize(nb_lombs);
+}
+
+void Joueur::sendMessage(std::string);
+
 Game::Game(){}
 
 Game::~Game(){}
@@ -39,12 +58,13 @@ uint8_t* Game::who_next(){
         if(alive_lomb[current_player][current_lomb[current_player]]){
             lomb[0] = current_player;
             lomb[1] = current_lomb[current_player];
+            return lomb;
         }
         else{
             current_lomb[current_player] = (current_lomb[current_player]+1)%nbr_lomb;
         }
     }
-    current_player = (current_player+1)%4;
+    current_player = (current_player+1)%current_lomb.size();
     who_next();
 }
 
@@ -56,28 +76,6 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
         request.ParseFromString(zmq_msg.message());
         Join_groupe_r groupe_r;
         UserConnect usr;
-        infoRoom room;
-        room.set_nbr_lomb(nbr_lomb);
-        room.set_map(map_id);
-        room.set_nbr_eq(nbr_eq);
-        room.set_time_round(time_round_game);
-        for(int i = 0;i<4;i++){
-            if(player_id[i] > 0){
-                DataBase_mutex.lock();
-                db.get_user(player_id[i] ,&usr);
-                DataBase_mutex.unlock();
-                room.add_pseudo(usr.pseudo());
-            }
-            else{
-                break;
-            }
-        }
-        zmq_msg.set_type_message(INFO_ROOM);
-        zmq_msg.set_message(room.SerializeAsString());
-        stream << "users/" << zmq_msg.receiver_id() << "/partie";
-        std::cout << stream.str() << std::endl;
-        s_sendmore_b(publisher, stream.str());
-        s_send_b(publisher, zmq_msg.SerializeAsString());
         DataBase_mutex.lock();
         db.get_user(zmq_msg.receiver_id() ,&usr);
         DataBase_mutex.unlock();
@@ -88,12 +86,6 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
         for(int i = 0; i<3 ; i++){
             if(equipe[request.id()][i] <= 0){
                 equipe[request.id()][i] = zmq_msg.receiver_id();
-                break;
-            }
-        }
-        for(int i = 0;i<4;i++){
-            if(player_id[i] <= 0){
-                player_id[i] = request.id();
                 break;
             }
         }
@@ -112,6 +104,60 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             }
         }
         pub_mutex.unlock();
+    }
+    else if(zmq_msg.type_message() == INFO_ROOM){
+        UserConnect usr;
+        infoRoom room;
+        room.set_nbr_lomb(nbr_lomb);
+        room.set_map(map_id);
+        room.set_nbr_eq(nbr_eq);
+        room.set_time_round(time_round_game);
+        for(int i = 0;i<4;i++){
+            if(player_id[i] > 0){
+                DataBase_mutex.lock();
+                db.get_user(player_id[i] ,&usr);
+                DataBase_mutex.unlock();
+                room.add_pseudo(usr.pseudo());
+            }
+            else{
+                break;
+            }
+        }
+        zmq_msg.set_message(room.SerializeAsString());
+        zmq_msg.set_type_message(INFO_ROOM);
+        stream << "users/" << zmq_msg.receiver_id() << "/partie";
+        std::cout << stream.str() << std::endl;
+        s_sendmore_b(publisher, stream.str());
+        s_send_b(publisher, zmq_msg.SerializeAsString());
+
+
+        for(int i = 0;i<4;i++){
+            if(player_id[i] <= 0){
+                player_id[i] = zmq_msg.receiver_id();
+                break;
+            }
+        }
+        DataBase_mutex.lock();
+        db.get_user(zmq_msg.receiver_id() ,&usr);
+        DataBase_mutex.unlock();
+        Usr_add usr_add;
+        usr_add.set_pseudo(usr.pseudo());
+        pub_mutex.lock();
+        zmq_msg.set_type_message(USR_ADD);
+        zmq_msg.set_message(usr.SerializeAsString());
+        for(int i = 0;i<4;i++){
+            stream.str("");
+            stream.clear();
+            if(player_id[i] > 0){
+                stream << "users/" << player_id[i] << "/partie";
+                std::cout << stream.str() << std::endl;
+                s_sendmore_b(publisher, stream.str());
+                s_send_b(publisher, zmq_msg.SerializeAsString());
+            }
+            else{
+                break;
+            }
+        }
     }
     else if( zmq_msg.receiver_id() == owner_id){
         switch (zmq_msg.type_message()){
@@ -165,7 +211,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
         //    Time_mod time_m;
         //    time_m.ParseFromString(zmq_msg.message());
         //    time_game = time_m.time();
-        //    
+        //
         //    pub_mutex.lock();
         //    for(int i = 0;i<4;i++){
         //        stream.str("");
@@ -184,7 +230,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             Time_mod time_r_m;
             time_r_m.ParseFromString(zmq_msg.message());
             time_round_game = time_r_m.time();
-            
+
             pub_mutex.lock();
             for(int i = 0;i<4;i++){
                 stream.str("");
@@ -206,7 +252,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             Nbr_lomb_mod nbr_lomb_m;
             nbr_lomb_m.ParseFromString(zmq_msg.message());
             nbr_lomb = nbr_lomb_m.nbr_lomb();
-            
+
             pub_mutex.lock();
             for(int i = 0;i<4;i++){
                 stream.str("");
@@ -243,7 +289,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             pub_mutex.unlock();
             break;
         }
-        
+
         default:
             break;
         }
