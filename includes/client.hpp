@@ -113,6 +113,7 @@ private:
 	bool started;//partie à commencée
 	bool changed;//struct infoPartie_s à changé
 	bool running = true;
+	bool end = false;//fin partie
 	std::string newRound = "";
 
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
@@ -192,7 +193,7 @@ public:
 	void updatePos(uint32_t id, uint32_t x, uint32_t y);
 	Map* getMap();
 	bool endTime();//fin du temps
-	bool endGame();//fin de la partie
+	void endGame();//fin de la partie
 	void endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 	std::vector<invitation> afficheAllInvits();

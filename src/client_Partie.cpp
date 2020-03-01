@@ -74,3 +74,13 @@ void Client::endTour(std::vector<uint32_t> deadLombrics){
 	sendMessage(m);
 	sendMutex.unlock();
 }
+
+void endGame(){
+	message m{};
+	m.type = END_GAME;
+	m.text = ""; //serveur n'a besoin d'aucunes infos
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}

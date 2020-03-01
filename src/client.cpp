@@ -67,6 +67,7 @@ int Client::run(){
 					invite(msg);
 					break;
 				case START: //L'hôte a lancé la partie
+					end = false;
 					notifyStarted(msg);
 					break;
 				case SHOOT: {//un joueur a tiré
@@ -123,6 +124,9 @@ int Client::run(){
 					break;
 				case NEXT_ROUND: //début de round
 					newRound = msg.text;
+					break;
+				case END_GAME: //Fin partie
+					end = true;
 					break;
 			}
 		}

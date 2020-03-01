@@ -51,6 +51,7 @@ void Client::startGame(){
 	m.type = START;
 
 	sendMutex.lock();
+	end = false;
 	sendMessage(m);
 	sendMutex.unlock();
 }
