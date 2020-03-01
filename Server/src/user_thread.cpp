@@ -54,6 +54,9 @@ int client_thread(int socket_client){
                 else if(type == USR_ADD){
                     la_poste.envoie_msg(USR_ADD, zmqmsg.message());
                 }
+                else if(type == JOIN_GROUP_R){
+                    la_poste.envoie_msg(JOIN_GROUP_R, zmqmsg.message());
+                }
                 else if(type == START){
                     la_poste.envoie_msg(START, zmqmsg.message());
                 }
