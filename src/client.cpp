@@ -150,12 +150,15 @@ void Client::sendMessage(message& msg){
 	packet_size = htonl(size);
 
 	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
-	if (size > 0){
-		res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
-		while (sent_size<size){ //envoie tout le message (string)
-			res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
-			sent_size += static_cast<uint32_t>(res);
-	        parser += res;
+
+	if (msg.text != ""){
+		if (size > 0){
+			res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
+			while (sent_size<size){ //envoie tout le message (string)
+				res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
+				sent_size += static_cast<uint32_t>(res);
+		        parser += res;
+			}
 		}
 	}
 	//std::string test = "echo 'TYPE " +std::to_string(msg.type)+"' >> out.txt";
