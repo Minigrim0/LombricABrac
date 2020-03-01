@@ -198,6 +198,7 @@ public:
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 	std::vector<invitation> afficheAllInvits();
 	infoRoom_s getInfoRoom(); //infos de la room
+	bool getIsEnded(){return end;};//si partie est finie
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	void acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
