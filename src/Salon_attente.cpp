@@ -99,7 +99,7 @@ info Salon_Attente::run(info information)
     information.client->changeTeam(1);
     print_string_window(equipe1,2+x_1,1,information.username.c_str());
     wclear(pseudo);
-    x++;
+    x_1++;
   }
 
   //len_str= static_cast<int>(equipe[0].size());
