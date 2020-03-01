@@ -122,8 +122,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         pub_mutex.unlock();
     }
     else if(zmq_msg.type_message() == JOIN_GROUP_S){
-        std::cout << "join_group"<< std::endl; // notifie à tout le monde que tel joueur join la game
-
         Join_groupe_s request;
         Join_groupe_r groupe_r;
         UserConnect usr;

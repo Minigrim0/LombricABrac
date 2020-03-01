@@ -40,10 +40,11 @@ int client_thread(int socket_client){
             }
             else{ // We got a message from the Broker
                 std::string contents = s_recv(subscriber);
-                std::cout << "client received : [" << address << "] : " << contents << std::endl;
 
                 zmqmsg.ParseFromString(contents);
                 type = zmqmsg.type_message();
+
+                std::cout << "client received on [" << address << "] type " << static_cast<int>(type) << std::endl;
                 if(type == ADD_ROOM_R){
                     is_on_game = true;
                     game_url = zmqmsg.message();
@@ -70,7 +71,7 @@ int client_thread(int socket_client){
         if(type == 0){
             type = la_poste.reception_type();
             if(type != 0)
-                std::cout << "type: " << static_cast<int>(type) << std::endl;
+                std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
             if(type == EXIT_FAILURE){
                 break;
             }
