@@ -54,6 +54,9 @@ void Joueur::set_equipe(uint8_t equipe){
 
 void Joueur::set_player_id(int id){
     m_player_id = id;
+    std::ostringstream stream;
+    stream << "users/" << id << "/room";
+    m_channel = stream.str();
 }
 
 void Joueur::set_current_lomb(int id){
@@ -170,7 +173,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
         Usr_add usr_add;
         usr_add.set_pseudo(usr.pseudo());
-        pub_mutex.lock();
         zmq_msg.set_type_message(USR_ADD);
         zmq_msg.set_message(usr.SerializeAsString());
 
