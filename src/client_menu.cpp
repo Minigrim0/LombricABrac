@@ -70,13 +70,13 @@ void Client::addToGame(std::string destinataire){
 	sendMutex.unlock();
 }
 
-bool Client::joinPartie(std::string host, bool ok){
+bool Client::joinPartie(std::string host){
 	message m{};
 
 	//construction de la structure à envoyer au serveur
 	Join obj;
 	obj.set_pseudo(host);
-	obj.set_accept(ok);
+	//obj.set_accept(ok);
 
 	obj.SerializeToString(&m.text);//convetis en string
 	m.type = JOIN_S;
@@ -234,4 +234,28 @@ void Client::changeTeam(uint32_t id_equipe){
 	sendMutex.lock();
 	sendMessage(m);
 	sendMutex.unlock();
+}
+
+infoRoom_s Client::getInfoRoom(){
+	message m{};
+	m.type = INFO_ROOM;
+	m.text = "";
+
+	std::string* reponse = waitAnswers(INFO_ROOM,m); //m.text de la réponse
+
+	infoRoom obj;
+	obj.ParseFromString(*reponse);
+
+	infoRoom_s res;
+	res.nbr_lomb = obj.nbr_lomb();
+	res.nbr_eq = obj.nbr_eq();
+	res.map = obj.map();
+	res.time_round = obj.time_round();
+
+	for (int i; i<obj.pseudo_size();++i){
+		res.pseudos.push_back(obj.pseudo(i));
+	}
+
+	delete reponse;
+	return res;
 }

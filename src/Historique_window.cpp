@@ -42,7 +42,7 @@ info Historique_window::run(info information)
       joueur= joueur + "Score : " + to_string(historique.table[i].point[a]) + ' ';
       joueur = joueur + "|| ";
     }
-    joueur= joueur +" date : "+ to_string(historique.table[i].date);
+    joueur= joueur +" date : "+ historique.table[i].date;
     historique.table[i].pseudo[0]=joueur;
   }
 
