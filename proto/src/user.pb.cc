@@ -17,6 +17,7 @@
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Chat_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_History_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Invitation_user_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Join_groupe_r_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Lombric_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Projectiles_user_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_user_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_rankInfo_user_2eproto;
@@ -784,8 +785,9 @@ static void InitDefaultsscc_info_infoRoom_user_2eproto() {
   ::infoRoom::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_infoRoom_user_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_infoRoom_user_2eproto}, {}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_infoRoom_user_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_infoRoom_user_2eproto}, {
+      &scc_info_Join_groupe_r_user_2eproto.base,}};
 
 static void InitDefaultsscc_info_rankInfo_user_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -1078,7 +1080,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_user_2eproto::offsets[] PROTOB
   PROTOBUF_FIELD_OFFSET(::infoRoom, nbr_eq_),
   PROTOBUF_FIELD_OFFSET(::infoRoom, time_round_),
   PROTOBUF_FIELD_OFFSET(::infoRoom, map_),
-  PROTOBUF_FIELD_OFFSET(::infoRoom, pseudo_),
+  PROTOBUF_FIELD_OFFSET(::infoRoom, joueur_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Create_room, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1235,13 +1237,13 @@ const char descriptor_table_protodef_user_2eproto[] PROTOBUF_SECTION_VARIABLE(pr
   " \001(\r\022\013\n\003vie\030\004 \001(\r\" \n\010End_tour\022\024\n\014id_lomb"
   "_mort\030\001 \003(\r\"1\n\014Next_lombric\022\017\n\007id_lomb\030\001"
   " \001(\r\022\020\n\010is_yours\030\002 \001(\010\"&\n\014infoPartie_p\022\026"
-  "\n\004lomb\030\001 \003(\0132\010.Lombric\"]\n\010infoRoom\022\020\n\010nb"
+  "\n\004lomb\030\001 \003(\0132\010.Lombric\"m\n\010infoRoom\022\020\n\010nb"
   "r_lomb\030\001 \001(\r\022\016\n\006nbr_eq\030\002 \001(\r\022\022\n\ntime_rou"
-  "nd\030\003 \001(\r\022\013\n\003map\030\004 \001(\r\022\016\n\006pseudo\030\005 \003(\t\"\035\n"
-  "\013Create_room\022\016\n\006usr_id\030\001 \001(\r\"!\n\016Create_r"
-  "oom_id\022\017\n\007room_id\030\001 \001(\r\"E\n\007ZMQ_msg\022\023\n\013re"
-  "ceiver_id\030\001 \001(\r\022\024\n\014type_message\030\002 \001(\r\022\017\n"
-  "\007message\030\003 \001(\tb\006proto3"
+  "nd\030\003 \001(\r\022\013\n\003map\030\004 \001(\r\022\036\n\006joueur\030\005 \003(\0132\016."
+  "Join_groupe_r\"\035\n\013Create_room\022\016\n\006usr_id\030\001"
+  " \001(\r\"!\n\016Create_room_id\022\017\n\007room_id\030\001 \001(\r\""
+  "E\n\007ZMQ_msg\022\023\n\013receiver_id\030\001 \001(\r\022\024\n\014type_"
+  "message\030\002 \001(\r\022\017\n\007message\030\003 \001(\tb\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_user_2eproto_deps[1] = {
 };
@@ -1293,7 +1295,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_use
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_user_2eproto_once;
 static bool descriptor_table_user_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_user_2eproto = {
-  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1942,
+  &descriptor_table_user_2eproto_initialized, descriptor_table_protodef_user_2eproto, "user.proto", 1958,
   &descriptor_table_user_2eproto_once, descriptor_table_user_2eproto_sccs, descriptor_table_user_2eproto_deps, 43, 0,
   schemas, file_default_instances, TableStruct_user_2eproto::offsets,
   file_level_metadata_user_2eproto, 43, file_level_enum_descriptors_user_2eproto, file_level_service_descriptors_user_2eproto,
@@ -9706,7 +9708,7 @@ infoRoom::infoRoom()
 infoRoom::infoRoom(const infoRoom& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      pseudo_(from.pseudo_) {
+      joueur_(from.joueur_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&nbr_lomb_, &from.nbr_lomb_,
     static_cast<size_t>(reinterpret_cast<char*>(&map_) -
@@ -9744,7 +9746,7 @@ void infoRoom::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  pseudo_.Clear();
+  joueur_.Clear();
   ::memset(&nbr_lomb_, 0, static_cast<size_t>(
       reinterpret_cast<char*>(&map_) -
       reinterpret_cast<char*>(&nbr_lomb_)) + sizeof(map_));
@@ -9786,15 +9788,13 @@ const char* infoRoom::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated string pseudo = 5;
+      // repeated .Join_groupe_r joueur = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr -= 1;
           do {
             ptr += 1;
-            auto str = _internal_add_pseudo();
-            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "infoRoom.pseudo"));
+            ptr = ctx->ParseMessage(_internal_add_joueur(), ptr);
             CHK_(ptr);
             if (!ctx->DataAvailable(ptr)) break;
           } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
@@ -9850,14 +9850,12 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(4, this->_internal_map(), target);
   }
 
-  // repeated string pseudo = 5;
-  for (int i = 0, n = this->_internal_pseudo_size(); i < n; i++) {
-    const auto& s = this->_internal_pseudo(i);
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
-      s.data(), static_cast<int>(s.length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
-      "infoRoom.pseudo");
-    target = stream->WriteString(5, s, target);
+  // repeated .Join_groupe_r joueur = 5;
+  for (unsigned int i = 0,
+      n = static_cast<unsigned int>(this->_internal_joueur_size()); i < n; i++) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(5, this->_internal_joueur(i), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -9876,12 +9874,11 @@ size_t infoRoom::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // repeated string pseudo = 5;
-  total_size += 1 *
-      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(pseudo_.size());
-  for (int i = 0, n = pseudo_.size(); i < n; i++) {
-    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-      pseudo_.Get(i));
+  // repeated .Join_groupe_r joueur = 5;
+  total_size += 1UL * this->_internal_joueur_size();
+  for (const auto& msg : this->joueur_) {
+    total_size +=
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
   }
 
   // uint32 nbr_lomb = 1;
@@ -9943,7 +9940,7 @@ void infoRoom::MergeFrom(const infoRoom& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  pseudo_.MergeFrom(from.pseudo_);
+  joueur_.MergeFrom(from.joueur_);
   if (from.nbr_lomb() != 0) {
     _internal_set_nbr_lomb(from._internal_nbr_lomb());
   }
@@ -9979,7 +9976,7 @@ bool infoRoom::IsInitialized() const {
 void infoRoom::InternalSwap(infoRoom* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
-  pseudo_.InternalSwap(&other->pseudo_);
+  joueur_.InternalSwap(&other->joueur_);
   swap(nbr_lomb_, other->nbr_lomb_);
   swap(nbr_eq_, other->nbr_eq_);
   swap(time_round_, other->time_round_);

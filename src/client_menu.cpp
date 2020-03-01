@@ -253,8 +253,8 @@ infoRoom_s Client::getInfoRoom(){
 	res.map = obj.map();
 	res.time_round = obj.time_round();
 
-	for (int i=0; i<obj.pseudo_size();++i){
-		res.pseudos.push_back(obj.pseudo(i));
+	for (int i=0; i<obj.joueur_size();++i){
+		res.pseudos.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
 	}
 
 	delete reponse;
