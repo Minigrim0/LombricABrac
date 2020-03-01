@@ -38,10 +38,12 @@ void Joueur::set_nb_lombs(uint8_t nb_lombs){
 }
 
 void Joueur::sendMessage(std::string msg){
+    std::cout << "locking4" << std::endl;
     pub_mutex.lock();
     s_sendmore_b(publisher, m_channel);
     s_send_b(publisher, msg);
     pub_mutex.unlock();
+    std::cout << "unlocking" << std::endl;
 }
 
 void Joueur::set_pseudo(std::string pseudo){
@@ -116,9 +118,11 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         stream.str("");
         stream.clear();
         stream << "user/" << zmq_msg.receiver_id() << "/check_room";
+        std::cout << "locking5" << std::endl;
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
+        std::cout << "unlocking" << std::endl;
         pub_mutex.unlock();
     }
     else if(zmq_msg.type_message() == JOIN_GROUP_S){
@@ -150,11 +154,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         }
 
         //Sending the informations about the user who changed team
-        pub_mutex.lock();
         for(size_t i = 0;i<m_players.size();i++){
             m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
-        pub_mutex.unlock();
     }
     else if(zmq_msg.type_message() == INFO_ROOM){
         UserConnect usr;
@@ -207,11 +209,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 map_m.ParseFromString(zmq_msg.message());
                 map_id = map_m.id();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
             case NB_EQ_MOD:{
@@ -220,12 +220,10 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 eq_m.ParseFromString(zmq_msg.message());
                 nbr_eq = eq_m.nbr_eq();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                     m_players[i].set_equipe(0);
                 }
-                pub_mutex.unlock();
                 break;
             }
             //case TIME_MOD:{
@@ -253,11 +251,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 time_r_m.ParseFromString(zmq_msg.message());
                 time_round_game = time_r_m.time();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
             case NB_LOMB_MOD:{
@@ -266,22 +262,18 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 nbr_lomb_m.ParseFromString(zmq_msg.message());
                 nbr_lomb = nbr_lomb_m.nbr_lomb();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
             case START:{
                 *current_step = STEP_GAME;
                 zmq_msg.set_type_message(START);
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
 
