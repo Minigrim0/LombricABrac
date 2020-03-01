@@ -151,7 +151,7 @@ void Client::sendMessage(message& msg){
 
 	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
 
-	if (msg.text != ""){
+	if (msg.text.size()){
 		if (size > 0){
 			res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
 			while (sent_size<size){ //envoie tout le message (string)
