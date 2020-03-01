@@ -224,7 +224,7 @@ info Menu_creation_partie::run(info information)
           information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
           information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
           information.client->setMap(static_cast<uint32_t>(nombre4));//la map
-          //information.client->set_nbr_equipes(static_cast<uint32_t>(nombre1));
+          information.client->set_nbr_equipes(static_cast<uint32_t>(nombre1));
           information.id=28;
           break;
         }

@@ -60,6 +60,21 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 	sendMutex.unlock();
 }
 
+void Client::set_nbr_equipes(uint32_t nbr_eq){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Nbr_eq_mod obj;
+	obj.set_nbr_eq(nbr_eq);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = NB_EQ_MOD;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 void Client::setLombricName(uint32_t id, std::string name){
 	message m{};
 

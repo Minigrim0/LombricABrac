@@ -179,6 +179,7 @@ public:
 	void setTime(uint32_t time);//défini durée partie
 	void setTimeRound(uint32_t time_round);//défini durée par tours
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
+	void set_nbr_equipes(uint32_t nbr_eq);
 	void changeTeam(uint32_t id_equipe);
 
 	//méthode pour l'historique
