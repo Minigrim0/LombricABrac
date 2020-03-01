@@ -37,8 +37,8 @@ int main(int argc, char** argv) {
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
         username       CHAR(40) NOT NULL,\
         password       CHAR(40) NOT NULL,\
-        connected      BOOL,\
-        victory_amount INT\
+        connected      BOOL DEFAULT FALSE,\
+        victory_amount INT DEFAULT 0\
     );";
 
     rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
