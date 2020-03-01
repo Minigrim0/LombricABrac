@@ -87,7 +87,7 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
                     history->set_point_4(std::stoi(argv[i]));
                 }
                 else if(strcmp(azColName[i], "timestamp") == 0){
-                    history->set_date(std::stoi(argv[i]));
+                    history->set_date(argv[i]);
                 }
             }
             break;
