@@ -73,7 +73,6 @@ info Request_history_window::run(info information)
 
     }
   }
-  cout<<information.friends;
   clear();
   endwin();
   return information;

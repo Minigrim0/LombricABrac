@@ -42,7 +42,7 @@ info Historique_window::run(info information)
       joueur= joueur + "Score : " + to_string(historique.table[i].point[a]) + ' ';
       joueur = joueur + "|| ";
     }
-    joueur= joueur +" date : "+ to_string(historique.table[i].date);
+    joueur= joueur +" date : "+ historique.table[i].date;
     historique.table[i].pseudo[0]=joueur;
   }
 
@@ -90,69 +90,72 @@ info Historique_window::run(info information)
   {
     //box(win, 0, 0);//sert a faire les bords de la fenetre
     touch = wgetch(win);
-    switch (touch) {
-      case KEY_UP:
-        effacer_caractere_window(win, y , x, len_arrow);
-        //si on veut scroller vers le haut et qu'on n 'est pas au début du tab'
-        if ((y-4) == (posStart_arrow - 4) && at_start_tab == FALSE)
-        {
-          at_end_tab = FALSE;
-          n = 0;
-          key--;
-          wclear(win);
-          print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
-          for (i = key; i < nbr_printed+key; i++)
+    if (size_history !=0)
+    {
+      switch (touch) {
+        case KEY_UP:
+          effacer_caractere_window(win, y , x, len_arrow);
+          //si on veut scroller vers le haut et qu'on n 'est pas au début du tab'
+          if ((y-4) == (posStart_arrow - 4) && at_start_tab == FALSE)
           {
-            print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
-            n+=4;
-            if (i == nbr_printed-1 && key == 0)
+            at_end_tab = FALSE;
+            n = 0;
+            key--;
+            wclear(win);
+            print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
+            for (i = key; i < nbr_printed+key; i++)
             {
-              at_start_tab = TRUE;
-              i += size_history;
+              print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
+              n+=4;
+              if (i == nbr_printed-1 && key == 0)
+              {
+                at_start_tab = TRUE;
+                i += size_history;
+              }
             }
+            y = posStart_arrow +4;
           }
-          y = posStart_arrow +4;
-        }
-        //pour ne pas depasser la window
-        if ((y-4) != (posStart_arrow-4))
-        {
-          y-=4;
-        }
-        print_string_window(win, y, x, arrow);
+          //pour ne pas depasser la window
+          if ((y-4) != (posStart_arrow-4))
+          {
+            y-=4;
+          }
+          print_string_window(win, y, x, arrow);
 
-        break;
-      case KEY_DOWN:
-        effacer_caractere_window(win, y , x, len_arrow);
-        //si on veut scroller ver sle baset qu'on n'est pas à la fin du tab
-        if ((y+4) == (posEnd_arrow+4) && at_end_tab== FALSE)
-        {
-          at_start_tab = FALSE;
-          n =0;
-          key++;
-          wclear(win);
-          print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
-          for (i = key; i < nbr_printed+key; i++)
+          break;
+        case KEY_DOWN:
+          effacer_caractere_window(win, y , x, len_arrow);
+          //si on veut scroller ver sle baset qu'on n'est pas à la fin du tab
+          if ((y+4) == (posEnd_arrow+4) && at_end_tab== FALSE)
           {
-            print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
-            n+=4;
-            if (i == size_history- 1)
+            at_start_tab = FALSE;
+            n =0;
+            key++;
+            wclear(win);
+            print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
+            for (i = key; i < nbr_printed+key; i++)
             {
-              at_end_tab = TRUE;
-              i += size_history;
+              print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
+              n+=4;
+              if (i == size_history- 1)
+              {
+                at_end_tab = TRUE;
+                i += size_history;
+              }
             }
+            y = posEnd_arrow -4;
           }
-          y = posEnd_arrow -4;
-        }
-        //pour éviter de descendre en dehors de la window
-        if ((y+4) != (posEnd_arrow+4))
-        {
-          y+=4;
-        }
-        print_string_window(win, y, x, arrow);
-        break;
-      default:
-        break;
-    }
+          //pour éviter de descendre en dehors de la window
+          if ((y+4) != (posEnd_arrow+4))
+          {
+            y+=4;
+          }
+          print_string_window(win, y, x, arrow);
+          break;
+        default:
+          break;
+      }
+  }
     if (touch == 263)//263 == touche delete
     {
       information.id = 2;
