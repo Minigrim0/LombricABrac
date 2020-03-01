@@ -19,6 +19,7 @@ protected:
 	unsigned long skin;
 public:
 	Sprite(int x, int y, unsigned long skin, uint32_t id_l);
+	Sprite(uint32_t id_l, Map* carte);
 	uint32_t getId();
 	unsigned long getSkin();
 	void getPos(int *pos);//rempli le tableau pos des coordonnées x et y
@@ -42,6 +43,7 @@ private:
 	int vie;
 public:
 	Lombric_c(int id,int x, int y, unsigned long skin, int pv);
+	Lombric_c(int id, int pv, Map* carte);//constructeur pour le seveur
 	bool update(Map* carte, double t) override;//update laa position
 	void move(int type, Map* carte);//gestion du déplacement (ctrl par le user)
 	inline void addLife(int n){vie += n;}

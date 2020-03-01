@@ -7,7 +7,7 @@ init_db
 *.db
 supdata.log
 cpl_proto/
-cppzmq/
-libzmq/
+Server/lib/cppzmq/
+Server/lib/libzmq/
 Server/client
 map

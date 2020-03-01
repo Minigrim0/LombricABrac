@@ -107,3 +107,7 @@ void Partie::addDeletedBlock(std::vector<int> v){
       blockDeleted.add_coord(*i);
     }
 }
+
+bool Partie::isLombAlive(int id){
+  return dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id))->getLife() > 0;
+}
