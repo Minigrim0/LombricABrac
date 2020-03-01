@@ -18,15 +18,13 @@ info Salon_Attente::run(info information)
   string titre= "Salon d'attente";
   string indication = "Appuyer sur 'a,b,c ou d' respectivement pour l'équipe 1,2,3 ou 4.";
   string msg_attente = "En attente de l'hote...";
-  string equipe[4]= {"Equipe 1:","Equipe 2:","Equipe 3:","Equipe 4:"};
-  string name[4]={"ismaroco le bg","alexise","gamerhack32","israel"};
   string arrow = "-> ";
   string bouttonPlay = "Lancer partie";
   string bouttonLeave = "Annuler";
   string bouttonSetting = "Option";
   string bouttonInvit = "Inviter amis";
   int map, nbr_equipe, time_round, nbr_lombric;
-  vector<string> joueur_in_room;
+  //vector<string> joueur_in_room;
 
   //on get les infos de la partie
   infoRoom_s Info_salon;
@@ -76,7 +74,6 @@ info Salon_Attente::run(info information)
   wrefresh(getInput);
   wrefresh(pseudo);
 
-  print_string_window(pseudo,1,1,name[0]);
   len_str=static_cast<int>(titre.size());
   draw(1,(max_x/2)-len_str/2,titre);
 
@@ -106,6 +103,7 @@ info Salon_Attente::run(info information)
   //len_str= static_cast<int>(equipe[0].size());
   if (!information.ishost)
   {
+    print_string_window(pseudo,1,1,information.username);
     len_str=static_cast<int>(titre.size());
     pseudo=newwin(4,20,11,(max_x/2)-len_str/2);
     len_str=static_cast<int>(indication.size());
@@ -257,6 +255,7 @@ info Salon_Attente::run(info information)
         {
           if ( x == x_arrow1)
           {
+
             information.id = 2;
             break;
           }
