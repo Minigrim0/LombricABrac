@@ -15,7 +15,8 @@ info Menu_creation_partie::run(info information)
   bool setting_one = TRUE;
   bool setting_two = TRUE;
   bool setting_three = TRUE;
-  int nombre1, nombre2, nombre3;
+  bool setting_four = TRUE;
+  int nombre1, nombre2, nombre3, nombre4;
   int set = 0;
   int ret =0;
   initscr();
@@ -25,13 +26,15 @@ info Menu_creation_partie::run(info information)
   char str[15];
   char str2[15];
   char str3[15];
-  string msg_nombre_equipe="Veuillez entrez le nombre d'équipe (min 2/max 4) :";
-  string msg_nombre_lombric="Veuillez entre le nombre de lombric par équipe (max 8 par équipe):";
+  char str4[15];
+  string msg_nombre_equipe="Veuillez entrer le nombre d'équipe (min 2/max 4) :";
+  string msg_nombre_lombric="Veuillez entrer le nombre de lombric par équipe (max 8 par équipe):";
   string msg_titre= "Création de partie";
   string msg_temps="Temps maximum (en seconde)pour chaque tour (max 100)  :";
+  string msg_map ="Veuillez entrer l'id de la carte (entre 1 et 3)";
   string msg_confirmation="Pour confirmer, appuyez sur ENTER";
   string msg_quitter="Pour revenir en arriere, appuyez sur RETURN";
-  WINDOW *nombre_equipe,*nombre_lombric,*temps,*confirmer;
+  WINDOW *nombre_equipe,*nombre_lombric,*temps,*map,*confirmer;
   getmaxyx(stdscr,len_str,largeur);
 
 
@@ -40,26 +43,30 @@ info Menu_creation_partie::run(info information)
   draw(1,(largeur/2)-(static_cast<int>(len_str/2)),msg_titre.c_str());
 
   //on crée les differentes sous-window
-  confirmer=newwin(5,50,13,(largeur/2)-18);
+  confirmer=newwin(5,50,15,(largeur/2)-18);
   nombre_equipe= newwin(3,20,4,2);
   nombre_lombric= newwin(3,20,7,2);
   temps=newwin(3,20,10,2);
+  map=newwin(3,20,13,2);
 
   //on crée des bordures
   box(nombre_lombric,0,0);
   box(temps,0,0);
   box(nombre_equipe,0,0);
+  box(map,0,0);
 
   //on print les messages
   draw(5,23,msg_nombre_equipe);
   draw(8,23,msg_nombre_lombric);
   draw(11,23,msg_temps);
+  draw(14,23,msg_map);
 
   //on refresh les window
   refresh();
   wrefresh(nombre_equipe);
   wrefresh(nombre_lombric);
   wrefresh(temps);
+  wrefresh(map);
 
   //on prend les infos qu'on ecrit au clavier
   mvwgetnstr(nombre_equipe,1,1,str,14);
@@ -109,13 +116,27 @@ info Menu_creation_partie::run(info information)
     set++;
   }
 
+  mvwgetnstr(map,1,1,str4,14);
+  try
+  {
+    nombre4 = stoi(str4);
+  } catch (invalid_argument &){
+    setting_four = FALSE;
+    ret++;
+  }
+  if (nombre4 < 1 || nombre4 > 3)
+  {
+    setting_four = FALSE;
+    set++;
+  }
+
   //on voit plus le curseur de la souris
   curs_set(FALSE);
   refresh();
   //on print le msg de confirmation et d'annulation
   print_string_window(confirmer,1,1,msg_confirmation.c_str());
   len_str=static_cast<int>(msg_quitter.size());
-  draw(15,(largeur/2)-(static_cast<int>(len_str/2 -1)),msg_quitter.c_str());
+  draw(17,(largeur/2)-(static_cast<int>(len_str/2 -1)),msg_quitter.c_str());
   refresh();
 
   //on active les fleches
@@ -183,12 +204,26 @@ info Menu_creation_partie::run(info information)
             break;
           }
         }
+        if(!setting_four)
+        {
+          if (information.id == 221)
+          {
+            information.id = 631;
+            break;
+          }
+          else
+          {
+            information.id = 63;
+            break;
+          }
+        }
         else
         {
 
           information.client->createRoom();
           information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
           information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
+          information.client->setMap(nombre4);//la map
           //information.client->set_nbr_equipes(nombre1);
           information.id=28;
           break;

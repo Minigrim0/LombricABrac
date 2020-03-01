@@ -73,6 +73,10 @@ string Window::get_message_Window(int id_window)
   {
     message = "Le troisième paramètre n'est pas correcte.";
   }
+  if (id_window == 63 || id_window == 631)
+  {
+    message = "Le quatrième paramètre n'est pas correcte.";
+  }
   if (id_window == 62)
   {
     message = "Le pseudo existe déjà.";

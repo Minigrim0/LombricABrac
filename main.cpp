@@ -204,6 +204,10 @@ int main(int argc, char** argv)
     {//lance pop up pseuod existant
       information = popup_window.run(information);
     }
+    if (information.id == 63)
+    {//lance pop up problème para 4
+      information = popup_window.run(information);
+    }
     if (information.id == 51)
     {//lance pop up pseudo ou mot de passe incorrect
       information = popup_window.run(information);
