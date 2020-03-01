@@ -54,6 +54,9 @@ int client_thread(int socket_client){
                 else if(type == USR_ADD){
                     la_poste.envoie_msg(USR_ADD, zmqmsg.message());
                 }
+                else if(type == START){
+                    la_poste.envoie_msg(START, zmqmsg.message());
+                }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
@@ -86,9 +89,7 @@ int client_thread(int socket_client){
                     zmqmsg.set_message("");
                 }
 
-                std::cout << "locking6" << std::endl;
                 pub_mutex.lock();
-                std::cout << "locked" << std::endl;
                 s_sendmore_b(publisher, game_url);
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
