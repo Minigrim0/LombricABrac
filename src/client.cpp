@@ -48,7 +48,7 @@ int Client::run(){
 			perror("'select' failed");close(client_socket);return 1;
 		}
 		//std::string t = "echo 'on sort' >> out.txt";
-	  system(t.c_str());
+	  //system(t.c_str());
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			res = readMessage();
@@ -59,13 +59,16 @@ int Client::run(){
 			switch (msg.type) {
 				case CHAT_R: //on a recu un chat
 					chatRcv(msg);
+					break;
 				case INVI_R: //on a recu une invitation de partie
 					invite(msg);
+					break;
 				case FRI_RCV: //on a recu une invitation d'ami
 					invite(msg);
+					break;
 				case START: //L'hôte a lancé la partie
 					notifyStarted(msg);
-
+					break;
 				case SHOOT: {//un joueur a tiré
 					//1er message: tir (armes + params)
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
@@ -83,32 +86,41 @@ int Client::run(){
 					}
 					tableUpdate.push_back(msg.text);
 					mutexPartie.unlock();
+					break;
 				}
 
 				case POS_LOMB_R: {//un lombric a bougé
 					Lomb_pos obj;
 					obj.ParseFromString(msg.text);
 					movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
+					break;
 				}
 				case JOIN_GROUP_R: {//quelqu'un a changé d'équipe
 					Join_groupe_r obj;
 					obj.ParseFromString(msg.text);
 					inNewTeam.push_back({obj.pseudo(),obj.id()});
+					break;
 				}
 
 				//paramètres changés:
 				case USR_ADD: //un joueur à été jouté dans le salon d'attente
 					nvJoueur(msg);
+					break;
 				case MAP_MOD: //L'hôte a changé de map
 					changeMap(msg);
+					break;
 				case TIME_MOD: //L'hôte a changé le temps de la partie
 					changeTime(msg);
+					break;
 				case TIME_ROUND_MOD: //L'hôte a changé le temps d'une partie
 					changeTimeRound(msg);
+					break;
 				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
 					changeNbrLombs(msg);
+					break;
 				case NEXT_ROUND: //début de round
-					endRound = m.text;
+					newRound = msg.text;
+					break;
 			}
 		}
 	}
@@ -149,7 +161,7 @@ int Client::readMessage(){
 	uint32_t size;//taille du message
 	int res;
 	//std::string test = "echo 'on rentre' >> out.txt";
-  system(test.c_str());
+  //system(test.c_str());
 	msgMutex.lock();
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
