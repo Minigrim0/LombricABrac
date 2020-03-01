@@ -268,6 +268,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 break;
             }
             case START:{
+                std::cout << "start" << std::endl;
                 *current_step = STEP_GAME;
                 zmq_msg.set_type_message(START);
 
@@ -351,15 +352,18 @@ void Game::end_round(){
 }
 
 void Game::spawn_lombric(){
+    std::cout << "spawnet" << std::endl;
     std::ostringstream stream;
     std::string myText;
     uint32_t hauteur;
     uint32_t largeur;
 
-    stream << "../map/" << map_id << ".map";
-
+    stream << static_cast<int>(map_id) << ".map";
+    std::cout << stream.str() << std::endl;
     std::ifstream MyReadFile(stream.str());
+    std::cout << "ouvert "<< std::endl;
     std::getline (MyReadFile, myText);
+    std::cout << "getline "<< std::endl;
     std::stringstream(myText) >> hauteur >> largeur;
     std::vector<std::string> map_s(hauteur);
 
@@ -369,12 +373,17 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
+    std::cout << "map" << std::endl;
     Map map(largeur,hauteur,map_s);
-
+    std::cout << "vector" << std::endl;
     std::vector<Sprite*> lombs;
+    std::cout << "fin vecto" << std::endl;
     for(size_t i=0;i<m_players.size();i++){
+        std::cout << "1" << std::endl;
         for(int j=0;j<nbr_lomb;j++){
+            std::cout << "lomb" << std::endl;
             lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
+            std::cout << "2" << std::endl;
         }
     }
 
