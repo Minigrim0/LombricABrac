@@ -101,7 +101,19 @@ int main(int argc, char** argv) {
         sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
               "VALUES (1, 2, 3, 4, 50, 20, 40, 50, true);"\
               "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
-              "VALUES (1, 2, 3, 4, 20, 10, 30, 100, true);";
+              "VALUES (1, 2, 3, 4, 20, 50, 45, 151, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 54423, 654, 54653, 5643, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 945, 86532, 5421, 542, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 865, 5421, 56432, 5432, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 765421, 57421, 75421, 75421, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 5421, 5421, 75421, 57421, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 57421, 5742542542, 681468146224618426, 5416546541564, true);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
