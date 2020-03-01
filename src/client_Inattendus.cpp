@@ -162,7 +162,8 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	int hauteur;
 	int largeur;
 
-	std::ifstream MyReadFile("../map/default.map");
+	std::string name = "../map/map" + std::to_string(currentParams.map) + ".map";
+	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
 	std::stringstream(myText) >> hauteur >> largeur;
 	std::vector<std::string> map(hauteur);
