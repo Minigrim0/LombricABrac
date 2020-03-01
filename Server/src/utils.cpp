@@ -43,38 +43,29 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 
 
 int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr, std::string zmq_msg){
-    std::cout << "lock" << std::endl;
     DataBase_mutex.lock();
     if(msg_type == CON_S){
-        std::cout << "con_s start" << std::endl;
         la_poste->reception();
-        std::cout << "con_s done" << std::endl;
         usr->ParseFromString(la_poste->get_buffer());
-        std::cout << usr->DebugString() << std::endl;
         if(usr->isregister()){ // si joueur a deja un compte
             if(usr->check_passwd(&db, usr->password())){
-                std::cout << "bon pass" << std::endl; // test indentifiant + password
                 int user_id;
                 db.get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
                 usr->set_auth(true);
                 la_poste->envoie_bool(CON_R,1);
                 db.connect_user(true, usr->pseudo());
-                std::cout << "unlock" << std::endl;
                 DataBase_mutex.unlock();
                 return 3;
             }
             else{
-                std::cout << "mauvais pass" << std::endl;
                 la_poste->envoie_bool(CON_R,0);
             }
         }
         else{
-            std::cout << "Creating user" << std::endl;
             int id = 0;
             db.get_user_id(usr->pseudo(), &id);
             if(id > 0){ // A user with the same pseudonym exists
-                std::cout << "Existing user with same pseudo id = " << id << std::endl;
                 la_poste->envoie_bool(CON_R, 0);
             }
             else{
@@ -87,7 +78,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     db.add_lombric(user_id, i, "anélonyme");
                 }
                 la_poste->envoie_bool(CON_R, 1);
-                std::cout << "unlock" << std::endl;
                 DataBase_mutex.unlock();
                 return 3;
             }
@@ -96,13 +86,10 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
     else if(usr->is_auth()){
         switch(msg_type){
             case CHAT_S:{
-                std::cout << "Sending message" << std::endl;
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
                 int receiver_id;db.get_user_id(chat_ob.pseudo(), &receiver_id);
-                std::cout << chat_ob.DebugString() << std::endl;
-                std::cout << chat_ob.msg() << std::endl;
                 db.send_message(usr->get_id(), receiver_id, chat_ob.msg());
                 Chat_broker chat_br;
                 chat_br.set_usr_id(usr->get_id());
@@ -117,7 +104,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case GET_CONVO:{
-                std::cout << "Getting convo" << std::endl;
                 convo_s request_convo;
                 Chat_r chat_r;
                 la_poste->reception();
@@ -132,7 +118,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     chat->set_pseudo(usr.pseudo());
                     chat->set_msg(chat_r.msgs(a).msg());
                 }
-                std::cout << "Sending to user : " << final_chat.DebugString() << std::endl;
                 la_poste->envoie_msg(CHAT_R, final_chat.SerializeAsString());
                 break;
             }
@@ -260,7 +245,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }
     }
-    std::cout << "unlock" << std::endl;
     DataBase_mutex.unlock();
     return 0;
 }
