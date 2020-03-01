@@ -5,7 +5,7 @@ using namespace std;
 #define min(_a,_b) _a<_b?_a:_b
 #define DELTA_T 50 //granularité du temps en millisecondes
 
-Partie::Partie(Map* m, std::vector<Sprite*> listLomb){}
+Partie::Partie(){}
 
 Partie::~Partie(){
   deleteinfoPartie_s(gameInfo);
