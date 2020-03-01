@@ -48,15 +48,22 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     //if(current_game.check_time()){
                     //    //mort subite
                     //}
+                    std::cout << "a" << std::endl;
                     std::string address = s_recv(subscriber);
+                    std::cout << "b" << std::endl;
                     if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
+                        std::cout << "c" << std::endl;
                         if(current_game.check_round_time()){
+                            std::cout << "d" << std::endl;
                             current_game.end_round();
                         }
                     }
                     else{
+                        std::cout << "e" << std::endl;
                         std::string contents = s_recv(subscriber);
+                        std::cout << "f" << std::endl;
                         zmqmsg.ParseFromString(contents);
+                        std::cout << "g" << std::endl;
                         current_game.handle_game(zmqmsg ,&current_step);
                     }
                 }

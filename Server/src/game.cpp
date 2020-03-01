@@ -38,12 +38,10 @@ void Joueur::set_nb_lombs(uint8_t nb_lombs){
 }
 
 void Joueur::sendMessage(std::string msg){
-    std::cout << "locking4" << std::endl;
     pub_mutex.lock();
     s_sendmore_b(publisher, m_channel);
     s_send_b(publisher, msg);
     pub_mutex.unlock();
-    std::cout << "unlocking" << std::endl;
 }
 
 void Joueur::set_pseudo(std::string pseudo){
@@ -118,16 +116,12 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         stream.str("");
         stream.clear();
         stream << "user/" << zmq_msg.receiver_id() << "/check_room";
-        std::cout << "locking5" << std::endl;
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
-        std::cout << "unlocking" << std::endl;
         pub_mutex.unlock();
     }
     else if(zmq_msg.type_message() == JOIN_GROUP_S){
-        std::cout << "join_group"<< std::endl; // notifie à tout le monde que tel joueur join la game
-
         Join_groupe_s request;
         Join_groupe_r groupe_r;
         UserConnect usr;
