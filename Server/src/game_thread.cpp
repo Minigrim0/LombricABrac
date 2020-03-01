@@ -44,6 +44,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
                 }
                 //current_game.set_begin();
+                current_game.spawn_lombric();
                 while(current_step == STEP_GAME){
                     //if(current_game.check_time()){
                     //    //mort subite

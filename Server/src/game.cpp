@@ -363,6 +363,4 @@ void Game::spawn_lombric(){
     MyReadFile.close(); 
     
     Map map(largeur,hauteur,map_s);
-
-
 }

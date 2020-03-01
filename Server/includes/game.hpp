@@ -52,6 +52,7 @@ class Game{
         void handle_room(ZMQ_msg zmq_msg, int* current_step);
         void handle_game(ZMQ_msg zmq_msg, int* current_step);
         void end_round();
+        void spawn_lombric();
 
     private:
         Partie obj_partie; //faut set les attributs de la partie au debut du jeu
