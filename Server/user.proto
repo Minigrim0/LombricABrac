@@ -94,7 +94,7 @@ message History{
   uint32 point_2 = 6;
   uint32 point_3 = 7;
   uint32 point_4 = 8;
-  uint32 date = 9;
+  string date = 9;
 }
 
 message History_r{
