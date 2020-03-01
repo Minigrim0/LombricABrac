@@ -154,8 +154,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
         zmq_msg.set_message(room.SerializeAsString());
         zmq_msg.set_type_message(INFO_ROOM);
-        stream << "users/" << zmq_msg.receiver_id() << "/partie";
 
+        stream << "users/" << zmq_msg.receiver_id() << "/partie";
         std::cout << stream.str() << std::endl;
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
@@ -173,15 +173,11 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         pub_mutex.lock();
         zmq_msg.set_type_message(USR_ADD);
         zmq_msg.set_message(usr.SerializeAsString());
+
+        m_players.push_back(newPlayer);
+
         for(size_t i = 0;i<m_players.size();i++){
-            stream.str("");
-            stream.clear();
-
-            stream << "users/" << newPlayer.get_id() << "/partie";
-            std::cout << stream.str() << std::endl;
-            s_sendmore_b(publisher, stream.str());
-            s_send_b(publisher, zmq_msg.SerializeAsString());
-
+            m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
     }
     else if(zmq_msg.receiver_id() == owner_id){
