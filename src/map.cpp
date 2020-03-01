@@ -12,7 +12,7 @@ bool Map::isTypeBloc(uint32_t x, uint32_t y, char type){
 }
 
 int Map::getColor(uint32_t x,uint32_t y){
-	int numColor;
+	int numColor = 0;
 	switch (mur[y][x]){//prend le bon numéro de couleur en fonction du bloc
       case AIR:
         numColor = AIR_COLOR;
@@ -42,7 +42,8 @@ void Map::setBloc(uint32_t x, uint32_t y, char type){
   mur[y][x] = type;
 }
 
-void Map::explose(std::vector<Sprite*> lombVect, int xExplosion, int yExplosion, int radius, int degat, int vitesse){
+std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
+  std::vector<int> res;
 	//retire tous les blocs touchés par l'explosion
   for(int x = xExplosion - radius; x <= xExplosion + radius; ++x) {//parcours le carré
     for(int y = yExplosion - radius; y <= yExplosion + radius; ++y){
@@ -50,34 +51,23 @@ void Map::explose(std::vector<Sprite*> lombVect, int xExplosion, int yExplosion,
       double yCircle = sqrt(pow(radius,2)-pow(x-xExplosion,2));
       double y1 = yCircle + yExplosion;
       double y2 = -yCircle + yExplosion;
-      if(y>=0 and x>=0 and y <= y1 and y >= y2 and isTypeBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),LIGHT_WALL)){//si les coords font parties du cercles et que c'est un bloc cassable
+      if(y>=0 && x>=0 && y <= y1 && y >= y2 && isTypeBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),LIGHT_WALL)){//si les coords font parties du cercles et que c'est un bloc cassable
         setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
+        res.push_back(x);
+        res.push_back(y);
       }
     }
   }
+  return res;
+}
 
-	//retire les points de vie au vers touchés par l'explosion
-	for(auto sp=lombVect.begin();sp!=lombVect.end();++sp){//parcours tous les sprites
-		if((*sp)->getId() != 0){//alors c'est un lombric
-			Lombric_c* lomb = dynamic_cast<Lombric_c*>((*sp));
-			int pos[2];
-			lomb->getPos(pos);
-			double dist = sqrt(pow(pos[0]-xExplosion,2) + pow(pos[1]-yExplosion,2));//distance du lombric et du centre de l'explosion
-			if(dist <= radius){//seuls les lombrics dans l'exlosion sont touchés
-				int dommage = static_cast<int>(round(degat*(radius-dist)/radius));//dégat que de prendre le lombric proportionnelement à la distance
-				lomb->addLife(dommage);
-
-				//Les lombrics touchés par l'explosion
-				//Décompose en 2 vecteur vitesse proportionnellement à la distance de l'explosion
-				//et a la position
-				double speedX = vitesse * (pos[0] - xExplosion)/radius;
-				double speedY = vitesse * (pos[1] - yExplosion)/radius;
-
-				lomb->setMovement(speedX, speedY, GRAVITY);
-			}
-
-		}
-	}
+void Map::explose(std::vector<int> coords){
+  auto point = coords.begin();
+  while (point != coords.end()){
+    int x = *(point++);
+    int y = *(point++);
+    setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
+  }
 }
 
 Map::~Map(){

@@ -23,6 +23,7 @@ struct infoPartie_s{
 	std::vector<Sprite*> spriteVector;
 	std::vector<Arme*> armesVector;
 	Lombric_c* currentWorms;
+	uint32_t tempsTour;
 	std::vector<Equipe*> teamsVector;
 };
 

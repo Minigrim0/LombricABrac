@@ -15,11 +15,11 @@ private:
 	double initX, initY;//position initiale
 	double initSpeedX, initSpeedY;//vitesses initiales
 	double gravity;
-	std::chrono::_V2::system_clock::time_point initTime;//t0 -> temps du début du déplacement
+	double initTime;
 	int moveType;//MRU ou PARABOLLE (tir non parabolique ou tir parabolique)
 public:
-	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav);
-	int* update(int* res);//modifie le tableau avec les coords de l'objets
+	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, double t0);
+	int* update(int* res, double t);//modifie le tableau avec les coords de l'objets, t -> temps actuel
 };
 
 #endif

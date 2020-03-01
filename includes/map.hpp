@@ -8,6 +8,7 @@
 
 #include "maccroAffichage.hpp"
 #include "sprite.hpp"
+#include "map.hpp"
 
 
 class Map{
@@ -23,7 +24,11 @@ public:
 	int getColor(uint32_t x,uint32_t y);//renvoie le numéro de la couleur du bloc en x y
 	int getColor(uint32_t pos);//renvoie le numéro de la couleur du pos ème bloc
 
-	void explose(std::vector<Sprite*> lombVect, int x, int y, int radius, int degat, int vitesse);//génère une explosion sur la carte
+	std::vector<int> explose(int xExplosion, int yExplosion, int radius);//génère une explosion sur la carte
+	//renvoie les liste des blocs détruits
+	void explose(std::vector<int> coords);//détruit tous les blocs dans le vecteur de int
+	//coords est un vecteur de taille pair les données vont 2 par 2  (x et y de chaque bloc)
+
 	//vitesse -> vitesse de propultion des lombrics au centre de cette explosion
 	//degat -> degat au centre de l'explosion à appliauer sur les worms
 

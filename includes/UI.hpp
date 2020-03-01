@@ -164,16 +164,17 @@ private:
 
   uint32_t weaponIndex; //id de l'arme
 
-  bool tour; // true si c'est à notre tour de jouer
   tour_s tourParam;
 
   time_t t0;//reset à chaque début de tour
   uint32_t spentTime;//temps écoulé depuis le début du tour
-  nextTour infoTour;//pour savoir à qui c'est de jouer
+  bool tour;
   paramsPartie gameParam;//parametre de la partie (surtout le temps qui nous intéresse)
-  std::vector<uint32_t> deadLombrics;//liste des ids des lombrics mort à communiquer avec le client
+  std::vector<int> blockDeleted;//contient tout les murs détruits -> utilisés pour synchroniser la carte avec le serveur
 
   uint32_t camX, camY; // position actuelle de la caméra (pour navigier dans la carte)
+
+  std::chrono::_V2::system_clock::time_point initTime;
 
   uint32_t screenWidth, screenHeight;//taille de la console
   uint32_t gameScreenWidth, gameScreenHeight;//taille de la fenêtre qui affiche l'overlay
@@ -185,17 +186,22 @@ private:
   bool mustRefreshOverlay;//a true s'il faut refresh l'overlay
   bool mustDrawWall;
 
-  void drawMap();//dessine toute la carte
+  void drawMap(double t);//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
   void drawMur(int pos);
 
-  void updateSprites(bool first);//bool a vrai s'il faut forcer l'affichage de chaque sprite même s'il n'a pas bougé
+  void updateSprites(double t);// t = temps actuel en milliseconde
   void drawSprite(Sprite* s, int* oldPos,int* newPos);//redessine le sprite
   void moveCurrentLombric(int mouvement);//peut prendre TRANSLATE_MOVE ou JUMP_MOVE en argument
 
   void resize();//test si la console a été resize, si oui ajuste l'affichage
 
   void writeOverlay();//fonction qui dessine tous l'overlay
+
+  void addDeletedBlock(std::vector<int> v);//ajoute v dans blockDeleted
+
+  void synchronizeMap(Block_Destroy b);//synchronise la carte (entre ce qui a été cassé en local et par le serveur)
+  void synchronizeLombrics(Degats_lombric d);
 
 public:
   Partie(Client* c);

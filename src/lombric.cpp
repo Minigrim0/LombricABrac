@@ -1,6 +1,11 @@
 #include "../includes/sprite.hpp"
 
+//y'a un warning surprenant par ici
 Lombric_c::Lombric_c(int id,int x, int y, unsigned long skin, int pv):Sprite(x, y, skin, id), direction(FORWARD),vie(pv){}
+
+Lombric_c::Lombric_c(int id, int pv, Map* carte):
+Sprite(id, carte),
+vie(pv){}
 
 void Lombric_c::move(int type, Map* carte){
 	uint32_t newX, newY;
@@ -27,11 +32,11 @@ void Lombric_c::move(int type, Map* carte){
   	}
 }
 
-bool Lombric_c::update(Map* carte){
+bool Lombric_c::update(Map* carte, double t){
 	if(movement){
 		int newPos[2];
-		movement->update(newPos);
-		//s'il est en mouvement et que le bloc en dessous est pas de l'air -> on arrête le mouvement et on oublie les nouvelles coordonnées 
+		movement->update(newPos, t);
+		//s'il est en mouvement et que le bloc en dessous est pas de l'air -> on arrête le mouvement et on oublie les nouvelles coordonnées
 		if(!carte->isTypeBloc(static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]),AIR)){
 			deleteMovement();
 		}
@@ -43,12 +48,29 @@ bool Lombric_c::update(Map* carte){
 
 	//si le lombric n'est pas en mouvement et qu'il flotte -> on lui applique une chute libre
 	if(!movement and carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
-		setMovement(0,0, GRAVITY, PARABOLLE);
+		setMovement(0,0, GRAVITY, PARABOLLE, t);
 	}
 
 	return vie > 0;
 }
 
-void Lombric_c::deathMove(infoPartie_s* inf){
+std::vector<int> Lombric_c::deathMove(infoPartie_s* inf, double t){
+	return std::vector<int>();
+}
 
+void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, int vitesse, double t){
+	int pos[2];
+	getPos(pos);
+	double dist = sqrt(pow(pos[0]-xExplosion,2) + pow(pos[1]-yExplosion,2));//distance du lombric et du centre de l'explosion
+	if(dist <= radius){//le lombric est à portée de l'explosion
+		int dommage = static_cast<int>(round(degat*(radius-dist)/radius));//dégat que de prendre le lombric proportionnelement à la distance
+		addLife(dommage);
+
+		//Décompose en 2 vecteur vitesse proportionnellement à la distance de l'explosion
+		//et a la position
+		double speedX = vitesse * (pos[0] - xExplosion)/radius;
+		double speedY = vitesse * (pos[1] - yExplosion)/radius;
+
+		setMovement(speedX, speedY, GRAVITY, PARABOLLE, t);
+	}
 }

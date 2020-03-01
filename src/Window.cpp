@@ -73,14 +73,6 @@ string Window::get_message_Window(int id_window)
   {
     message = "Le troisième paramètre n'est pas correcte.";
   }
-  if (id_window == 63 || id_window == 631)
-  {
-    message = "Le quatrième paramètre n'est pas correcte.";
-  }
-  if (id_window == 62)
-  {
-    message = "Le pseudo existe déjà.";
-  }
   return message;
 
 }
@@ -105,7 +97,6 @@ void Window::draw(int pos_y,int pos_x, string msg)
 {
   move(pos_y,pos_x);
   printw(msg.c_str());
-  refresh();
 }
 
 int Window::envoyer_info_client()
