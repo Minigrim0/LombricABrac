@@ -8,6 +8,25 @@
 #include "../includes/comm_macros.hpp"
 #include "../cpl_proto/user.pb.h"
 
+
+Joueur::Joueur()
+:Lombrics(std::vector<uint32_t>())
+{
+
+}
+
+Joueur::~Joueur(){}
+
+uint32_t Joueur::getNextLombricId(){
+    Lombrics;
+}
+
+void Joueur::set_nb_lombs(uint8_t nb_lombs){
+    Lombrics.resize(nb_lombs);
+}
+
+void Joueur::sendMessage(std::string);
+
 Game::Game(){}
 
 Game::~Game(){}
@@ -192,7 +211,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
         //    Time_mod time_m;
         //    time_m.ParseFromString(zmq_msg.message());
         //    time_game = time_m.time();
-        //    
+        //
         //    pub_mutex.lock();
         //    for(int i = 0;i<4;i++){
         //        stream.str("");
@@ -211,7 +230,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             Time_mod time_r_m;
             time_r_m.ParseFromString(zmq_msg.message());
             time_round_game = time_r_m.time();
-            
+
             pub_mutex.lock();
             for(int i = 0;i<4;i++){
                 stream.str("");
@@ -233,7 +252,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             Nbr_lomb_mod nbr_lomb_m;
             nbr_lomb_m.ParseFromString(zmq_msg.message());
             nbr_lomb = nbr_lomb_m.nbr_lomb();
-            
+
             pub_mutex.lock();
             for(int i = 0;i<4;i++){
                 stream.str("");
@@ -270,7 +289,7 @@ void Game::handle_room(ZMQ_msg zmq_msg , int* current_step){
             pub_mutex.unlock();
             break;
         }
-        
+
         default:
             break;
         }
