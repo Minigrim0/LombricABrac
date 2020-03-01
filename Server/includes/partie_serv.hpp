@@ -36,11 +36,11 @@ private:
   Block_Destroy blockDeleted;
 
   bool updateSprites(int t);//bool a vrai s'il faut forcer l'affichage de chaque sprite même s'il n'a pas bougé
-  bool moveCurrentLombric(std::string s);//prend le string de Lomb_pos
   void addDeletedBlock(std::vector<int> v);
 public:
   Partie();
 
+  bool moveCurrentLombric(std::string s);//prend le string de Lomb_pos
   void insertProj(std::vector<int> v, int id);
   void setParam(Map* m, std::vector<Sprite*> listLomb);
   //méthode qui fait les calculs d'une utilisation d'arme et qui renvoie un tableau de 2 strings

@@ -26,15 +26,17 @@ class Joueur{
         std::vector<uint32_t> Lombrics;
 };
 
-//Tout ce qui est en rapport avec la fin de la partie(timer) sera gerer partie 3(eau qui monte)
+//Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
 class Game{
     public:
-        Game();
+        Game(uint32_t owner);
         ~Game();
 
         //void set_begin();
         void set_round_time();
+        void set_setting_game();
         void set_lomb(int nbr_player,int nb_lomb);
+        void spawn_lombric();
         bool check_round_time();
         //bool check_time();
         uint8_t* who_next();

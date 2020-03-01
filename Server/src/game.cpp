@@ -1,5 +1,7 @@
 #include <iostream>
 #include <ctime>
+#include <sstream>
+#include <fstream>
 
 #include "../includes/game.hpp"
 #include "../includes/game_thread.hpp"
@@ -27,7 +29,9 @@ void Joueur::set_nb_lombs(uint8_t nb_lombs){
 
 void Joueur::sendMessage(std::string);
 
-Game::Game(){}
+Game::Game(uint32_t owner){
+    owner_id = owner;
+}
 
 Game::~Game(){}
 
@@ -300,6 +304,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
     std::ostringstream stream;
     switch (zmq_msg.type_message()){
         case POS_LOMB_S:{
+            obj_partie.moveCurrentLombric(zmq_msg.message());
             zmq_msg.set_type_message(POS_LOMB_R);
             for(int i = 0;i<4;i++){
                 stream.str("");
@@ -333,12 +338,8 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
             std::vector<std::string> res;
             res = obj_partie.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
-            List_Projectiles list_proj;
-            Degats_lombric deg_lomb;
-            list_proj.ParseFromString(res[0]);
-            deg_lomb.ParseFromString(res[1]);
             zmq_msg.set_type_message(POS_PROJ);
-            zmq_msg.set_message(list_proj.SerializeAsString());
+            zmq_msg.set_message(res[0]);
             for(int i = 0;i<4;i++){
                 stream.str("");
                 stream.clear();
@@ -353,7 +354,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
                 }
             }
             zmq_msg.set_type_message(LOMB_DMG);
-            zmq_msg.set_message(deg_lomb.SerializeAsString());
+            zmq_msg.set_message(res[1]);
             for(int i = 0;i<4;i++){
                 stream.str("");
                 stream.clear();
@@ -398,4 +399,28 @@ void Game::end_round(){
         }
     }
     time(&time_round);
+}
+
+void Game::spawn_lombric(){
+    std::ostringstream stream;
+    std::string myText;
+    uint32_t hauteur;
+    uint32_t largeur;
+
+    stream << "../map/" << map_id << ".map";
+
+    std::ifstream MyReadFile(stream.str());
+    std::getline (MyReadFile, myText);
+    std::stringstream(myText) >> hauteur >> largeur;
+    std::vector<std::string> map_s(hauteur);
+
+    for (int i =0; i<hauteur; i++) {
+        std::getline (MyReadFile, map_s[i]);
+    }
+
+    MyReadFile.close(); 
+    
+    Map map(largeur,hauteur,map_s);
+
+
 }

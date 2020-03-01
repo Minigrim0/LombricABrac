@@ -8,13 +8,13 @@
 #include "../includes/utils.hpp"
 #include "../cpl_proto/user.pb.h"
 
-int game_thread(std::string chan_sub, uint32_t owner_id){
+int game_thread(std::string chan_sub, uint32_t owner){
 
     bool game_running = true;
     int current_step = STEP_ROOM;
-    Game current_game;
+    Game current_game(owner);
     ZMQ_msg zmqmsg;
-    
+
     zmq::context_t context(1);
     zmq::socket_t subscriber(context, ZMQ_SUB);
     subscriber.connect("tcp://localhost:5563");
@@ -37,7 +37,7 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
                 
                 break;
             }
-            case STEP_GAME:
+            case STEP_GAME:{
                 std::cout << "You're in the game" << std::endl;
                 {
                     size_t opt_value = 500;
@@ -61,6 +61,7 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
                     }
                 }
                 break;
+            }
             case STEP_ENDSCREEN:
                 std::cout << "You're in the end screen" << std::endl;
                 break;
