@@ -91,7 +91,7 @@ std::vector<chat_r> Client::getConvo(std::string username){
 	obj.SerializeToString(&m.text); //convertis stucture en string
 	m.type = GET_CONVO;
 
-	std::string* reponse = waitAnswers(CONVO_R, m); //envoie le message au serveur et attends la réponse
+	std::string* reponse = waitAnswers(CHAT_R, m); //envoie le message au serveur et attends la réponse
 
 	convo_r obj_r;
 	std::vector<chat_r> res;
@@ -133,9 +133,10 @@ void Client::mursChanged(message &m){
 	changed = true; //modifications sur la map
 }
 
+/*
 void Client::newProjectile(message &m){
 	//ds la fct shoot on donnes des params diff que la struct projectile_s?? OK???
-}
+}*/
 
 void Client::sendMessage(message& msg){
 	int res;
@@ -353,7 +354,7 @@ stringTable Client::getLombricsName(){
 	res->size = 8;
 	res->table = new std::string[8];//on va recevoir 8 noms de lombrics
 	
-	m.type = GAT_LOMB;
+	m.type = GET_LOMB;
 	m.text = "";
 
 	std::string* reponse = waitAnswers(LOMB_R,m);
@@ -481,18 +482,20 @@ historyTable* Client::get_history(std::string user, uint32_t first_game, uint32_
 	res->table = new gameHistory[res->size];
 
 
-	res->table->pseudo = new std::string[static_cast<uint32_t>(obj_r.history(0).pseudo_size())];
-	res->table->point = new uint32_t[static_cast<uint32_t>(obj_r.history(0).point_size())];
+	res->table->pseudo = new std::string[static_cast<uint32_t>(4)];
+	res->table->point = new uint32_t[static_cast<uint32_t>(4)];
 	for (int i=0;i<res->size;i++){
 		//les pseudos des joueurs de la partie
 		uint32_t index_table = static_cast<uint32_t>(i);
-		for (int j=0;j<4;i++){
-			res->table[index_table].pseudo[static_cast<uint32_t>(j)] = obj_r.history(i).pseudo(j);
-		}
-		//les points
-		for (int j=0;j<4;i++){
-			res->table[index_table].point[static_cast<uint32_t>(j)] = obj_r.history(i).point(j);
-		}
+		res->table[index_table].pseudo[static_cast<uint32_t>(0)] = obj_r.history(i).pseudo_1();
+		res->table[index_table].pseudo[static_cast<uint32_t>(1)] = obj_r.history(i).pseudo_2();
+		res->table[index_table].pseudo[static_cast<uint32_t>(2)] = obj_r.history(i).pseudo_3();
+		res->table[index_table].pseudo[static_cast<uint32_t>(3)] = obj_r.history(i).pseudo_4();
+		//les points des joueurs de la partie
+		res->table[index_table].point[static_cast<uint32_t>(0)] = obj_r.history(i).point_1();
+		res->table[index_table].point[static_cast<uint32_t>(1)] = obj_r.history(i).point_2();
+		res->table[index_table].point[static_cast<uint32_t>(2)] = obj_r.history(i).point_3();
+		res->table[index_table].point[static_cast<uint32_t>(3)] = obj_r.history(i).point_4();
 		//la date
 		res->table[index_table].date = obj_r.history(i).date();
 	}
@@ -617,12 +620,12 @@ void Client::getGameInfo(infoPartie_s* gameInfo){
 
 
 #include <thread>
-int main(){
+int main(){/*
 	Client c("127.0.0.1", 4444);
 	std::thread t (&Client::run,&c);
 
 	bool res = true;
 	res = c.connection("Simon", "Password", true);
 	std::cout << res << std::endl;
-	t.join();
+	t.join();*/
 }
