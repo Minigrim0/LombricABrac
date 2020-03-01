@@ -102,7 +102,7 @@ int main(int argc, char **argv){
     errno = 0;
 
     if(argc != 2) {
-        std::cout << "You must provide the port you want to use as a parameter" << std::endl;
+        std::cout << "You must provide the port you want to use as first and only parameter" << std::endl;
         return EXIT_FAILURE;
     }
 
