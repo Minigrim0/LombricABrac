@@ -75,8 +75,6 @@ info Menu_creation_equipe_lombric::run(info information)
   draw(15,largeur/2 +10,msg_lombric8);
   char* name[9]= {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8};
 
-  int decalage1=0;
-  int decalage2=0;
   lombric_name= information.client->getLombricsName();
   //draw(20,x,msg_pseudo.c_str());
 
