@@ -9,7 +9,7 @@
 class Joueur{
     public:
         Joueur(int nbLomb);
-        ~Joueur();
+        virtual ~Joueur();
 
         uint32_t getNextLombricId(Partie* obj_partie, int nbLomb);
         void set_nb_lombs(uint8_t);
@@ -41,7 +41,7 @@ class Joueur{
 class Game{
     public:
         Game(uint32_t owner);
-        ~Game();
+        virtual ~Game();
 
         //void set_begin();
         void set_round_time();
