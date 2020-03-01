@@ -103,7 +103,23 @@ uint32_t Game::who_next(){
 
 void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     std::ostringstream stream;
-    if(zmq_msg.type_message() == JOIN_GROUP_S){
+    if(zmq_msg.type_message() == PING){
+        if(m_players.size < 4){
+            zmq_msg.set_message("true");
+        }
+        else
+        {
+            zmq_msg.set_message("false");
+        }
+        stream.str("");
+        stream.clear();
+        stream << "user/" << zmq_msg.receiver_id() << "/room";
+        pub_mutex.lock();
+        s_sendmore_b(publisher, stream.str());
+        s_send_b(publisher, zmq_msg.SerializeAsString());
+        pub_mutex.unlock();
+    }
+    else if(zmq_msg.type_message() == JOIN_GROUP_S){
         std::cout << "join_group"<< std::endl; // notifie à tout le monde que tel joueur join la game
 
         Join_groupe_s request;
