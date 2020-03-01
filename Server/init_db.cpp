@@ -98,10 +98,10 @@ int main(int argc, char** argv) {
     }
 
     if(fill_db){
-        sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
-              "VALUES (1, 2, 3, 4, 50, 20, 40, 50);"\
-              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
-              "VALUES (1, 2, 3, 4, 20, 10, 30, 100);";
+        sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 50, 20, 40, 50, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 20, 10, 30, 100, true);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
