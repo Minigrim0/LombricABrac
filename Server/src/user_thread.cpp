@@ -48,6 +48,9 @@ int client_thread(int socket_client){
                     is_on_game = true;
                     game_url = zmqmsg.message();
                 }
+                else if(type == INFO_ROOM){
+                    la_poste.envoie_msg(INFO_ROOM, zmqmsg.message());
+                }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
@@ -68,11 +71,17 @@ int client_thread(int socket_client){
             if(is_on_game){
                 std::cout << "---> Redirecting to room" << std::endl;
                 ZMQ_msg zmqmsg;
-                la_poste.reception();
 
                 zmqmsg.set_type_message(type);
-                zmqmsg.set_message(la_poste.get_buffer());
                 zmqmsg.set_receiver_id(usr.get_id());
+
+                if(type != INFO_ROOM){
+                    la_poste.reception();
+                    zmqmsg.set_message(la_poste.get_buffer());
+                }
+                else{
+                    zmqmsg.set_message("void");
+                }
 
                 pub_mutex.lock();
                 s_sendmore_b(publisher, game_url);

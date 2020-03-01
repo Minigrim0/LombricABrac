@@ -161,9 +161,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         infoRoom room;
         Joueur newPlayer(nbr_lomb);
 
-        room.set_nbr_lomb(nbr_lomb);
-        room.set_map(map_id);
-        room.set_nbr_eq(nbr_eq);
+        room.set_nbr_lomb(static_cast<uint32_t>(nbr_lomb));
+        room.set_map(static_cast<uint32_t>(map_id));
+        room.set_nbr_eq(static_cast<uint32_t>(nbr_eq));
         room.set_time_round(time_round_game);
 
         for(size_t i = 0;i<m_players.size();i++){
