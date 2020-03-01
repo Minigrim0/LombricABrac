@@ -156,6 +156,8 @@ info Liste_ami_window::run(info information)
   {
     box(win, 0, 0);//sert a faire les bords de la fenetre
     touch = wgetch(win);
+    if (len_tab!=0)
+    {
     switch (touch) {
       case KEY_UP:
         effacer_caractere_window(win, y , x, len_arrow);
@@ -201,6 +203,7 @@ info Liste_ami_window::run(info information)
           }
           y = posStart_arrow +2;
         }
+
         //pour ne pas depasser la window
         if ((y-2) != (posStart_arrow-2))
         {
@@ -268,11 +271,13 @@ info Liste_ami_window::run(info information)
             //cout << tab[i_save]<< "/";
           }
         }
+
         print_string_window(win, y, x, arrow);
         break;
       default:
         break;
     }
+  }
     if (touch == 263)//263 == touche delete
     {
       if (information.id==30)

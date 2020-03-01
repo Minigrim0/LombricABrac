@@ -58,6 +58,7 @@ int main(int argc, char** argv)
   Wait_window wait_window;
   Menu_invite_amis demande_amis;
   Historique_window historique_window;
+  Request_history_window request_history;
   Ami_window ami_window;
   info information;
   information.id=1;
@@ -206,6 +207,10 @@ int main(int argc, char** argv)
     if (information.id == 51)
     {//lance pop up pseudo ou mot de passe incorrect
       information = popup_window.run(information);
+    }
+    if (information.id == 71)
+    {//lance la fenetre où l'utilisateur devra entrer le nom de qui il veut voir l'historique
+      information = request_history.run(information);
     }
     if( information.id == 80)
     {

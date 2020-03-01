@@ -9,6 +9,7 @@ using namespace std;
 
 info Historique_window::run(info information)
 {
+  cout<<information.friends;
   int x = 4, y = 4, max_x = 0, max_y = 0;
   int posStart_arrow = 0, posEnd_arrow = 0;
   int n = 0;
@@ -27,7 +28,7 @@ info Historique_window::run(info information)
 
   //gameHistory tableau_joueur;
   historyTable historique;
-  historique = information.client->get_history(information.username, 0, 10);//renvoie l'histoirique des parties
+  historique = information.client->get_history(information.friends, 0, 10);//renvoie l'histoirique des parties
   int size_history;
   size_history = historique.size;
   string joueur;

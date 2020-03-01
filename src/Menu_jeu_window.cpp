@@ -53,11 +53,11 @@ info Menu_jeu_window::run(info information)
   {
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
     int len_vec= static_cast<int>(new_msg.size());
-      system("echo $len_vec >> out.txt");
-    draw(1,1,to_string(len_vec));
+      //system("echo ${len_vec} >> out.txt");
+    //draw(1,1,to_string(len_vec));
     if (len_vec !=0)
     {
-      system("echo len_vec >> out.txt");
+      //system("echo ${len_vec} >> out.txt");
       //cout<<new_msg[static_cast<unsigned int>(0)].text;
       information.notif=1;
       tab[5] = " Ami(s) * ";
@@ -130,8 +130,8 @@ info Menu_jeu_window::run(info information)
       }
       if (y == posStart_arrow+12)
       {
-        //historique
-        information.id = 26;
+        //request historique
+        information.id = 71;
         break;
       }
       if (y == posStart_arrow+10)

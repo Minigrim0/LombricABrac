@@ -30,6 +30,7 @@ info Menu_creation_equipe_lombric::run(info information)
   string titre= "Creation d'une equipe de lombric";
   string annulation= "Pour revenir en arriere, appuyez sur RETURN";
   string msg_confirme_equipe= "Appuyez sur ENTER pour confirmer";
+  string msg_pseudo = "Voici les noms de vos lombrics actuels : ";
   string msg_lombric1= "Nom du lombric numero 1 :";
   string msg_lombric2= "Nom du lombric numero 2 :";
   string msg_lombric3= "Nom du lombric numero 3 :";
@@ -77,21 +78,40 @@ info Menu_creation_equipe_lombric::run(info information)
   int decalage1=0;
   int decalage2=0;
   lombric_name= information.client->getLombricsName();
-  for (int i=0;i<lombric_name.size;i++)
+  //draw(20,x,msg_pseudo.c_str());
+
+  /*if (lombric_name.size != 0)
   {
-    if (decalage1<=16)
+    for (int i =0;i<lombric_name.size;i++)
     {
       len_str= static_cast<int>(lombric_name.table[i].size());
-      draw(5+decalage1,1,lombric_name.table[i].c_str());
-      decalage1+=4;
+      msg_pseudo = msg_pseudo + lombric_name.table[i] + ",";
+      draw(20,x,msg_pseudo.c_str());
     }
-    else
+  }*/
+  draw(20,3,msg_pseudo.c_str());
+  if (lombric_name.size != 0)
+  {
+    msg_pseudo="";
+    for (int i=0;i<lombric_name.size;i++)
     {
-      len_str= static_cast<int>(lombric_name.table[i].size());
-      draw(4+decalage2,largeur/2 +12,lombric_name.table[i].c_str());
-      decalage2+=4;
+      /*if (decalage1<=16)
+      {
+        len_str= static_cast<int>(lombric_name.table[i].size());
+        draw(5+decalage1,1,lombric_name.table[i].c_str());
+        decalage1+=4;
+      }
+      else
+      {
+        len_str= static_cast<int>(lombric_name.table[i].size());
+        draw(4+decalage2,largeur/2 +12,lombric_name.table[i].c_str());
+        decalage2+=4;
+      }*/
+      msg_pseudo = msg_pseudo + lombric_name.table[i] + " ";
     }
+    draw(22,6,msg_pseudo.c_str());
   }
+
 
 
   refresh();

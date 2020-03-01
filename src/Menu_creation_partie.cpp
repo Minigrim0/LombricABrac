@@ -25,7 +25,7 @@ info Menu_creation_partie::run(info information)
   char str[15];
   char str2[15];
   char str3[15];
-  string msg_nombre_equipe="Veuillez entrez le nombre d'équipe (max 4) :";
+  string msg_nombre_equipe="Veuillez entrez le nombre d'équipe (min 2/max 4) :";
   string msg_nombre_lombric="Veuillez entre le nombre de lombric par équipe (max 8 par équipe):";
   string msg_titre= "Création de partie";
   string msg_temps="Temps maximum (en seconde)pour chaque tour (max 100)  :";
@@ -71,7 +71,7 @@ info Menu_creation_partie::run(info information)
     setting_one = FALSE;
     ret++;
   }
-  if (nombre1 > 4)
+  if (nombre1 > 4 || nombre1 < 2)
   {
     setting_one = FALSE;
     set++;
@@ -204,6 +204,7 @@ info Menu_creation_partie::run(info information)
     }
   }
   //print_string_window(confirmer,1,1,msg_confirmation.c_str());
+  clear();
   endwin(); //on free les window et on quitte
   return information;
 }
