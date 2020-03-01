@@ -10,7 +10,7 @@
 */
 
 // <-- Pre-menu -->
-#define CON_S 46 // : (uint8_t str) (uint8_t str) -> Connexion : username password
+#define CON_S 48 // : (uint8_t str) (uint8_t str) -> Connexion : username password
 #define CON_R 2 // : bool -> Connexion // : Résultat (réussi/raté)
 
 // <-- Chat -->
@@ -40,7 +40,8 @@
 #define NB_EQ_MOD 45// : // nombre équipes si host
 #define JOIN_GROUP_S 19// : uint8_t //id_groupe
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
-#define START 45
+#define START 46 // proto buf infopartie
+#define INFO_ROOM 52
 
 // <-- Menu historique -->
 #define GET_HISTORY 21// : (uint8_t str) int short int //user first_game(de la page) nbr_game
@@ -57,6 +58,7 @@
 #define FRI_RMV 28// : (uint8_t str) //friend_remove user_del
 #define FRI_LS_S 29// : //request friend list
 #define FRI_LS_R 30// : (uint8_t str) * int // all friend list of a user
+#define GET_ALL_INVIT 49
 
 // <-- Partie -->
 #define POS_LOMB_R 31// : uint8_t short int*2 //id_lomb pos_x pos_y
@@ -71,5 +73,8 @@
 #define END_TOUR 40// : uint8_t //fin du round lomb_current
 #define GET_GAME_INFO 41// : //demande les infos de début de partie
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
+#define NOTIF 47// : // Dire au client mdr t'as une notif
+#define NEXT_ROUND 50 // Id du lomb qui va jouer
+#define DECO 51
 
 #endif
