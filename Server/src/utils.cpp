@@ -243,6 +243,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 ZMQ_msg zmqmsg;
                 la_poste->reception();
                 zmqmsg.ParseFromString(la_poste->get_buffer());
+                std::cout << "Sending info room" << std::endl;
                 la_poste->envoie_msg(zmqmsg.type_message(), zmqmsg.message());
                 break;
             }

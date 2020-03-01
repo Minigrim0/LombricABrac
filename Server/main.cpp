@@ -71,9 +71,11 @@ int broker_thread(){
 
                     std::cout << "Sending room id to client on " << stream.str() << std::endl;
 
+                    std::cout << "locking1" << std::endl;
                     pub_mutex.lock();
                     s_sendmore_b(publisher, stream.str());
                     s_send_b(publisher, partie_r.SerializeAsString());
+                    std::cout << "unlocking" << std::endl;
                     pub_mutex.unlock();
 
                     break;
@@ -84,9 +86,11 @@ int broker_thread(){
         }
         else{
             stream << "users/" << zmqmsg.receiver_id() << "/broker";
+            std::cout << "locking2" << std::endl;
             pub_mutex.lock();
             s_sendmore_b(publisher, stream.str());
             s_send_b(publisher, zmqmsg.SerializeAsString());
+            std::cout << "unlocking" << std::endl;
             pub_mutex.unlock();
             std::cout << "---transfered---> [" << stream.str() << "]" << std::endl;
         }
@@ -130,9 +134,11 @@ int main(int argc, char **argv){
     res = listen(sockfd, 20);
     catch_error(res, 0, "Unable to listen.\n", 1, sockfd);
 
+    std::cout << "locking3" << std::endl;
     pub_mutex.lock();
     publisher.bind("tcp://*:5563");
     pub_mutex.unlock();
+    std::cout << "unlocking" << std::endl;
 
     std::thread tobj(broker_thread);
     tobj.detach();

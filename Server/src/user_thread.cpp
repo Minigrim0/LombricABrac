@@ -80,10 +80,12 @@ int client_thread(int socket_client){
                     zmqmsg.set_message(la_poste.get_buffer());
                 }
                 else{
-                    zmqmsg.set_message("void");
+                    zmqmsg.set_message("");
                 }
 
+                std::cout << "locking6" << std::endl;
                 pub_mutex.lock();
+                std::cout << "locked" << std::endl;
                 s_sendmore_b(publisher, game_url);
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
