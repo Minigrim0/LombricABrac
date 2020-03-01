@@ -8,6 +8,7 @@
 
 #include "maccroAffichage.hpp"
 #include "sprite.hpp"
+#include "map.hpp"
 
 
 class Map{

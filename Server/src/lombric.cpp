@@ -3,6 +3,10 @@
 //y'a un warning surprenant par ici
 Lombric_c::Lombric_c(int id,int x, int y, unsigned long skin, int pv):Sprite(x, y, skin, id), direction(FORWARD),vie(pv){}
 
+Lombric_c::Lombric_c(int id, int pv, Map* carte):
+Sprite(id, carte),
+vie(pv){}
+
 void Lombric_c::move(int type, Map* carte){
 	uint32_t newX, newY;
   	bool isPossible = true;//possibilité du mouvement
