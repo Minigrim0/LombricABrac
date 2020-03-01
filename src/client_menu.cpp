@@ -40,9 +40,12 @@ bool Client::createRoom(){
 	m.type = ADD_ROOM_S;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	sendMutex.lock();
-	sendMessage(m);
-	sendMutex.unlock();
+	std::string* reponse = waitAnswers(ADD_ROOM_R, m);//m.text de la réponse
+
+	bool res = (*reponse)[0];
+
+	delete reponse;
+	return res;
 }
 
 void Client::startGame(){

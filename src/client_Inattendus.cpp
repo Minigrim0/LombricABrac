@@ -19,9 +19,9 @@ std::vector<chat_r> Client::getNewMsg(){
 
 
 void Client::invite(message& m){
-	//Invitation obj;
-	//obj.ParseFromString(m.text);
-	//invitations.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
+	Invitation obj;
+	obj.ParseFromString(m.text);
+	invitations.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
 }
 
 
@@ -67,7 +67,7 @@ std::vector<std::string> Client::getNewPlayers(){
 	return res;
 }
 
-void Client::lombChanged(message &m){
+void Client::lombChanged(/*message &m*/){
 	/*Lombric obj;
 	obj.ParseFromString(m.text);
 	for (int i=0;i<static_cast<int>(thisGame->versListe.size());i++){

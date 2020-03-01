@@ -132,7 +132,7 @@ private:
 	//méthodes sur les messages inattendus
 	void chatRcv(message& m);//reception d'une demande d'amis
 	void invite(message& m);//on recoit une invitation (d'amis ou de partie)
-	void lombChanged(message &m);//un lombric a bougé
+	void lombChanged(/*message &m*/);//un lombric a bougé
 	void nvJoueur(message& m);//joueur est arrivé dans le salon d'attente
 	//void newProjectile(message &m);
 	void notifyStarted(message& m);
