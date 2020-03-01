@@ -35,10 +35,7 @@ int client_thread(int socket_client){
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
 
-            if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
-                type = 0;
-            }
-            else{ // We got a message from the Broker
+            if(strcmp(address.c_str(), "") != 0){ // We got a message from the Broker
                 std::string contents = s_recv(subscriber);
 
                 zmqmsg.ParseFromString(contents);
@@ -65,6 +62,9 @@ int client_thread(int socket_client){
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
                 continue;
+            }
+            else{ // The receive just timed out
+                type = 0;
             }
         }
 
@@ -155,7 +155,6 @@ int client_thread(int socket_client){
                     stream.clear();
                     stream << "users/" << usr.get_id() << "/room";
                     subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-                    std::cout << "User " << usr.get_id() << " connected to " << stream.str() << std::endl;
                 }
             }
         }
