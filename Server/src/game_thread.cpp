@@ -26,7 +26,6 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
         switch(current_step){
             case STEP_ROOM:{
                 std::cout << "You're in the room" << std::endl;
-                std::ostringstream stream;
                 while (current_step == STEP_ROOM)
                 {
                     std::string address = s_recv(subscriber);
@@ -40,15 +39,26 @@ int game_thread(std::string chan_sub, uint32_t owner_id){
             }
             case STEP_GAME:
                 std::cout << "You're in the game" << std::endl;
+                {
+                    size_t opt_value = 500;
+                    subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
+                }
                 //current_game.set_begin();
                 while(current_step == STEP_GAME){
                     //if(current_game.check_time()){
-                    //    //mort subite                 WIP
+                    //    //mort subite
                     //}
                     std::string address = s_recv(subscriber);
-                    std::string contents = s_recv(subscriber);
-                    zmqmsg.ParseFromString(contents);
-                    current_game.handle_game(zmqmsg ,&current_step);
+                    if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
+                        if(current_game.check_round_time()){
+                            current_game.end_round();
+                        }
+                    }
+                    else{
+                        std::string contents = s_recv(subscriber);
+                        zmqmsg.ParseFromString(contents);
+                        current_game.handle_game(zmqmsg ,&current_step);
+                    }
                 }
                 break;
             case STEP_ENDSCREEN:
