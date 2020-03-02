@@ -8,3 +8,5 @@ init_db
 *.db
 Server/supdata.log
 cpl_proto/
+out.txt
+input

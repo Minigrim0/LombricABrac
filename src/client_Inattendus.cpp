@@ -134,6 +134,17 @@ std::vector<infoArme> Client::getNewWeapons(){
 }
 
 paramsPartie Client::getParamsPartie(){
+	std::string text;
+	text = "echo map = " + std::to_string(currentParams.map) + " >> out.txt";
+	system(text.c_str());
+	text = "echo time = " + std::to_string(currentParams.time) + " >> out.txt";
+	system(text.c_str());
+	text = "echo time_round = " + std::to_string(currentParams.time_round) + " >> out.txt";
+	system(text.c_str());
+	text = "echo nbr_lombs = " + std::to_string(currentParams.nbr_lombs) + " >> out.txt";
+	system(text.c_str());
+	text = "echo nbr_equipes = " + std::to_string(currentParams.nbr_equipes) + " >> out.txt";
+	system(text.c_str());
 	return currentParams; //renvois tous les paramètres de la partie
 }
 
@@ -150,6 +161,9 @@ std::string Client::getNextRound(){
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
+	std::string text = "echo traitement infoPartie >> out.txt";
+	system(text.c_str());
+
 	started = true; // la partie à démarré
 	infoPartie_p obj;
 	obj.ParseFromString(m.text); //struct recue par le serveur
@@ -188,4 +202,6 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 
 	thisGame = gameInfo;
+	text = "echo End infoPartie >> out.txt";
+	system(text.c_str());
 }
