@@ -263,7 +263,21 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             }
             case START:{
                 *current_step = STEP_GAME;
+                spawn_lombric();
+
                 zmq_msg.set_type_message(START);
+                infoPartie_p msg;
+                for(int i=0;i<m_lombs.size();i++){
+                    Lombric* lomb = msg.add_lomb();
+                    int lomb_pos[2];
+                    dynamic_cast<Lombric_c*>(m_lombs[i])->getPos(lomb_pos);
+                    lomb->set_pos_x(lomb_pos[0]);
+                    lomb->set_pos_y(lomb_pos[1]);
+                    lomb->set_vie(dynamic_cast<Lombric_c*>(m_lombs[i])->getLife());
+                    lomb->set_id_lomb(dynamic_cast<Lombric_c*>(m_lombs[i])->getId());
+                }
+
+                zmq_msg.set_message(msg.SerializeAsString());
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -345,18 +359,14 @@ void Game::end_round(){
 }
 
 void Game::spawn_lombric(){
-    std::cout << "spawnet" << std::endl;
     std::ostringstream stream;
     std::string myText;
     uint32_t hauteur;
     uint32_t largeur;
 
-    stream << static_cast<int>(map_id) << ".map";
     std::cout << stream.str() << std::endl;
     std::ifstream MyReadFile(stream.str());
-    std::cout << "ouvert "<< std::endl;
     std::getline (MyReadFile, myText);
-    std::cout << "getline "<< std::endl;
     std::stringstream(myText) >> hauteur >> largeur;
     std::vector<std::string> map_s(hauteur);
 
@@ -367,14 +377,13 @@ void Game::spawn_lombric(){
     MyReadFile.close();
 
     Map map(largeur,hauteur,map_s);
-    std::vector<Sprite*> lombs;
-    std::cout << "Start init Lombs" << std::endl;
+
     for(size_t i=0;i<m_players.size();i++){
         std::cout << "1" << std::endl;
         for(int j=0;j<nbr_lomb;j++){
-            lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
         }
     }
 
-    obj_partie.setParam(&map, lombs);
+    obj_partie.setParam(&map, m_lombs);
 }

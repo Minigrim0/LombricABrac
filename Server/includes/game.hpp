@@ -69,7 +69,7 @@ class Game{
         uint32_t owner_id;
         uint8_t current_player;
         std::vector<Joueur> m_players;
-
+        std::vector<Sprite*> m_lombs;
 };
 
 #endif
