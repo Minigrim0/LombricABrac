@@ -49,7 +49,7 @@ info Warning_leave_window::run(info information)
     touch = wgetch(win);
     switch (touch)
     {
-      case KEY_RIGHT:
+      case NAVIGATE_RIGHT:
       effacer_caractere_window(win, y , x, len_arrow);
       if (x != x_arrow1)
       {
@@ -62,7 +62,7 @@ info Warning_leave_window::run(info information)
       print_string_window(win, y, x, arrow);
         break;
 
-      case KEY_LEFT:
+      case NAVIGATE_LEFT:
         effacer_caractere_window(win, y , x, len_arrow);
         if (x != x_arrow2)
         {

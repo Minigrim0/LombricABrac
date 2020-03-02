@@ -159,7 +159,7 @@ info Liste_ami_window::run(info information)
     if (len_tab!=0)
     {
     switch (touch) {
-      case KEY_UP:
+      case NAVIGATE_UP:
         effacer_caractere_window(win, y , x, len_arrow);
         //si on veut scroller vers le haut et qu'on n 'est pas au début du tab'
         if ((y-2) == (posStart_arrow - 2) && at_start_tab == FALSE)
@@ -216,7 +216,7 @@ info Liste_ami_window::run(info information)
         }
         print_string_window(win, y, x, arrow);
         break;
-      case KEY_DOWN:
+      case NAVIGATE_DOWN:
         effacer_caractere_window(win, y , x, len_arrow);
         //si on veut scroller ver sle baset qu'on n'est pas à la fin du tab
         if ((y+2) == (posEnd_arrow+2) && at_end_tab== FALSE)

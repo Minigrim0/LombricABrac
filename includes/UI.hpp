@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "client.hpp"
+#include "maccroAffichage.hpp"
 
 using namespace std;
 
