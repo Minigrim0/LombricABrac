@@ -348,6 +348,8 @@ info Salon_Attente::run(info information)
           if (x== x_arrow4 && information.ishost)
           {
             information.client->startGame();
+            std::string t = "echo 'partie lancée' >> out.txt";
+	        system(t.c_str());
             information.id=80;
             break;
           }
@@ -363,8 +365,15 @@ info Salon_Attente::run(info information)
         }
       }
   }
+  std::string t = "echo 'finished if' >> out.txt";
+  system(t.c_str());
+
   clear();
   endwin();
+
+  t = "echo 'end of the function' >> out.txt";
+  system(t.c_str());
+
   return information;
 }
 
