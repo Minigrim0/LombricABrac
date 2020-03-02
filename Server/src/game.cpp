@@ -26,7 +26,7 @@ m_pseudo("")
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t cur_lomb=0;cur_lomb<nbLomb;cur_lomb++){
+    for(uint8_t cur_lomb=0;cur_lomb<nbr_lomb;cur_lomb++){
         if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
             return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
         }
