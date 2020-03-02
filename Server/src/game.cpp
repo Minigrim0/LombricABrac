@@ -18,13 +18,15 @@ m_channel(""),
 m_current_lombric(0),
 m_is_current_player(false),
 m_pseudo("")
-{}
+{
+    for(int i=0;i<8;i++)
+        m_Lombrics[i] = 0;
+}
 
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
     for(uint8_t cur_lomb=0;cur_lomb<nbLomb;cur_lomb++){
-        std::cout << "GNLOMB : " << m_Lombrics.size() << std::endl;
         if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
             return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
         }
@@ -34,9 +36,7 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
 }
 
 void Joueur::set_nb_lombs(uint8_t nb_lombs){
-    std::cout << "Resizing : " << m_Lombrics.size() << std::endl;
-    m_Lombrics.resize(nb_lombs);
-    std::cout << m_Lombrics.size() << std::endl;
+    nbr_lomb = nb_lombs;
 }
 
 void Joueur::sendMessage(std::string msg){
@@ -62,7 +62,7 @@ void Joueur::set_player_id(int id){
 }
 
 void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<m_Lombrics.size();i++){
+    for(size_t i=0;i<nbr_lomb;i++){
         if(m_Lombrics[i] == static_cast<unsigned int>(id)){
             m_current_lombric = i;
         }
@@ -183,7 +183,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         zmq_msg.set_type_message(INFO_ROOM);
 
         stream << "users/" << zmq_msg.receiver_id() << "/room";
-        std::cout << stream.str() << std::endl;
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
 

@@ -35,9 +35,10 @@ class Joueur{
         std::string m_channel;
         int m_current_lombric;
         bool m_is_current_player;
+        uint8_t nbr_lomb;
 
         std::string m_pseudo; // Pas obligatoire mais on sait jamais
-        std::vector<uint32_t> m_Lombrics;
+        uint32_t m_Lombrics[8];
 };
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
