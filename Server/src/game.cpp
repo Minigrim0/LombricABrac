@@ -18,15 +18,15 @@ m_channel(""),
 m_current_lombric(0),
 m_is_current_player(false),
 m_pseudo(""),
-m_Lombrics(std::vector<uint32_t>(nbLomb))
+m_Lombrics(new std::vector<uint32_t>(nbLomb))
 {}
 
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
     for(uint8_t cur_lomb=1;cur_lomb<nbLomb+1;cur_lomb++){
-        if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
-            return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
+        if(obj_partie->isLombAlive((*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb])){
+            return (*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb];
         }
     }
 
@@ -34,7 +34,7 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
 }
 
 void Joueur::set_nb_lombs(uint8_t nb_lombs){
-    m_Lombrics.resize(nb_lombs);
+    (*m_Lombrics).resize(nb_lombs);
 }
 
 void Joueur::sendMessage(std::string msg){
@@ -60,8 +60,8 @@ void Joueur::set_player_id(int id){
 }
 
 void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<m_Lombrics.size();i++){
-        if(m_Lombrics[i] == static_cast<unsigned int>(id)){
+    for(size_t i=0;i<(*m_Lombrics).size();i++){
+        if((*m_Lombrics)[i] == static_cast<unsigned int>(id)){
             m_current_lombric = i;
         }
     }

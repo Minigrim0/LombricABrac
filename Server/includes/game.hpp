@@ -25,7 +25,7 @@ class Joueur{
         inline std::string get_pseudo() const{return m_pseudo;};
         inline bool is_current_player() const{return m_is_current_player;};
         inline bool current_lombric() const{return m_is_current_player;};
-        inline uint32_t get_lombric_id(int pos) const{return m_Lombrics[pos];}
+        inline uint32_t get_lombric_id(int pos) const{return (*m_Lombrics)[pos];}
 
     private:
         uint8_t m_Equipe;
@@ -35,7 +35,7 @@ class Joueur{
         bool m_is_current_player;
 
         std::string m_pseudo; // Pas obligatoire mais on sait jamais
-        std::vector<uint32_t> m_Lombrics;
+        std::vector<uint32_t>* m_Lombrics;
 };
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
