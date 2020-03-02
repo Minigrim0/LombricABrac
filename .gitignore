@@ -10,4 +10,3 @@ cpl_proto/
 Server/lib/cppzmq/
 Server/lib/libzmq/
 Server/client
-map
