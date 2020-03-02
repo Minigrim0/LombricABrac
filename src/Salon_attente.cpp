@@ -279,7 +279,7 @@ info Salon_Attente::run(info information)
 
       touch = wgetch(getInput);
       switch (touch)
-        {
+      {
           case NAVIGATE_RIGHT:
           effacer_caractere_window(getInput, 2 , x, len_str);
           if(x == x_arrow1)
@@ -324,9 +324,9 @@ info Salon_Attente::run(info information)
 
           default:
             break;
-        }
 
-        if (touch == 10)
+
+        case 10:
         {
           if ( x == x_arrow1)
           {
@@ -353,16 +353,8 @@ info Salon_Attente::run(info information)
             break;
           }
         }
-        if (touch == 'r')
-        {
-          /*wclear(equipe1);
-          wclear(equipe2);
-          wclear(equipe3);
-          wclear(equipe4);*/
-
-          continue;
-        }
       }
+    }
   }
   std::string t = "echo 'finished if' >> out.txt";
   system(t.c_str());
