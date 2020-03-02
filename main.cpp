@@ -202,13 +202,13 @@ int main(int argc, char** argv)
                 information = request_history.run(information);
                 break;
             case 80:
-                std::string t = "echo 'Avant' >> out.txt";
+                std::string t = "echo Avant >> out.txt";
                 system(t.c_str());
                 Window* gameWin = new Partie(information.client);
-                t = "echo 'pendant' >> out.txt";
+                t = "echo pendant >> out.txt";
                 system(t.c_str());
                 information = gameWin->run(information);
-                t = "echo 'Après' >> out.txt";
+                t = "echo Après >> out.txt";
                 system(t.c_str());
                 break;
         }
