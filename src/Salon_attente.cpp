@@ -10,7 +10,8 @@
 info Salon_Attente::run(info information)
 {
   bool partie_lance = FALSE, trois_equipe = FALSE, quatre_equipe = FALSE;
-  int max_x,max_y,len_str;
+  int max_x,max_y,len_str=0;
+  int size_repeated;
   int x=4;//y=4;
   int n = 0, x_1 = 0,x_2 = 0,x_3 = 0,x_4 = 0;
   //int x_pseudo1, x_pseudo2, x_pseudo3, x_pseudo4;
@@ -24,7 +25,8 @@ info Salon_Attente::run(info information)
   string bouttonSetting = "Option";
   string bouttonInvit = "Inviter amis";
   int map, nbr_equipe, time_round, nbr_lombric;
-  //vector<string> joueur_in_room;
+  vector<playerTeam> joueur_in_room;
+
 
   //on get les infos de la partie
   infoRoom_s Info_salon;
@@ -33,13 +35,9 @@ info Salon_Attente::run(info information)
   nbr_equipe = Info_salon.nbr_eq;
   time_round = Info_salon.time_round;
   nbr_lombric = Info_salon.nbr_lomb;
-  cout<<nbr_equipe;
-  cout<<"-";
-  cout<<nbr_lombric;
-  cout<<"-";
-  cout<<time_round;
-  cout<<"-";
-  cout<<map;
+  joueur_in_room = Info_salon.pseudos;
+  size_repeated = joueur_in_room.size();
+
 
   //vector<string> name_joueur(4);
 
@@ -66,6 +64,7 @@ info Salon_Attente::run(info information)
   box(equipe3, 0,0);
   box(equipe4, 0,0);
 
+
   refresh();
   wrefresh(equipe1);
   wrefresh(equipe2);
@@ -73,6 +72,7 @@ info Salon_Attente::run(info information)
   wrefresh(equipe4);
   wrefresh(getInput);
   wrefresh(pseudo);
+
 
   len_str=static_cast<int>(titre.size());
   draw(1,(max_x/2)-len_str/2,titre);
@@ -91,18 +91,58 @@ info Salon_Attente::run(info information)
     box(equipe4, 0,0);
     quatre_equipe = TRUE;
     print_string_window(equipe4,1,1,"Equipe 4 :");
+    box(equipe3, 0,0);
+    trois_equipe = TRUE;
+    print_string_window(equipe3,1,1,"Equipe 3 :");
   }
-
   if(information.ishost)
   {
     information.client->changeTeam(1);
     print_string_window(equipe1,2+x_1,1,information.username.c_str());
     wclear(pseudo);
+    x_1++;
   }
 
   //len_str= static_cast<int>(equipe[0].size());
   if (!information.ishost)
   {
+    //on print les joueuer deja présents dans la room (on s'arrete quand on rencontre le jouer qui viens de rejoindre)
+    /*for (int i = 0;i<size_repeated; i++)
+    {
+      if (joueur_in_room[i].pseudo.compare(information.username) != 0 ) //egale == 0 si les string sont les mêmes
+      {
+          n = static_cast<int>(joueur_in_room[i].id_team);
+          switch (n) {
+            case 1:
+              print_string_window(equipe1,2+x_1,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(1);
+              wclear(pseudo);
+              x_1++;
+              break;
+            case 2:
+              print_string_window(equipe2,2+x_2,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(2);
+              wclear(pseudo);
+              x_2++;
+              n++;
+              break;
+            case 3:
+              print_string_window(equipe3,2+x_3,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(3);
+              wclear(pseudo);
+              x_3++;
+              n++;
+              break;
+            case 4:
+              print_string_window(equipe4,2+x_4,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(4);
+              wclear(pseudo);
+              x_4++;
+              break;
+
+          }
+      }
+    }*/
     print_string_window(pseudo,1,1,information.username);
     len_str=static_cast<int>(titre.size());
     pseudo=newwin(4,20,11,(max_x/2)-len_str/2);
@@ -111,8 +151,8 @@ info Salon_Attente::run(info information)
     refresh();
     keypad(pseudo,TRUE);
 
-    //print_string_window(pseudo,1,1,information.username);
     touch = wgetch(pseudo);
+    //le joueur qui a rejoint chosis son équipe
     switch (touch)
     {
       case 'a':
@@ -200,12 +240,48 @@ info Salon_Attente::run(info information)
     len_str = static_cast<int>(arrow.size());
     keypad(getInput, TRUE);
 
-    while(1)
+    bool running = true;
+    while(running)
     {
+      /*joueur_in_room = information.client->getNewTeam();
+      size_repeated = joueur_in_room.size();
+
+      for (int i = 0;i<size_repeated; i++)
+      {
+          n = static_cast<int>(joueur_in_room[i].id_team);
+          switch (n) {
+            case 1:
+              print_string_window(equipe1,2+x_1,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(1);
+              wclear(pseudo);
+              x_1++;
+              break;
+            case 2:
+              print_string_window(equipe2,2+x_2,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(2);
+              wclear(pseudo);
+              x_2++;
+              break;
+            case 3:
+              print_string_window(equipe3,2+x_3,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(3);
+              wclear(pseudo);
+              x_3++;
+              break;
+            case 4:
+              print_string_window(equipe4,2+x_4,1,joueur_in_room[i].pseudo.c_str());
+              //information.client->changeTeam(4);
+              wclear(pseudo);
+              x_4++;
+              break;
+
+          }
+      }*/
+
       touch = wgetch(getInput);
       switch (touch)
-        {
-          case KEY_RIGHT:
+      {
+          case NAVIGATE_RIGHT:
           effacer_caractere_window(getInput, 2 , x, len_str);
           if(x == x_arrow1)
           {
@@ -226,7 +302,7 @@ info Salon_Attente::run(info information)
           print_string_window(getInput, 2, x, arrow);
             break;
 
-          case KEY_LEFT:
+          case NAVIGATE_LEFT:
             effacer_caractere_window(getInput, 2 , x, len_str);
             if (x == x_arrow4)
             {
@@ -249,41 +325,53 @@ info Salon_Attente::run(info information)
 
           default:
             break;
-        }
 
-        if (touch == 10)
+
+        case 10:
         {
           if ( x == x_arrow1)
           {
 
             information.id = 2;
+            running = false;
             break;
           }
           if (x == x_arrow2 && information.ishost)
           {
             information.id = 221;
+            running = false;
             break;
           }
           if (x == x_arrow3 && information.ishost)
           {
             information.id = 30;
+            running = false;
             break;
           }
           if (x== x_arrow4 && information.ishost)
           {
             information.client->startGame();
             information.id=80;
+            running = false;
             break;
           }
         }
-        if (touch == 'r')
-        {
-          continue;
-        }
       }
+    }
   }
+
+
   clear();
+  delwin(equipe1);
+  delwin(equipe2);
+  delwin(equipe3);
+  delwin(equipe4);
+  delwin(getInput);
+  delwin(pseudo);
+
+
   endwin();
+
   return information;
 }
 

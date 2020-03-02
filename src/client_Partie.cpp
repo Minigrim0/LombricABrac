@@ -56,6 +56,22 @@ infoPartie_s* Client::getGameInfo(){
 	std::string* reponse = waitAnswers(GAME_INFO_R,m);
   */
 
+	while(!thisGame);
+
+	std::string text;
+	text = "echo Start Check Init >> out.txt";
+	system(text.c_str());
+	text = "echo thisGame NOT init >> out.txt";
+	if(thisGame){
+		text = "echo thisGame init >> out.txt";
+	}
+	system(text.c_str());
+	text = "echo Carte NOT init >> out.txt";
+	if(thisGame->carte){
+		text = "echo Carte init >> out.txt";
+	}
+	system(text.c_str());
+
   return thisGame;
 }
 

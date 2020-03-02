@@ -56,7 +56,7 @@ info Ami_window::run(info information)
   {
     touch = wgetch(win);
     switch (touch) {
-      case KEY_UP:
+      case NAVIGATE_UP:
         effacer_caractere_window(win, y , x, len_arrow);
         if ((y-2) == posStart_arrow-2)
         {
@@ -65,7 +65,7 @@ info Ami_window::run(info information)
         y-=2;
         print_string_window(win, y, x, arrow);
         break;
-      case KEY_DOWN:
+      case NAVIGATE_DOWN:
         effacer_caractere_window(win, y , x, len_arrow);
         if ((y+2) == posEnd_arrow+2)
         {
@@ -105,6 +105,7 @@ info Ami_window::run(info information)
 
   }
   clear();
+  delwin(win);
   endwin(); //retourne au terminal usuelle et desallou la mémoires
   return information;
 }

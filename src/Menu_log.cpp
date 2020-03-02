@@ -162,6 +162,11 @@ info Menu_log_in::run(info information)
     }
   }
   clear();
+  delwin(user_name);
+  delwin(mot_de_passe);
+  delwin(fin);
+  delwin(titre);
+  delwin(confirmer);
   endwin();
   return information;
 }

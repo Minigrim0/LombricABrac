@@ -59,23 +59,23 @@ string Window::get_message_Window(int id_window)
   }
   if (id_window == 56 || id_window == 561)
   {
-    message = "Les paramètres entrés sont incorrectes.";
+    message = "Les paramètres entrés sont incorrects.";
   }
   if (id_window == 57 || id_window == 571)
   {
-    message = "Le premier paramètre n'est pas correcte.";
+    message = "Le premier paramètre n'est pas correct.";
   }
   if (id_window == 58 || id_window == 581)
   {
-    message = "Le deuxieme paramètre n'est pas correcte.";
+    message = "Le deuxieme paramètre n'est pas correct.";
   }
   if (id_window == 59 || id_window == 591)
   {
-    message = "Le troisième paramètre n'est pas correcte.";
+    message = "Le troisième paramètre n'est pas correct.";
   }
   if (id_window == 63 || id_window == 631)
   {
-    message = "Le quatrième paramètre n'est pas correcte.";
+    message = "Le quatrième paramètre n'est pas correct.";
   }
   if (id_window == 62)
   {

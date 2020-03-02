@@ -8,6 +8,8 @@ init_db
 *.db
 supdata.log
 cpl_proto/
+out.txt
+input
 Server/lib/cppzmq/
 Server/lib/libzmq/
 Server/client

@@ -249,9 +249,16 @@ infoRoom_s Client::getInfoRoom(){
 
 	infoRoom_s res;
 	res.nbr_lomb = obj.nbr_lomb();
+	currentParams.nbr_lombs = obj.nbr_lomb();
+
 	res.nbr_eq = obj.nbr_eq();
+	currentParams.nbr_equipes = obj.nbr_eq();
+
 	res.map = obj.map();
+	currentParams.map = obj.map();
+
 	res.time_round = obj.time_round();
+	currentParams.time_round = obj.time_round();
 
 	for (int i=0; i<obj.joueur_size();++i){
 		res.pseudos.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});

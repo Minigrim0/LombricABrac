@@ -2,6 +2,18 @@
 #ifndef MACCRO_AFFICAHGE
 #define MACCRO_AFFICAHGE
 
+
+//NAVIGATION DANS LE MENU
+/*#define NAVIGATE_RIGHT KEY_RIGHT
+#define NAVIGATE_LEFT KEY_LEFT
+#define NAVIGATE_UP KEY_UP
+#define NAVIGATE_DOWN KEY_DOWN*/
+
+#define NAVIGATE_RIGHT 'l'
+#define NAVIGATE_LEFT 'j'
+#define NAVIGATE_UP 'i'
+#define NAVIGATE_DOWN 'k'
+
 //AFFICHAGE
 #define VIDE ' '
 #define LIGHT_WALL '#'
@@ -52,6 +64,6 @@
 
 
 //TAILLE DES WINDOW
-#define OVERLAY_WIDTH 20 //taille fixée pour l'overlay
+#define OVERLAY_WIDTH 25 //taille fixée pour l'overlay
 
 #endif

@@ -74,6 +74,7 @@ info Request_history_window::run(info information)
     }
   }
   clear();
+  delwin(nom_joueur);
   endwin();
   return information;
 }

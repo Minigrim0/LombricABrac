@@ -123,6 +123,10 @@ info discuter::run(info information)
 
 
     clear();
+    delwin(msg_envoyer);
+    delwin(confirmer);
+    delwin(convo);
+    delwin(message);
     endwin();
     return information;
 }

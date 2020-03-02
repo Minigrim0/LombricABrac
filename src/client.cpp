@@ -55,20 +55,26 @@ int Client::run(){
 			if (res == EXIT_FAILURE){
 				break;
 			}
+
 			/*Messages inattendus:*/
+			msgMutex.lock();
 			switch (msg.type) {
 				case CHAT_R: //on a recu un chat
 					chatRcv(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case INVI_R: //on a recu une invitation de partie
 					invite(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case FRI_RCV: //on a recu une invitation d'ami
 					invite(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case START: //L'hôte a lancé la partie
 					end = false;
 					notifyStarted(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case SHOOT: {//un joueur a tiré
 					//1er message: tir (armes + params)
@@ -87,6 +93,7 @@ int Client::run(){
 					}
 					tableUpdate.push_back(msg.text);
 					mutexPartie.unlock();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
 
@@ -94,41 +101,52 @@ int Client::run(){
 					Lomb_pos obj;
 					obj.ParseFromString(msg.text);
 					movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
 				case JOIN_GROUP_R: {//quelqu'un a changé d'équipe
 					Join_groupe_r obj;
 					obj.ParseFromString(msg.text);
 					inNewTeam.push_back({obj.pseudo(),obj.id()});
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
 
 				//paramètres changés:
 				case USR_ADD: //un joueur à été jouté dans le salon d'attente
 					nvJoueur(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case MAP_MOD: //L'hôte a changé de map
 					changeMap(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case TIME_MOD: //L'hôte a changé le temps de la partie
 					changeTime(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case TIME_ROUND_MOD: //L'hôte a changé le temps d'une partie
 					changeTimeRound(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
 					changeNbrLombs(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case NB_EQ_MOD: //L'hôte a changé le nombre de lombrics
 					changeNbrEq(msg);
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case NEXT_ROUND: //début de round
 					newRound = msg.text;
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case END_GAME: //Fin partie
 					end = true;
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 			}
+			msgMutex.unlock();
 		}
 	}
 
@@ -173,6 +191,10 @@ int Client::readMessage(){
 	//std::string test = "echo 'on rentre' >> out.txt";
   //system(test.c_str());
 	msgMutex.lock();
+	if(msg.type){//si le type est pas à 0, c'est que le message n'est pas encore interprété -> on peut pas l'écraser
+		msgMutex.unlock();
+		return EXIT_SUCCESS;
+	}
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
 		close(client_socket);
@@ -198,9 +220,9 @@ int Client::readMessage(){
 
 	msg.text = static_cast<std::string>(buffer);
 	delete buffer;
+	std::string t = "echo Type reçu: "+ std::to_string(msg.type) +" >> out.txt";
+	system(t.c_str());
 	msgMutex.unlock();
-	//std::string t = "echo 'on sort' >> out.txt";
-  //system(t.c_str());
 	return EXIT_SUCCESS;
 }
 
@@ -211,7 +233,6 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 
 	reponseAttendue = typeAttendu;
 	sendMessage(m);
-
 	bool msgReady;
 
 	do{ //tant que le messages n'est pas la réponse attendue
@@ -220,7 +241,7 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 		msgMutex.unlock();
 	}
 	while(msgReady);
-
+	msg.type = 0;
 	*res = msg.text;
 	msgMutex.unlock();
 	sendMutex.unlock();

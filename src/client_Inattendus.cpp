@@ -134,6 +134,17 @@ std::vector<infoArme> Client::getNewWeapons(){
 }
 
 paramsPartie Client::getParamsPartie(){
+	std::string text;
+	text = "echo map = " + std::to_string(currentParams.map) + " >> out.txt";
+	system(text.c_str());
+	text = "echo time = " + std::to_string(currentParams.time) + " >> out.txt";
+	system(text.c_str());
+	text = "echo time_round = " + std::to_string(currentParams.time_round) + " >> out.txt";
+	system(text.c_str());
+	text = "echo nbr_lombs = " + std::to_string(currentParams.nbr_lombs) + " >> out.txt";
+	system(text.c_str());
+	text = "echo nbr_equipes = " + std::to_string(currentParams.nbr_equipes) + " >> out.txt";
+	system(text.c_str());
 	return currentParams; //renvois tous les paramètres de la partie
 }
 
@@ -150,9 +161,13 @@ std::string Client::getNextRound(){
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
+	std::string text = "echo Init gameInfo " + m.text +">> out.txt";
+	system(text.c_str());
+
 	started = true; // la partie à démarré
 	infoPartie_p obj;
 	obj.ParseFromString(m.text); //struct recue par le serveur
+
 
 	infoPartie_s* gameInfo = new infoPartie_s;
 	//remplis le vecteur des murs
@@ -162,15 +177,21 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	int hauteur;
 	int largeur;
 
-	std::string name = "../map/map" + std::to_string(currentParams.map) + ".map";
+
+	std::string name = "./map/map" + std::to_string(currentParams.map) + ".map";
+
 	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
+
+	//text = "echo Ligne 1 " + myText +" >>out.txt";
+	//system(text.c_str());
+
 	std::stringstream(myText) >> hauteur >> largeur;
 	std::vector<std::string> map(hauteur);
 
 	for (int i =0; i<hauteur; i++) {
 	    std::getline (MyReadFile, map[i]);
-	    std::cout << map[i] << std::endl;
+	    //std::cout << map[i] << std::endl;
 	}
 
 	MyReadFile.close();
@@ -180,6 +201,8 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
+		text = "echo new lomb >> out.txt";
+		system(text.c_str());
 		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(),LOMBRIC_SKIN,100));
 	}
 
@@ -188,4 +211,6 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 
 	thisGame = gameInfo;
+	text = "echo End init >> out.txt";
+	system(text.c_str());
 }
