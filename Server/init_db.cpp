@@ -37,7 +37,8 @@ int main(int argc, char** argv) {
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
         username       CHAR(40) NOT NULL,\
         password       CHAR(40) NOT NULL,\
-        victory_amount INT\
+        connected      BOOL DEFAULT FALSE,\
+        victory_amount INT DEFAULT 0\
     );";
 
     rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
@@ -74,14 +75,15 @@ int main(int argc, char** argv) {
     std::cout << "------ Creating History Table ------" << std::endl << ">> ";
     sql = "CREATE TABLE history(\
         id             INTEGER PRIMARY KEY AUTOINCREMENT,\
-        user_1_id      INTEGER,\
-        user_2_id      INTEGER,\
-        user_3_id      INTEGER,\
-        user_4_id      INTEGER,\
-        user_1_points  SMALLINT,\
-        user_2_points  SMALLINT,\
-        user_3_points  SMALLINT,\
-        user_4_points  SMALLINT,\
+        user_1_id      INTEGER DEFAULT 0,\
+        user_2_id      INTEGER DEFAULT 0,\
+        user_3_id      INTEGER DEFAULT 0,\
+        user_4_id      INTEGER DEFAULT 0,\
+        user_1_points  SMALLINT DEFAULT 0,\
+        user_2_points  SMALLINT DEFAULT 0,\
+        user_3_points  SMALLINT DEFAULT 0,\
+        user_4_points  SMALLINT DEFAULT 0,\
+        finished       BOOLEAN DEFAULT FALSE, \
         timestamp      TIMESTAMP DEFAULT CURRENT_TIMESTAMP\
     );";
 
@@ -96,10 +98,22 @@ int main(int argc, char** argv) {
     }
 
     if(fill_db){
-        sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
-              "VALUES (1, 2, 3, 4, 50, 20, 40, 50);"\
-              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points) "  \
-              "VALUES (1, 2, 3, 4, 20, 10, 30, 100);";
+        sql = "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 50, 20, 40, 50, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 20, 50, 45, 151, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 54423, 654, 54653, 5643, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 945, 86532, 5421, 542, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 865, 5421, 56432, 5432, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 765421, 57421, 75421, 75421, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 5421, 5421, 75421, 57421, true);"\
+              "INSERT INTO history (user_1_id, user_2_id, user_3_id, user_4_id, user_1_points, user_2_points, user_3_points, user_4_points, finished) "  \
+              "VALUES (1, 2, 3, 4, 57421, 5742542542, 681468146224618426, 5416546541564, true);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 
@@ -187,7 +201,8 @@ int main(int argc, char** argv) {
     std::cout << "----- Creating Lombrics Table -----" << std::endl << ">> ";
     sql = "CREATE TABLE worms(\
         id             INTEGER  PRIMARY KEY AUTOINCREMENT,\
-        name           CHAR(40) NOT NULL,\
+        id_lomb        INTEGER,\
+        name           CHAR(20) NOT NULL,\
         owner_id       INTEGER  NOT NULL\
     );";
 
@@ -202,14 +217,14 @@ int main(int argc, char** argv) {
     }
 
     if(fill_db){
-        sql = "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Michel', 1); " \
-             "INSERT INTO worms (name,owner_id) "  \
-             "VALUES ('Patrice', 1); "     \
-             "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Josh', 1);" \
-             "INSERT INTO worms (name,owner_id)" \
-             "VALUES ('Fred', 1);";
+        sql = "INSERT INTO worms (id_lomb, name, owner_id) "  \
+             "VALUES (0, 'Michel', 1); " \
+             "INSERT INTO worms (id_lomb, name,owner_id) "  \
+             "VALUES (1, 'Patrice', 1); "     \
+             "INSERT INTO worms (id_lomb, name,owner_id)" \
+             "VALUES (2, 'Josh', 1);" \
+             "INSERT INTO worms (id_lomb, name,owner_id)" \
+             "VALUES (3, 'Fred', 1);";
 
        rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &zErrMsg);
 

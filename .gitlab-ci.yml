@@ -1,11 +1,18 @@
 image: registry.gitlab.com/infof209-1920/groupe-5:lastest
 
-
 before_script:
-  - apt-get update
-  - apt-get install libncurses-dev
+    - export SUDO=0
+    - apt install -y cmake
+    - apt-get update
+    - apt-get install libncurses-dev
 
 compile:
   script:
-  - echo "TESTING"
+  - echo "TESTING SERVER"
+  - cd Server
+  - make
+  - make init_db
+  - ./init_db true
+  - echo "TESTING CLIENT"
+  - cd ../
   - make

@@ -15,6 +15,7 @@
 #define DT_RAN 6 // Datatype Rank_r
 #define DT_CHA 7 // Datatype Chat_r
 #define DT_FRI 8 // Datatype Fri_ls_r
+#define DT_RID 9 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -29,13 +30,15 @@ class DataBase{
 
         // User operations
         int get_user(std::string username, UserConnect* userconnect);
+        int get_user(int user_id, UserConnect* userconnect);
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
         int register_user(std::string username, std::string passwd);
+        int connect_user(bool connected, std::string username);
 
         // Lombrics Operations
-        int add_lombric(int user_id, std::string lombric_name);
-        int set_lombric_name(int lombric_id, std::string username);
+        int add_lombric(int user_id, int lombric_id, std::string lombric_name);
+        int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
 
         // Game history operations
@@ -63,6 +66,11 @@ class DataBase{
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
 
+        // Create game
+        int create_room(int owner_id);
+        int get_last_room_id(Create_room_id *room_id);
+        int get_room_id_from_owner_id(int owner_id, int* room_id);
+
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with
 
@@ -76,7 +84,7 @@ class DataBase{
         std::ostringstream m_stringStream; // Object used to properly concatenate requests
 
         char salt[BCRYPT_HASHSIZE]; //salt for hash function
-        char hash[BCRYPT_HASHSIZE]; // store the hash of passw 
+        char hash[BCRYPT_HASHSIZE]; // store the hash of passw
 };
 
 #endif
