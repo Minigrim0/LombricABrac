@@ -55,7 +55,7 @@ info Menu_entrer::run(info information)
     int clav=wgetch(win);
     switch (clav)
     {
-      case KEY_UP:
+      case NAVIGATE_UP:
         effacer_caractere_window(win,pos_y,pos_x,len_arrow);
         pos_y-=3;
         if (pos_y!=(hauteur/2)-8){
@@ -67,7 +67,7 @@ info Menu_entrer::run(info information)
           print_string_window(win,pos_y,pos_x,arrow);
         }
         break;
-      case KEY_DOWN:
+      case NAVIGATE_DOWN:
         effacer_caractere_window(win,pos_y,pos_x,len_arrow);
         pos_y+=3;
         if (pos_y!=(hauteur/2)+4){

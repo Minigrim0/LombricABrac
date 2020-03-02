@@ -45,6 +45,8 @@ info Salon_Attente::run(info information)
   {
     name_joueur[static_cast<unsigned int>(i)]=name[i];
   }*/
+
+  system("echo ich bin here > out.txt");
   clear();
   refresh();
   initscr();
@@ -279,7 +281,7 @@ info Salon_Attente::run(info information)
       touch = wgetch(getInput);
       switch (touch)
         {
-          case KEY_RIGHT:
+          case NAVIGATE_RIGHT:
           effacer_caractere_window(getInput, 2 , x, len_str);
           if(x == x_arrow1)
           {
@@ -300,7 +302,7 @@ info Salon_Attente::run(info information)
           print_string_window(getInput, 2, x, arrow);
             break;
 
-          case KEY_LEFT:
+          case NAVIGATE_LEFT:
             effacer_caractere_window(getInput, 2 , x, len_str);
             if (x == x_arrow4)
             {
