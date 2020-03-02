@@ -240,7 +240,8 @@ info Salon_Attente::run(info information)
     len_str = static_cast<int>(arrow.size());
     keypad(getInput, TRUE);
 
-    while(1)
+    bool running = true;
+    while(running)
     {
       /*joueur_in_room = information.client->getNewTeam();
       size_repeated = joueur_in_room.size();
@@ -332,24 +333,26 @@ info Salon_Attente::run(info information)
           {
 
             information.id = 2;
+            running = false;
             break;
           }
           if (x == x_arrow2 && information.ishost)
           {
             information.id = 221;
+            running = false;
             break;
           }
           if (x == x_arrow3 && information.ishost)
           {
             information.id = 30;
+            running = false;
             break;
           }
           if (x== x_arrow4 && information.ishost)
           {
             information.client->startGame();
-            std::string t = "echo 'partie lancée' >> out.txt";
-	        system(t.c_str());
             information.id=80;
+            running = false;
             break;
           }
         }
