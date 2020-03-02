@@ -54,7 +54,7 @@ int Listener::reception(){
         return EXIT_FAILURE;
     }
     else if(m_res == 0){
-        perror("Client closed socket.\n");
+        std::cerr << "Client closed socket." << std::endl;
         return EXIT_FAILURE;
     }
 

@@ -35,10 +35,7 @@ int client_thread(int socket_client){
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
 
-            if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
-                type = 0;
-            }
-            else{ // We got a message from the Broker
+            if(strcmp(address.c_str(), "") != 0){ // We got a message from the Broker
                 std::string contents = s_recv(subscriber);
 
                 zmqmsg.ParseFromString(contents);
@@ -50,21 +47,32 @@ int client_thread(int socket_client){
                     game_url = zmqmsg.message();
                 }
                 else if(type == INFO_ROOM){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(INFO_ROOM, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == USR_ADD){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(USR_ADD, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == JOIN_GROUP_R){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(JOIN_GROUP_R, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == START){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(START, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
                 continue;
+            }
+            else{ // The receive just timed out
+                type = 0;
             }
         }
 
@@ -72,6 +80,7 @@ int client_thread(int socket_client){
             type = la_poste.reception_type();
             if(type != 0)
                 std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
+            std::cout << " >> type: " << static_cast<int>(type) << std::endl;
             if(type == EXIT_FAILURE){
                 break;
             }
@@ -85,7 +94,7 @@ int client_thread(int socket_client){
                 zmqmsg.set_type_message(type);
                 zmqmsg.set_receiver_id(usr.get_id());
 
-                if(type != INFO_ROOM){
+                if(type != INFO_ROOM && type != START){
                     la_poste.reception();
                     zmqmsg.set_message(la_poste.get_buffer());
                 }
@@ -155,7 +164,6 @@ int client_thread(int socket_client){
                     stream.clear();
                     stream << "users/" << usr.get_id() << "/room";
                     subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-                    std::cout << "User " << usr.get_id() << " connected to " << stream.str() << std::endl;
                 }
             }
         }

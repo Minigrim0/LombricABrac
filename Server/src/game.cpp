@@ -18,15 +18,15 @@ m_channel(""),
 m_current_lombric(0),
 m_is_current_player(false),
 m_pseudo(""),
-m_Lombrics(std::vector<uint32_t>(nbLomb))
+m_Lombrics(new std::vector<uint32_t>(nbLomb))
 {}
 
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
     for(uint8_t cur_lomb=1;cur_lomb<nbLomb+1;cur_lomb++){
-        if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
-            return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
+        if(obj_partie->isLombAlive((*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb])){
+            return (*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb];
         }
     }
 
@@ -34,7 +34,7 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
 }
 
 void Joueur::set_nb_lombs(uint8_t nb_lombs){
-    m_Lombrics.resize(nb_lombs);
+    (*m_Lombrics).resize(nb_lombs);
 }
 
 void Joueur::sendMessage(std::string msg){
@@ -60,8 +60,8 @@ void Joueur::set_player_id(int id){
 }
 
 void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<m_Lombrics.size();i++){
-        if(m_Lombrics[i] == static_cast<unsigned int>(id)){
+    for(size_t i=0;i<(*m_Lombrics).size();i++){
+        if((*m_Lombrics)[i] == static_cast<unsigned int>(id)){
             m_current_lombric = i;
         }
     }
@@ -345,15 +345,18 @@ void Game::end_round(){
 }
 
 void Game::spawn_lombric(){
+    std::cout << "spawnet" << std::endl;
     std::ostringstream stream;
     std::string myText;
     uint32_t hauteur;
     uint32_t largeur;
 
-    stream << "../map/" << map_id << ".map";
-
+    stream << static_cast<int>(map_id) << ".map";
+    std::cout << stream.str() << std::endl;
     std::ifstream MyReadFile(stream.str());
+    std::cout << "ouvert "<< std::endl;
     std::getline (MyReadFile, myText);
+    std::cout << "getline "<< std::endl;
     std::stringstream(myText) >> hauteur >> largeur;
     std::vector<std::string> map_s(hauteur);
 
@@ -364,9 +367,10 @@ void Game::spawn_lombric(){
     MyReadFile.close();
 
     Map map(largeur,hauteur,map_s);
-
     std::vector<Sprite*> lombs;
+    std::cout << "Start init Lombs" << std::endl;
     for(size_t i=0;i<m_players.size();i++){
+        std::cout << "1" << std::endl;
         for(int j=0;j<nbr_lomb;j++){
             lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
         }
