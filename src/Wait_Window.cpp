@@ -29,6 +29,7 @@ info Wait_window::run(info information)
   getch();
   information.id = 2;
   clear();
+  delwin(win);
   endwin(); //retourne au terminal usuelle et desallou la mémoires
   return information;
 }

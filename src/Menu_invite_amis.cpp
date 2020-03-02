@@ -80,6 +80,7 @@ info Menu_invite_amis::run(info information)
 
 
   clear();
+  delwin(nom_joueur);
   endwin();
   return information;
 }

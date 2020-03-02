@@ -105,6 +105,7 @@ info Menu_entrer::run(info information)
     }
   }
   clear();
+  delwin(win);
   endwin();
   return information;
 }

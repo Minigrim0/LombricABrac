@@ -97,6 +97,7 @@ info Warning_leave_window::run(info information)
   }
 
   clear();
+  delwin(win);
   endwin(); //retourne au terminal usuelle et desallou la mémoires
   return information;
 }
