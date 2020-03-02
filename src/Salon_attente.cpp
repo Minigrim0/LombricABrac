@@ -359,8 +359,7 @@ info Salon_Attente::run(info information)
       }
     }
   }
-  std::string t = "echo 'finished if' >> out.txt";
-  system(t.c_str());
+
 
   clear();
   delwin(equipe1);
@@ -372,9 +371,6 @@ info Salon_Attente::run(info information)
 
 
   endwin();
-
-  t = "echo 'end of the function' >> out.txt";
-  system(t.c_str());
 
   return information;
 }
