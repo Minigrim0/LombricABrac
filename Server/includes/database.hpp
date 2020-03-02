@@ -7,15 +7,16 @@
 #include "../lib/bcrypt.h"
 #include "../cpl_proto/user.pb.h"
 
-#define DT_USR 1 // Datatype UserConnect
-#define DT_STR 2 // Datatype String
-#define DT_INT 3 // Datatype Int
-#define DT_LOM 4 // Datatype Lomb_r
-#define DT_HIS 5 // Datatype History_r
-#define DT_RAN 6 // Datatype Rank_r
-#define DT_CHA 7 // Datatype Chat_r
-#define DT_FRI 8 // Datatype Fri_ls_r
-#define DT_RID 9 // Datatype Fri_ls_r
+#define DT_USR 1  // Datatype UserConnect
+#define DT_STR 2  // Datatype String
+#define DT_INT 3  // Datatype Int
+#define DT_LOM 4  // Datatype Lomb_r
+#define DT_HIS 5  // Datatype History_r
+#define DT_RAN 6  // Datatype Rank_r
+#define DT_CHA 7  // Datatype Chat_r
+#define DT_FRI 8  // Datatype Fri_ls_r
+#define DT_RID 9  // Datatype Fri_ls_r
+#define DT_END 10 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -40,6 +41,7 @@ class DataBase{
         int add_lombric(int user_id, int lombric_id, std::string lombric_name);
         int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
+        int get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r);
 
         // Game history operations
         int get_history(int user_id, int index, int size, History_r* history_r);

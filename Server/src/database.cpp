@@ -126,8 +126,11 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
         case DT_RID:
             static_cast<Create_room_id*>(data_container)->set_room_id(atoi(argv[0]));
             break;
+        case DT_END:
+            static_cast<End_tour*>(data_container)->add_id_lomb_mort(atoi(argv[0]));
+            break;
         default:
-            std::cout << "> Error, datatype not recognised" << std::endl;
+            std::cout << "> Error, datatype not recognized" << std::endl;
     }
 
     return 0;
@@ -257,6 +260,21 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
     m_data_type = DT_LOM;
 
     m_stringStream << "SELECT name FROM worms WHERE owner_id=" << owner_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_r, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_END;
+
+    m_stringStream << "SELECT id FROM worms WHERE owner_id=" << owner_id << " LIMIT 0, " << nbLombs << ";";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_r, &m_zErrMsg);

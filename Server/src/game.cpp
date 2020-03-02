@@ -11,22 +11,22 @@
 #include "../cpl_proto/user.pb.h"
 
 
-Joueur::Joueur(int nbLomb)
+Joueur::Joueur()
 :m_Equipe(0),
 m_player_id(0),
 m_channel(""),
 m_current_lombric(0),
 m_is_current_player(false),
-m_pseudo(""),
-m_Lombrics(new std::vector<uint32_t>(nbLomb))
+m_pseudo("")
 {}
 
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t cur_lomb=1;cur_lomb<nbLomb+1;cur_lomb++){
-        if(obj_partie->isLombAlive((*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb])){
-            return (*m_Lombrics)[(cur_lomb+m_current_lombric)%nbLomb];
+    for(uint8_t cur_lomb=0;cur_lomb<nbLomb;cur_lomb++){
+        std::cout << "GNLOMB : " << m_Lombrics.size() << std::endl;
+        if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
+            return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
         }
     }
 
@@ -34,7 +34,9 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
 }
 
 void Joueur::set_nb_lombs(uint8_t nb_lombs){
-    (*m_Lombrics).resize(nb_lombs);
+    std::cout << "Resizing : " << m_Lombrics.size() << std::endl;
+    m_Lombrics.resize(nb_lombs);
+    std::cout << m_Lombrics.size() << std::endl;
 }
 
 void Joueur::sendMessage(std::string msg){
@@ -60,8 +62,8 @@ void Joueur::set_player_id(int id){
 }
 
 void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<(*m_Lombrics).size();i++){
-        if((*m_Lombrics)[i] == static_cast<unsigned int>(id)){
+    for(size_t i=0;i<m_Lombrics.size();i++){
+        if(m_Lombrics[i] == static_cast<unsigned int>(id)){
             m_current_lombric = i;
         }
     }
@@ -69,6 +71,15 @@ void Joueur::set_current_lomb(int id){
 
 void Joueur::set_current_player(bool current){
     m_is_current_player = current;
+}
+
+void Joueur::add_worms(int worm, int nbWorm){
+    for(int x=0;x<nbWorm;x++){
+        if(m_Lombrics[x] == 0){
+            m_Lombrics[x] = nbWorm;
+            return;
+        }
+    }
 }
 
 Game::Game(uint32_t owner){
@@ -155,7 +166,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     else if(zmq_msg.type_message() == INFO_ROOM){
         UserConnect usr;
         infoRoom room;
-        Joueur newPlayer(nbr_lomb);
+        Joueur newPlayer;
 
         room.set_nbr_lomb(static_cast<uint32_t>(nbr_lomb));
         room.set_map(static_cast<uint32_t>(map_id));
@@ -177,10 +188,16 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         s_send_b(publisher, zmq_msg.SerializeAsString());
 
         newPlayer.set_player_id(zmq_msg.receiver_id());
+        newPlayer.set_nb_lombs(nbr_lomb);
+        End_tour lombs;
 
         DataBase_mutex.lock();
+        db.get_x_lombrics(zmq_msg.receiver_id(), nbr_lomb, &lombs);
         db.get_user(zmq_msg.receiver_id(), &usr);
         DataBase_mutex.unlock();
+        
+        for(int x=0;x<nbr_lomb;x++)
+            newPlayer.add_worms(lombs.id_lomb_mort(x), nbr_lomb);
 
         newPlayer.set_pseudo(usr.pseudo());
 
@@ -282,6 +299,25 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
+                
+                zmq_msg.Clear();
+                zmq_msg.set_type_message(NEXT_ROUND);
+                Next_lombric lomb;
+                lomb.set_id_lomb(who_next());
+
+                for(size_t i=0;i<m_players.size();i++){
+                    if(i == current_player){
+                        lomb.set_is_yours(true);
+                        zmq_msg.set_message(lomb.SerializeAsString());
+                        m_players[i].sendMessage(zmq_msg.SerializeAsString());    
+                    }
+                    else{
+                        lomb.set_is_yours(false);
+                        zmq_msg.set_message(lomb.SerializeAsString());
+                        m_players[i].sendMessage(zmq_msg.SerializeAsString());    
+                    }
+                }
+
                 break;
             }
 
