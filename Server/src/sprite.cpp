@@ -9,8 +9,8 @@ Sprite::Sprite(uint32_t id_l, Map* carte):id(id_l), skin(0){
 	while(run){//on recommence tant que l'emplacement n'est pas bon
 		std::cout << "Start init Lomb" << std::endl;
 		do{//jusqu'à ce que les coords = bloc d'air
-			x = rand() % carte->getLargeur();//nombre entre 0 et largeur de la carte
-			y = rand() % carte->getHauteur();//nombre entre 0 et hauteur de la carte
+			x = rand() % carte->getLargeur(); //nombre entre 0 et largeur de la carte
+			y = rand() % carte->getHauteur(); //nombre entre 0 et hauteur de la carte
 			std::cout << "Generate: x = " << x << " - y = " << y << " - Color: " << carte->getColor(x,y) <<  std::endl;
 		}while(!carte->isTypeBloc(x,y,AIR));
 		std::cout << "Position free" << std::endl;
