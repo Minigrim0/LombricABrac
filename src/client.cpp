@@ -220,9 +220,6 @@ int Client::readMessage(){
 
 	msg.text = static_cast<std::string>(buffer);
 	delete buffer;
-
-	std::string text = "echo Maccro reçue: " + std::to_string(msg.type) + " >> out.txt";
-	system(text.c_str());
 	msgMutex.unlock();
 	//std::string t = "echo 'on sort' >> out.txt";
   //system(t.c_str());
@@ -235,13 +232,7 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	msg.type = 0;
 
 	reponseAttendue = typeAttendu;
-	std::string text = "echo Sending maccro " + std::to_string(m.type) + " >> out.txt";
-	system(text.c_str());
 	sendMessage(m);
-
-	text = "echo Sent >> out.txt";
-	system(text.c_str());
-
 	bool msgReady;
 
 	do{ //tant que le messages n'est pas la réponse attendue
