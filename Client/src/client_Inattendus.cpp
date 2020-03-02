@@ -178,7 +178,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	int largeur;
 
 
-	std::string name = "../map/map" + std::to_string(currentParams.map) + ".map";
+	std::string name = "../map/" + std::to_string(currentParams.map) + ".map";
 
 	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
