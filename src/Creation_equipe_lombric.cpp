@@ -166,7 +166,16 @@ info Menu_creation_equipe_lombric::run(info information)
         break;
     }
   }
-
+  clear();
+  delwin(win_lombric1);
+  delwin(win_lombric2);
+  delwin(win_lombric3);
+  delwin(win_lombric4);
+  delwin(win_lombric5);
+  delwin(win_lombric6);
+  delwin(win_lombric7);
+  delwin(win_lombric8);
+  delwin(confirmer);
   endwin();
   return information;
 }

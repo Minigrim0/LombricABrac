@@ -242,6 +242,11 @@ info Menu_creation_partie::run(info information)
   }
   //print_string_window(confirmer,1,1,msg_confirmation.c_str());
   clear();
+  delwin(nombre_equipe);
+  delwin(nombre_lombric);
+  delwin(temps);
+  delwin(map);
+  delwin(confirmer);
   endwin(); //on free les window et on quitte
   return information;
 }
