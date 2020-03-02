@@ -4,9 +4,9 @@
 
 //AFFICHAGE
 #define VIDE ' '
-#define LIGHT_WALL '1'
-#define AIR '0'
-#define SOLID_WALL '2'
+#define LIGHT_WALL '#'
+#define AIR ' '
+#define SOLID_WALL '='
 
 #define AIR_COLOR 1
 #define LIGHT_WALL_COLOR 2

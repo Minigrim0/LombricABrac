@@ -94,7 +94,7 @@ int client_thread(int socket_client){
                 zmqmsg.set_type_message(type);
                 zmqmsg.set_receiver_id(usr.get_id());
 
-                if(type != INFO_ROOM){
+                if(type != INFO_ROOM && type != START){
                     la_poste.reception();
                     zmqmsg.set_message(la_poste.get_buffer());
                 }

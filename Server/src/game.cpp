@@ -262,7 +262,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 break;
             }
             case START:{
-                std::cout << "start" << std::endl;
                 *current_step = STEP_GAME;
                 zmq_msg.set_type_message(START);
 
@@ -367,17 +366,13 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    std::cout << "map" << std::endl;
     Map map(largeur,hauteur,map_s);
-    std::cout << "vector" << std::endl;
     std::vector<Sprite*> lombs;
-    std::cout << "fin vecto" << std::endl;
+    std::cout << "Start init Lombs" << std::endl;
     for(size_t i=0;i<m_players.size();i++){
         std::cout << "1" << std::endl;
         for(int j=0;j<nbr_lomb;j++){
-            std::cout << "lomb" << std::endl;
             lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
-            std::cout << "2" << std::endl;
         }
     }
 
