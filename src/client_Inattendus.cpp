@@ -161,7 +161,7 @@ std::string Client::getNextRound(){
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
-	std::string text = "echo Init gameInfo >> out.txt";
+	std::string text = "echo Init gameInfo " + m.text +">> out.txt";
 	system(text.c_str());
 
 	started = true; // la partie à démarré
@@ -183,15 +183,15 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
 
-	text = "echo Ligne 1 " + myText +" >>out.txt";
-	system(text.c_str());
+	//text = "echo Ligne 1 " + myText +" >>out.txt";
+	//system(text.c_str());
 
 	std::stringstream(myText) >> hauteur >> largeur;
 	std::vector<std::string> map(hauteur);
 
 	for (int i =0; i<hauteur; i++) {
 	    std::getline (MyReadFile, map[i]);
-	    std::cout << map[i] << std::endl;
+	    //std::cout << map[i] << std::endl;
 	}
 
 	MyReadFile.close();
@@ -201,6 +201,8 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
+		text = "echo new lomb >> out.txt";
+		system(text.c_str());
 		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(),LOMBRIC_SKIN,100));
 	}
 

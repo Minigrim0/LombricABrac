@@ -64,6 +64,6 @@
 
 
 //TAILLE DES WINDOW
-#define OVERLAY_WIDTH 20 //taille fixée pour l'overlay
+#define OVERLAY_WIDTH 25 //taille fixée pour l'overlay
 
 #endif
