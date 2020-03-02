@@ -47,16 +47,24 @@ int client_thread(int socket_client){
                     game_url = zmqmsg.message();
                 }
                 else if(type == INFO_ROOM){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(INFO_ROOM, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == USR_ADD){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(USR_ADD, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == JOIN_GROUP_R){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(JOIN_GROUP_R, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else if(type == START){
+                    std::cout << "sending to client" << std::endl;
                     la_poste.envoie_msg(START, zmqmsg.message());
+                    std::cout << "sent" << std::endl;
                 }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
@@ -72,6 +80,7 @@ int client_thread(int socket_client){
             type = la_poste.reception_type();
             if(type != 0)
                 std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
+            std::cout << " >> type: " << static_cast<int>(type) << std::endl;
             if(type == EXIT_FAILURE){
                 break;
             }
