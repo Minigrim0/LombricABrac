@@ -364,7 +364,7 @@ void Game::spawn_lombric(){
     uint32_t hauteur;
     uint32_t largeur;
 
-    stream << "../map/" << map_id << ".map";
+    stream << "../map/" << static_cast<int>(map_id) << ".map";
     std::cout << stream.str() << std::endl;
     std::ifstream MyReadFile(stream.str());
     std::getline (MyReadFile, myText);
