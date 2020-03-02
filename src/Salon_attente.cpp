@@ -10,7 +10,7 @@
 info Salon_Attente::run(info information)
 {
   bool partie_lance = FALSE, trois_equipe = FALSE, quatre_equipe = FALSE;
-  int max_x,max_y,len_str;
+  int max_x,max_y,len_str=0;
   int size_repeated;
   int x=4;//y=4;
   int n = 0, x_1 = 0,x_2 = 0,x_3 = 0,x_4 = 0;
@@ -64,6 +64,7 @@ info Salon_Attente::run(info information)
   box(equipe3, 0,0);
   box(equipe4, 0,0);
 
+
   refresh();
   wrefresh(equipe1);
   wrefresh(equipe2);
@@ -71,6 +72,7 @@ info Salon_Attente::run(info information)
   wrefresh(equipe4);
   wrefresh(getInput);
   wrefresh(pseudo);
+
 
   len_str=static_cast<int>(titre.size());
   draw(1,(max_x/2)-len_str/2,titre);
@@ -93,7 +95,6 @@ info Salon_Attente::run(info information)
     trois_equipe = TRUE;
     print_string_window(equipe3,1,1,"Equipe 3 :");
   }
-
   if(information.ishost)
   {
     information.client->changeTeam(1);
