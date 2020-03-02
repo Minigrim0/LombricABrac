@@ -14,5 +14,5 @@ compile:
   - make init_db
   - ./init_db true
   - echo "TESTING CLIENT"
-  - cd ../
+  - cd ../Client/
   - make
