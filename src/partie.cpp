@@ -345,7 +345,7 @@ void Partie::resize(){
     screenHeight = newHeight;
 
     //la taille de la fenêtre de jeu est soit bornée par la taille de la carte ou par celle de la console
-    gameScreenWidth = min(screenWidth - OVERLAY_WIDTH - 1, gameInfo->carte->getLargeur());;//on garde de la taille pour l'overlay
+    gameScreenWidth = min(screenWidth - OVERLAY_WIDTH - 1, gameInfo->carte->getLargeur());//on garde de la taille pour l'overlay
     gameScreenHeight = min(screenHeight, gameInfo->carte->getHauteur());
 
     //recréé la fenêtre pour la partie
