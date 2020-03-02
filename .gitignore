@@ -12,3 +12,4 @@ out.txt
 input
 Server/lib/cppzmq/
 Server/lib/libzmq/
+Client/proto/src/
