@@ -81,6 +81,12 @@ int main(int argc, char** argv)
     if(errno){
             std::cout << "Vous n'avez malheureusement pas réussi à vous connecter avec le serveur" << std::endl;
             std::cout << "ps: allez prendre l'air, ça ira peut-être mieux après!" << std::endl;
+            std::cout << " _  _    ___  _  _    " << std::endl;
+            std::cout << "| || |  / _ \\| || |  " << std::endl;
+            std::cout << "| || |_| | | | || |_ " << std::endl;
+            std::cout << "|__   _| |_| |__   _|" << std::endl;
+            std::cout << "   |_|  \\___/   |_|  " << std::endl;
+
             return EXIT_FAILURE;
     }
 
