@@ -1,0 +1,209 @@
+syntax = "proto3";
+
+message UserConnect{
+  bool isregister = 1;
+  string pseudo = 2;
+  string password = 3;
+}
+
+message Chat{
+  string pseudo = 1;
+  string msg = 2;
+}
+
+message Chat_r{
+  repeated Chat msgs = 1;
+}
+
+message Chat_broker{
+  uint32 usr_id = 1;
+}
+
+message convo_s{
+  string pseudo = 1;
+}
+
+message Invitation{
+  string pseudo = 1;
+  bool type = 2; // True = invitation pour une partie, False = invitation d'ami
+  uint32 game_id = 3;
+}
+
+message Invitation_r{
+    repeated Invitation invits = 1;
+}
+
+message Join{
+  string pseudo = 1;
+}
+
+message Lomb_r{
+  repeated string Lombs = 1;
+}
+
+message Lomb_mod{
+  uint32 id_lomb = 1;
+  string name_Lomb = 2;
+}
+
+message Usr_add{
+  string pseudo = 1;
+}
+
+message Map_mod{
+  uint32 id = 1;
+}
+
+message Time_mod{
+  uint32 time = 1;
+}
+
+message Time_round_mod{
+  uint32 time = 1;
+}
+
+message Nbr_lomb_mod{
+  uint32 nbr_lomb = 1;
+}
+
+message Nbr_eq_mod{
+  uint32 nbr_eq = 1;
+}
+
+message Join_groupe_s{
+  uint32 id = 1;
+}
+
+message Join_groupe_r{
+  string pseudo = 1;
+  uint32 id = 2;
+}
+
+message Get_history{
+  string pseudo = 1;
+  uint32 first_game = 2;
+  uint32 nbr_game = 3;
+}
+
+message History{
+  string pseudo_1 = 1;
+  string pseudo_2 = 2;
+  string pseudo_3 = 3;
+  string pseudo_4 = 4;
+  uint32 point_1 = 5;
+  uint32 point_2 = 6;
+  uint32 point_3 = 7;
+  uint32 point_4 = 8;
+  string date = 9;
+}
+
+
+message History_r{
+  repeated History history = 1;
+}
+
+message Get_rank{
+  uint32 first_player = 1;
+  uint32 nbr_player = 2;
+}
+
+message rankInfo{
+  string user = 1;
+  uint32 point = 2;
+}
+
+message Rank_r{
+   repeated rankInfo players = 1;
+}
+
+message Fri_add{
+  string user = 1;
+}
+
+message Fri_rcv{
+  string user = 1;
+}
+
+message Fri_accept{
+  bool accept = 1;
+  string user = 2;
+}
+
+message Fri_rmv{
+  string user = 1;
+}
+
+message Fri_ls_r{
+  repeated string user = 1;
+}
+
+message Lomb_pos{
+  uint32 id_lomb = 1;
+  uint32 pos_x = 2;
+  uint32 pos_y = 3;
+}
+
+message Tir{
+  uint32 id_arme = 1;
+  uint32 force = 2;
+  double angle = 3;
+}
+
+message Projectiles{
+  uint32 id_projectile = 1;
+  repeated uint32 block = 2;
+}
+
+message List_Projectiles{
+  repeated Projectiles list_proj = 1;
+}
+
+message Block_Destroy{
+  repeated uint32 coord = 1;
+}
+
+message Degats_lombric{
+  repeated Lombric lomb_upt = 1;
+}
+
+message Lombric{
+  uint32 id_lomb = 1;
+  uint32 pos_x = 2;
+  uint32 pos_y = 3;
+  uint32 vie = 4;
+}
+
+message End_tour{
+  repeated uint32 id_lomb_mort = 1;
+}
+
+message Next_lombric{
+  uint32 id_lomb = 1;
+  bool is_yours = 2;
+}
+
+message infoPartie_p{
+  repeated Lombric lomb = 1;
+}
+
+message infoRoom{
+  uint32 nbr_lomb = 1;
+  uint32 nbr_eq = 2;
+  uint32 time_round = 3;
+  uint32 map = 4;
+  repeated Join_groupe_r joueur = 5;
+}
+
+message Create_room{
+  uint32 usr_id = 1;
+}
+
+message Create_room_id{
+  uint32 room_id = 1;
+}
+
+message ZMQ_msg{
+  uint32 receiver_id = 1;
+  uint32 type_message = 2;
+  string message = 3;
+}
