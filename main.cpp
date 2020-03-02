@@ -67,6 +67,8 @@ int main(int argc, char** argv)
     information.notif = 0;
     information.notif_invit = 0;
 
+    system(">out.txt");//vide le fichier de debug
+
     if(argc != 3){
         std::cout << "Il faut exactement 2 arguments (adresse du serveur et port)" << std::endl;
         return EXIT_FAILURE;

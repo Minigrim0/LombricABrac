@@ -36,11 +36,6 @@ mustDrawWall(false){
   noecho();//empêche d'écrire dans la console
   curs_set(FALSE);//affiche pas le curseur
 
-  std::string test;
-
-  test = "echo gameinfo->carte " + std::to_string(gameInfo->carte->getHauteur()) + ">> out.txt";
-  system(test.c_str());
-
   if (has_colors() == FALSE) {
     endwin();
     std::cout << "Your terminal does not support color" << std::endl;
