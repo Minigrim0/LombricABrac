@@ -68,26 +68,26 @@ int main(int argc, char** argv)
     information.notif_invit = 0;
 
     if(argc != 3){
-            std::cout << "Il faut exactement 2 arguments (adresse du serveur et port)" << std::endl;
-            return EXIT_FAILURE;
+        std::cout << "Il faut exactement 2 arguments (adresse du serveur et port)" << std::endl;
+        return EXIT_FAILURE;
     }
     int port = strtol(argv[2],NULL,10);
     if(errno || !port){
-            std::cout << "Mauvais port, est-ce un entier ?" << std::endl;
-            return EXIT_FAILURE;
+        std::cout << "Mauvais port, est-ce un entier ?" << std::endl;
+        return EXIT_FAILURE;
     }
     information.client = new Client(argv[1], port);
 
     if(errno){
-            std::cout << "Vous n'avez malheureusement pas réussi à vous connecter avec le serveur" << std::endl;
-            std::cout << "ps: allez prendre l'air, ça ira peut-être mieux après!" << std::endl;
-            std::cout << " _  _    ___  _  _    " << std::endl;
-            std::cout << "| || |  / _ \\| || |  " << std::endl;
-            std::cout << "| || |_| | | | || |_ " << std::endl;
-            std::cout << "|__   _| |_| |__   _|" << std::endl;
-            std::cout << "   |_|  \\___/   |_|  " << std::endl;
+        std::cout << "Vous n'avez malheureusement pas réussi à vous connecter avec le serveur" << std::endl;
+        std::cout << "ps: allez prendre l'air, ça ira peut-être mieux après!" << std::endl;
+        std::cout << " _  _    ___  _  _    " << std::endl;
+        std::cout << "| || |  / _ \\| || |  " << std::endl;
+        std::cout << "| || |_| | | | || |_ " << std::endl;
+        std::cout << "|__   _| |_| |__   _|" << std::endl;
+        std::cout << "   |_|  \\___/   |_|  " << std::endl;
 
-            return EXIT_FAILURE;
+        return EXIT_FAILURE;
     }
 
     std::thread t(&Client::run,information.client);
