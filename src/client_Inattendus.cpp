@@ -161,12 +161,13 @@ std::string Client::getNextRound(){
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
-	std::string text = "echo traitement infoPartie >> out.txt";
+	std::string text = "echo Init gameInfo >> out.txt";
 	system(text.c_str());
 
 	started = true; // la partie à démarré
 	infoPartie_p obj;
 	obj.ParseFromString(m.text); //struct recue par le serveur
+
 
 	infoPartie_s* gameInfo = new infoPartie_s;
 	//remplis le vecteur des murs
@@ -176,9 +177,15 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	int hauteur;
 	int largeur;
 
-	std::string name = "../map/map" + std::to_string(currentParams.map) + ".map";
+
+	std::string name = "./map/map" + std::to_string(currentParams.map) + ".map";
+
 	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
+
+	text = "echo Ligne 1 " + myText +" >>out.txt";
+	system(text.c_str());
+
 	std::stringstream(myText) >> hauteur >> largeur;
 	std::vector<std::string> map(hauteur);
 
@@ -202,6 +209,6 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 
 	thisGame = gameInfo;
-	text = "echo End infoPartie >> out.txt";
+	text = "echo End init >> out.txt";
 	system(text.c_str());
 }
