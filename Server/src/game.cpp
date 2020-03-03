@@ -76,7 +76,7 @@ void Joueur::set_current_player(bool current){
 void Joueur::add_worms(int worm, int nbWorm){
     for(int x=0;x<nbWorm;x++){
         if(m_Lombrics[x] == 0){
-            m_Lombrics[x] = nbWorm;
+            m_Lombrics[x] = worm;
             return;
         }
     }
@@ -194,7 +194,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         db.get_x_lombrics(zmq_msg.receiver_id(), nbr_lomb, &lombs);
         db.get_user(zmq_msg.receiver_id(), &usr);
         DataBase_mutex.unlock();
-        
+
         for(int x=0;x<nbr_lomb;x++)
             newPlayer.add_worms(lombs.id_lomb_mort(x), nbr_lomb);
 
@@ -295,10 +295,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
                 zmq_msg.set_message(msg.SerializeAsString());
 
-                for(size_t i=0;i<m_players.size();i++){
+                for(size_t i=0;i<m_players.size();i++)
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                }
-                
+
                 zmq_msg.Clear();
                 zmq_msg.set_type_message(NEXT_ROUND);
                 Next_lombric lomb;
@@ -308,12 +307,12 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                     if(i == current_player){
                         lomb.set_is_yours(true);
                         zmq_msg.set_message(lomb.SerializeAsString());
-                        m_players[i].sendMessage(zmq_msg.SerializeAsString());    
+                        m_players[i].sendMessage(zmq_msg.SerializeAsString());
                     }
                     else{
                         lomb.set_is_yours(false);
                         zmq_msg.set_message(lomb.SerializeAsString());
-                        m_players[i].sendMessage(zmq_msg.SerializeAsString());    
+                        m_players[i].sendMessage(zmq_msg.SerializeAsString());
                     }
                 }
 
@@ -407,7 +406,7 @@ void Game::spawn_lombric(){
     std::vector<std::string> map_s(hauteur);
 
     for (uint32_t i =0; i<hauteur; i++) {
-        std::getline (MyReadFile, map_s[i]);
+        std::getline(MyReadFile, map_s[i]);
     }
 
     MyReadFile.close();
@@ -415,7 +414,6 @@ void Game::spawn_lombric(){
     Map map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
-        std::cout << "1" << std::endl;
         for(int j=0;j<nbr_lomb;j++){
             m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
         }
