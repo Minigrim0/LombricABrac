@@ -20,7 +20,7 @@ $(EXECUTABLE): main.cpp $(OBJECTS) $(LIBS) build/user.pb.o
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 build/user.pb.o:
-	protoc -I=proto --cpp_out=proto/src proto/user.proto
+	#protoc -I=proto --cpp_out=proto/src proto/user.proto
 	$(CXX) $(COMPILER_FLAGS) -c proto/src/*
 	mv user.pb.o build/user.pb.o
 
