@@ -371,10 +371,13 @@ void Game::end_round(){
         current_player = 0;
 
     uint32_t next_lomb_id = who_next();
-    if(next_lomb_id == 0){ // This player is dead
+    if(next_lomb_id == 0){ // This player is mort
         // A vérifier, il est possible que ca supprime le joueur suivant
         m_players.erase(m_players.begin() + current_player);
     }
+
+    obj_partie.setCurrentLomb(next_lomb_id);
+
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
 
     for(size_t i=0;i<m_players.size();i++){
