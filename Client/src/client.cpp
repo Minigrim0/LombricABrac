@@ -214,8 +214,12 @@ int Client::readMessage(){
 	}
 
 	msg.text = static_cast<std::string>(buffer);
+<<<<<<< HEAD
 	delete[] buffer;
 
+=======
+	delete buffer;
+>>>>>>> f18243a58a5ee61218d1d59b15ae7b7e95411e06
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
 }
