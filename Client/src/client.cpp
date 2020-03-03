@@ -220,8 +220,6 @@ int Client::readMessage(){
 
 	msg.text = static_cast<std::string>(buffer);
 	delete buffer;
-	std::string t = "echo Type reçu: "+ std::to_string(msg.type) +" >> out.txt";
-	system(t.c_str());
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
 }

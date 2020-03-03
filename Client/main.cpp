@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     information.notif = 0;
     information.notif_invit = 0;
 
-    system(">out.txt");//vide le fichier de debug
+    //system(">out.txt");//vide le fichier de debug
 
     if(argc != 3){
         std::cout << "Il faut exactement 2 arguments (adresse du serveur et port)" << std::endl;
@@ -204,14 +204,8 @@ int main(int argc, char** argv)
                 information = request_history.run(information);
                 break;
             case 80:
-                std::string t = "echo Avant >> out.txt";
-                system(t.c_str());
                 Window* gameWin = new Partie(information.client);
-                t = "echo pendant >> out.txt";
-                system(t.c_str());
                 information = gameWin->run(information);
-                t = "echo Après >> out.txt";
-                system(t.c_str());
                 break;
         }
     }
