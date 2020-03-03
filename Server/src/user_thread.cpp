@@ -60,6 +60,9 @@ int client_thread(int socket_client){
                     la_poste.envoie_msg(START, zmqmsg.message());
                     std::cout << "sent" << std::endl;
                 }
+                else if(type == NEXT_ROUND){
+                    la_poste.envoie_msg(NEXT_ROUND, zmqmsg.message());
+                }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
