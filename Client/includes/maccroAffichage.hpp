@@ -34,7 +34,7 @@
 #define JUMP 0
 
 #define MRU 1
-#define PARABOLLE 2
+#define PARABOLE 2
 
 #define GRAVITY 25
 

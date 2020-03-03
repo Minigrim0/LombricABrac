@@ -154,7 +154,7 @@ int Client::run(){
 	return 0;
 }
 
-void Client::sendMessage(message& msg){
+void Client::sendMessage(message& msg, bool forceSend){
 	int res;
 	uint32_t size;
 	uint32_t packet_size;
@@ -167,7 +167,7 @@ void Client::sendMessage(message& msg){
 
 	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
 
-	if (msg.text.size()){
+	if (msg.text.size() || forceSend){
 		if (size > 0){
 			res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
 			while (sent_size<size){ //envoie tout le message (string)

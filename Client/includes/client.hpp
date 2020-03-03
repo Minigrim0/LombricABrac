@@ -125,7 +125,7 @@ private:
 	std::vector<playerTeam> inNewTeam;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
-	void sendMessage(message& m);//envoie le type, la taille et le string
+	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
 	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue
 

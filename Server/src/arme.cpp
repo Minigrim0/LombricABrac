@@ -27,8 +27,7 @@ void LanceMissile::shoot(infoPartie_s* inf, double t){
 
 	inf->currentWorms->getPos(pos);
 
-
-	Projectile_c*	p = new Projectile_c(pos[0], pos[1]-1, speed[0], speed[1],radius, degat,t, PROJECTILE_SKIN);
+	Projectile_c* p = new Projectile_c(pos[0], pos[1]-1, speed[0], speed[1],radius, degat,t, PROJECTILE_SKIN);
 
 	inf->spriteVector.push_back(p);
 }
@@ -53,7 +52,7 @@ void BatteBaseball::shoot(infoPartie_s* inf, double t){
 			lomb->getPos(posLomb);
 
 			if(lomb != inf->currentWorms and posLomb[0] == pos[0] and posLomb[1] == pos[1]){//le vers doit être sur la même case
-				lomb->setMovement(speed[0], speed[1], GRAVITY, PARABOLLE, t);
+				lomb->setMovement(speed[0], speed[1], GRAVITY, PARABOLE, t);
 				lomb->addLife(degat);
 			}
 		}

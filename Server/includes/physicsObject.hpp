@@ -16,7 +16,7 @@ private:
 	double initSpeedX, initSpeedY;//vitesses initiales
 	double gravity;
 	double initTime;
-	int moveType;//MRU ou PARABOLLE (tir non parabolique ou tir parabolique)
+	int moveType;//MRU ou PARABOLE (tir non parabolique ou tir parabolique)
 public:
 	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, double t0);
 	int* update(int* res, double t);//modifie le tableau avec les coords de l'objets, t -> temps actuel

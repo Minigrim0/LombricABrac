@@ -48,7 +48,7 @@ bool Lombric_c::update(Map* carte, double t){
 
 	//si le lombric n'est pas en mouvement et qu'il flotte -> on lui applique une chute libre
 	if(!movement and carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
-		setMovement(0,0, GRAVITY, PARABOLLE, t);
+		setMovement(0,0, GRAVITY, PARABOLE, t);
 	}
 
 	return vie > 0;
@@ -71,6 +71,6 @@ void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, 
 		double speedX = vitesse * (pos[0] - xExplosion)/radius;
 		double speedY = vitesse * (pos[1] - yExplosion)/radius;
 
-		setMovement(speedX, speedY, GRAVITY, PARABOLLE, t);
+		setMovement(speedX, speedY, GRAVITY, PARABOLE, t);
 	}
 }

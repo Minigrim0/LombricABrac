@@ -53,7 +53,7 @@ void BatteBaseball::shoot(infoPartie_s* inf, double t){
 			lomb->getPos(posLomb);
 
 			if(lomb != inf->currentWorms and posLomb[0] == pos[0] and posLomb[1] == pos[1]){//le vers doit être sur la même case
-				lomb->setMovement(speed[0], speed[1], GRAVITY, PARABOLLE, t);
+				lomb->setMovement(speed[0], speed[1], GRAVITY, PARABOLE, t);
 				lomb->addLife(degat);
 			}
 		}

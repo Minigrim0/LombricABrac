@@ -10,7 +10,7 @@ int* PhysicsObject::update(int* res, double t){
 		res[0] = static_cast<int>(initSpeedX * t + initX);
 		res[1] = static_cast<int>(initSpeedY * t + initY);
 	}
-	else if(moveType == PARABOLLE){//tir parabollique
+	else if(moveType == PARABOLE){//tir parabollique
 		res[0] = static_cast<int>(std::round(initSpeedX * t + initX));//MRU
 		res[1] = static_cast<int>(std::round(gravity * t*t/2 + initSpeedY*t + initY)); //MRUA
 	}

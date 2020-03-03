@@ -24,7 +24,7 @@ public:
 	unsigned long getSkin();
 	void getPos(int *pos);//rempli le tableau pos des coordonnées x et y
 	void setPos(int* newPos);
-	void setMovement(double speedX, double speedY, double gravity, int type, double t);//type = type de mouvement (default=PARABOLLE)
+	void setMovement(double speedX, double speedY, double gravity, int type, double t);//type = type de mouvement (default=PARABOLE)
 	bool isInMovement();
 	void deleteMovement();
 

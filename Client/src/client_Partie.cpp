@@ -8,6 +8,7 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){//joueur tir
 	message m{};
 
 	//constuction de l'objet à envoyer
+	force = force==0?1:force;
 	Tir obj;
 	obj.set_id_arme(id_arme);
 	obj.set_force(force);
@@ -17,7 +18,7 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){//joueur tir
 	m.type = SHOOT;
 
 	sendMutex.lock();
-	sendMessage(m);
+	sendMessage(m, true);
 	sendMutex.unlock();
 }
 
