@@ -396,7 +396,7 @@ void Partie::writeOverlay(){
   }
 
   //Affichage des équipes et de leurs point de vie
-  for(auto equipe = gameInfo->teamsVector.begin(); equipe != gameInfo->teamsVector.end(); ++equipe ){
+  /*for(auto equipe = gameInfo->teamsVector.begin(); equipe != gameInfo->teamsVector.end(); ++equipe ){
     ++y;
     text = (*equipe)->getName() + ": " + std::to_string((*equipe)->getLife());//affiche le nom de l'équipe
     print_string_window(overlayWin,y++,1,text);
@@ -404,6 +404,17 @@ void Partie::writeOverlay(){
     std::vector<Lombric_c*> e = (*equipe)->getLombric();
     for(auto lomb = e.begin(); lomb != e.end(); ++lomb){//parcours tous les lombrics d'une équipe
       text = std::to_string((*lomb)->getId()) + ": " + std::to_string((*lomb)->getLife()) + " hp";
+      print_string_window(overlayWin,y++,1,text);
+    }
+  }*/
+
+  ++y;
+  for(auto sp = gameInfo->spriteVector.begin(); sp != gameInfo->spriteVector.end();++sp){
+    int id = (*sp)->getId();
+    if(id){//c'est un lombric
+      Lombric_c* lomb = dynamic_cast<Lombric_c*>(*sp);
+
+      text = "Lombric " + std::to_string(id) + ": " + std::to_string(lomb->getLife()) + "hp";//affiche le nom de l'équipe
       print_string_window(overlayWin,y++,1,text);
     }
   }
