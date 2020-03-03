@@ -50,6 +50,7 @@ public:
   // arg tir: string du protobuff de la structure Tir
   std::vector<std::string> useWeapon(std::string tir);
   bool isLombAlive(int id);
+  void setCurrentLomb(int id);
 
   ~Partie();
 };
