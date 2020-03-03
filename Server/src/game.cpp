@@ -84,6 +84,7 @@ void Joueur::add_worms(int worm, int nbWorm){
 
 Game::Game(uint32_t owner){
     owner_id = owner;
+    current_player = 0;
 }
 
 Game::~Game(){}
@@ -283,7 +284,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
                 zmq_msg.set_type_message(START);
                 infoPartie_p msg;
-                for(int i=0;i<m_lombs.size();i++){
+                for(size_t i=0;i<m_lombs.size();i++){
                     Lombric* lomb = msg.add_lomb();
                     int lomb_pos[2];
                     dynamic_cast<Lombric_c*>(m_lombs[i])->getPos(lomb_pos);

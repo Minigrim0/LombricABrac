@@ -43,6 +43,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
                 }
                 //current_game.set_begin();
 
+                current_game.set_round_time();
                 while(current_step == STEP_GAME){
                     //if(current_game.check_time()){
                     //    //mort subite

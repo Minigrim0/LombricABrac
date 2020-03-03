@@ -77,7 +77,6 @@ int client_thread(int socket_client){
             type = la_poste.reception_type();
             if(type != 0)
                 std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
-            std::cout << " >> type: " << static_cast<int>(type) << std::endl;
             if(type == EXIT_FAILURE){
                 break;
             }
