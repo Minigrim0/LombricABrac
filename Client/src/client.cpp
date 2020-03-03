@@ -216,6 +216,11 @@ int Client::readMessage(){
 	msg.text = static_cast<std::string>(buffer);
 	delete[] buffer;
 
+
+	std::string text = "echo Type Reçu: " + std::to_string(static_cast<int>(msg.type)) + " >> out.txt";
+	system(text.c_str());
+
+
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
 }
