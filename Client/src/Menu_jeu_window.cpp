@@ -53,12 +53,8 @@ info Menu_jeu_window::run(info information)
   {
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
     int len_vec= static_cast<int>(new_msg.size());
-      //system("echo ${len_vec} >> out.txt");
-    //draw(1,1,to_string(len_vec));
-    if (len_vec !=0)
-    {
-      //system("echo ${len_vec} >> out.txt");
-      //cout<<new_msg[static_cast<unsigned int>(0)].text;
+
+    if (len_vec !=0){
       information.notif=1;
       tab[5] = " Ami(s) * ";
       n=0;

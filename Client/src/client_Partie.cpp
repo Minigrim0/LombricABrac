@@ -58,21 +58,7 @@ infoPartie_s* Client::getGameInfo(){
 
 	while(!thisGame);
 
-	std::string text;
-	text = "echo Start Check Init >> out.txt";
-	system(text.c_str());
-	text = "echo thisGame NOT init >> out.txt";
-	if(thisGame){
-		text = "echo thisGame init >> out.txt";
-	}
-	system(text.c_str());
-	text = "echo Carte NOT init >> out.txt";
-	if(thisGame->carte){
-		text = "echo Carte init >> out.txt";
-	}
-	system(text.c_str());
-
-  return thisGame;
+  	return thisGame;
 }
 
 void Client::endTour(std::vector<uint32_t> deadLombrics){

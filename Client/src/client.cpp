@@ -47,8 +47,6 @@ int Client::run(){
 		if(res == -1){
 			perror("'select' failed");close(client_socket);return 1;
 		}
-		//std::string t = "echo 'on sort' >> out.txt";
-	  //system(t.c_str());
 
 		if(FD_ISSET(client_socket, &rfds)){//il y'a un message à lire
 			res = readMessage();
@@ -179,8 +177,6 @@ void Client::sendMessage(message& msg){
 			}
 		}
 	}
-	//std::string test = "echo 'TYPE " +std::to_string(msg.type)+"' >> out.txt";
-	//system(test.c_str());
 }
 
 
@@ -188,8 +184,7 @@ int Client::readMessage(){
 	//on lit la taille du message sur un uint_8 puis on lit tous les caractères
 	uint32_t size;//taille du message
 	int res;
-	//std::string test = "echo 'on rentre' >> out.txt";
-  //system(test.c_str());
+
 	msgMutex.lock();
 	if(msg.type){//si le type est pas à 0, c'est que le message n'est pas encore interprété -> on peut pas l'écraser
 		msgMutex.unlock();
@@ -219,9 +214,8 @@ int Client::readMessage(){
 	}
 
 	msg.text = static_cast<std::string>(buffer);
-	delete buffer;
-	std::string t = "echo Type reçu: "+ std::to_string(msg.type) +" >> out.txt";
-	system(t.c_str());
+	delete[] buffer;
+
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
 }

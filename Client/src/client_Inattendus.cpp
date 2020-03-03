@@ -33,7 +33,6 @@ std::vector<invitation> Client::getInvitations(){
 
 std::vector<chat_r> Client::getConvo(std::string username){
 	message m{};
-	//system("echo 'GETTING CONVO' >> out.txt");
 	//construction de la structure
 	convo_s obj;
 	obj.set_pseudo(username);
@@ -134,17 +133,6 @@ std::vector<infoArme> Client::getNewWeapons(){
 }
 
 paramsPartie Client::getParamsPartie(){
-	std::string text;
-	text = "echo map = " + std::to_string(currentParams.map) + " >> out.txt";
-	system(text.c_str());
-	text = "echo time = " + std::to_string(currentParams.time) + " >> out.txt";
-	system(text.c_str());
-	text = "echo time_round = " + std::to_string(currentParams.time_round) + " >> out.txt";
-	system(text.c_str());
-	text = "echo nbr_lombs = " + std::to_string(currentParams.nbr_lombs) + " >> out.txt";
-	system(text.c_str());
-	text = "echo nbr_equipes = " + std::to_string(currentParams.nbr_equipes) + " >> out.txt";
-	system(text.c_str());
 	return currentParams; //renvois tous les paramètres de la partie
 }
 
@@ -161,8 +149,6 @@ std::string Client::getNextRound(){
 }
 
 void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie démarre
-	std::string text = "echo Init gameInfo " + m.text +">> out.txt";
-	system(text.c_str());
 
 	started = true; // la partie à démarré
 	infoPartie_p obj;
@@ -183,9 +169,6 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	std::ifstream MyReadFile(name);
 	std::getline (MyReadFile, myText);
 
-	//text = "echo Ligne 1 " + myText +" >>out.txt";
-	//system(text.c_str());
-
 	std::stringstream(myText) >> hauteur >> largeur;
 	std::vector<std::string> map(hauteur);
 
@@ -201,8 +184,6 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
-		text = "echo new lomb >> out.txt";
-		system(text.c_str());
 		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(),LOMBRIC_SKIN,100));
 	}
 
@@ -211,6 +192,4 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 
 	thisGame = gameInfo;
-	text = "echo End init >> out.txt";
-	system(text.c_str());
 }
