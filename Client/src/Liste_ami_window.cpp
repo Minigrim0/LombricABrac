@@ -360,7 +360,7 @@ info Liste_ami_window::run(info information)
           information.vec_invit.erase(information.vec_invit.begin()+i_save);
         }
     }
-
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(win);

@@ -167,7 +167,7 @@ info Menu_jeu_window::run(info information)
         break;
       }
     }
-
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(win);

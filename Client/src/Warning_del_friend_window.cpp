@@ -94,7 +94,7 @@ info Warning_del_friend_window::run(info information)
       }
 
     }
-
+    usleep(MENU_SLEEP_TIME);
   }
 
   clear();

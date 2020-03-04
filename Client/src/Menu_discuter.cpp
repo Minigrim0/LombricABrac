@@ -107,6 +107,7 @@ info discuter::run(info information)
           {
             break;
           }
+          usleep(MENU_SLEEP_TIME);
         }
 
       }

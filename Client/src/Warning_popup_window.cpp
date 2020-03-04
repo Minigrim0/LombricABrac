@@ -40,6 +40,7 @@ info Warning_popup_window::run(info information)
     {
       break;
     }
+    usleep(MENU_SLEEP_TIME);
   }
 
   if (information.id == 561 || information.id == 571 || information.id == 581 || information.id == 591)

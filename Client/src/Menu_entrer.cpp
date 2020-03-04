@@ -103,6 +103,7 @@ info Menu_entrer::run(info information)
       default:
         break;
     }
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(win);

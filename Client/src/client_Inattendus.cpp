@@ -21,6 +21,8 @@ std::vector<chat_r> Client::getNewMsg(){
 void Client::invite(message& m){
 	Invitation obj;
 	obj.ParseFromString(m.text);
+
+	std::string text = "echo Num de la room: " + std::to_string(obj.game_id()) + " >> out.txt";
 	invitations.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
 }
 

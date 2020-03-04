@@ -72,6 +72,7 @@ info Request_history_window::run(info information)
         break;
 
     }
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(nom_joueur);

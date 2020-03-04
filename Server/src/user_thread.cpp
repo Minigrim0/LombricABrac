@@ -190,6 +190,7 @@ int client_thread(int socket_client){
                 }
             }
         }
+        usleep(MENU_SLEEP_TIME);
     }
     close(socket_client);
     std::cout << "Closing thread for client " << usr.get_id() << std::endl;

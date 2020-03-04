@@ -90,6 +90,7 @@ info Menu_log_in::run(info information)
       decalage++;
       taille_mdp_max-=1;
     }
+    usleep(MENU_SLEEP_TIME);
   }
 
   char *ok[2]={str,str2};
@@ -181,6 +182,7 @@ info Menu_log_in::run(info information)
         break;
 
     }
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(user_name);
