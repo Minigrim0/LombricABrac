@@ -62,7 +62,9 @@ int Client::run(){
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case INVI_R: //on a recu une invitation de partie
-					invite(msg);
+					{std::string t = "echo GOT INVITE LUL >> out.txt";
+					system(t.c_str());
+					}invite(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case FRI_RCV: //on a recu une invitation d'ami

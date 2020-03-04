@@ -29,14 +29,33 @@ info Salon_Attente::run(info information)
 
 
   //on get les infos de la partie
-  infoRoom_s Info_salon;
-  Info_salon = information.client->getInfoRoom();
-  map = Info_salon.map;
-  nbr_equipe = Info_salon.nbr_eq;
-  time_round = Info_salon.time_round;
-  nbr_lombric = Info_salon.nbr_lomb;
-  joueur_in_room = Info_salon.pseudos;
-  size_repeated = joueur_in_room.size();
+  if (information.ishost)
+  {
+      if (information.already_in_room != 1)
+      {
+          infoRoom_s Info_salon;
+          information.Info = information.client->getInfoRoom();
+          map = information.Info.map;
+          nbr_equipe = information.Info.nbr_eq;
+          time_round = information.Info.time_round;
+          nbr_lombric = information.Info.nbr_lomb;
+          joueur_in_room = information.Info.pseudos;
+          size_repeated = joueur_in_room.size();
+          information.already_in_room = 1;
+      }
+  }
+  else
+  {
+      infoRoom_s Info_salon;
+      Info_salon = information.client->getInfoRoom();
+      map = Info_salon.map;
+      nbr_equipe = Info_salon.nbr_eq;
+      time_round = Info_salon.time_round;
+      nbr_lombric = Info_salon.nbr_lomb;
+      joueur_in_room = Info_salon.pseudos;
+      size_repeated = joueur_in_room.size();
+  }
+
 
 
   //vector<string> name_joueur(4);

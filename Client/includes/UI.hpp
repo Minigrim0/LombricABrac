@@ -20,6 +20,8 @@ typedef struct info{
   vector<invitation> vec_invit;
   Client *client;
   string *notification;
+  int already_in_room = 0;
+  infoRoom_s Info;
 }info;
 
 

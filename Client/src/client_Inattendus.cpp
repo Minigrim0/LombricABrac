@@ -26,6 +26,9 @@ void Client::invite(message& m){
 
 
 std::vector<invitation> Client::getInvitations(){
+	{std::string t = "echo ingetinvit >> out.txt";
+	system(t.c_str());
+	}
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
@@ -55,7 +58,7 @@ std::vector<chat_r> Client::getConvo(std::string username){
 }
 
 void Client::nvJoueur(message& m){
-	Join obj;
+	newUser obj;
 	obj.ParseFromString(m.text); //convertis en struct proto-buff
 	newPlayers.push_back(obj.pseudo()); //ajoute message recu dans le vecteur
 }

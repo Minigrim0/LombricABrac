@@ -55,7 +55,6 @@ info Liste_ami_window::run(info information)
   }
   if (information.id==23)
   {
-    information.vec_invit = information.client->afficheAllInvits();
     information.notif_invit=0;
     len_tab=static_cast<int>(information.vec_invit.size());
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";
@@ -358,6 +357,7 @@ info Liste_ami_window::run(info information)
             information.id = 2;
             break;
           }
+          information.vec_invit.erase(information.vec_invit.begin()+i_save);
         }
     }
 

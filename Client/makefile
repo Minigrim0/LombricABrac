@@ -15,7 +15,7 @@ all: pre $(EXECUTABLE)
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(OBJECTS) $(LIBS) build/user.pb.o
+$(EXECUTABLE): build/user.pb.o main.cpp $(OBJECTS) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 

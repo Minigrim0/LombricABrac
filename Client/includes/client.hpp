@@ -140,7 +140,7 @@ private:
 
 	//réponse aux invitations
 	void acceptFriend(std::string username, bool ok); //accepte ou refuse demande amis
-	bool joinPartie(std::string host);//join la partie de host
+	bool joinPartie(int room_id);//join la partie de host
 
 	//les paramètres de la partie ont changés
 	void changeMap(message& m);

@@ -71,12 +71,14 @@ void Client::addToGame(std::string destinataire){
 	sendMutex.unlock();
 }
 
-bool Client::joinPartie(std::string host){
+bool Client::joinPartie(int room_id){
 	message m{};
 
 	//construction de la structure à envoyer au serveur
 	Join obj;
-	obj.set_pseudo(host);
+	obj.set_room_id(room_id);
+	std::string t = "echo ROOM ID : " + std::to_string(room_id) + " >> out.txt";
+	system(t.c_str());
 	//obj.set_accept(ok);
 
 	obj.SerializeToString(&m.text);//convetis en string
