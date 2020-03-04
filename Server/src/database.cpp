@@ -612,7 +612,7 @@ int DataBase::get_room_id_from_owner_id(int owner_id, int* room_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "SELECT id FROM history WHERE user1_id=" << owner_id << " and finished=false;";
+    m_stringStream << "SELECT id FROM history WHERE user_1_id=" << owner_id << " and finished=false;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
