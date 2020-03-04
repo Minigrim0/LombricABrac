@@ -26,12 +26,12 @@ Ensuite pour lancer le serveur, il suffit de taper
 
 ## Partie client
 Pour compiler et lancer le client, tapez les commandes suivantes dans votre terminal
-'''
+```
 	cd Client
 	sudo apt-get install libncurses-dev
 	make
-'''
+```
 Ensuite, vous pouvez lancer le client en utilisant
-'''
+```
 	./lombricABrac <adresse du serveur> <port du serveur>
-'''
+```
