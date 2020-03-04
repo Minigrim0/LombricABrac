@@ -563,6 +563,22 @@ int DataBase::remove_friend(int user_id, int friend_id){
     return m_rc;
 }
 
+int DataBase::is_online(int friend_id, int* online){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_stringStream << "SELECT connected FROM users WHERE id=" << friend_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, online, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+
 int DataBase::create_room(int owner_id){
     m_stringStream.str("");
     m_stringStream.clear();
@@ -581,7 +597,7 @@ int DataBase::get_last_room_id(Create_room_id *room_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "SELECT id FROM history ORDER BY timestamp ASC LIMIT 0, 1;";
+    m_stringStream << "SELECT id FROM history ORDER BY timestamp DESC LIMIT 0, 1;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);

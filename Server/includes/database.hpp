@@ -67,6 +67,7 @@ class DataBase{
         int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
+        int is_online(int friend_id, int* online);
 
         // Create game
         int create_room(int owner_id);

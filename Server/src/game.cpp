@@ -28,6 +28,8 @@ Joueur::~Joueur(){}
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
     for(uint8_t cur_lomb=0;cur_lomb<nbr_lomb;cur_lomb++){
         if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
+            m_current_lombric++;
+            m_current_lombric=m_current_lombric>nbr_lomb?0:m_current_lombric;
             return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
         }
     }
@@ -82,10 +84,10 @@ void Joueur::add_worms(int worm, int nbWorm){
     }
 }
 
-Game::Game(uint32_t owner){
-    owner_id = owner;
-    current_player = 0;
-}
+Game::Game(uint32_t owner)
+:owner_id(owner),
+current_player(0)
+{}
 
 Game::~Game(){}
 
@@ -303,10 +305,13 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 zmq_msg.set_type_message(NEXT_ROUND);
                 Next_lombric lomb;
                 lomb.set_id_lomb(who_next());
+                std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
+                obj_partie.setCurrentLomb(lomb.id_lomb());
 
                 for(size_t i=0;i<m_players.size();i++){
                     if(i == current_player){
                         lomb.set_is_yours(true);
+                        std::cout << "Tour de " << i << std::endl;
                         zmq_msg.set_message(lomb.SerializeAsString());
                         m_players[i].sendMessage(zmq_msg.SerializeAsString());
                     }
@@ -342,6 +347,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
+
             std::vector<std::string> res;
             res = obj_partie.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
             List_Projectiles list_proj;
@@ -358,6 +364,8 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
+
+            end_round();
             break;
         }
     }
@@ -367,31 +375,40 @@ void Game::end_round(){
     std::ostringstream stream;
     ZMQ_msg zmq_msg;
     zmq_msg.set_type_message(NEXT_ROUND);
-    current_player++;
-    if(current_player > m_players.size())
-        current_player = 0;
 
-    uint32_t next_lomb_id = who_next();
-    if(next_lomb_id == 0){ // This player is mort
-        // A vérifier, il est possible que ca supprime le joueur suivant
-        m_players.erase(m_players.begin() + current_player);
-    }
+    uint32_t next_lomb_id;
+
+    std::cout << "Previous player : " << static_cast<int>(current_player) << std::endl;
+
+    do{
+        current_player++;
+        if(current_player >= m_players.size())
+            current_player = 0;
+
+        next_lomb_id = who_next();
+        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
+        std::cout << "Current player : " << static_cast<int>(current_player) << std::endl;
+    }while(next_lomb_id == 0);
 
     obj_partie.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
 
+    Next_lombric lomb;
+    lomb.set_id_lomb(next_lomb_id);
+
     for(size_t i=0;i<m_players.size();i++){
-        stream.str("");
-        stream.clear();
         if(i == current_player){
-            m_players[i].set_current_player(true);
-            m_players[i].set_current_lomb(next_lomb_id);
+            lomb.set_is_yours(true);
+            std::cout << "Tour de " << i << std::endl;
+            zmq_msg.set_message(lomb.SerializeAsString());
+            m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
         else{
-            m_players[i].set_current_player(false);
+            lomb.set_is_yours(false);
+            zmq_msg.set_message(lomb.SerializeAsString());
+            m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
-        m_players[i].sendMessage(zmq_msg.SerializeAsString());
     }
     time(&time_round);
 }
@@ -403,7 +420,6 @@ void Game::spawn_lombric(){
     uint32_t largeur;
 
     stream << "../map/" << static_cast<int>(map_id) << ".map";
-    std::cout << stream.str() << std::endl;
     std::ifstream MyReadFile(stream.str());
     std::getline (MyReadFile, myText);
     std::stringstream(myText) >> hauteur >> largeur;
@@ -415,13 +431,13 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    Map map(largeur,hauteur,map_s);
+    Map* m = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
         for(int j=0;j<nbr_lomb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, &map));
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m));
         }
     }
 
-    obj_partie.setParam(&map, m_lombs);
+    obj_partie.setParam(m, m_lombs);
 }

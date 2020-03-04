@@ -1,7 +1,11 @@
 #include "../includes/sprite.hpp"
 
-Projectile_c::Projectile_c(int x, int y, double speedX, double speedY,int rayon, int degat,double t, unsigned long skin):Sprite(x,y,skin,0),radius(rayon),dommage(degat){
-	setMovement(speedX, speedY, GRAVITY, PARABOLLE, t);
+Projectile_c::Projectile_c(int x, int y, double speedX, double speedY,int rayon, int degat,double t, unsigned long skin)
+:Sprite(x,y,skin,0),
+radius(rayon),
+dommage(degat)
+{
+	setMovement(speedX, speedY, GRAVITY, PARABOLE, t);
 }
 
 bool Projectile_c::update(Map* carte, double t){

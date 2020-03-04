@@ -157,7 +157,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 r_rank.ParseFromString(la_poste->get_buffer());
                 Rank_r rank_list;
                 db.get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
-                std::cout << rank_list.DebugString() << std::endl;
                 la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
                 break;
             }

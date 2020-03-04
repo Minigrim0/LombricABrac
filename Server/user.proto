@@ -191,7 +191,7 @@ message infoRoom{
   uint32 time_round = 3;
   uint32 map = 4;
   repeated Join_groupe_r joueur = 5;
-  
+
 }
 
 message Create_room{
@@ -205,5 +205,5 @@ message Create_room_id{
 message ZMQ_msg{
   uint32 receiver_id = 1;
   uint32 type_message = 2;
-  string message = 3;
+  bytes message = 3;
 }

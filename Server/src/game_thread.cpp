@@ -20,7 +20,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, chan_sub.c_str(), strlen(chan_sub.c_str()));
 
-    std::cout << "room started" << std::endl;
+    std::cout << "room started on " << chan_sub << std::endl;
 
     while(game_running){
         switch(current_step){
@@ -48,23 +48,15 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     //if(current_game.check_time()){
                     //    //mort subite
                     //}
-                    std::cout << "a" << std::endl;
                     std::string address = s_recv(subscriber);
-                    std::cout << "b" << std::endl;
-                    if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
-                        std::cout << "c" << std::endl;
-                        if(current_game.check_round_time()){
-                            std::cout << "d" << std::endl;
-                            current_game.end_round();
-                        }
-                    }
-                    else{
-                        std::cout << "e" << std::endl;
+                    if(address.size()){ // The receive just timed out
                         std::string contents = s_recv(subscriber);
-                        std::cout << "f" << std::endl;
                         zmqmsg.ParseFromString(contents);
-                        std::cout << "g" << std::endl;
                         current_game.handle_game(zmqmsg ,&current_step);
+                    }
+                    if(current_game.check_round_time()){
+                        std::cout << "changing round" << std::endl;
+                        current_game.end_round();
                     }
                 }
                 break;

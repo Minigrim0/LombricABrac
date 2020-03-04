@@ -1,14 +1,17 @@
 #include "../includes/map.hpp"
 
-Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m):largeur(l), hauteur(h), mur(m){
-}
+Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m)
+:largeur(l),
+hauteur(h),
+mur(m)
+{}
 
 uint32_t Map::getLargeur(){return largeur;}
 
 uint32_t Map::getHauteur(){return hauteur;}
 
 bool Map::isTypeBloc(uint32_t x, uint32_t y, char type){
-  	return x<largeur and y<hauteur and mur[y][x] == type;
+  	return x<largeur && y<hauteur && mur[y][x] == type;
 }
 
 int Map::getColor(uint32_t x,uint32_t y){

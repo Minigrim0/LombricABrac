@@ -35,37 +35,30 @@ int client_thread(int socket_client){
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
 
-            if(strcmp(address.c_str(), "") != 0){ // We got a message from the Broker
+            if(address != ""){ // We got a message from the Broker
                 std::string contents = s_recv(subscriber);
 
                 zmqmsg.ParseFromString(contents);
                 type = zmqmsg.type_message();
 
                 std::cout << "client received on [" << address << "] type " << static_cast<int>(type) << std::endl;
-                if(type == ADD_ROOM_R){
+
+                std::ostringstream stream;
+                stream << "users/" << usr.get_id() << "/room";
+
+                if(address == stream.str()){
+                    std::cout << "Redirecting zmq message to the client" << std::endl;
+                    la_poste.envoie_msg(type, zmqmsg.message());
+                }
+                else if(type == ADD_ROOM_R){
                     is_on_game = true;
                     game_url = zmqmsg.message();
                 }
-                else if(type == INFO_ROOM){
-                    la_poste.envoie_msg(INFO_ROOM, zmqmsg.message());
-                }
-                else if(type == USR_ADD){
-                    la_poste.envoie_msg(USR_ADD, zmqmsg.message());
-                }
-                else if(type == JOIN_GROUP_R){
-                    la_poste.envoie_msg(JOIN_GROUP_R, zmqmsg.message());
-                }
-                else if(type == START){
-                    std::cout << "sending to client" << std::endl;
-                    la_poste.envoie_msg(START, zmqmsg.message());
-                    std::cout << "sent" << std::endl;
-                }
-                else if(type == NEXT_ROUND){
-                    la_poste.envoie_msg(NEXT_ROUND, zmqmsg.message());
-                }
                 else{
+                    std::cout << "Handle from ZMQ chan " << address << std::endl;
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
+
                 continue;
             }
             else{ // The receive just timed out
@@ -84,24 +77,54 @@ int client_thread(int socket_client){
 
         if(type != 0){
             if(is_on_game){
-                std::cout << "---> Redirecting to room" << std::endl;
+                std::cout << "---> Redirecting to room @" << game_url << std::endl;
                 ZMQ_msg zmqmsg;
 
                 zmqmsg.set_type_message(type);
                 zmqmsg.set_receiver_id(usr.get_id());
 
-                if(type != INFO_ROOM && type != START){
+                if(type == FRI_LS_S){
+                    res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+                }
+                else if(type == INVI_S){
+                    int online = 0;
+                    int friend_id;
+                    Invitation invit;
+
                     la_poste.reception();
-                    zmqmsg.set_message(la_poste.get_buffer());
+                    invit.ParseFromString(la_poste.get_buffer());
+
+                    DataBase_mutex.lock();
+                    db.get_user_id(invit.pseudo(), &friend_id);
+                    db.is_online(friend_id, &online);
+                    DataBase_mutex.unlock();
+
+                    if(online){
+                        ZMQ_msg zmqmsg;
+                        zmqmsg.set_type_message(INVI_R);
+                        zmqmsg.set_receiver_id(friend_id);
+                        zmqmsg.set_message(invit.SerializeAsString());
+
+                        pub_mutex.lock();
+                        s_sendmore_b(publisher, "all");
+                        s_send_b(publisher, zmqmsg.SerializeAsString());
+                        pub_mutex.unlock();
+                    };
                 }
                 else{
-                    zmqmsg.set_message("");
-                }
+                    if(type != INFO_ROOM && type != START){
+                        la_poste.reception();
+                        zmqmsg.set_message(la_poste.get_buffer());
+                    }
+                    else{
+                        zmqmsg.set_message("");
+                    }
 
-                pub_mutex.lock();
-                s_sendmore_b(publisher, game_url);
-                s_send_b(publisher, zmqmsg.SerializeAsString());
-                pub_mutex.unlock();
+                    pub_mutex.lock();
+                    s_sendmore_b(publisher, game_url);
+                    s_send_b(publisher, zmqmsg.SerializeAsString());
+                    pub_mutex.unlock();
+                }
             }
             else{
                 if(type == JOIN_S){
@@ -141,7 +164,6 @@ int client_thread(int socket_client){
                     waiting_room.connect("tcp://localhost:5563");
                     std::string address = s_recv(waiting_room);
                     if(address == ""){ // The room died or is full
-                        std::cout << "NO ROOM" << std::endl;
                         la_poste.envoie_bool(JOIN_R, false);
                     }
                     else{ // The room responded
@@ -150,6 +172,7 @@ int client_thread(int socket_client){
                         la_poste.envoie_bool(JOIN_R, true);
                     }
                 }
+                std::cout << "Handle from USER chan (type : " << static_cast<int>(type) << ")" << std::endl;
                 res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 if(res == 3){
                     //User connected

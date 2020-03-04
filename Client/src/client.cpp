@@ -77,6 +77,7 @@ int Client::run(){
 				case SHOOT: {//un joueur a tiré
 					//1er message: tir (armes + params)
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
+					msgMutex.unlock();
 					tableUpdate.push_back(msg.text);
 
 					res = readMessage();//2e: projectile (angle, force)
@@ -90,6 +91,7 @@ int Client::run(){
 						break;
 					}
 					tableUpdate.push_back(msg.text);
+					msgMutex.lock();
 					mutexPartie.unlock();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
@@ -207,6 +209,8 @@ int Client::readMessage(){
 	char* parser = buffer;
 	buffer[size] = '\0';
 
+	std::string text = "echo Starting receive type " + std::to_string(static_cast<int>(msg.type)) + " of size : " + std::to_string(size) + " >> out.txt";
+	system(text.c_str());
 	while (size>0){ //recois tout le message
 		int r = static_cast<int>(recv(client_socket, parser, size, 0));
 		size -= static_cast<uint32_t>(r);
@@ -217,7 +221,7 @@ int Client::readMessage(){
 	delete[] buffer;
 
 
-	std::string text = "echo Type Reçu: " + std::to_string(static_cast<int>(msg.type)) + " >> out.txt";
+	text = "echo Type Reçu: " + std::to_string(static_cast<int>(msg.type)) + " >> out.txt";
 	system(text.c_str());
 
 

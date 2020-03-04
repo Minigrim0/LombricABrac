@@ -16,8 +16,8 @@ void Partie::setParam(Map* m, std::vector<Sprite*> listLomb){
   gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
   gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 }
-std::vector<std::string> Partie::useWeapon(std::string tir)
-{
+
+std::vector<std::string> Partie::useWeapon(std::string tir){
   int t=0;
   std::vector<std::string> res;
 
@@ -30,6 +30,7 @@ std::vector<std::string> Partie::useWeapon(std::string tir)
   currentWeapon->setForce(weaponUsed.force());
   currentWeapon->setAngle(weaponUsed.angle());
   currentWeapon->shoot(gameInfo, t);
+
 
   bool run = true;
   while (run){
@@ -67,10 +68,10 @@ bool Partie::updateSprites(int t){
 
   auto s = gameInfo->spriteVector.begin();
   while(s != gameInfo->spriteVector.end()){
+      int id = (*s)->getId();
     (*s)->getPos(oldPos);
     bool alive = (*s)->update(gameInfo->carte, t);
     (*s)->getPos(newPos);
-    int id = (*s)->getId();
     isMovement |= (*s)->isInMovement();//un suel lombric en mouvement -> isMovement = true
     if(!alive){//le sprite doit mourir, on le supprime
       isMovement = true;
@@ -114,5 +115,6 @@ bool Partie::isLombAlive(int id){
 
 
 void Partie::setCurrentLomb(int id){
+    std::cout << "Setting current lomb - " << id << std::endl;
   gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id));
 }
