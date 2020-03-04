@@ -67,10 +67,6 @@ int Client::run(){
 					}invite(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case FRI_RCV: //on a recu une invitation d'ami
-					invite(msg);
-					msg.type = 0;//pour qu'un nouveau message puisse être lu
-					break;
 				case START: //L'hôte a lancé la partie
 					end = false;
 					notifyStarted(msg);

@@ -53,7 +53,6 @@
 
 // <!-- Menu friend -->
 #define FRI_ADD 25// : (uint8_t str) //friend_request dest_user
-#define FRI_RCV 26// : (uint8_t str) //friend_request src_user
 #define FRI_ACCEPT 27// : bool (uint8_t str) //friend_acceptation yes/no src_user
 #define FRI_RMV 28// : (uint8_t str) //friend_remove user_del
 #define FRI_LS_S 29// : //request friend list
