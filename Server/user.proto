@@ -34,6 +34,10 @@ message Invitation_r{
 }
 
 message Join{
+  uint32 room_id = 1;
+}
+
+message newUser{
   string pseudo = 1;
 }
 
