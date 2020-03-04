@@ -5,14 +5,12 @@
 #include <netinet/in.h>
 #include <cstring>
 #include <thread>
-#include <chrono>
 #include <sstream>
 #include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
 #include "includes/comm_macros.hpp"
 #include "includes/user_thread.hpp"
-#include "includes/game_thread.hpp"
 #include "includes/constant.hpp"
 #include "includes/database.hpp"
 #include "includes/zhelpers.hpp"
@@ -26,11 +24,11 @@ int broker_thread(){
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
 
     ZMQ_msg zmqmsg;
-    std::ostringstream stream;
+    std::ostringstream stream_obj;
 
     while(true){
-        stream.str("");
-        stream.clear();
+        stream_obj.str("");
+        stream_obj.clear();
 
         std::string address = s_recv(subscriber);
         std::string contents = s_recv(subscriber);
@@ -41,37 +39,7 @@ int broker_thread(){
             std::cout << "---interpreting---> local" << std::endl;
             switch(zmqmsg.type_message()){
                 case ADD_ROOM_S:{
-                    Create_room owner_usr;
-                    owner_usr.ParseFromString(zmqmsg.message());
-                    int room_id;
-
-                    DataBase_mutex.lock();
-                    db.create_room(owner_usr.usr_id());
-                    db.get_last_room_id(&room_id);
-                    DataBase_mutex.unlock();
-
-                    stream.str("");
-                    stream.clear();
-                    stream << "room/" << room_id << "/client";
-                    std::thread tobj(game_thread, stream.str(), owner_usr.usr_id());
-                    tobj.detach();
-
-                    ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
-                    owner_usr.ParseFromString(zmqmsg.message());
-
-                    partie_r.set_receiver_id(owner_usr.usr_id());
-                    partie_r.set_type_message(ADD_ROOM_R);
-                    partie_r.set_message(stream.str());
-
-                    stream.str("");
-                    stream.clear();
-                    stream << "users/" << partie_r.receiver_id() << "/broker";
-
-                    pub_mutex.lock();
-                    s_sendmore_b(publisher, stream.str());
-                    s_send_b(publisher, partie_r.SerializeAsString());
-                    pub_mutex.unlock();
-
+                    create_room_thread(zmqmsg);
                     break;
                 }
                 default:
@@ -79,12 +47,12 @@ int broker_thread(){
             }
         }
         else{
-            stream << "users/" << zmqmsg.receiver_id() << "/broker";
+            stream_obj << "users/" << zmqmsg.receiver_id() << "/broker";
             pub_mutex.lock();
-            s_sendmore_b(publisher, stream.str());
+            s_sendmore_b(publisher, stream_obj.str());
             s_send_b(publisher, zmqmsg.SerializeAsString());
             pub_mutex.unlock();
-            std::cout << "---transfered---> [" << stream.str() << "]" << std::endl;
+            std::cout << "---transfered---> [" << stream_obj.str() << "]" << std::endl;
         }
     }
 

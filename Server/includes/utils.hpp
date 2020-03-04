@@ -20,5 +20,6 @@ extern zmq::socket_t publisher;
 
 void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...);
 int handle_instruction(uint8_t msg_type, Listener* la_poste, ConnectedPlayer* usr, std::string zmq_msg);
+void create_room_thread(ZMQ_msg zmqmsg);
 
 #endif
