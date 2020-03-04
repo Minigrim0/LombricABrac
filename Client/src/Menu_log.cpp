@@ -91,7 +91,10 @@ info Menu_log_in::run(info information)
       taille_mdp_max-=1;
     }
   }
+  
   char *ok[2]={str,str2};
+  int len_str_pseudo = strlen(str);
+  int len_str_password = strlen(str2);
   curs_set(FALSE);
   refresh();
 
@@ -117,7 +120,15 @@ info Menu_log_in::run(info information)
         if (information.id==11)
         {
           bool connected;
-          connected=information.client->connection(ok[0],ok[1],true);
+          if (len_str_pseudo != 0 || len_str_password != 0)
+          {
+            connected=information.client->connection(ok[0],ok[1],true);
+          }
+          else
+          {
+            connected = false;
+          }
+          
           if (connected)
           {
             string pseudo= string(ok[0]);
@@ -134,7 +145,15 @@ info Menu_log_in::run(info information)
         if (information.id==12)
         {
           bool isenregistrer;
-          isenregistrer=information.client->connection(ok[0],ok[1],false);
+          if (len_str_pseudo != 0 || len_str_password != 0)
+          {
+            isenregistrer=information.client->connection(ok[0],ok[1],false);
+
+          }
+          else
+          {
+            isenregistrer = false;
+          }
           if (isenregistrer)
           {
             string pseudo= string(ok[0]);
