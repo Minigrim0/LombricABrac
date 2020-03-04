@@ -71,7 +71,7 @@ class DataBase{
 
         // Create game
         int create_room(int owner_id);
-        int get_last_room_id(Create_room_id *room_id);
+        int get_last_room_id(int *room_id);
         int get_room_id_from_owner_id(int owner_id, int* room_id);
 
     private:

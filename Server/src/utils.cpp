@@ -204,6 +204,12 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
                 break;
             }
+            case INVI_R:{
+                std::cout << "Sending invite to someone" << std::endl;
+                la_poste->envoie_msg(INVI_R, zmq_msg);
+                std::cout << "Sent" << std::endl;
+                break;
+            }
             case FRI_RMV:{
                 Fri_rmv fri;
                 la_poste->reception();

@@ -43,7 +43,7 @@ int broker_thread(){
                 case ADD_ROOM_S:{
                     Create_room owner_usr;
                     owner_usr.ParseFromString(zmqmsg.message());
-                    Create_room_id room_id;
+                    int room_id;
 
                     DataBase_mutex.lock();
                     db.create_room(owner_usr.usr_id());
@@ -52,7 +52,7 @@ int broker_thread(){
 
                     stream.str("");
                     stream.clear();
-                    stream << "room/" << room_id.room_id() << "/client";
+                    stream << "room/" << room_id << "/client";
                     std::thread tobj(game_thread, stream.str(), owner_usr.usr_id());
                     tobj.detach();
 

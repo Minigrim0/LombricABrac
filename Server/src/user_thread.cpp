@@ -77,7 +77,6 @@ int client_thread(int socket_client){
 
         if(type != 0){
             if(is_on_game){
-                std::cout << "---> Redirecting to room @" << game_url << std::endl;
                 ZMQ_msg zmqmsg;
 
                 zmqmsg.set_type_message(type);
@@ -89,15 +88,20 @@ int client_thread(int socket_client){
                 else if(type == INVI_S){
                     int online = 0;
                     int friend_id;
+                    int room_id;
                     Invitation invit;
 
                     la_poste.reception();
                     invit.ParseFromString(la_poste.get_buffer());
+                    invit.set_type(true);
 
                     DataBase_mutex.lock();
                     db.get_user_id(invit.pseudo(), &friend_id);
                     db.is_online(friend_id, &online);
+                    db.get_room_id_from_owner_id(usr.get_id(), &room_id);
                     DataBase_mutex.unlock();
+
+                    invit.set_game_id(room_id);
 
                     if(online){
                         ZMQ_msg zmqmsg;
@@ -112,6 +116,7 @@ int client_thread(int socket_client){
                     };
                 }
                 else{
+                    std::cout << "---> Redirecting to room @" << game_url << std::endl;
                     if(type != INFO_ROOM && type != START){
                         la_poste.reception();
                         zmqmsg.set_message(la_poste.get_buffer());
@@ -128,15 +133,14 @@ int client_thread(int socket_client){
             }
             else{
                 if(type == JOIN_S){
+                    std::cout << "receiving join s" << std::endl;
                     la_poste.reception();
                     Join join_msg;
                     join_msg.ParseFromString(la_poste.get_buffer());
 
-                    int room_id = 0;
-                    int owner_id = 0;
-                    db.get_user_id(join_msg.pseudo(), &owner_id);
-                    db.get_room_id_from_owner_id(owner_id, &room_id);
+                    int room_id = join_msg.room_id();
 
+                    std::cout << "pINGPONG on " << room_id << std::endl;
                     ZMQ_msg zmqmsg;
                     zmqmsg.set_type_message(PING);
                     zmqmsg.set_message("ping");

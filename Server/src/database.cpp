@@ -593,12 +593,14 @@ int DataBase::create_room(int owner_id){
     return m_rc;
 }
 
-int DataBase::get_last_room_id(Create_room_id *room_id){
+int DataBase::get_last_room_id(int *room_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
     m_stringStream << "SELECT id FROM history ORDER BY timestamp DESC LIMIT 0, 1;";
     m_sql_request = m_stringStream.str();
+
+    m_data_type = DT_INT;
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
     catch_error();
