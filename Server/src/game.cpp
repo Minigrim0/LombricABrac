@@ -118,6 +118,26 @@ uint32_t Game::who_next(){
     return m_players[current_player].getNextLombricId(&obj_partie, nbr_lomb);
 }
 
+// Handles the events where a user quits
+void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
+    //If the message is not of type QUIT, we dont care
+    if(zmq_msg.type_message() != QUIT_ROOM)
+        return;
+
+    // Else, we go trough the player vector to delete the player that has quit
+    for(size_t user_index=0;user_index<m_players.size();user_index++){
+        if(m_players[user_index].get_id() == zmq_msg.receiver_id()){
+            m_players.erase(m_players.begin() + user_index);
+        }
+    }
+
+    // Finally, if the vector is empty, we delete the game thread
+    if(m_players.empty()){
+        *current_step = STEP_GAMEEND;
+    }
+}
+
+// Handles events in the room (Change of parameters, user joined, ...)
 void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     std::ostringstream stream;
     if(zmq_msg.type_message() == PING){
@@ -171,6 +191,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         infoRoom room;
         Joueur newPlayer;
 
+        //Setting the informations of the room in infoRoom object
         room.set_nbr_lomb(static_cast<uint32_t>(nbr_lomb));
         room.set_map(static_cast<uint32_t>(map_id));
         room.set_nbr_eq(static_cast<uint32_t>(nbr_eq));
@@ -182,15 +203,15 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             joueur->set_id(m_players[i].get_id());
         }
 
+        // Changinf the zmqmsg message to the informations of the room
         zmq_msg.set_message(room.SerializeAsString());
-        zmq_msg.set_type_message(INFO_ROOM);
-
-        stream << "users/" << zmq_msg.receiver_id() << "/room";
-        s_sendmore_b(publisher, stream.str());
-        s_send_b(publisher, zmq_msg.SerializeAsString());
 
         newPlayer.set_player_id(zmq_msg.receiver_id());
         newPlayer.set_nb_lombs(nbr_lomb);
+
+        // Sending the informations to the user
+        newPlayer.sendMessage(zmq_msg.SerializeAsString());
+
         End_tour lombs;
 
         DataBase_mutex.lock();
@@ -215,7 +236,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         }
     }
     else if(zmq_msg.receiver_id() == owner_id){
-        switch (zmq_msg.type_message()){
+        // Room admin actions
+        switch(zmq_msg.type_message()){
             case MAP_MOD:{
                 zmq_msg.set_type_message(MAP_MOD);
                 Map_mod map_m;
@@ -311,7 +333,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 for(size_t i=0;i<m_players.size();i++){
                     if(i == current_player){
                         lomb.set_is_yours(true);
-                        std::cout << "Tour de " << i << std::endl;
                         zmq_msg.set_message(lomb.SerializeAsString());
                         m_players[i].sendMessage(zmq_msg.SerializeAsString());
                     }
@@ -324,16 +345,15 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
                 break;
             }
-
             default:
                 break;
         }
     }
 }
 
+// Handles events in the game (Lombric moved, shot, ...)
 void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
-    std::ostringstream stream;
-    switch (zmq_msg.type_message()){
+    switch(zmq_msg.type_message()){
         case POS_LOMB_S:{
             obj_partie.moveCurrentLombric(zmq_msg.message());
             zmq_msg.set_type_message(POS_LOMB_R);
@@ -344,6 +364,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
         }
         case SHOOT:{
             zmq_msg.set_type_message(SHOOT);
+            // Telling everyone that a player shot
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }

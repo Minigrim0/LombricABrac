@@ -48,13 +48,21 @@ class Game{
         virtual ~Game();
 
         //void set_begin();
+
+        // Game parameters
         void set_round_time();
         void set_lomb(uint8_t nb_lomb);
+
+        //Verification methods
         bool check_round_time();
         //bool check_time();
-        uint32_t who_next();
+
+        void handle_quit(ZMQ_msg zmq_msg, int* current_step); // Handles the event where a user quits
         void handle_room(ZMQ_msg zmq_msg, int* current_step);
         void handle_game(ZMQ_msg zmq_msg, int* current_step);
+
+
+        uint32_t who_next();
         void end_round();
         void spawn_lombric();
 

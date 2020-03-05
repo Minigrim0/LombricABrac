@@ -27,6 +27,9 @@ int client_thread(int socket_client){
     }
     subscriber.connect("tcp://localhost:5563");
 
+    std::string broker_channel = "";
+    std::string room_channel = "";
+
     bool is_on_game = false;
     std::string game_url = "";
     bool connected = true;
@@ -42,13 +45,8 @@ int client_thread(int socket_client){
                 zmqmsg.ParseFromString(contents);
                 type = zmqmsg.type_message();
 
-                std::cout << "client received on [" << address << "] type " << static_cast<int>(type) << std::endl;
-
-                std::ostringstream stream;
-                stream << "users/" << usr.get_id() << "/room";
-
-                if(address == stream.str()){
-                    std::cout << "Redirecting zmq message to the client" << std::endl;
+                if(address == room_channel){
+                    std::cout << "Redirecting zmq message " << static_cast<int>(type) << " to the client" << std::endl;
                     la_poste.envoie_msg(type, zmqmsg.message());
                 }
                 else if(type == ADD_ROOM_R){
@@ -56,7 +54,6 @@ int client_thread(int socket_client){
                     game_url = zmqmsg.message();
                 }
                 else{
-                    std::cout << "Handle from ZMQ chan " << address << std::endl;
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }
 
@@ -166,14 +163,29 @@ int client_thread(int socket_client){
                     //User connected
                     std::ostringstream stream;
                     stream << "users/" << usr.get_id() << "/broker";
+                    broker_channel = stream.str();
                     subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
                     stream.str("");
                     stream.clear();
                     stream << "users/" << usr.get_id() << "/room";
+                    room_channel = stream.str();
                     subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
                 }
             }
         }
+    }
+
+    if(is_on_game){ // Telling the room the user quit
+        std::cout << "Telling room on " << game_url << " that the user quit" << std::endl;
+        ZMQ_msg zmqmsg;
+        zmqmsg.set_type_message(QUIT_ROOM);
+        zmqmsg.set_receiver_id(usr.get_id());
+        zmqmsg.set_message(usr.pseudo());
+
+        pub_mutex.lock();
+        s_sendmore_b(publisher, game_url);
+        s_send_b(publisher, zmqmsg.SerializeAsString());
+        pub_mutex.unlock();
     }
 
     close(socket_client);

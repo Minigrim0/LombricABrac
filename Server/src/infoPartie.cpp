@@ -10,15 +10,18 @@ Sprite* findById(std::vector<Sprite*>& data, uint32_t id){
 }
 
 void deleteinfoPartie_s(infoPartie_s* s){
-	for(auto sp = s->spriteVector.begin(); sp!=s->spriteVector.end(); ++sp){
-		delete (*sp);
-	}
 
-	for(auto sp = s->teamsVector.begin(); sp!=s->teamsVector.end(); ++sp){
-		delete (*sp);
-	}
+	// The code below generates a segfault... Why ? Idk :p
 
-	delete s->carte;
+	//for(auto sp = s->spriteVector.begin(); sp!=s->spriteVector.end(); ++sp){
+	//	delete (*sp);
+	//}
+
+	//for(auto sp = s->teamsVector.begin(); sp!=s->teamsVector.end(); ++sp){
+	//	delete (*sp);
+	//}
+
+	//delete s->carte;
 	delete s;
 }
 

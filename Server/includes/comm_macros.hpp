@@ -77,5 +77,6 @@
 #define DECO 51
 
 #define PING 53
+#define QUIT_ROOM 54
 
 #endif
