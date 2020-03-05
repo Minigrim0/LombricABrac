@@ -161,7 +161,7 @@ info Historique_window::run(info information)
       information.id = 2;
       break;
     }
-
+    usleep(MENU_SLEEP_TIME);
   }
 
   clear();

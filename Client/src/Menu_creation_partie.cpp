@@ -239,6 +239,7 @@ info Menu_creation_partie::run(info information)
         break;
 
     }
+    usleep(MENU_SLEEP_TIME);
   }
   //print_string_window(confirmer,1,1,msg_confirmation.c_str());
   clear();

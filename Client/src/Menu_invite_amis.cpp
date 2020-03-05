@@ -75,6 +75,7 @@ info Menu_invite_amis::run(info information)
         break;
 
     }
+    usleep(MENU_SLEEP_TIME);
   }
 
 

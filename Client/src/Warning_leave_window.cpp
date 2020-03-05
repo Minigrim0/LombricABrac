@@ -93,7 +93,7 @@ info Warning_leave_window::run(info information)
       }
 
     }
-
+    usleep(MENU_SLEEP_TIME);
   }
 
   clear();

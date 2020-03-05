@@ -165,6 +165,7 @@ info Menu_creation_equipe_lombric::run(info information)
       default:
         break;
     }
+    usleep(MENU_SLEEP_TIME);
   }
   clear();
   delwin(win_lombric1);
