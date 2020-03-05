@@ -74,13 +74,16 @@ void Client::addFriend(std::string user){
 }
 
 
-void Client::acceptInvitation(invitation* inv, bool ok){
+bool Client::acceptInvitation(invitation* inv, bool ok){
+	bool res;
 	if(inv->type){ //invitation en partie
-		joinPartie(inv->id_partie);
+		res = joinPartie(inv->id_partie);
 	}
 	else if(!inv->type){ //invitation d'amis
 		acceptFriend(inv->text, ok);
+		res = true;
 	}
+	return res;
 }
 
 
