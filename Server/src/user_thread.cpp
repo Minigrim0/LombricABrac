@@ -22,7 +22,7 @@ int client_thread(int socket_client){
     zmq::socket_t subscriber(context, ZMQ_SUB);
 
     {
-        size_t opt_value = 500;
+        size_t opt_value = 50;
         subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
     }
     subscriber.connect("tcp://localhost:5563");
@@ -61,20 +61,17 @@ int client_thread(int socket_client){
 
                 continue;
             }
-            else{ // The receive just timed out
-                type = 0;
-            }
         }
 
-        if(type == 0){
-            type = la_poste.reception_type();
-            if(type != 0)
-                std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
-            if(type == EXIT_FAILURE){
-                break;
-            }
-        }
+        type = la_poste.reception_type();
+        if(type != 0)
+            std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
+        else if(type == EXIT_FAILURE)
+            break;
+        else
+            continue;
 
+        std::cout << "no time out" << std::endl;
         if(type != 0){
             if(is_on_game){
                 ZMQ_msg zmqmsg;
@@ -161,13 +158,13 @@ int client_thread(int socket_client){
                     zmq::socket_t waiting_room(context, ZMQ_SUB);
                     waiting_room.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
 
-                    {
-                        size_t opt_value = 1000;
-                        waiting_room.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
-                    }
+                    size_t opt_value = 2000;
+                    waiting_room.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
                     waiting_room.connect("tcp://localhost:5563");
+
                     std::string address = s_recv(waiting_room);
                     if(address == ""){ // The room died or is full
+                        std::cout << "The room died" << std::endl;
                         la_poste.envoie_bool(JOIN_R, false);
                     }
                     else{ // The room responded
@@ -175,8 +172,9 @@ int client_thread(int socket_client){
                         game_url = stream.str();
                         la_poste.envoie_bool(JOIN_R, true);
                     }
+                    continue;
                 }
-                std::cout << "Handle from USER chan (type : " << static_cast<int>(type) << ")" << std::endl;
+
                 res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 if(res == 3){
                     //User connected
@@ -191,6 +189,7 @@ int client_thread(int socket_client){
             }
         }
     }
+
     close(socket_client);
     std::cout << "Closing thread for client " << usr.get_id() << std::endl;
     return EXIT_SUCCESS;
