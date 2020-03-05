@@ -188,7 +188,6 @@ int client_thread(int socket_client){
                 }
             }
         }
-        usleep(MENU_SLEEP_TIME);
     }
 
     close(socket_client);
