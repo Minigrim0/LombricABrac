@@ -150,7 +150,7 @@ message Lomb_pos{
 message Tir{
   uint32 id_arme = 1;
   uint32 force = 2;
-  double angle = 3;
+  uint32 angle = 3;
 }
 
 message Projectiles{
