@@ -127,9 +127,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         else{
             zmq_msg.set_message("false");
         }
-        stream.str("");
-        stream.clear();
-        stream << "user/" << zmq_msg.receiver_id() << "/check_room";
+
+        stream << "users/" << zmq_msg.receiver_id() << "/check_room";
+
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
@@ -425,7 +425,7 @@ void Game::spawn_lombric(){
     std::stringstream(myText) >> hauteur >> largeur;
     std::vector<std::string> map_s(hauteur);
 
-    for (uint32_t i =0; i<hauteur; i++) {
+    for(uint32_t i =0; i<hauteur; i++) {
         std::getline(MyReadFile, map_s[i]);
     }
 

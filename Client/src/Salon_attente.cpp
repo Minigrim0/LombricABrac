@@ -80,8 +80,6 @@ info Salon_Attente::run(info information)
   pseudo=newwin(4,20,11,(max_x/2)-len_str/2);
   box(equipe1, 0,0);
   box(equipe2, 0,0);
-  box(equipe3, 0,0);
-  box(equipe4, 0,0);
 
 
   refresh();
