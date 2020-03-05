@@ -29,8 +29,9 @@ int client_thread(int socket_client){
 
     bool is_on_game = false;
     std::string game_url = "";
+    bool connected = true;
 
-    while(1){
+    while(connected){
         type = 0;
         if(usr.is_auth()){
             std::string address = s_recv(subscriber);
@@ -66,12 +67,9 @@ int client_thread(int socket_client){
         type = la_poste.reception_type();
         if(type != 0)
             std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
-        else if(type == EXIT_FAILURE)
-            break;
-        else
-            continue;
+        if(type == EXIT_FAILURE)
+            connected = false;
 
-        std::cout << "no time out" << std::endl;
         if(type != 0){
             if(is_on_game){
                 ZMQ_msg zmqmsg;
@@ -130,14 +128,12 @@ int client_thread(int socket_client){
             }
             else{
                 if(type == JOIN_S){
-                    std::cout << "receiving join s" << std::endl;
                     la_poste.reception();
                     Join join_msg;
                     join_msg.ParseFromString(la_poste.get_buffer());
 
                     int room_id = join_msg.room_id();
 
-                    std::cout << "pINGPONG on " << room_id << std::endl;
                     ZMQ_msg zmqmsg;
                     zmqmsg.set_type_message(PING);
                     zmqmsg.set_message("ping");
@@ -151,20 +147,9 @@ int client_thread(int socket_client){
                     s_send_b(publisher, zmqmsg.SerializeAsString());
                     pub_mutex.unlock();
 
-                    stream.str("");
-                    stream.clear();
-                    stream << "users/" << usr.get_id() << "/check_room";
-
-                    zmq::socket_t waiting_room(context, ZMQ_SUB);
-                    waiting_room.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-
-                    size_t opt_value = 2000;
-                    waiting_room.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
-                    waiting_room.connect("tcp://localhost:5563");
-
-                    std::string address = s_recv(waiting_room);
+                    // Waiting for the room to respond
+                    std::string address = s_recv(subscriber);
                     if(address == ""){ // The room died or is full
-                        std::cout << "The room died" << std::endl;
                         la_poste.envoie_bool(JOIN_R, false);
                     }
                     else{ // The room responded
@@ -172,6 +157,7 @@ int client_thread(int socket_client){
                         game_url = stream.str();
                         la_poste.envoie_bool(JOIN_R, true);
                     }
+
                     continue;
                 }
 

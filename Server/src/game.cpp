@@ -128,7 +128,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             zmq_msg.set_message("false");
         }
 
-        stream << "users/" << zmq_msg.receiver_id() << "/check_room";
+        stream << "users/" << zmq_msg.receiver_id() << "/room";
 
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
