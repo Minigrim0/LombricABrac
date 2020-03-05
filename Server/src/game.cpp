@@ -378,6 +378,8 @@ void Game::end_round(){
 
     uint32_t next_lomb_id;
 
+    set_round_time();
+
     std::cout << "Previous player : " << static_cast<int>(current_player) << std::endl;
 
     do{
