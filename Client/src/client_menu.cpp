@@ -45,6 +45,16 @@ void Client::createRoom(){
 	sendMutex.unlock();
 }
 
+void Client::quitRoom(){
+	message m{};
+	m.type = QUIT_ROOM;
+	m.text = ""; //serveur n'a besoin d'aucunes infos
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 void Client::startGame(){
 	message m{};
 	m.text = ""; //serveur n'a besoin d'aucunes infos

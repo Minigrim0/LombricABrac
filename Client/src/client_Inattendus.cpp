@@ -71,6 +71,12 @@ std::vector<std::string> Client::getNewPlayers(){
 	return res;
 }
 
+std::vector<std::string> Client::getGonePlayers(){
+	std::vector<std::string> res = playersGone;
+	playersGone.clear(); //vide vecteur
+	return res;
+}
+
 void Client::lombChanged(/*message &m*/){
 	/*Lombric obj;
 	obj.ParseFromString(m.text);

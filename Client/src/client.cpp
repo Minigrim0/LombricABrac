@@ -117,6 +117,12 @@ int Client::run(){
 					nvJoueur(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
+				case USR_REM: //un joueur à été jouté dans le salon d'attente
+					{newUser obj;
+					obj.ParseFromString(msg.text); //convertis en struct proto-buff
+					playersGone.push_back(obj.pseudo());
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
 				case MAP_MOD: //L'hôte a changé de map
 					changeMap(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
