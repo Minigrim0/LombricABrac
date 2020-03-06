@@ -62,9 +62,6 @@ int Client::run(){
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case INVI_R: //on a recu une invitation de partie
-					{std::string t = "echo GOT INVITE LUL >> out.txt";
-					system(t.c_str());
-					}invite(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case START: //L'hôte a lancé la partie
@@ -78,16 +75,21 @@ int Client::run(){
 					msgMutex.unlock();
 					tableUpdate.push_back(msg.text);
 
-					res = readMessage();//2e: projectile (angle, force)
+					msg.type = 0;
+					res = readMessage();//2e: projectile (angle, force
+
 					if (res == EXIT_FAILURE){
 						break;
 					}
 					tableUpdate.push_back(msg.text);
 
+					msg.type = 0;
 					res = readMessage();//3e: dégats au lombrics + positions
+
 					if (res == EXIT_FAILURE){
 						break;
 					}
+
 					tableUpdate.push_back(msg.text);
 					msgMutex.lock();
 					mutexPartie.unlock();
@@ -191,6 +193,7 @@ int Client::readMessage(){
 		msgMutex.unlock();
 		return EXIT_SUCCESS;
 	}
+
 	res = static_cast<int>(recv(client_socket, &msg.type , sizeof(msg.type), 0)); // reçois le type du message
 	if(res==-1){
 		close(client_socket);
@@ -208,8 +211,6 @@ int Client::readMessage(){
 	char* parser = buffer;
 	buffer[size] = '\0';
 
-	std::string text = "echo Starting receive type " + std::to_string(static_cast<int>(msg.type)) + " of size : " + std::to_string(size) + " >> out.txt";
-	system(text.c_str());
 	while (size>0){ //recois tout le message
 		int r = static_cast<int>(recv(client_socket, parser, size, 0));
 		size -= static_cast<uint32_t>(r);
@@ -218,11 +219,6 @@ int Client::readMessage(){
 
 	msg.text = static_cast<std::string>(buffer);
 	delete[] buffer;
-
-
-	text = "echo Type Reçu: " + std::to_string(static_cast<int>(msg.type)) + " >> out.txt";
-	system(text.c_str());
-
 
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
