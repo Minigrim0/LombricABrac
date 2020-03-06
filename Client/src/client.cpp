@@ -146,6 +146,7 @@ int Client::run(){
 			}
 			msgMutex.unlock();
 		}
+		usleep(50);
 	}
 
 	quit();
