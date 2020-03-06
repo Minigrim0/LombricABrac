@@ -46,22 +46,20 @@ void Map::setBloc(uint32_t x, uint32_t y, char type){
 }
 
 std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
-  std::vector<int> res;
+    std::vector<int> res;
 	//retire tous les blocs touchés par l'explosion
-  for(int x = xExplosion - radius; x <= xExplosion + radius; ++x) {//parcours le carré
-    for(int y = yExplosion - radius; y <= yExplosion + radius; ++y){
-      //calcul des oordonnées du cercle pour un x fixé y = +- sqrt()
-      double yCircle = sqrt(pow(radius,2)-pow(x-xExplosion,2));
-      double y1 = yCircle + yExplosion;
-      double y2 = -yCircle + yExplosion;
-      if(y>=0 && x>=0 && y <= y1 && y >= y2 && isTypeBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),LIGHT_WALL)){//si les coords font parties du cercles et que c'est un bloc cassable
-        setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
-        res.push_back(x);
-        res.push_back(y);
-      }
+    for(int x = xExplosion - radius; x <= xExplosion + radius; ++x) {//parcours le carré
+        //calcul des oordonnées du cercle pour un x fixé y = +- sqrt()
+        double yCircle = sqrt(pow(radius,2)-pow(x-xExplosion,2));
+        double y1 = yCircle + yExplosion;
+        double y2 = -yCircle + yExplosion;
+        for(int y = y2; y <= y1; ++y){
+            setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
+            res.push_back(x);
+            res.push_back(y);
+        }
     }
-  }
-  return res;
+    return res;
 }
 
 void Map::explose(std::vector<int> coords){
