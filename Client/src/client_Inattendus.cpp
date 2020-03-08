@@ -28,9 +28,9 @@ void Client::invite(message& m){
 
 
 std::vector<invitation> Client::getInvitations(){
-	{std::string t = "echo ingetinvit >> out.txt";
+	/*{std::string t = "echo ingetinvit >> out.txt";
 	system(t.c_str());
-	}
+}*/
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
