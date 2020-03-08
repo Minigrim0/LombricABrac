@@ -173,6 +173,7 @@ private:
   time_t t0;//reset à chaque début de tour
   uint32_t spentTime;//temps écoulé depuis le début du tour
   bool tour;
+  bool endRound;//true quand c'est la fin du tour
   paramsPartie gameParam;//parametre de la partie (surtout le temps qui nous intéresse)
   std::vector<int> blockDeleted;//contient tout les murs détruits -> utilisés pour synchroniser la carte avec le serveur
 
@@ -194,7 +195,7 @@ private:
   void drawMur(int x, int y);//dessine 1 mur
   void drawMur(int pos);
 
-  void updateSprites(double t);// t = temps actuel en milliseconde
+  bool updateSprites(double t);// t = temps actuel en milliseconde
   void drawSprite(Sprite* s, int* oldPos,int* newPos);//redessine le sprite
   void moveCurrentLombric(int mouvement);//peut prendre TRANSLATE_MOVE ou JUMP_MOVE en argument
 

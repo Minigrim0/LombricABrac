@@ -69,33 +69,26 @@ int Client::run(){
 					notifyStarted(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case SHOOT: {//un joueur a tiré
+				case SHOOT://un joueur a tiré
 					//1er message: tir (armes + params)
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
-					msgMutex.unlock();
 					tableUpdate.push_back(msg.text);
-
-					msg.type = 0;
-					res = readMessage();//2e: projectile (angle, force
-
-					if (res == EXIT_FAILURE){
-						break;
-					}
-					tableUpdate.push_back(msg.text);
-
-					msg.type = 0;
-					res = readMessage();//3e: dégats au lombrics + positions
-
-					if (res == EXIT_FAILURE){
-						break;
-					}
-
-					tableUpdate.push_back(msg.text);
-					msgMutex.lock();
 					mutexPartie.unlock();
-					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					msg.type = 0;
 					break;
-				}
+				case UPDATE_WALL://update des murs
+					mutexPartie.lock(); //s'assure de la reception des 3 messages
+					tableUpdate.push_back(msg.text);
+					mutexPartie.unlock();
+					msg.type = 0;
+					break;
+
+				case LOMB_DMG://updates des lombrics
+					mutexPartie.lock(); //s'assure de la reception des 3 messages
+					tableUpdate.push_back(msg.text);
+					mutexPartie.unlock();
+					msg.type = 0;
+					break;
 
 				case POS_LOMB_R: {//un lombric a bougé
 					Lomb_pos obj;
@@ -117,6 +110,12 @@ int Client::run(){
 					nvJoueur(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
+				case USR_REM: //un joueur à été jouté dans le salon d'attente
+					{newUser obj;
+					obj.ParseFromString(msg.text); //convertis en struct proto-buff
+					playersGone.push_back(obj.pseudo());
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
 				case MAP_MOD: //L'hôte a changé de map
 					changeMap(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
@@ -219,6 +218,9 @@ int Client::readMessage(){
 
 	msg.text = static_cast<std::string>(buffer);
 	delete[] buffer;
+
+	std::string text = "echo reçu type " + std::to_string(msg.type) + " de taille " + std::to_string(msg.text.size()) + " >> out.txt";
+	system(text.c_str());
 
 	msgMutex.unlock();
 	return EXIT_SUCCESS;

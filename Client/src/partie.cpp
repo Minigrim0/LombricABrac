@@ -21,6 +21,7 @@ Partie::Partie(Client* c)
 gameInfo(c->getGameInfo()),
 weaponIndex(0),
 tour(false),
+endRound(true),
 gameParam(c->getParamsPartie()),
 blockDeleted(),
 camX(0),
@@ -64,7 +65,9 @@ info Partie::run(info information)
     //gestion du resize de la fenêtre
     resize();
 
-    updateSprites(t);//update la positions des sprites à cahque itérations
+    bool movement = updateSprites(t);//update la positions des sprites à cahque itérations
+    //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
+    if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
     if(mustDrawWall){
       drawMap(t);
@@ -72,25 +75,28 @@ info Partie::run(info information)
 
 
     //vérifie si le tour a changé
-    std::string nextRound = cli->getNextRound();
-    if(nextRound.size()){//si on a un string-> on change de tour
-      Next_lombric next;
-      next.ParseFromString(nextRound);
-      spentTime = 0;
-      t0 = time(NULL);
-      mustRefreshOverlay = true;
-      tour = next.is_yours();
-      gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
+    if(endRound){
+      std::string nextRound = cli->getNextRound();
+      if(nextRound.size()){//si on a un string-> on change de tour
+        Next_lombric next;
+        next.ParseFromString(nextRound);
+        spentTime = 0;
+        t0 = time(NULL);
+        mustRefreshOverlay = true;
+        tour = next.is_yours();
+        gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
 
-      synchronizeLombrics(lombricUpdatedByServ);
-      lombricUpdatedByServ.Clear();
+        synchronizeLombrics(lombricUpdatedByServ);
+        lombricUpdatedByServ.Clear();
 
-      synchronizeMap(destroyByServ);
-      blockDeleted.clear();
-      destroyByServ.Clear();
+        synchronizeMap(destroyByServ);
+        blockDeleted.clear();
+        //destroyByServ.Clear();
 
-      mustRefreshOverlay = true;
-      mustDrawWall = true;
+        mustRefreshOverlay = true;
+        mustDrawWall = true;
+        endRound = false;
+      }
     }
 
     //vérifie s'il y'a un tir a effectuer
@@ -106,7 +112,7 @@ info Partie::run(info information)
       destroyByServ.ParseFromString(sVect[1]);
       lombricUpdatedByServ.ParseFromString(sVect[2]);
 
-      spentTime = gameParam.time_round;
+      spentTime = gameParam.time_round;//force la fin du tour
     }
 
     //update du time
@@ -192,7 +198,6 @@ info Partie::run(info information)
 
           //gameInfo->armesVector[weaponIndex]->shoot(gameInfo, t);
           mustRefreshOverlay = true;
-          spentTime = gameParam.time_round;//force la fin du tour
           tour = false;
         }
         break;
@@ -266,7 +271,7 @@ void Partie::drawMur(int x, int y){//dessine le mur en x y
   mvwaddch(gameWin, y-camY, x-camX, VIDE | COLOR_PAIR(numColor));//affiche le bloc
 }
 
-void Partie::updateSprites(double t){
+bool Partie::updateSprites(double t){
   int newPos[2];
   int oldPos[2];
 
@@ -298,9 +303,7 @@ void Partie::updateSprites(double t){
       ++s;
     }
   }
-  if(!isMovement && spentTime >= gameParam.time_round){//si le temps est écoulé et que plus qucun sprite est en mouvemnt
-    //id = 0;//fin du tour
-  }
+  return isMovement;
 }
 
 void Partie::drawSprite(Sprite* s, int* oldPos, int* newPos){

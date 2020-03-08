@@ -28,9 +28,9 @@ void Client::invite(message& m){
 
 
 std::vector<invitation> Client::getInvitations(){
-	{std::string t = "echo ingetinvit >> out.txt";
+	/*{std::string t = "echo ingetinvit >> out.txt";
 	system(t.c_str());
-	}
+}*/
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
@@ -68,6 +68,12 @@ void Client::nvJoueur(message& m){
 std::vector<std::string> Client::getNewPlayers(){
 	std::vector<std::string> res = newPlayers;
 	newPlayers.clear(); //vide vecteur
+	return res;
+}
+
+std::vector<std::string> Client::getGonePlayers(){
+	std::vector<std::string> res = playersGone;
+	playersGone.clear(); //vide vecteur
 	return res;
 }
 
@@ -193,7 +199,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	}
 
 	//remplis le vecteur des projectiles
-	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 3));
+	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 
 	thisGame = gameInfo;

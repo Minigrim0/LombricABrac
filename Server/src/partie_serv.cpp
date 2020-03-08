@@ -34,7 +34,7 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     while (run){
         //run tant que il y'a des psites en mouvement
         run = updateSprites(t);//update la positions des sprites à cahque itérations
-        t += 50;
+        t += 25;
     }
 
     res.push_back(blockDeleted.SerializeAsString());
@@ -54,7 +54,6 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     }
 
     res.push_back(d.SerializeAsString());
-
     return res;//pour le moment du moins
 }
 
@@ -77,13 +76,13 @@ bool Partie::updateSprites(int t){
             std::vector<int> deletedBlock = (*s)->deathMove(gameInfo,t);
             addDeletedBlock(deletedBlock);
 
+            gameInfo->spriteVector.erase(s);
             if(!id){
-                gameInfo->spriteVector.erase(s);
-                delete *s;
+              delete *s;
             }
         }
         else{
-            ++s;
+          ++s;
         }
     }
     return isMovement;
@@ -108,7 +107,9 @@ void Partie::addDeletedBlock(std::vector<int> v){
 }
 
 bool Partie::isLombAlive(int id){
-    return dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id))->getLife() > 0;
+    Lombric_c* lomb =  dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id));
+    if(!lomb)return false;
+    return lomb->getLife()>0;
 }
 
 

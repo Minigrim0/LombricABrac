@@ -42,6 +42,8 @@
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
 #define START 46 // proto buf infopartie
 #define INFO_ROOM 52
+#define USR_REM 53// : préviens que qqun a quitté salon d'attente
+#define QUIT_ROOM 54// :quitte salon d'attente
 
 // <-- Menu historique -->
 #define GET_HISTORY 21// : (uint8_t str) int short int //user first_game(de la page) nbr_game
@@ -63,7 +65,7 @@
 #define POS_LOMB_R 31// : uint8_t short int*2 //id_lomb pos_x pos_y
 #define POS_LOMB_S 32// : short int*2 //id_lomb pos_x pos_y
 #define SHOOT 33// : uint8_t*2 short int //id_arme force angle
-#define POS_PROJ 34// : uint8_t short int*2 //id_proj pos_x pos_y
+#define UPDATE_WALL 34// : uint8_t short int*2 //id_proj pos_x pos_y
 #define LOMB_DMG 35// : uint8_t short int //id_lomb degat(pas uint8_t car peut aller en negatif pour heal)
 #define LAND_DMG 36// : short int*2 //destruction terrain pos_x pos_y
 #define SPAWN_HEAL 37// : short int*2 //heal lomb pos_x pos_y

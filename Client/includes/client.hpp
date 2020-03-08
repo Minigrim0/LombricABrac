@@ -123,6 +123,7 @@ private:
 	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
 	std::vector<std::string> tableUpdate;
 	std::vector<playerTeam> inNewTeam;
+	std::vector<std::string>playersGone;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
@@ -181,6 +182,7 @@ public:
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
 	void set_nbr_equipes(uint32_t nbr_eq);
 	void changeTeam(uint32_t id_equipe);
+	void quitRoom();//quitter salon d'attente
 
 	//méthode pour l'historique
 	historyTable get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
@@ -215,6 +217,7 @@ public:
 	std::vector<std::string> getTableUpdate();
 	std::vector<playerTeam> getNewTeam();
 	std::string getNextRound(); //infos du provhain tour
+	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
 
 	//thread
 	bool isRunning(){return running;};
