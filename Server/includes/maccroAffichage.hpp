@@ -2,6 +2,20 @@
 #ifndef MACCRO_AFFICAHGE
 #define MACCRO_AFFICAHGE
 
+
+//NAVIGATION DANS LE MENU
+/*#define NAVIGATE_RIGHT KEY_RIGHT
+#define NAVIGATE_LEFT KEY_LEFT
+#define NAVIGATE_UP KEY_UP
+#define NAVIGATE_DOWN KEY_DOWN*/
+
+#define MENU_SLEEP_TIME 100 //temps de sleep entre chaque pause (en microseconde)
+
+#define NAVIGATE_RIGHT 'l'
+#define NAVIGATE_LEFT 'j'
+#define NAVIGATE_UP 'i'
+#define NAVIGATE_DOWN 'k'
+
 //AFFICHAGE
 #define VIDE ' '
 #define LIGHT_WALL '#'
@@ -25,6 +39,11 @@
 #define PARABOLE 2
 
 #define GRAVITY 25
+
+//vitesse à partir de laquelle le lombric commence à prendre des dégats
+#define FALL_DAMAGE_SPEED 14.14  //plus ou moins après une chute de 4 blocs
+//nombre de dégat par unité de vitesse
+#define DOMMAGE_PER_SPEED 1
 
 //nbre de secondes durant lesquelles le joueur peut encore se déplacer après avoir tiré
 #define EXTRA_TIME 5
@@ -52,6 +71,6 @@
 
 
 //TAILLE DES WINDOW
-#define OVERLAY_WIDTH 30 //taille fixée pour l'overlay
+#define OVERLAY_WIDTH 25 //taille fixée pour l'overlay
 
 #endif

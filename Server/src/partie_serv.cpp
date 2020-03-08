@@ -101,7 +101,7 @@ bool Partie::moveCurrentLombric(std::string s){
     bool movement;
     do{//simule les évantuel mouvements à cause du déplacement du lombrics (chute libre par exemple)
         movement = updateSprites(t);
-        t += 25;
+        t += 10;
     }while(movement);
 
     std::cout << "End move lomb after " << t << std::endl;

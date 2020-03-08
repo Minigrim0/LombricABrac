@@ -23,3 +23,8 @@ int* PhysicsObject::update(int* res, double t){
 	}
 	return res;
 }
+
+double PhysicsObject::getSpeedY(int t){
+	t = (t - initTime)/1000; //temps écoulé en secondes
+	return gravity*t+initSpeedY;
+}

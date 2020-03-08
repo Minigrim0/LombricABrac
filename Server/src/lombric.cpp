@@ -5,8 +5,7 @@ Lombric_c::Lombric_c(int id,int x, int y, unsigned long skin, int pv):Sprite(x, 
 
 Lombric_c::Lombric_c(int id, int pv, Map* carte):
 Sprite(id, carte),
-vie(pv)
-{}
+vie(pv){}
 
 void Lombric_c::move(int type, Map* carte){
 	uint32_t newX, newY;
@@ -38,8 +37,14 @@ bool Lombric_c::update(Map* carte, double t){
 		int newPos[2];
 		movement->update(newPos, t);
 		//s'il est en mouvement et que le bloc en dessous est pas de l'air -> on arrête le mouvement et on oublie les nouvelles coordonnées
+		//et on fait les dégats de CHUUUTE
 		if(!carte->isTypeBloc(static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]),AIR)){
+			double impactSpeed = movement->getSpeedY(t);
 			deleteMovement();
+
+			if(impactSpeed >= FALL_DAMAGE_SPEED){//la chute va faire mal
+				vie -= impactSpeed*DOMMAGE_PER_SPEED;
+			}
 		}
 		else{//on change les coordonnées
 			posX = newPos[0];
@@ -48,7 +53,7 @@ bool Lombric_c::update(Map* carte, double t){
 	}
 
 	//si le lombric n'est pas en mouvement et qu'il flotte -> on lui applique une chute libre
-	if(!movement && carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
+	if(!movement and carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
 		setMovement(0,0, GRAVITY, PARABOLE, t);
 	}
 

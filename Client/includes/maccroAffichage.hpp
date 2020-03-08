@@ -40,6 +40,11 @@
 
 #define GRAVITY 25
 
+//vitesse à partir de laquelle le lombric commence à prendre des dégats
+#define FALL_DAMAGE_SPEED 14.14  //plus ou moins après une chute de 4 blocs
+//nombre de dégat par unité de vitesse
+#define DOMMAGE_PER_SPEED 1
+
 //nbre de secondes durant lesquelles le joueur peut encore se déplacer après avoir tiré
 #define EXTRA_TIME 5
 

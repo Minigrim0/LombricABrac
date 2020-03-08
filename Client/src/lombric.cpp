@@ -37,8 +37,14 @@ bool Lombric_c::update(Map* carte, double t){
 		int newPos[2];
 		movement->update(newPos, t);
 		//s'il est en mouvement et que le bloc en dessous est pas de l'air -> on arrête le mouvement et on oublie les nouvelles coordonnées
+		//et on fait les dégats de CHUUUTE
 		if(!carte->isTypeBloc(static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]),AIR)){
+			double impactSpeed = movement->getSpeedY(t);
 			deleteMovement();
+
+			if(impactSpeed >= FALL_DAMAGE_SPEED){//la chute va faire mal
+				vie -= impactSpeed*DOMMAGE_PER_SPEED;
+			}
 		}
 		else{//on change les coordonnées
 			posX = newPos[0];

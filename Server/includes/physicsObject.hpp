@@ -20,6 +20,7 @@ private:
 public:
 	PhysicsObject(int x, int y, double speedX,double speedY, int moveT, double grav, double t0);
 	int* update(int* res, double t);//modifie le tableau avec les coords de l'objets, t -> temps actuel
+	double getSpeedY(int t);//récupère la vitesse y du sprite pour une vitesse t
 };
 
 #endif
