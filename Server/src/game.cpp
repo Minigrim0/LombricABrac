@@ -372,6 +372,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             std::vector<std::string> res;
             res = obj_partie.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
 
+            zmq_msg.set_type_message(UPDATE_WALL);
             zmq_msg.set_message(res[0]);
             for(size_t i = 0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -381,6 +382,8 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
+
+            std::cout << "All is send" << std::endl;
 
             end_round();
             break;

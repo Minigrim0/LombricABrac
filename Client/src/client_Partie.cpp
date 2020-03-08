@@ -25,8 +25,10 @@ void Client::shoot(uint32_t id_arme, uint32_t force, double angle){//joueur tir
 std::vector<std::string> Client::getTableUpdate(){
 	std::vector<std::string> res; //vecteur vide
 	if (mutexPartie.try_lock()){//toutes ou aucunes des informations on été recues
-		res = tableUpdate;
-		tableUpdate.clear(); //vide tableau
+		if(tableUpdate.size() == 3){
+			res = tableUpdate;
+			tableUpdate.clear(); //vide tableau
+		}
 		mutexPartie.unlock();
 	}
 	return res;

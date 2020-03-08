@@ -34,7 +34,7 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     while (run){
         //run tant que il y'a des psites en mouvement
         run = updateSprites(t);//update la positions des sprites à cahque itérations
-        t += 50;
+        t += 25;
     }
 
     res.push_back(blockDeleted.SerializeAsString());
@@ -54,7 +54,6 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     }
 
     res.push_back(d.SerializeAsString());
-
     return res;//pour le moment du moins
 }
 
