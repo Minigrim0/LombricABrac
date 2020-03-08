@@ -129,8 +129,8 @@ info Partie::run(info information)
     }
 
     //synchronisation avec le serveur des déplacements des autres lombrics
+    std::vector<lombricPos> movedLombs = cli->getNewLombPos();
     if(!tour){
-      std::vector<lombricPos> movedLombs = cli->getNewLombPos();
       for (auto lombPos = movedLombs.begin();lombPos!=movedLombs.end();++lombPos){
         int pos[2];
         Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,(*lombPos).id_lomb));
