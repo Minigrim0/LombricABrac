@@ -97,6 +97,15 @@ bool Partie::moveCurrentLombric(std::string s){
     pos[1] = lp.pos_y();
     lomb->setPos(pos);
 
+    int t = 0;
+    bool movement;
+    do{//simule les évantuel mouvements à cause du déplacement du lombrics (chute libre par exemple)
+        movement = updateSprites(t);
+        t += 25;
+    }while(movement);
+
+    std::cout << "End move lomb after " << t << std::endl;
+
     return true;
 }
 
