@@ -60,15 +60,21 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
 bool Partie::updateSprites(int t){
     int newPos[2];
     int oldPos[2];
+    int life;
 
     bool isMovement = false;//mis à vrai s'il y a un seul sprite en mouvement
 
     auto s = gameInfo->spriteVector.begin();
     while(s != gameInfo->spriteVector.end()){
         int id = (*s)->getId();
+        if(id)life = dynamic_cast<Lombric_c*>(*s)->getLife();
         (*s)->getPos(oldPos);
         bool alive = (*s)->update(gameInfo->carte, t);
         (*s)->getPos(newPos);
+
+        //si la vie du lombric a changé -> fin de tour
+        if(id && dynamic_cast<Lombric_c*>(*s)->getLife() != life)endTour = true;
+
         isMovement |= (*s)->isInMovement();//un suel lombric en mouvement -> isMovement = true
         if(!alive){//le sprite doit mourir, on le supprime
             isMovement = true;
@@ -123,5 +129,8 @@ bool Partie::isLombAlive(int id){
 
 
 void Partie::setCurrentLomb(int id){
+    endTour = false;
     gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id));
 }
+
+bool Partie::isTourFinish(){return endTour;}

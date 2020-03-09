@@ -219,8 +219,8 @@ int Client::readMessage(){
 	msg.text = static_cast<std::string>(buffer);
 	delete[] buffer;
 
-	std::string text = "echo reçu type " + std::to_string(msg.type) + " de taille " + std::to_string(msg.text.size()) + " >> out.txt";
-	system(text.c_str());
+	//std::string text = "echo reçu type " + std::to_string(msg.type) + " de taille " + std::to_string(msg.text.size()) + " >> out.txt";
+	//system(text.c_str());
 
 	msgMutex.unlock();
 	return EXIT_SUCCESS;
