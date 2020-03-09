@@ -42,7 +42,7 @@ int Map::getColor(uint32_t pos){
 }
 
 void Map::setBloc(uint32_t x, uint32_t y, char type){
-  mur[y][x] = type;
+    if(x>=0 && y>=0 && x<largeur && y<hauteur)mur[y][x] = type;
 }
 
 std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
@@ -59,6 +59,7 @@ std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
             res.push_back(y);
         }
     }
+
     return res;
 }
 
