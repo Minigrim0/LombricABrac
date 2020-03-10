@@ -54,9 +54,11 @@ std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
         double y1 = yCircle + yExplosion;
         double y2 = -yCircle + yExplosion;
         for(int y = y2; y <= y1; ++y){
-            setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
-            res.push_back(x);
-            res.push_back(y);
+            if(x>=0 && y>=0 && x<largeur && y<hauteur){
+                setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
+                res.push_back(x);
+                res.push_back(y);
+            }
         }
     }
 
