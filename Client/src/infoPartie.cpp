@@ -22,6 +22,9 @@ void deleteinfoPartie_s(infoPartie_s* s){
 	delete s;
 }
 
+Equipe::Equipe(std::string n):
+name(n){
+}
 
 Equipe::Equipe(std::string n, std::vector<Lombric_c*> v):
 name(n),
@@ -34,4 +37,8 @@ int Equipe::getLife(){
 		res += (*lomb)->getLife();
 	}
 	return res;
+}
+
+void Equipe::addLomb(Lombric_c* lombric){
+	teamMembers.push_back(lombric);
 }

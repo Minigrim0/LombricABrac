@@ -41,13 +41,15 @@ class Lombric_c:public Sprite{
 private:
 	int direction;//-1 ou 1
 	int vie;
+	std::string name;
 public:
-	Lombric_c(int id,int x, int y, unsigned long skin, int pv);
+	Lombric_c(int id,int x, int y, unsigned long skin, int pv, std::string name_lomb);
 	Lombric_c(int id, int pv, Map* carte);//constructeur pour le seveur
 	bool update(Map* carte, double t) override;//update laa position
 	void move(int type, Map* carte);//gestion du déplacement (ctrl par le user)
 	inline void addLife(int n){vie += n;}
 	inline int getLife(){return vie;}
+	std::string getName();
 	inline void setLife(int newLife){vie=newLife;}
 	std::vector<int> deathMove(infoPartie_s* inf, double t) override;
 	void explosed(int x, int y, int radius, int degat, int vitesse, double t);//méthode appellée quand il y'a une explosion et subit les dégats s'il est à portée

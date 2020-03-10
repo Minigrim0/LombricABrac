@@ -36,10 +36,12 @@ private:
 	std::string name;
 	std::vector<Lombric_c*> teamMembers;
 public:
+	Equipe(std::string n);
 	Equipe(std::string n, std::vector<Lombric_c*> v);
 	inline std::string getName(){return name;}
 	inline std::vector<Lombric_c*> getLombric(){return teamMembers;}
 	int getLife();
+	void addLomb(Lombric_c* lombric);
 	~Equipe()=default;
 
 };
