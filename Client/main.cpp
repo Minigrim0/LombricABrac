@@ -99,9 +99,6 @@ int main(int argc, char** argv)
             break;
         }
 
-        std::vector<invitation> tmp_vect = information.client->getInvitations();
-        information.vec_invit.reserve(tmp_vect.size() + information.vec_invit.size());
-        information.vec_invit.insert(information.vec_invit.end(), tmp_vect.begin(), tmp_vect.end());
 
         switch(information.id){
             case 1://on rentre dans le menu entrer
@@ -125,9 +122,14 @@ int main(int argc, char** argv)
             case 221: //lance window création partie depuis le salon d'attente (si l'hote veut changer les paramètres)
                 information = create_window.run(information);
                 break;
-            case 23: //lance window pour voir ses invitations
+            case 23:{ //lance window pour voir ses invitations
+                information.vec_invit = information.client->afficheAllInvits();
+                std::vector<invitation> tmp_vect = information.client->getInvitations();
+                information.vec_invit.reserve(tmp_vect.size() + information.vec_invit.size());
+                information.vec_invit.insert(information.vec_invit.end(), tmp_vect.begin(), tmp_vect.end());
                 information = friends_window.run(information);
                 break;
+            }
             case 24: //lance le classement
                 information = friends_window.run(information);
                 break;

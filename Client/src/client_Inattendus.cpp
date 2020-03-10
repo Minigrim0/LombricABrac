@@ -22,15 +22,14 @@ void Client::invite(message& m){
 	Invitation obj;
 	obj.ParseFromString(m.text);
 
-	std::string text = "echo Num de la room: " + std::to_string(obj.game_id()) + " >> out.txt";
+	std::string text = "echo Invitation de : " + obj.pseudo() + " >> out.txt";
+	system(text.c_str());
+
 	invitations.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
 }
 
 
 std::vector<invitation> Client::getInvitations(){
-	/*{std::string t = "echo ingetinvit >> out.txt";
-	system(t.c_str());
-}*/
 	std::vector<invitation> res = invitations;
 	invitations.clear(); //vide vecteur
 	return res; //renvoie le vecteur de demandes d'amis
