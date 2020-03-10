@@ -176,7 +176,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
 
                     Invitation invit;
                     invit.set_type(false);
-                    invit.set_pseudo(fri.user());
+                    invit.set_pseudo(usr->get_pseudo());
 
                     zmqmsg.set_type_message(INVI_R);
                     zmqmsg.set_receiver_id(friend_id);

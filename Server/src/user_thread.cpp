@@ -97,6 +97,8 @@ int client_thread(int socket_client){
 
                     if(online){
                         ZMQ_msg zmqmsg;
+                        invit.set_pseudo(usr.pseudo());
+                        
                         zmqmsg.set_type_message(INVI_R);
                         zmqmsg.set_receiver_id(friend_id);
                         zmqmsg.set_message(invit.SerializeAsString());

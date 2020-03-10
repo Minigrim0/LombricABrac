@@ -14,6 +14,7 @@ class ConnectedPlayer: public UserConnect{
         // Getters
         bool is_auth() const;
         int get_id() const;
+        std::string get_pseudo() const;
 
         void set_id(int id);
         void set_auth(bool auth);
