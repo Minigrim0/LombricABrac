@@ -1,7 +1,7 @@
 #include "../includes/sprite.hpp"
 
 //y'a un warning surprenant par ici
-Lombric_c::Lombric_c(int id,int x, int y, unsigned long skin, int pv):Sprite(x, y, skin, id), direction(FORWARD),vie(pv){}
+Lombric_c::Lombric_c(int id,int x, int y, unsigned long skin, int pv, std::string name_lomb):Sprite(x, y, skin, id), direction(FORWARD),vie(pv),name(name_lomb){}
 
 Lombric_c::Lombric_c(int id, int pv, Map* carte):
 Sprite(id, carte),
@@ -80,3 +80,5 @@ void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, 
 		setMovement(speedX, speedY, GRAVITY, PARABOLE, t);
 	}
 }
+
+std::string Lombric_c::getName(){return name;}
