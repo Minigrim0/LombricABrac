@@ -171,9 +171,12 @@ message Degats_lombric{
 
 message Lombric{
   uint32 id_lomb = 1;
-  uint32 pos_x = 2;
-  uint32 pos_y = 3;
-  uint32 vie = 4;
+  uint32 team_lomb = 2;
+  string name_lomb = 3;
+  string name_player = 4;
+  uint32 pos_x = 5;
+  uint32 pos_y = 6;
+  uint32 vie = 7;
 }
 
 message End_tour{

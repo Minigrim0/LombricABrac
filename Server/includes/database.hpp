@@ -42,6 +42,7 @@ class DataBase{
         int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
         int get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r);
+        int get_lombric_name(int lomb_id, std::string* lomb_name);
 
         // Game history operations
         int get_history(int user_id, int index, int size, History_r* history_r);
@@ -58,7 +59,6 @@ class DataBase{
         int get_messages_sent_to(int sender_id, int receiver_id, Chat_r* chat_r);
         int get_messages_received_from(int receiver_id, int sender_id, Chat_r* chat_r);
         int get_convo(int user1_id, int user2_id, Chat_r* chat_r);
-
 
         // Friendship operations
         int add_friend(int sender_id, int receiver_id);

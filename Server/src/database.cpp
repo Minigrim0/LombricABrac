@@ -284,6 +284,23 @@ int DataBase::get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r){
 }
 
 
+int DataBase::get_lombric_name(int lomb_id, std::string* lomb_name){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_STR;
+
+    m_stringStream << "SELECT name FROM worms WHERE id=" << lomb_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_name, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+
+
 // Game history operations
 int DataBase::get_history(int user_id, int index, int size, History_r* history_r){
     m_stringStream.str("");
