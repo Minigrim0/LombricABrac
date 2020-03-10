@@ -165,10 +165,28 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
             case FRI_ADD:{
                 Fri_add fri;
+                int online = 0;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
                 db.add_friend(usr->get_id(), friend_id);
+                db.is_online(friend_id, &online);//si le user est online on doit lui envoyer le message
+                if(online){
+                    ZMQ_msg zmqmsg;
+
+                    Invitation invit;
+                    invit.set_type(false);
+                    invit.set_pseudo(fri.user());
+
+                    zmqmsg.set_type_message(INVI_R);
+                    zmqmsg.set_receiver_id(friend_id);
+                    zmqmsg.set_message(invit.SerializeAsString());
+
+                    pub_mutex.lock();
+                    s_sendmore_b(publisher, "all");
+                    s_send_b(publisher, zmqmsg.SerializeAsString());
+                    pub_mutex.unlock();
+                }
                 break;
             }
             case GET_ALL_INVIT:{
