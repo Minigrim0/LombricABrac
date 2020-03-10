@@ -274,17 +274,26 @@ void Partie::drawMur(int x, int y){//dessine le mur en x y
 bool Partie::updateSprites(double t){
   int newPos[2];
   int oldPos[2];
+  int life;
 
   bool isMovement = false;//mis à vrai s'il y a un seul sprite en mouvement
 
   auto s = gameInfo->spriteVector.begin();
   while(s != gameInfo->spriteVector.end()){
+    int id = (*s)->getId();
+    if(id)life = dynamic_cast<Lombric_c*>(*s)->getLife();
     (*s)->getPos(oldPos);
     bool alive = (*s)->update(gameInfo->carte, t);
     (*s)->getPos(newPos);
 
+    //si la vie du lombric a changé -> fin de tour
+    if(id && dynamic_cast<Lombric_c*>(*s)->getLife() != life){
+        spentTime = gameParam.time_round;
+        mustRefreshOverlay = true;
+        tour = false;
+    };
+
     isMovement |= (*s)->isInMovement();//un seul lombric en mouvement -> isMovement = true
-    int id = (*s)->getId();
     if(!alive){//le sprite doit mourir, on le supprime
       isMovement = true;
 

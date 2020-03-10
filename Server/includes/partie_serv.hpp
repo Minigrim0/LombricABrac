@@ -34,6 +34,7 @@ private:
 
   //List_Projectiles listProj;
   Block_Destroy blockDeleted;
+  bool endTour;
 
   bool updateSprites(int t);//bool a vrai s'il faut forcer l'affichage de chaque sprite même s'il n'a pas bougé
   void addDeletedBlock(std::vector<int> v);
@@ -51,6 +52,7 @@ public:
   std::vector<std::string> useWeapon(std::string tir);
   bool isLombAlive(int id);
   void setCurrentLomb(int id);
+  bool isTourFinish();
 
   ~Partie();
 };
