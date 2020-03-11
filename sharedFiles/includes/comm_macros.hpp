@@ -42,6 +42,8 @@
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
 #define START 46 // proto buf infopartie
 #define INFO_ROOM 52
+#define USR_REM 53
+#define QUIT_ROOM 54
 
 // <-- Menu historique -->
 #define GET_HISTORY 21// : (uint8_t str) int short int //user first_game(de la page) nbr_game
