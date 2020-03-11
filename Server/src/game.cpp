@@ -328,8 +328,10 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
                     lomb->set_name_lomb(lomb_name);
                     lomb->set_name_player(user_username);
-                    for(size_t index;index<m_players.size();index++){
-                        if(m_players[index].get_id() == lomb->id_lomb()){
+                    for(size_t index=0;index<m_players.size();index++){
+                        std::cout << "Current player: " << m_players[index].get_id() << std::endl;
+                        if(m_players[index].get_id() == owner_id){
+                            std::cout << "Team: " << m_players[index].get_team() << std::endl;
                             lomb->set_team_lomb(m_players[index].get_team());
                             break;
                         }
