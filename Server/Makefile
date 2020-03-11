@@ -5,10 +5,14 @@ LIBS=lib/sqlite3.o lib/bcrypt.o  lib/crypt_blowfish.o  lib/crypt_gensalt.o  lib/
 CXX=g++ -ggdb -ldl
 
 SOURCES=$(wildcard src/*.cpp)
+COMMON_SOURCES=$(wildcard ../sharedFiles/src/*.cpp)
 PROTO_SOURCES=$(wildcard *.proto)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
+TMP_OBJECTS2 = $(COMMON_SOURCES:.cpp=.o)
+
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
+OBJECTS2=$(TMP_OBJECTS2:../sharedFiles/src/%=../sharedFiles/build/%)
 
 PROTO_TMP_OBJECTS=$(PROTO_SOURCES:.proto=.pb.cpp)
 PROTO_OBJECTS=$(PROTO_TMP_OBJECTS:%=cpl_proto/%)
@@ -35,7 +39,7 @@ pre:
 	@./install_zmq.sh
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp $(OBJECTS) $(PROTO_BUILDS) $(LIBS)
+$(EXECUTABLE): main.cpp $(OBJECTS) $(OBJECTS2) $(PROTO_BUILDS) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@ `pkg-config --cflags --libs protobuf`
 
@@ -46,6 +50,11 @@ build/%.pb.o: cpl_proto/%.pb.cpp
 
 build/%.o: src/%.cpp
 	@mkdir -p build
+	@echo "\e[1;33m >> $^ -> $@\e[0m"
+	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
+
+../sharedFiles/build/%.o: ../sharedFiles/src/%.cpp
+	@mkdir -p ../sharedFiles/build
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
 	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
 
@@ -62,6 +71,7 @@ clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
+	rm -f ../sharedFiles/*.o
 	rm -f cpl_proto/*
 
 hard_clean: clean

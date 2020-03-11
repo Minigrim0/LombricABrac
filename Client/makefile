@@ -6,23 +6,27 @@ EXECUTABLE=lombricABrac
 CXX=g++ -ggdb -ldl
 
 SOURCES=$(wildcard src/*.cpp)
+COMMON_SOURCES=$(wildcard ../sharedFiles/src/*.cpp)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
+TMP_OBJECTS2 = $(COMMON_SOURCES:.cpp=.o)
+
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
+OBJECTS2=$(TMP_OBJECTS2:../sharedFiles/src/%=../sharedFiles/build/%)
 
 all: pre $(EXECUTABLE)
 
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp build/user.pb.o $(OBJECTS) $(LIBS)
+$(EXECUTABLE): main.cpp build/user.pb.o $(OBJECTS) $(OBJECTS2) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
 build/user.pb.o:
 	@mkdir -p build
 	@mkdir -p proto/src/
-	protoc -I=proto --cpp_out=proto/src proto/user.proto
+	protoc -I=../sharedFiles --cpp_out=proto/src ../sharedFiles/user.proto
 	$(CXX) $(COMPILER_FLAGS) -c proto/src/*
 	mv user.pb.o build/user.pb.o
 
@@ -31,10 +35,16 @@ build/%.o: src/%.cpp
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
 	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
 
+../sharedFiles/build/%.o: ../sharedFiles/src/%.cpp
+	@mkdir -p ../sharedFiles/build
+	@echo "\e[1;33m >> $^ -> $@\e[0m"
+	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
+
 clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
+	rm -f ../sharedFiles/build/*.o
 
 run: all
 	@echo "\e[0;31m================= Run ================\e[0m"

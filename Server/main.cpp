@@ -9,7 +9,7 @@
 #include <zmq_addon.hpp>
 
 #include "includes/utils.hpp"
-#include "includes/comm_macros.hpp"
+#include "../sharedFiles/includes/comm_macros.hpp"
 #include "includes/user_thread.hpp"
 #include "includes/constant.hpp"
 #include "includes/database.hpp"

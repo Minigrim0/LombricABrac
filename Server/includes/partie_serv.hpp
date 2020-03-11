@@ -11,10 +11,10 @@
 
 #include "../cpl_proto/user.pb.h"
 
-#include "map.hpp"
-#include "sprite.hpp"
-#include "arme.hpp"
-#include "infoPartie.hpp"
+#include "../../sharedFiles/includes/map.hpp"
+#include "../../sharedFiles/includes/sprite.hpp"
+#include "../../sharedFiles/includes/arme.hpp"
+#include "../../sharedFiles/includes/infoPartie.hpp"
 
 using namespace std;
 

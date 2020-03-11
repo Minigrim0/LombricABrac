@@ -7,7 +7,7 @@
 #include <chrono>
 
 #include "../includes/UI.hpp"
-#include "../includes/map.hpp"
+#include "../../sharedFiles/includes/map.hpp"
 //#include "../includes/client.hpp"
 
 using namespace std;

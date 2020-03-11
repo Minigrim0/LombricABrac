@@ -5,7 +5,7 @@
 #include <sstream>
 
 #include "../includes/utils.hpp"
-#include "../includes/comm_macros.hpp"
+#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
 #include "../includes/game_thread.hpp"

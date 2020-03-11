@@ -42,8 +42,8 @@
 #define JOIN_GROUP_R 20// : (uint8_t str) uint8_t //refresh menu user id_groupe
 #define START 46 // proto buf infopartie
 #define INFO_ROOM 52
-#define USR_REM 53// : préviens que qqun a quitté salon d'attente
-#define QUIT_ROOM 54// :quitte salon d'attente
+#define USR_REM 53
+#define QUIT_ROOM 54
 
 // <-- Menu historique -->
 #define GET_HISTORY 21// : (uint8_t str) int short int //user first_game(de la page) nbr_game
@@ -75,7 +75,10 @@
 #define GET_GAME_INFO 41// : //demande les infos de début de partie
 #define GAME_INFO_R 42// : //réponse de GET_GAME_INFO
 #define NOTIF 47// : // Dire au client mdr t'as une notif
-#define NEXT_ROUND 50
+#define NEXT_ROUND 50 // Id du lomb qui va jouer
 #define DECO 51
+
+#define PING 53
+#define QUIT_ROOM 54
 
 #endif
