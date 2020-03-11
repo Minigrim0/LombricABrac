@@ -198,7 +198,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
-		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(),LOMBRIC_SKIN,100, obj.lomb(i).name_lomb()));
+		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(), '0'+ obj.lomb(i).team_lomb(),100, obj.lomb(i).name_lomb()));
 		gameInfo->teamsVector[obj.lomb(i).team_lomb()]->addLomb(dynamic_cast<Lombric_c*>(gameInfo->spriteVector[i]));
 	}
 
