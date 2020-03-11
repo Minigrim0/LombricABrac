@@ -192,14 +192,14 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->carte = new Map(largeur, hauteur, map);
 
 	for (int i=0;i<currentParams.nbr_equipes;i++){
-		std::string nom = "Equipe " + std::to_string(i);
+		std::string nom = "Equipe " + std::to_string(i+1);
 		gameInfo->teamsVector.push_back(new Equipe(nom));
 	}
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
 		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(), '0'+ obj.lomb(i).team_lomb(),100, obj.lomb(i).name_lomb()));
-		gameInfo->teamsVector[obj.lomb(i).team_lomb()]->addLomb(dynamic_cast<Lombric_c*>(gameInfo->spriteVector[i]));
+		gameInfo->teamsVector[obj.lomb(i).team_lomb()-1]->addLomb(dynamic_cast<Lombric_c*>(gameInfo->spriteVector[i]));
 	}
 
 	//remplis le vecteur des projectiles
