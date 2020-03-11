@@ -20,6 +20,10 @@ int ConnectedPlayer::get_id() const{
     return m_id;
 }
 
+std::string ConnectedPlayer::get_pseudo() const{
+    return pseudo();
+}
+
 void ConnectedPlayer::set_id(int id){
     m_id = id;
 }
