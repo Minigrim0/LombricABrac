@@ -28,6 +28,7 @@ class Joueur{
         inline bool is_current_player() const{return m_is_current_player;};
         inline bool current_lombric() const{return m_is_current_player;};
         inline uint32_t get_lombric_id(int pos) const{return m_Lombrics[pos];}
+        inline uint8_t get_team() const{return m_Equipe;}
 
     private:
         uint8_t m_Equipe;

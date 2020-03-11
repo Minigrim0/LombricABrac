@@ -155,6 +155,21 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
     return m_rc;
 }
 
+int DataBase::get_user_username(int user_id, std::string* username){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_STR;
+
+    m_stringStream << "SELECT username FROM users WHERE id='" << user_id << "';";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, username, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
 int DataBase::get_user(int user_id, UserConnect* userconnect){
     m_stringStream.str("");
     m_stringStream.clear();
@@ -263,6 +278,21 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_r, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::get_lombric_owner_id(int lombric_id, int* owner_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_stringStream << "SELECT owner_id FROM worms WHERE id=" << lombric_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, owner_id, &m_zErrMsg);
     catch_error();
 
     return m_rc;

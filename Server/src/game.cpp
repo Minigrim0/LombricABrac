@@ -317,12 +317,23 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                     lomb->set_vie(dynamic_cast<Lombric_c*>(m_lombs[i])->getLife());
                     lomb->set_id_lomb(dynamic_cast<Lombric_c*>(m_lombs[i])->getId());
                     std::string lomb_name;
+                    int owner_id;
+                    std::string user_username;
 
                     DataBase_mutex.lock();
                     db.get_lombric_name(lomb->id_lomb(), &lomb_name);
+                    db.get_lombric_owner_id(lomb->id_lomb(), &owner_id);
+                    db.get_user_username(owner_id, &user_username);
                     DataBase_mutex.unlock();
 
                     lomb->set_name_lomb(lomb_name);
+                    lomb->set_name_player(user_username);
+                    for(size_t index;index<m_players.size();index++){
+                        if(m_players[index].get_id() == lomb->id_lomb()){
+                            lomb->set_team_lomb(m_players[index].get_team());
+                            break;
+                        }
+                    }
                 }
 
                 zmq_msg.set_message(msg.SerializeAsString());

@@ -31,6 +31,7 @@ class DataBase{
 
         // User operations
         int get_user(std::string username, UserConnect* userconnect);
+        int get_user_username(int user_id, std::string* username);
         int get_user(int user_id, UserConnect* userconnect);
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
@@ -41,6 +42,7 @@ class DataBase{
         int add_lombric(int user_id, int lombric_id, std::string lombric_name);
         int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
+        int get_lombric_owner_id(int lombric_id, int* owner_id);
         int get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r);
         int get_lombric_name(int lomb_id, std::string* lomb_name);
 
