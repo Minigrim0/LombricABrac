@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include "client.hpp"
-#include "maccroAffichage.hpp"
+#include "../../sharedFiles/includes/maccroAffichage.hpp"
 
 using namespace std;
 

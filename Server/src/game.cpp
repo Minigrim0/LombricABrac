@@ -7,7 +7,7 @@
 #include "../includes/game_thread.hpp"
 #include "../includes/utils.hpp"
 #include "../includes/connected_player.hpp"
-#include "../includes/comm_macros.hpp"
+#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../cpl_proto/user.pb.h"
 
 

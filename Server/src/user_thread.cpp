@@ -7,7 +7,7 @@
 #include "../includes/game_thread.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
-#include "../includes/comm_macros.hpp"
+#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/zhelpers.hpp"
 
 

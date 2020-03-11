@@ -6,8 +6,8 @@
 #define _DEFAULT_SOURCE 1
 
 #include "../proto/src/user.pb.h"
-#include "comm_macros.hpp"
-#include "infoPartie.hpp"
+#include "../../sharedFiles/includes/comm_macros.hpp"
+#include "../../sharedFiles/includes/infoPartie.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
