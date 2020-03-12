@@ -32,7 +32,6 @@ $(EXECUTABLE): main.cpp build/user.pb.o $(PROTO_OBJECTS) $(OBJECTS) $(SHARED_OBJ
 build/user.pb.o:
 	@mkdir -p build
 	@mkdir -p proto/src/
-	@rm proto/src/user.pb.h.gch
 	@echo "\e[1;33mProtobuf >> sharedFile/user.proto -> $@\e[0m"
 	@protoc -I=../sharedFiles --cpp_out=proto/src ../sharedFiles/user.proto
 	@$(CXX) $(COMPILER_FLAGS) -c proto/src/*
