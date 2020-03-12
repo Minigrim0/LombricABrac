@@ -36,6 +36,7 @@ private:
   Block_Destroy blockDeleted;
   bool endTour;
 
+  int animationTime;
   bool updateSprites(int t);//bool a vrai s'il faut forcer l'affichage de chaque sprite même s'il n'a pas bougé
   void addDeletedBlock(std::vector<int> v);
 public:
@@ -53,6 +54,9 @@ public:
   bool isLombAlive(int id);
   void setCurrentLomb(int id);
   bool isTourFinish();
+
+  void setAnimationTime(int t);
+  void waitAnimationTime();
 
   ~Partie();
 };

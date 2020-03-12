@@ -406,7 +406,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
 
             std::cout << "All is send" << std::endl;
-
+            obj_partie.waitAnimationTime();
             end_round();
             break;
         }

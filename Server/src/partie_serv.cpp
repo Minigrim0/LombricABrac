@@ -36,6 +36,7 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
         run = updateSprites(t);//update la positions des sprites à cahque itérations
         t += 25;
     }
+    setAnimationTime(t);
 
     res.push_back(blockDeleted.SerializeAsString());
 
@@ -134,3 +135,12 @@ void Partie::setCurrentLomb(int id){
 }
 
 bool Partie::isTourFinish(){return endTour;}
+
+void Partie::setAnimationTime(int t){
+    animationTime = t;
+}
+
+void Partie::waitAnimationTime(){
+    usleep(animationTime);
+    animationTime = 0;
+}
