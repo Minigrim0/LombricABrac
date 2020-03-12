@@ -2,7 +2,7 @@
 
 Sprite::Sprite(int x, int y, unsigned long sk, uint32_t id_l):id(id_l),posX(x),posY(y),movement(nullptr),skin(sk){}
 
-Sprite::Sprite(uint32_t id_l, Map* carte):id(id_l), skin(0){
+Sprite::Sprite(uint32_t id_l, Map* carte):id(id_l), skin(0), movement(nullptr){
 	int x,y;
 	bool run = true;
 
