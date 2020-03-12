@@ -11,7 +11,7 @@ out.txt
 input
 Server/lib/cppzmq/
 Server/lib/libzmq/
-Server/cpl_proto/
 Client/proto/src/
+Server/proto/src/
 .gdb_history
 peda-session-server.txt
