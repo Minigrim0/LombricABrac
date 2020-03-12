@@ -9,17 +9,17 @@ SOURCES=$(wildcard src/*.cpp)
 COMMON_SOURCES=$(wildcard ../sharedFiles/src/*.cpp)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
-TMP_OBJECTS2 = $(COMMON_SOURCES:.cpp=.o)
+TMP_SHARED_OBJECTS = $(COMMON_SOURCES:.cpp=.o)
 
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
-OBJECTS2=$(TMP_OBJECTS2:../sharedFiles/src/%=../sharedFiles/build/%)
+SHARED_OBJECTS=$(TMP_SHARED_OBJECTS:../sharedFiles/src/%=../sharedFiles/build/%)
 
 all: pre $(EXECUTABLE)
 
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): main.cpp build/user.pb.o $(OBJECTS) $(OBJECTS2) $(LIBS)
+$(EXECUTABLE): main.cpp build/user.pb.o $(OBJECTS) $(SHARED_OBJECTS) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
 
