@@ -1,7 +1,11 @@
 #Copie heuteuse du travail qui n'est pas le mien mais c'est très joli
 #Mais l'auteur original a modifié ce magnifique makefile et t'excuse d'utiliser son travail
-COMPILER_FLAGS= -std=c++17 -masm=intel -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
+COMPILER_FLAGS= -std=c++17 -fconcepts  -mlong-double-128 -ggdb3 -Wpedantic -Wall -Wextra -Wstrict-null-sentinel -Wold-style-cast -Wnoexcept -Wctor-dtor-privacy -Woverloaded-virtual -Wsign-promo -Wzero-as-null-pointer-constant -Wsuggest-final-types -Wsuggest-final-methods `pkg-config --cflags --libs protobuf`
 LINKER_FLAGS=-pthread -ldl -lpthread -lncurses
+
+QT_COMPILER_FLAGS = -pipe -O2 -Wall -W -D_REENTRANT -fPIC -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -I. -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -isystem /usr/include/libdrm -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
+QT_LINKER_FLAGS = -Wl,-O1 -lQt5Gui -lQt5Core -lGL -lpthread
+
 EXECUTABLE=lombricABrac
 CXX=g++ -ggdb -ldl
 
@@ -21,7 +25,7 @@ pre:
 
 $(EXECUTABLE): main.cpp build/user.pb.o $(OBJECTS) $(OBJECTS2) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
-	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) -o $@
+	@$(CXX) $^ $(COMPILER_FLAGS) $(LINKER_FLAGS) $(QT_COMPILER_FLAGS) $(QT_LINKER_FLAGS) -o $@
 
 build/user.pb.o:
 	@mkdir -p build
@@ -33,7 +37,7 @@ build/user.pb.o:
 build/%.o: src/%.cpp
 	@mkdir -p build
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
-	@$(CXX) $(COMPILER_FLAGS) -c $^ -o $@
+	@$(CXX) $(COMPILER_FLAGS) $(QT_COMPILER_FLAGS) $(QT_LINKER_FLAGS) -c $^ -o $@
 
 ../sharedFiles/build/%.o: ../sharedFiles/src/%.cpp
 	@mkdir -p ../sharedFiles/build
