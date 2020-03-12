@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../lib/bcrypt.h"
 
 // Static attribute must be declared before class methods

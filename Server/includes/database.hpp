@@ -5,7 +5,7 @@
 #include <sstream>
 #include "../lib/sqlite3.h"
 #include "../lib/bcrypt.h"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 #define DT_USR 1  // Datatype UserConnect
 #define DT_STR 2  // Datatype String

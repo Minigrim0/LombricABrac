@@ -8,7 +8,7 @@
 #include "../includes/utils.hpp"
 #include "../includes/connected_player.hpp"
 #include "../../sharedFiles/includes/comm_macros.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 
 Joueur::Joueur()
@@ -303,6 +303,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 break;
             }
             case START:{
+                //Setting current game step to STEP_GAME
                 *current_step = STEP_GAME;
                 spawn_lombric();
 
@@ -317,20 +318,20 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                     lomb->set_vie(dynamic_cast<Lombric_c*>(m_lombs[i])->getLife());
                     lomb->set_id_lomb(dynamic_cast<Lombric_c*>(m_lombs[i])->getId());
                     std::string lomb_name;
-                    int owner_id;
+                    int lomb_owner_id;
                     std::string user_username;
 
                     DataBase_mutex.lock();
                     db.get_lombric_name(lomb->id_lomb(), &lomb_name);
-                    db.get_lombric_owner_id(lomb->id_lomb(), &owner_id);
-                    db.get_user_username(owner_id, &user_username);
+                    db.get_lombric_owner_id(lomb->id_lomb(), &lomb_owner_id);
+                    db.get_user_username(lomb_owner_id, &user_username);
                     DataBase_mutex.unlock();
 
                     lomb->set_name_lomb(lomb_name);
                     lomb->set_name_player(user_username);
                     for(size_t index=0;index<m_players.size();index++){
                         std::cout << "Current player: " << m_players[index].get_id() << std::endl;
-                        if(m_players[index].get_id() == owner_id){
+                        if(static_cast<int>(m_players[index].get_id()) == lomb_owner_id){
                             std::cout << "Team: " << m_players[index].get_team() << std::endl;
                             lomb->set_team_lomb(m_players[index].get_team());
                             break;
@@ -381,7 +382,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
             //le mouvement peut impliquer la fin du tour
-            if(obj_partie.isTourFinish())end_round();
+            if(obj_partie.isTourFinish())end_round(current_step);
             break;
         }
         case SHOOT:{
@@ -407,13 +408,13 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
 
             std::cout << "All is send" << std::endl;
             obj_partie.waitAnimationTime();
-            end_round();
+            end_round(current_step);
             break;
         }
     }
 }
 
-void Game::end_round(){
+void Game::end_round(int *current_step){
     std::ostringstream stream;
     ZMQ_msg zmq_msg;
     zmq_msg.set_type_message(NEXT_ROUND);
@@ -437,6 +438,8 @@ void Game::end_round(){
     obj_partie.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
+    if(false) //Si endgame
+        (*current_step)++;
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);

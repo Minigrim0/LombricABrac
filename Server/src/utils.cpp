@@ -9,7 +9,7 @@
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
 #include "../includes/game_thread.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../includes/connected_player.hpp"
 #include "../includes/zhelpers.hpp"
 

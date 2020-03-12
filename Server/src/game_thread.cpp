@@ -6,7 +6,7 @@
 #include "../includes/game.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 int game_thread(std::string chan_sub, uint32_t owner){
 
@@ -58,7 +58,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     }
                     if(current_game.check_round_time()){ //Checking the time
                         std::cout << "changing round" << std::endl;
-                        current_game.end_round(); // If the time's up, ending the round
+                        current_game.end_round(&current_step); // If the time's up, ending the round
                     }
                 }
                 break;

@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 class ConnectedPlayer: public UserConnect{
     public:
