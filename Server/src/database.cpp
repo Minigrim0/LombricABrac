@@ -667,3 +667,29 @@ int DataBase::get_room_id_from_owner_id(int owner_id, int* room_id){
 
     return m_rc;
 }
+
+int DataBase::add_player(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::set_final_points(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
