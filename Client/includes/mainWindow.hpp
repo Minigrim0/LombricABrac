@@ -2,7 +2,8 @@
 Objet qui s'occuppe du switch des fenêtres
 */
 
-#pragma once
+#ifndef MAIN_WINDOW
+#define MAIN_WINDOW
 
 #include <QtWidgets>
 #include <QStackedLayout>
@@ -22,7 +23,9 @@ protected:
     info information;
 
 public:
-    explicit MainWindow(Client *cli, QWidget *parent);
+    MainWindow(Client *cli, QWidget *parent);
 public slots:
     void setPage(int index);
 };
+
+#endif

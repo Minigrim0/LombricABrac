@@ -13,5 +13,6 @@ Server/lib/cppzmq/
 Server/lib/libzmq/
 Server/cpl_proto/
 Client/proto/src/
+Client/temp/*
 .gdb_history
 peda-session-server.txt

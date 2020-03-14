@@ -6,8 +6,13 @@
 #include <thread>
 #include <cerrno>
 
+//je sais pas trop pourquoi
+#undef scroll
+#undef border
+#undef timeout
+#include <QObject>
 #include <QApplication>
-#include <QtWidgets>
+
 #include "includes/mainWindow.hpp"
 
 #include <fstream>
@@ -72,8 +77,8 @@ int main(int argc, char** argv)
 
     std::thread t(&Client::run,client);
 
-    QApplication app = QApplication(argc, argv);
-    MainWindow mw = MainWindow(client, firstPage);
+    QApplication app(argc, argv);
+    MainWindow mw(client, nullptr);
     mw.show();
     app.exec();
 
