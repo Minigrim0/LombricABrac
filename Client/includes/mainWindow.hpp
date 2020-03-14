@@ -24,7 +24,9 @@ protected:
 
 public:
     MainWindow(Client *cli, QWidget *parent);
+    Client* getClient();
     virtual ~MainWindow()=default;
+    
 public slots:
     void setPage(int index);
 };

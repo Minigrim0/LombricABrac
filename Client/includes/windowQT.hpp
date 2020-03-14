@@ -3,6 +3,7 @@
 #define WINDOW_QT
 
 #include "mainWindow.hpp"
+#include "client.hpp"
 #include <QtWidgets>
 
 class MainWindow;
@@ -14,8 +15,9 @@ private:
 protected:
     QSignalMapper *signalMapper;
     MainWindow *parent;
+    Client* client;
 public:
-    WindowQT(int id, MainWindow *parent);
+    WindowQT(int id, MainWindow *parent, Client* cli);
     int getId();
     virtual ~WindowQT() = default;
 };

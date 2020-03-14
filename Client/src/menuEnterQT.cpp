@@ -1,8 +1,8 @@
 #include "../includes/menuEnterQT.hpp"
 
 
-MenuEnterQT::MenuEnterQT(int id, MainWindow *parent):
-WindowQT(id, parent)
+MenuEnterQT::MenuEnterQT(int id, MainWindow *parent, Client* client):
+WindowQT(id, parent, client)
 {
     message = new QLabel("Menu de connection");
 

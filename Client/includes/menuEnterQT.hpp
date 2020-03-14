@@ -13,7 +13,7 @@ private:
     QLabel *message;
     QPushButton *connectButton, *registerButton, *leaveButton;
 public:
-    MenuEnterQT(int id, MainWindow *parent);
+    MenuEnterQT(int id, MainWindow *parent, Client* cli);
     virtual ~MenuEnterQT()=default;
 };
 
