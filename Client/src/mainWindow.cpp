@@ -1,12 +1,20 @@
 #include "../includes/mainWindow.hpp"
 
+#include "../includes/menuEnterQT.hpp"
+
 MainWindow::MainWindow(Client *cli, QWidget *parent = nullptr):
 QWidget(parent),
 client(cli),
 isHost(false){
     setWindowTitle("Lombric à Brac");
     layout = new QStackedLayout();
+
+    //ajout de toutes les fenêtres
+    layout->addWidget(new MenuEnterQT(1,this));
+
     information.client=client;
+    this   -> setLayout(layout);
+
     setPage(1);
 }
 

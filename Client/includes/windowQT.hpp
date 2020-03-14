@@ -13,10 +13,11 @@ private:
     int id;
 protected:
     QSignalMapper *signalMapper;
+    MainWindow *parent;
 public:
     WindowQT(int id, MainWindow *parent);
     int getId();
-    virtual ~WindowQT() = 0;
+    virtual ~WindowQT() = default;
 };
 
 #endif
