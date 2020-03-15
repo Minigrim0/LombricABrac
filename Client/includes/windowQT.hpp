@@ -12,13 +12,18 @@ class WindowQT: public QWidget{
     Q_OBJECT
 private:
     int id;
+    int intervalle;
 protected:
     QSignalMapper *signalMapper;
     MainWindow *parent;
     Client* client;
+    QTimer* timer;
 public:
     WindowQT(int id, MainWindow *parent, Client* cli);
     int getId();
+    void startTimer();
+    void stopTimer();
+    void setTimerIntervalle(int t);
     virtual ~WindowQT() = default;
 };
 
