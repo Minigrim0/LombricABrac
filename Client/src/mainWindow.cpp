@@ -10,7 +10,8 @@ isHost(false){
     layout = new QStackedLayout();
 
     //ajout de toutes les fenêtres
-    layout->addWidget(new MenuEnterQT(1,this,client));
+    //layout->addWidget(new MenuEnterQT(1,this,client));
+    resize(1640,880);
     layout->addWidget(new partieQT(80,this,client));
 
     information.client=client;
@@ -51,11 +52,14 @@ void MainWindow::setPage(int index){
     while (!find){
       information.id = index;
       for(int i=0; i<layout->count();++i){
-          int currentIndex = dynamic_cast<WindowQT*>(layout->widget(i))->getId();
+          WindowQT* currentWidget = dynamic_cast<WindowQT*>(layout->widget(i));
+          int currentIndex = currentWidget->getId();
+          currentWidget->stopTimer();
           if(currentIndex == index){
-              layout->setCurrentIndex(i);
-              find = true;
-              break;
+            layout->setCurrentIndex(i);
+            currentWidget->initWindow();
+            currentWidget->startTimer();
+            find = true;
           }
       }
 
@@ -165,8 +169,8 @@ void MainWindow::setPage(int index){
                   information = request_history.run(information);
                   break;
               case 80:
-                  Window* gameWin = new Partie(information.client);
-                  information = gameWin->run(information);
+                  //Window* gameWin = new Partie(information.client);
+                  //information = gameWin->run(information);
                   break;
             }
             index = information.id;
