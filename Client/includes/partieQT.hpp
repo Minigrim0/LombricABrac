@@ -5,6 +5,9 @@
 #include <QTimer>
 #include <QtGui>
 #include <QGridLayout>
+#include <QSize>
+#include <QFrame>
+#include <QRect>
 
 #include "client.hpp"
 #include "../../sharedFiles/includes/infoPartie.hpp"
@@ -82,8 +85,11 @@ private:
 
   QGridLayout* map;
 
+  QFrame* gameFrame;
+  QGridLayout* mainLayout;
+
   //??????????????----
-  void drawMap(double t);//dessine toute la carte
+  void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
   void drawMur(int pos);
   //------------------
@@ -97,7 +103,7 @@ private:
   void synchronizeMap(Block_Destroy b);//synchronise la carte (entre ce qui a été cassé en local et par le serveur)
   void synchronizeLombrics(Degats_lombric d);
 
-  void initGame();
+  void initWindow() override;
   void updateGame();
 public:
   partieQT(int id, MainWindow *parent, Client* client); //Constructor

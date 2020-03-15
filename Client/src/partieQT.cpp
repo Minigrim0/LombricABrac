@@ -1,4 +1,5 @@
 #include "../includes/partieQT.hpp"
+#define min(a,b) a<b?a:b
 
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client),
@@ -10,13 +11,17 @@ gameInfo(nullptr){
 
 void partieQT::update(){
   //std::cout << "update" <<std::endl;
-  if (!gameInfo){
-    initGame();
+
+  QSize size = parent->size();
+  if (size.height()!=screenHeight || size.width()!=screenWidth){
+    screenWidth = size.width();
+    screenHeight = size.height();
+    drawMap();
   }
   //updateGame();
 }
 
-void partieQT::initGame(){
+void partieQT::initWindow(){
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
   std::cout << "got game info" <<std::endl;
@@ -26,14 +31,16 @@ void partieQT::initGame(){
   gameParam = client->getParamsPartie();
   camX = 0;
   camY = 0;
-  screenWidth =0;
+  blockWidth = 20;
+  screenWidth = 0;
   screenHeight = 0;
   gameScreenWidth = 0;
   gameScreenHeight = 0;
-  map = new QGridLayout;
-  map->setVerticalSpacing(0);
-  map->setHorizontalSpacing(0);
-  //QWidget w;
+  map = nullptr;
+  mainLayout = new QGridLayout;
+  gameFrame = new QFrame;
+  mainLayout->addWidget(gameFrame, 0, 0);
+  setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();
   Block_Destroy destroyByServ;
@@ -52,21 +59,18 @@ void partieQT::initGame(){
     for (int x=0; x<gameInfo->carte->getLargeur(); ++x){
       QPixmap texture = blocTexture[gameInfo->carte->getColor(x,y)-1];
       mapWidget[y].push_back(new Case(texture));
-      mapWidget[y][x]->draw(50,50);
-      map->addWidget(mapWidget[y][x], y, x);
     }
   }
   std::cout << "case set" <<std::endl;
 
-  for (auto lomb = gameInfo->spriteVector.begin(); lomb != gameInfo->spriteVector.begin(); ++lomb){
+  for (auto lomb = gameInfo->spriteVector.begin(); lomb != gameInfo->spriteVector.end(); ++lomb){
     int pos[2];
+    std::cout << "Simon est méchant" <<std::endl;
     (*lomb)->getPos(pos);
     mapWidget[pos[1]][pos[0]]->addLomb(dynamic_cast<Lombric_QT*>(*lomb));
   }
-  std::cout << "done init" <<std::endl;
-  setLayout(map);
-  //w.show();
 
+  std::cout << "done init" <<std::endl;
 }
 
 void partieQT::updateGame(){
@@ -77,9 +81,9 @@ void partieQT::updateGame(){
   //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
   if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
-  std::cout << "gonna draw" <<std::endl;
-  drawMap(t);
-  std::cout << "done drawing" <<std::endl;
+  //std::cout << "gonna draw" <<std::endl;
+  //drawMap();
+  //std::cout << "done drawing" <<std::endl;
 
   //vérifie si le tour a changé
   if(endRound){
@@ -145,15 +149,47 @@ void partieQT::updateGame(){
   }
 }
 
-void partieQT::drawMap(double t){
-  QPixmap toDisplay;
+void partieQT::drawMap(){
+  if(map){delete map;}
+  map = new QGridLayout;
+  map->setVerticalSpacing(0);
+  map->setHorizontalSpacing(0);
 
-  for(int y=0; y<gameInfo->carte->getHauteur(); ++y){
-    for (int x=0; x<gameInfo->carte->getLargeur(); ++x){
+  int nBlockWidth = screenWidth / blockWidth;
+  int nBlockHeight = screenHeight / blockWidth;
+
+  /*if(nBlockWidth > gameInfo->carte->getLargeur() || nBlockHeight > gameInfo->carte->getHauteur()){
+    if(nBlockWidth - gameInfo->carte->getLargeur() > nBlockHeight - gameInfo->carte->getHauteur()){
+      nBlockWidth = gameInfo->carte->getLargeur();
+      blockWidth = screenWidth / nBlockWidth;
+      nBlockHeight = screenHeight / blockWidth;
+    }else{
+      nBlockHeight = gameInfo->carte->getHauteur();
+      blockWidth = screenHeight / nBlockHeight;
+      nBlockWidth = screenWidth / blockWidth;
+    }
+
+  }*/
+  nBlockWidth = min(nBlockWidth, gameInfo->carte->getLargeur());
+  nBlockHeight = min(nBlockHeight, gameInfo->carte->getHauteur());
+
+  QRect r(0,0,nBlockWidth*blockWidth, nBlockHeight*blockWidth);
+  gameFrame->setFrameRect(r);
+
+  //screenWidth = nBlockWidth * blockWidth;
+  //screenHeight = nBlockHeight * blockWidth;
+
+  //parent->resize(screenWidth, screenHeight);
+
+  for(int y=0; y<nBlockHeight; ++y){
+    for (int x=0; x<nBlockWidth; ++x){
       //affichage blocks
-      mapWidget[y][x]->draw(50,50);
+      //mapWidget[y][x]->draw(50,50);
+      map->addWidget(mapWidget[camY+y][camX+x], y, x);
+      mapWidget[y][x]->draw(blockWidth,blockWidth);
     }
   }
+  gameFrame->setLayout(map);
 }
 
 bool partieQT::updateSprites(double t){

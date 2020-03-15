@@ -10,7 +10,7 @@ Lombric_QT::Lombric_QT(QPixmap skin, QPixmap turnSkin, int id,int x, int y, unsi
 
 void Lombric_QT::draw(int width, int height, QWidget* parent){
   skinLabel = new QLabel(parent);
-  skinLabel->setPixmap(skin.scaled(width, height));
+  skinLabel->setPixmap(skin.scaled(width,height));
 }
 
 void Lombric_QT::setCurrentWeapon(int id){
@@ -44,10 +44,15 @@ void Case::removeLomb(Lombric_QT* lomb){
 
 void Case::draw(int width, int height){
   textureLabel = new QLabel(this);
-  textureLabel->setPixmap(texture);
+  textureLabel->setPixmap(texture.scaled(width,height));
+  //textureLabel->setPixmap(QPixmap("./images/lomb1.png"));
+
 
   for(auto lomb = lombs.begin(); lomb != lombs.end(); ++lomb){
+    std::cout<< "lombs drawing"<<std::endl;
     (*lomb)->draw(width, height, this);
+    //QLabel* test = new QLabel(this);
+    //test->setPixmap(QPixmap("./images/lombrics/testNull.png"));
   }
   show();
 }

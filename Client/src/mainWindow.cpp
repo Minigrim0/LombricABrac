@@ -11,6 +11,7 @@ isHost(false){
 
     //ajout de toutes les fenêtres
     //layout->addWidget(new MenuEnterQT(1,this,client));
+    resize(1640,880);
     layout->addWidget(new partieQT(80,this,client));
 
     information.client=client;
