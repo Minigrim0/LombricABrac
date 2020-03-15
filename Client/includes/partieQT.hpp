@@ -13,6 +13,8 @@
 #include <QRect>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include <QPainter>
+
 
 #include "client.hpp"
 #include "../../sharedFiles/includes/infoPartie.hpp"
@@ -86,21 +88,25 @@ private:
   uint32_t gameScreenWidth, gameScreenHeight;//taille de la fenêtre qui affiche l'overlay
   uint32_t overlayScreenWidth, overlayScreenHeight;
 
+  bool mustDrawWall;
+
   std::vector<std::vector<Case*>> mapWidget;
 
-  QGridLayout* map;
-
-  QFrame* gameFrame;
+  QLabel* gameLabel;
+  QPixmap* gamePixmap;
   QGridLayout* mainLayout;
 
-  //??????????????----
+  QPixmap *textureMur;
+  QPixmap *skinSprite;
+
+
   void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
-  void drawMur(int pos);
-  //------------------
+  void drawSprites();
+  void drawSprite(Sprite* s, int* oldPos=nullptr, int* newPos=nullptr);
+
 
   bool updateSprites(double t);// t = temps actuel en milliseconde
-  void drawSprite(Sprite* s, int* oldPos,int* newPos);//redessine le sprite
   void moveCurrentLombric(int mouvement);//peut prendre TRANSLATE_MOVE ou JUMP_MOVE en argument
 
   void addDeletedBlock(std::vector<int> v);//ajoute v dans blockDeleted
@@ -110,12 +116,11 @@ private:
 
   void initWindow() override;
   void updateGame();
-
   bool eventFilter(QObject* obj, QEvent* ev) override;
 public:
   partieQT(int id, MainWindow *parent, Client* client); //Constructor
   //info run(info information);
-  ~partieQT() = default; // Destructor
+  ~partieQT(); // Destructor
 public slots:
   void update();
 };

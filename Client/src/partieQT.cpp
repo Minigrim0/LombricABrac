@@ -9,10 +9,24 @@ gameInfo(nullptr){
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
+
+  textureMur = new QPixmap[3]{
+    QPixmap("images/blocs/air.png"),
+    QPixmap("images/blocs/bloc.png"),
+    QPixmap("images/blocs/blocSolide.png")
+  };
+
+  skinSprite = new QPixmap[5]{
+    QPixmap("images/bomb.png"),
+    QPixmap("images/lombrics/lomb1.png"),
+    QPixmap("images/lombrics/lomb1.png"),
+    QPixmap("images/lombrics/lomb1.png"),
+    QPixmap("images/lombrics/lomb1.png")
+  };
 }
 
 void partieQT::update(){
-  //std::cout << "update" <<std::endl;
+  //std::cout << "update" <<std::eusedWeaponndl;
   QSize size = parent->size();
 
   if (size.height()!=screenHeight || size.width()!=screenWidth){
@@ -22,12 +36,14 @@ void partieQT::update(){
       uint32_t tempWidth = screenWidth/gameInfo->carte->getLargeur();
       uint32_t tempHeight = screenHeight/gameInfo->carte->getHauteur();
       blockWidth = min(tempWidth, tempHeight);
+      camX = 0;
+      camY = 0;
       drawMap();
     }
   }
   tempScreenWidth = size.width();
   tempScreenHeight = size.height();
-  //updateGame();
+  updateGame();
 }
 
 void partieQT::initWindow(){
@@ -47,40 +63,15 @@ void partieQT::initWindow(){
   tempScreenHeight = 0;
   gameScreenWidth = 0;
   gameScreenHeight = 0;
-  map = nullptr;
   mainLayout = new QGridLayout;
-  gameFrame = new QFrame;
-  mainLayout->addWidget(gameFrame, 0, 0);
-  setLayout(mainLayout);
+  gameLabel = new QLabel(this);
+  gamePixmap = nullptr;
+  //setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();
   Block_Destroy destroyByServ;
   Degats_lombric lombricUpdatedByServ;
 
-
-  QPixmap blocTexture[] = {
-    QPixmap("images/blocs/air.png"),
-    QPixmap("images/blocs/bloc.png"),
-    QPixmap("images/blocs/blocSolide.png"),
-  };
-
-  std::cout << "setting case" <<std::endl;
-  for(int y=0; y<gameInfo->carte->getHauteur(); ++y){
-    mapWidget.push_back({});
-    for (int x=0; x<gameInfo->carte->getLargeur(); ++x){
-      QPixmap texture = blocTexture[gameInfo->carte->getColor(x,y)-1];
-      mapWidget[y].push_back(new Case(texture));
-    }
-  }
-  std::cout << "case set" <<std::endl;
-
-  for (auto lomb = gameInfo->spriteVector.begin(); lomb != gameInfo->spriteVector.end(); ++lomb){
-    int pos[2];
-    (*lomb)->getPos(pos);
-    mapWidget[pos[1]][pos[0]]->addLomb(dynamic_cast<Lombric_QT*>(*lomb));
-  }
-
-  std::cout << "done init" <<std::endl;
 }
 
 void partieQT::updateGame(){
@@ -92,7 +83,7 @@ void partieQT::updateGame(){
   if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
   //std::cout << "gonna draw" <<std::endl;
-  //drawMap();
+  drawMap();
   //std::cout << "done drawing" <<std::endl;
 
   //vérifie si le tour a changé
@@ -160,11 +151,7 @@ void partieQT::updateGame(){
 }
 
 void partieQT::drawMap(){
-  if(map){delete map;}
-  gameFrame->hide();
-  map = new QGridLayout;
-  map->setVerticalSpacing(0);
-  map->setHorizontalSpacing(0);
+  if (gamePixmap){delete gamePixmap;gamePixmap=nullptr;}
 
   int nBlockWidth = screenWidth / blockWidth;
   int nBlockHeight = screenHeight / blockWidth;
@@ -172,19 +159,68 @@ void partieQT::drawMap(){
   nBlockWidth = min(nBlockWidth, gameInfo->carte->getLargeur());
   nBlockHeight = min(nBlockHeight, gameInfo->carte->getHauteur());
 
-  QRect r(0,0,nBlockWidth*blockWidth, nBlockHeight*blockWidth);
-  gameFrame->setFrameRect(r);
+  gamePixmap = new QPixmap(nBlockWidth*blockWidth, nBlockHeight*blockWidth);
+  gamePixmap->fill(QColor("transparent"));
 
   for(int y=0; y<nBlockHeight; ++y){
     for (int x=0; x<nBlockWidth; ++x){
-      //affichage blocks
-      //mapWidget[y][x]->draw(50,50);
-      map->addWidget(mapWidget[camY+y][camX+x], y, x);
-      mapWidget[y][x]->draw(blockWidth,blockWidth);
+      drawMur(x,y);
     }
   }
-  gameFrame->show();
-  gameFrame->setLayout(map);
+
+  drawSprites();
+  gameLabel->setScaledContents(true);
+  gameLabel->setPixmap(*gamePixmap);
+  gameLabel->adjustSize();
+}
+
+void partieQT::drawMur(int x, int y){//dessine le pos ème mur du tableau
+  QPainter painter(gamePixmap);
+  int numColor = gameInfo->carte->getColor(x,y)-1;
+  QPixmap texture = textureMur[numColor].scaled(blockWidth, blockWidth);
+  x *= blockWidth;
+  y *= blockWidth;
+  painter.drawPixmap(x, y, texture);
+}
+
+void partieQT::drawSprites(){
+  for(auto sprite=gameInfo->spriteVector.begin(); sprite != gameInfo->spriteVector.end(); ++sprite){
+    drawSprite(*sprite);
+  }
+}
+
+void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
+  QPainter painter(gamePixmap);
+
+  int pos[2];
+  s->getPos(pos);
+
+  int x = pos[0] * blockWidth;
+  int y = pos[1] * blockWidth;
+
+  QPixmap texture;
+  switch(s->getSkin()){
+    case PROJECTILE_SKIN:
+      texture = skinSprite[0].scaled(blockWidth, blockWidth);
+      break;
+    case '1':
+      texture = skinSprite[1].scaled(blockWidth, blockWidth);
+      break;
+    case '2':
+      texture = skinSprite[2].scaled(blockWidth, blockWidth);
+      break;
+    case '3':
+      texture = skinSprite[3].scaled(blockWidth, blockWidth);
+      break;
+    case '4':
+      texture = skinSprite[4].scaled(blockWidth, blockWidth);
+      break;
+    default:
+      texture = skinSprite[4].scaled(blockWidth, blockWidth);
+      break;
+  };
+  painter.drawPixmap(x, y, texture);
+
 }
 
 bool partieQT::updateSprites(double t){
@@ -270,8 +306,8 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         if (tempSizeBlock < MIN_SIZE_BLOCK){
           blockWidth = MIN_SIZE_BLOCK;
         }
-        else if (tempSizeBlock > gameFrame->frameRect().width() || tempSizeBlock > gameFrame->frameRect().height()){
-          blockWidth = min(gameFrame->frameRect().width(), gameFrame->frameRect().height());
+        else if (tempSizeBlock > gamePixmap->size().width() || tempSizeBlock > gamePixmap->size().height()){
+          blockWidth = min(gamePixmap->size().width(), gamePixmap->size().height());
         }
         else{
           blockWidth = tempSizeBlock;
@@ -279,4 +315,10 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         drawMap();
       }
     return false;
+}
+
+
+partieQT::~partieQT(){
+  delete[] textureMur;
+  delete[] skinSprite;
 }
