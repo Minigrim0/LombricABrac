@@ -4,6 +4,8 @@
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client),
 gameInfo(nullptr){
+  //installEventFilter(this);
+  installEventFilter(this);
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
@@ -11,13 +13,20 @@ gameInfo(nullptr){
 
 void partieQT::update(){
   //std::cout << "update" <<std::endl;
-
   QSize size = parent->size();
+
   if (size.height()!=screenHeight || size.width()!=screenWidth){
-    screenWidth = size.width();
-    screenHeight = size.height();
-    drawMap();
+    if (size.height()==tempScreenHeight && size.width()==tempScreenWidth){
+      screenWidth = size.width();
+      screenHeight = size.height();
+      uint32_t tempWidth = screenWidth/gameInfo->carte->getLargeur();
+      uint32_t tempHeight = screenHeight/gameInfo->carte->getHauteur();
+      blockWidth = min(tempWidth, tempHeight);
+      drawMap();
+    }
   }
+  tempScreenWidth = size.width();
+  tempScreenHeight = size.height();
   //updateGame();
 }
 
@@ -31,9 +40,11 @@ void partieQT::initWindow(){
   gameParam = client->getParamsPartie();
   camX = 0;
   camY = 0;
-  blockWidth = 20;
+  blockWidth = INIT_SIZE_BLOCK;
   screenWidth = 0;
   screenHeight = 0;
+  tempScreenWidth = 0;
+  tempScreenHeight = 0;
   gameScreenWidth = 0;
   gameScreenHeight = 0;
   map = nullptr;
@@ -65,7 +76,6 @@ void partieQT::initWindow(){
 
   for (auto lomb = gameInfo->spriteVector.begin(); lomb != gameInfo->spriteVector.end(); ++lomb){
     int pos[2];
-    std::cout << "Simon est méchant" <<std::endl;
     (*lomb)->getPos(pos);
     mapWidget[pos[1]][pos[0]]->addLomb(dynamic_cast<Lombric_QT*>(*lomb));
   }
@@ -151,6 +161,7 @@ void partieQT::updateGame(){
 
 void partieQT::drawMap(){
   if(map){delete map;}
+  gameFrame->hide();
   map = new QGridLayout;
   map->setVerticalSpacing(0);
   map->setHorizontalSpacing(0);
@@ -158,28 +169,11 @@ void partieQT::drawMap(){
   int nBlockWidth = screenWidth / blockWidth;
   int nBlockHeight = screenHeight / blockWidth;
 
-  /*if(nBlockWidth > gameInfo->carte->getLargeur() || nBlockHeight > gameInfo->carte->getHauteur()){
-    if(nBlockWidth - gameInfo->carte->getLargeur() > nBlockHeight - gameInfo->carte->getHauteur()){
-      nBlockWidth = gameInfo->carte->getLargeur();
-      blockWidth = screenWidth / nBlockWidth;
-      nBlockHeight = screenHeight / blockWidth;
-    }else{
-      nBlockHeight = gameInfo->carte->getHauteur();
-      blockWidth = screenHeight / nBlockHeight;
-      nBlockWidth = screenWidth / blockWidth;
-    }
-
-  }*/
   nBlockWidth = min(nBlockWidth, gameInfo->carte->getLargeur());
   nBlockHeight = min(nBlockHeight, gameInfo->carte->getHauteur());
 
   QRect r(0,0,nBlockWidth*blockWidth, nBlockHeight*blockWidth);
   gameFrame->setFrameRect(r);
-
-  //screenWidth = nBlockWidth * blockWidth;
-  //screenHeight = nBlockHeight * blockWidth;
-
-  //parent->resize(screenWidth, screenHeight);
 
   for(int y=0; y<nBlockHeight; ++y){
     for (int x=0; x<nBlockWidth; ++x){
@@ -189,6 +183,7 @@ void partieQT::drawMap(){
       mapWidget[y][x]->draw(blockWidth,blockWidth);
     }
   }
+  gameFrame->show();
   gameFrame->setLayout(map);
 }
 
@@ -265,4 +260,23 @@ void partieQT::synchronizeLombrics(Degats_lombric d){
     lomb->setPos(pos);
     lomb->setLife(l.vie());
   }
+}
+
+bool partieQT::eventFilter(QObject* obj, QEvent* event){
+    if (event->type() == QEvent::Wheel){
+        QWheelEvent *mouseScroll = static_cast<QWheelEvent*>(event);
+        QPoint numSteps = mouseScroll->angleDelta()/120;
+        int tempSizeBlock=blockWidth+numSteps.y();
+        if (tempSizeBlock < MIN_SIZE_BLOCK){
+          blockWidth = MIN_SIZE_BLOCK;
+        }
+        else if (tempSizeBlock > gameFrame->frameRect().width() || tempSizeBlock > gameFrame->frameRect().height()){
+          blockWidth = min(gameFrame->frameRect().width(), gameFrame->frameRect().height());
+        }
+        else{
+          blockWidth = tempSizeBlock;
+        }
+        drawMap();
+      }
+    return false;
 }

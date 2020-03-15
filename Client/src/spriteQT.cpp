@@ -49,7 +49,6 @@ void Case::draw(int width, int height){
 
 
   for(auto lomb = lombs.begin(); lomb != lombs.end(); ++lomb){
-    std::cout<< "lombs drawing"<<std::endl;
     (*lomb)->draw(width, height, this);
     //QLabel* test = new QLabel(this);
     //test->setPixmap(QPixmap("./images/lombrics/testNull.png"));

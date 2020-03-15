@@ -1,6 +1,9 @@
 #ifndef GAME
 #define GAME
 
+#define INIT_SIZE_BLOCK 20
+#define MIN_SIZE_BLOCK 10
+
 #include <QtWidgets>
 #include <QTimer>
 #include <QtGui>
@@ -8,6 +11,8 @@
 #include <QSize>
 #include <QFrame>
 #include <QRect>
+#include <QKeyEvent>
+#include <QWheelEvent>
 
 #include "client.hpp"
 #include "../../sharedFiles/includes/infoPartie.hpp"
@@ -77,7 +82,7 @@ private:
 
   std::chrono::_V2::system_clock::time_point initTime;
 
-  uint32_t screenWidth, screenHeight;//taille de la console
+  uint32_t screenWidth, screenHeight, tempScreenWidth, tempScreenHeight;//taille de la console
   uint32_t gameScreenWidth, gameScreenHeight;//taille de la fenêtre qui affiche l'overlay
   uint32_t overlayScreenWidth, overlayScreenHeight;
 
@@ -105,6 +110,8 @@ private:
 
   void initWindow() override;
   void updateGame();
+
+  bool eventFilter(QObject* obj, QEvent* ev) override;
 public:
   partieQT(int id, MainWindow *parent, Client* client); //Constructor
   //info run(info information);
