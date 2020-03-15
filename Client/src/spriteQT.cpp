@@ -44,7 +44,7 @@ void Case::removeLomb(Lombric_QT* lomb){
 
 void Case::draw(int width, int height){
   textureLabel = new QLabel(this);
-  textureLabel->setPixmap(texture.scaled(width, height));
+  textureLabel->setPixmap(texture);
 
   for(auto lomb = lombs.begin(); lomb != lombs.end(); ++lomb){
     (*lomb)->draw(width, height, this);
