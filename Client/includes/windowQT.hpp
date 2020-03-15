@@ -20,6 +20,7 @@ protected:
     QTimer* timer;
 public:
     WindowQT(int id, MainWindow *parent, Client* cli);
+    virtual void initWindow();
     int getId();
     void startTimer();
     void stopTimer();

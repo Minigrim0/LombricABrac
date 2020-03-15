@@ -55,9 +55,10 @@ void MainWindow::setPage(int index){
           int currentIndex = currentWidget->getId();
           currentWidget->stopTimer();
           if(currentIndex == index){
-              layout->setCurrentIndex(i);
-              currentWidget->startTimer();
-              find = true;
+            layout->setCurrentIndex(i);
+            currentWidget->initWindow();
+            currentWidget->startTimer();
+            find = true;
           }
       }
 

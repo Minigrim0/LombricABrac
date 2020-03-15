@@ -31,3 +31,5 @@ void WindowQT::stopTimer(){
 void WindowQT::setTimerIntervalle(int t){
   intervalle = t;
 }
+
+void WindowQT::initWindow(){}
