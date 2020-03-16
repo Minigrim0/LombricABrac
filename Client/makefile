@@ -34,7 +34,7 @@ all: pre $(EXECUTABLE)
 pre:
 	@echo "\e[0;32m============== Compiling  =============\e[0m"
 
-$(EXECUTABLE): build/main.o build/user.pb.o $(OBJECTS_UI) $(OBJECTS_QRC) $(OBJECTS_MOC) $(OBJECTS) $(SHARED_OBJECTS) $(LIBS)
+$(EXECUTABLE): build/user.pb.o build/main.o $(OBJECTS_UI) $(OBJECTS_QRC) $(OBJECTS_MOC) $(OBJECTS) $(SHARED_OBJECTS) $(LIBS)
 	@echo "\e[1;32mcompiling : $^ -> $@\e[0m"
 	@$(CXX) $^ $(LINKER_FLAGS) $(QT_COMPILER_FLAGS) $(QT_LINKER_FLAGS) -o $@
 
