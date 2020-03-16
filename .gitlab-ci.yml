@@ -3,6 +3,8 @@ image: registry.gitlab.com/infof209-1920/groupe-5:lastest
 before_script:
     - export SUDO=0
     - apt install -y cmake
+    - apt-get update
+    - apt-get install libncurses-dev
 
 compile:
   script:
@@ -12,5 +14,5 @@ compile:
   - make init_db
   - ./init_db true
   - echo "TESTING CLIENT"
-  - cd ../src/client
+  - cd ../Client/
   - make

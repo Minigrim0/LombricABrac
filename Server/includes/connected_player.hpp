@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 class ConnectedPlayer: public UserConnect{
     public:
@@ -14,6 +14,7 @@ class ConnectedPlayer: public UserConnect{
         // Getters
         bool is_auth() const;
         int get_id() const;
+        std::string get_pseudo() const;
 
         void set_id(int id);
         void set_auth(bool auth);

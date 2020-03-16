@@ -6,7 +6,7 @@
 #include "../includes/game.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 int game_thread(std::string chan_sub, uint32_t owner){
 
@@ -20,7 +20,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, chan_sub.c_str(), strlen(chan_sub.c_str()));
 
-    std::cout << "room started" << std::endl;
+    std::cout << "room started on " << chan_sub << std::endl;
 
     while(game_running){
         switch(current_step){
@@ -30,9 +30,10 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     std::string contents = s_recv(subscriber);
 
                     zmqmsg.ParseFromString(contents);
-                    current_game.handle_room(zmqmsg ,&current_step);
+                    current_game.handle_room(zmqmsg, &current_step);
+                    current_game.handle_quit(zmqmsg, &current_step);
                 }
-                
+
                 break;
             }
             case STEP_GAME:{
@@ -42,29 +43,22 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
                 }
                 //current_game.set_begin();
-                current_game.spawn_lombric();
-                std::cout << "spawn" << std::endl;
+
+                current_game.set_round_time();
                 while(current_step == STEP_GAME){
                     //if(current_game.check_time()){
                     //    //mort subite
                     //}
-                    std::cout << "a" << std::endl;
                     std::string address = s_recv(subscriber);
-                    std::cout << "b" << std::endl;
-                    if(strcmp(address.c_str(), "") == 0){ // The receive just timed out
-                        std::cout << "c" << std::endl;
-                        if(current_game.check_round_time()){
-                            std::cout << "d" << std::endl;
-                            current_game.end_round();
-                        }
-                    }
-                    else{
-                        std::cout << "e" << std::endl;
+                    if(address.size()){ // The receive just timed out
                         std::string contents = s_recv(subscriber);
-                        std::cout << "f" << std::endl;
                         zmqmsg.ParseFromString(contents);
-                        std::cout << "g" << std::endl;
-                        current_game.handle_game(zmqmsg ,&current_step);
+                        current_game.handle_game(zmqmsg, &current_step);
+                        current_game.handle_quit(zmqmsg, &current_step);
+                    }
+                    if(current_game.check_round_time()){ //Checking the time
+                        std::cout << "changing round" << std::endl;
+                        current_game.end_round(&current_step); // If the time's up, ending the round
                     }
                 }
                 break;
@@ -72,11 +66,16 @@ int game_thread(std::string chan_sub, uint32_t owner){
             case STEP_ENDSCREEN:
                 std::cout << "You're in the end screen" << std::endl;
                 break;
+            case STEP_GAMEEND: // There's nobody left in the room
+                game_running = false;
+                break;
             default:
                 std::cout << "An error occured" << std::endl;
                 game_running = false;
         }
     }
+
+    std::cout << "Closing room " << chan_sub << std::endl;
 
     return EXIT_SUCCESS;
 }

@@ -9,12 +9,12 @@
 #include <ctime>
 #include <vector>
 
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
-#include "map.hpp"
-#include "sprite.hpp"
-#include "arme.hpp"
-#include "infoPartie.hpp"
+#include "../../sharedFiles/includes/map.hpp"
+#include "../../sharedFiles/includes/sprite.hpp"
+#include "../../sharedFiles/includes/arme.hpp"
+#include "../../sharedFiles/includes/infoPartie.hpp"
 
 using namespace std;
 
@@ -34,7 +34,9 @@ private:
 
   //List_Projectiles listProj;
   Block_Destroy blockDeleted;
+  bool endTour;
 
+  int animationTime;
   bool updateSprites(int t);//bool a vrai s'il faut forcer l'affichage de chaque sprite même s'il n'a pas bougé
   void addDeletedBlock(std::vector<int> v);
 public:
@@ -50,6 +52,11 @@ public:
   // arg tir: string du protobuff de la structure Tir
   std::vector<std::string> useWeapon(std::string tir);
   bool isLombAlive(int id);
+  void setCurrentLomb(int id);
+  bool isTourFinish();
+
+  void setAnimationTime(int t);
+  void waitAnimationTime();
 
   ~Partie();
 };

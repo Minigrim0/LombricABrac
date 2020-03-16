@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../lib/bcrypt.h"
 
 // Static attribute must be declared before class methods
@@ -126,8 +126,11 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
         case DT_RID:
             static_cast<Create_room_id*>(data_container)->set_room_id(atoi(argv[0]));
             break;
+        case DT_END:
+            static_cast<End_tour*>(data_container)->add_id_lomb_mort(atoi(argv[0]));
+            break;
         default:
-            std::cout << "> Error, datatype not recognised" << std::endl;
+            std::cout << "> Error, datatype not recognized" << std::endl;
     }
 
     return 0;
@@ -147,6 +150,21 @@ int DataBase::get_user(std::string username, UserConnect* userconnect){
 
     m_sql_request = "SELECT id, username, victory_amount FROM users WHERE username='" + username + "';";
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, userconnect, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::get_user_username(int user_id, std::string* username){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_STR;
+
+    m_stringStream << "SELECT username FROM users WHERE id='" << user_id << "';";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, username, &m_zErrMsg);
     catch_error();
 
     return m_rc;
@@ -264,6 +282,53 @@ int DataBase::get_lombrics(int owner_id, Lomb_r* lomb_r){
 
     return m_rc;
 }
+
+int DataBase::get_lombric_owner_id(int lombric_id, int* owner_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_stringStream << "SELECT owner_id FROM worms WHERE id=" << lombric_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, owner_id, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_END;
+
+    m_stringStream << "SELECT id FROM worms WHERE owner_id=" << owner_id << " LIMIT 0, " << nbLombs << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_r, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+
+int DataBase::get_lombric_name(int lomb_id, std::string* lomb_name){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_STR;
+
+    m_stringStream << "SELECT name FROM worms WHERE id=" << lomb_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, lomb_name, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
 
 
 // Game history operations
@@ -545,6 +610,22 @@ int DataBase::remove_friend(int user_id, int friend_id){
     return m_rc;
 }
 
+int DataBase::is_online(int friend_id, int* online){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_data_type = DT_INT;
+
+    m_stringStream << "SELECT connected FROM users WHERE id=" << friend_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, online, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+
 int DataBase::create_room(int owner_id){
     m_stringStream.str("");
     m_stringStream.clear();
@@ -559,12 +640,14 @@ int DataBase::create_room(int owner_id){
     return m_rc;
 }
 
-int DataBase::get_last_room_id(Create_room_id *room_id){
+int DataBase::get_last_room_id(int *room_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "SELECT id FROM history ORDER BY timestamp ASC LIMIT 0, 1;";
+    m_stringStream << "SELECT id FROM history ORDER BY timestamp DESC LIMIT 0, 1;";
     m_sql_request = m_stringStream.str();
+
+    m_data_type = DT_INT;
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
     catch_error();
@@ -576,10 +659,36 @@ int DataBase::get_room_id_from_owner_id(int owner_id, int* room_id){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "SELECT id FROM history WHERE user1_id=" << owner_id << " and finished=false;";
+    m_stringStream << "SELECT id FROM history WHERE user_1_id=" << owner_id << " and finished=false;";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::add_player(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::set_final_points(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
     catch_error();
 
     return m_rc;

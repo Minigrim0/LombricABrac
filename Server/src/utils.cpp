@@ -1,12 +1,15 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstdarg>
+#include <thread>
+#include <sstream>
 
 #include "../includes/utils.hpp"
-#include "../includes/comm_macros.hpp"
+#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../includes/game_thread.hpp"
+#include "../proto/src/user.pb.h"
 #include "../includes/connected_player.hpp"
 #include "../includes/zhelpers.hpp"
 
@@ -157,16 +160,33 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 r_rank.ParseFromString(la_poste->get_buffer());
                 Rank_r rank_list;
                 db.get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
-                std::cout << rank_list.DebugString() << std::endl;
                 la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
                 break;
             }
             case FRI_ADD:{
                 Fri_add fri;
+                int online = 0;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
                 db.add_friend(usr->get_id(), friend_id);
+                db.is_online(friend_id, &online);//si le user est online on doit lui envoyer le message
+                if(online){
+                    ZMQ_msg zmqmsg;
+
+                    Invitation invit;
+                    invit.set_type(false);
+                    invit.set_pseudo(usr->get_pseudo());
+
+                    zmqmsg.set_type_message(INVI_R);
+                    zmqmsg.set_receiver_id(friend_id);
+                    zmqmsg.set_message(invit.SerializeAsString());
+
+                    pub_mutex.lock();
+                    s_sendmore_b(publisher, "all");
+                    s_send_b(publisher, zmqmsg.SerializeAsString());
+                    pub_mutex.unlock();
+                }
                 break;
             }
             case GET_ALL_INVIT:{
@@ -203,6 +223,12 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 Fri_ls_r fri;
                 db.get_friend_list(usr->get_id(), &fri);
                 la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
+                break;
+            }
+            case INVI_R:{
+                std::cout << "Sending invite to someone" << std::endl;
+                la_poste->envoie_msg(INVI_R, zmq_msg);
+                std::cout << "Sent" << std::endl;
                 break;
             }
             case FRI_RMV:{
@@ -243,6 +269,42 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }
     }
+
     DataBase_mutex.unlock();
     return 0;
+}
+
+
+void create_room_thread(ZMQ_msg zmqmsg){
+    Create_room owner_usr;
+    std::ostringstream stream;
+    owner_usr.ParseFromString(zmqmsg.message());
+    int room_id;
+
+    DataBase_mutex.lock();
+    db.create_room(owner_usr.usr_id());
+    db.get_last_room_id(&room_id);
+    DataBase_mutex.unlock();
+
+    stream.str("");
+    stream.clear();
+    stream << "room/" << room_id << "/client";
+    std::thread tobj(game_thread, stream.str(), owner_usr.usr_id());
+    tobj.detach();
+
+    ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
+    owner_usr.ParseFromString(zmqmsg.message());
+
+    partie_r.set_receiver_id(owner_usr.usr_id());
+    partie_r.set_type_message(ADD_ROOM_R);
+    partie_r.set_message(stream.str());
+
+    stream.str("");
+    stream.clear();
+    stream << "users/" << partie_r.receiver_id() << "/broker";
+
+    pub_mutex.lock();
+    s_sendmore_b(publisher, stream.str());
+    s_send_b(publisher, partie_r.SerializeAsString());
+    pub_mutex.unlock();
 }

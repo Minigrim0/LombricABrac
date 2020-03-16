@@ -5,17 +5,18 @@
 #include <sstream>
 #include "../lib/sqlite3.h"
 #include "../lib/bcrypt.h"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
-#define DT_USR 1 // Datatype UserConnect
-#define DT_STR 2 // Datatype String
-#define DT_INT 3 // Datatype Int
-#define DT_LOM 4 // Datatype Lomb_r
-#define DT_HIS 5 // Datatype History_r
-#define DT_RAN 6 // Datatype Rank_r
-#define DT_CHA 7 // Datatype Chat_r
-#define DT_FRI 8 // Datatype Fri_ls_r
-#define DT_RID 9 // Datatype Fri_ls_r
+#define DT_USR 1  // Datatype UserConnect
+#define DT_STR 2  // Datatype String
+#define DT_INT 3  // Datatype Int
+#define DT_LOM 4  // Datatype Lomb_r
+#define DT_HIS 5  // Datatype History_r
+#define DT_RAN 6  // Datatype Rank_r
+#define DT_CHA 7  // Datatype Chat_r
+#define DT_FRI 8  // Datatype Fri_ls_r
+#define DT_RID 9  // Datatype Fri_ls_r
+#define DT_END 10 // Datatype Fri_ls_r
 
 class DataBase{
     public:
@@ -30,6 +31,7 @@ class DataBase{
 
         // User operations
         int get_user(std::string username, UserConnect* userconnect);
+        int get_user_username(int user_id, std::string* username);
         int get_user(int user_id, UserConnect* userconnect);
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
@@ -40,6 +42,9 @@ class DataBase{
         int add_lombric(int user_id, int lombric_id, std::string lombric_name);
         int set_lombric_name(int lombric_id, int user_id, std::string username);
         int get_lombrics(int owner_id, Lomb_r* lomb_r);
+        int get_lombric_owner_id(int lombric_id, int* owner_id);
+        int get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r);
+        int get_lombric_name(int lomb_id, std::string* lomb_name);
 
         // Game history operations
         int get_history(int user_id, int index, int size, History_r* history_r);
@@ -57,7 +62,6 @@ class DataBase{
         int get_messages_received_from(int receiver_id, int sender_id, Chat_r* chat_r);
         int get_convo(int user1_id, int user2_id, Chat_r* chat_r);
 
-
         // Friendship operations
         int add_friend(int sender_id, int receiver_id);
         int get_friend_list(int user_id, Fri_ls_r* fri_ls_r); // Get friend list only for those who accepted
@@ -65,11 +69,14 @@ class DataBase{
         int get_friend_invites(int user_id, Fri_ls_r* fri_ls_r); // Get only the friend that are waiting to be accepted
         int accept_friend_invite(int user_id, int friend_id);
         int remove_friend(int user_id, int friend_id);
+        int is_online(int friend_id, int* online);
 
         // Create game
         int create_room(int owner_id);
-        int get_last_room_id(Create_room_id *room_id);
+        int get_last_room_id(int *room_id);
         int get_room_id_from_owner_id(int owner_id, int* room_id);
+        int add_player(int room_id, int player_id, int nb_players);
+        int set_final_points(int room_id, int player_id, int nb_players);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with
