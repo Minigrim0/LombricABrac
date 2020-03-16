@@ -163,12 +163,19 @@ void partieQT::drawMap(){
   gamePixmap = new QPixmap(nBlockWidth*blockWidth, nBlockHeight*blockWidth);
   gamePixmap->fill(QColor("transparent"));
 
-  for(int y=0; y<nBlockHeight; ++y){
-    for (int x=0; x<nBlockWidth; ++x){
+  if(nBlockHeight + camY > gameInfo->carte->getHauteur() ){
+    camY = gameInfo->carte->getHauteur() - nBlockHeight;
+    //mustDrawWall = true;
+  }
+  if(nBlockWidth + camX > gameInfo->carte->getLargeur()){
+    camX = gameInfo->carte->getLargeur() - nBlockWidth;
+    //mustDrawWall = true;
+  }
+  for(int y=camY; y<nBlockHeight+camY; ++y){
+    for (int x=camX; x<nBlockWidth+camX; ++x){
       drawMur(x,y);
     }
   }
-
   drawSprites();
   gameLabel->setScaledContents(true);
   gameLabel->setPixmap(*gamePixmap);
@@ -179,6 +186,8 @@ void partieQT::drawMur(int x, int y){//dessine le pos ème mur du tableau
   QPainter painter(gamePixmap);
   int numColor = gameInfo->carte->getColor(x,y)-1;
   QPixmap texture = textureMur[numColor].scaled(blockWidth, blockWidth);
+  x-=camX;
+  y-=camY;
   x *= blockWidth;
   y *= blockWidth;
   painter.drawPixmap(x, y, texture);
@@ -196,9 +205,8 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   int pos[2];
   int id = s->getId();
   s->getPos(pos);
-
-  int x = pos[0] * blockWidth;
-  int y = pos[1] * blockWidth;
+  int x = (pos[0]-camX) * blockWidth;
+  int y = (pos[1]-camY) * blockWidth;
 
   QPixmap texture;
   switch(s->getSkin()){
@@ -311,6 +319,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
       int tempSizeBlock=blockWidth+numSteps.y();
       if (tempSizeBlock < MIN_SIZE_BLOCK){
         blockWidth = MIN_SIZE_BLOCK;
+
       }
       else if (tempSizeBlock > gamePixmap->size().width() || tempSizeBlock > gamePixmap->size().height()){
         blockWidth = min(gamePixmap->size().width(), gamePixmap->size().height());
@@ -318,11 +327,12 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
       else{
         blockWidth = tempSizeBlock;
       }
-      drawMap();
     }
 
     else if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+      int nBlockWidth = screenWidth / blockWidth;
+      int nBlockHeight = screenHeight / blockWidth;
       switch (keyEvent->key()) {
         case Qt::Key_Right://fleche droite poue aller a droite
           moveCurrentLombric(FORWARD);
@@ -333,14 +343,33 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         case Qt::Key_Space://espace pour sauter
           moveCurrentLombric(JUMP);
           break;
+        case Qt::Key_Q://Q pour bouger cam à gauche
+          if(camX > 0){
+            --camX;
+            //mustDrawWall = true;
+          }
+          break;
+        case Qt::Key_Z://Z pour bouger cam en haut
+          if(camY > 0){
+            --camY;
+            //mustDrawWall = true;
+          }
+          break;
+        case Qt::Key_S://s pour bouger cam vers le bas
+          if(nBlockHeight + camY< gameInfo->carte->getHauteur() ){
+            ++camY;
+            //mustDrawWall = true;
+          }
+          break;
+        case Qt::Key_D://D pour bouger cam à droite
+          if(nBlockWidth + camX< gameInfo->carte->getLargeur()){
+            ++camX;
+            //mustDrawWall = true;
+          }
+          break;
         default:
           break;
       }
-      drawMap();
-   }
-
-   else if (event->type() == QEvent::MouseButtonPress){
-
    }
 
     return false;
