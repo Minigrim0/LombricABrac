@@ -248,22 +248,29 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int xBarVie = x;
     int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
     int largeur = blockWidth * lomb->getLife() / 100;
-    pen.setColor(Qt::red);
+    switch(lomb->getTeamId()){
+      case 0:
+        pen.setColor(Qt::darkBlue);
+        break;
+      case 1:
+        pen.setColor(Qt::green);
+        break;
+      case 2:
+        pen.setColor(Qt::darkYellow);
+        break;
+      case 3:
+        pen.setColor(Qt::darkMagenta);
+        break;
+    }
     pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
     painter.setPen(pen);
     painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);
 
     QRect rect(x-blockWidth/2, y - blockWidth, 2*blockWidth, 0.8*blockWidth);
-    pen.setColor(Qt::black);
-    painter.setPen(pen);
     QString name(lomb->getName().c_str());
     painter.drawText(rect, Qt::AlignCenter, name);
   }
   painter.drawPixmap(x, y, texture);
-
-}
-
-void partieQT::drawOverlay(){
 
 }
 
