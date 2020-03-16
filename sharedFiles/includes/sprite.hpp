@@ -40,10 +40,11 @@ public:
 class Lombric_c:public Sprite{
 private:
 	int direction;//-1 ou 1
+	int teamId;//int de 0 à 3
 	int vie;
 	std::string name;
 public:
-	Lombric_c(int id,int x, int y, unsigned long skin, int pv, std::string name_lomb);
+	Lombric_c(int id,int idTeam,int x, int y, unsigned long skin, int pv, std::string name_lomb);
 	Lombric_c(int id, int pv, Map* carte);//constructeur pour le seveur
 	bool update(Map* carte, double t) override;//update laa position
 	void move(int type, Map* carte);//gestion du déplacement (ctrl par le user)
@@ -56,6 +57,8 @@ public:
 	//x,y coords du centre de l'explosion, radius -> rayon de l'explosion,
 	//vitesse -> vitesse d'expulsion du lombric (au centre)
 	//t -> moment de l'explosion
+	int getTeamId();
+	int getDirection();
 	virtual ~Lombric_c()=default;
 };
 

@@ -57,6 +57,7 @@
 #define MOVE_CAM_RIGHT 'd'
 #define MOVE_CAM_UP 'w'
 #define MOVE_CAM_DOWN 's'
+
 	//gestion de la puissance de l'arme
 #define UP_POWER KEY_UP
 #define DOWN_POWER KEY_DOWN

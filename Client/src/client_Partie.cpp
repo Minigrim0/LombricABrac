@@ -59,7 +59,9 @@ infoPartie_s* Client::getGameInfo(){
 	std::string* reponse = waitAnswers(GAME_INFO_R,m);
   */
 
-	while(!thisGame);
+	while(!thisGame){
+		usleep(20);
+	};
 
   	return thisGame;
 }
