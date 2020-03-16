@@ -185,9 +185,48 @@ void partieQT::drawMap(){
     }
   }
   drawSprites();
+  //affichage temps endRound
+  std::string text;
+  text =  "Temps restant: " + std::to_string(gameParam.time_round - spentTime)+" secondes";
+
+  QPainter painter(gamePixmap);
+  painter.setBrush(Qt::SolidPattern);
+  QPen pen;
+  pen.setColor(Qt::black);
+  pen.setWidth(blockWidth*2);
+  painter.setPen(pen);
+  QString name(text.c_str());
+  painter.drawText(blockWidth, blockWidth, name);
+
+
+  //affichage tour
+  Lombric_c* lomb = gameInfo->currentWorms;
+
+  if (!lomb){
+    return;
+  }
+  if(tour){
+    text =  "A vous de jouer!";
+  } else{
+    text = "Attendez votre tour...";
+  }
+  pen.setColor(Qt::black);
+  painter.setPen(pen);
+  QString currentTour(text.c_str());
+  painter.drawText(blockWidth, 2*blockWidth, currentTour);
+
+  //affiche nom lombric qui joue
+  setPenColor(lomb, &pen);
+  painter.setPen(pen);
+  text = lomb->getName()+" joue";
+  QString nameLomb(text.c_str());
+  painter.drawText(blockWidth, 3*blockWidth, nameLomb);
+
+
   gameLabel->setScaledContents(true);
   gameLabel->setPixmap(*gamePixmap);
   gameLabel->adjustSize();
+
 }
 
 void partieQT::drawMur(int x, int y){//dessine le pos ème mur du tableau
@@ -245,23 +284,11 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     //Affichage de la barre de vie
     painter.setBrush(Qt::SolidPattern);
     QPen pen;
+    int color;
     int xBarVie = x;
     int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
     int largeur = blockWidth * lomb->getLife() / 100;
-    switch(lomb->getTeamId()){
-      case 0:
-        pen.setColor(Qt::darkBlue);
-        break;
-      case 1:
-        pen.setColor(Qt::green);
-        break;
-      case 2:
-        pen.setColor(Qt::darkYellow);
-        break;
-      case 3:
-        pen.setColor(Qt::darkMagenta);
-        break;
-    }
+    setPenColor(lomb, &pen);
     pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
     painter.setPen(pen);
     painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);
@@ -272,6 +299,23 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   }
   painter.drawPixmap(x, y, texture);
 
+}
+
+void partieQT::setPenColor(Lombric_c* lomb, QPen *pen){
+  switch(lomb->getTeamId()){
+    case 0:
+      pen->setColor(Qt::darkBlue);
+      break;
+    case 1:
+      pen->setColor(Qt::green);
+      break;
+    case 2:
+      pen->setColor(Qt::darkYellow);
+      break;
+    case 3:
+      pen->setColor(Qt::darkMagenta);
+      break;
+  }
 }
 
 bool partieQT::updateSprites(double t){
