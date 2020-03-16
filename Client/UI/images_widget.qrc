@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="wallpaper">
+    <file>Image_GUI.qrc/cropped-1920-1080-515958.jpg</file>
+    <file>Image_GUI.qrc/cropped-1920-1080-521477.jpg</file>
+  </qresource>
+  <qresource prefix="icons">
+    <file>Image_GUI.qrc/icons8-bookmark-64.png</file>
+    <file>Image_GUI.qrc/icons8-bookmark-100.png</file>
+    <file>Image_GUI.qrc/icons8-export-64.png</file>
+    <file>Image_GUI.qrc/icons8-fire-40.png</file>
+    <file>Image_GUI.qrc/icons8-friends-64.png</file>
+    <file>Image_GUI.qrc/icons8-hydra-48.png</file>
+    <file>Image_GUI.qrc/icons8-invite-64.png</file>
+    <file>Image_GUI.qrc/icons8-join-40.png</file>
+    <file>Image_GUI.qrc/icons8-menu-64.png</file>
+    <file>Image_GUI.qrc/icons8-new-message-64.png</file>
+    <file>Image_GUI.qrc/icons8-play-64.png</file>
+    <file>Image_GUI.qrc/icons8-topic-push-notification-64.png</file>
+  </qresource>
+</RCC>
