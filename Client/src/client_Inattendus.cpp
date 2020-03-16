@@ -1,4 +1,6 @@
 #include "../includes/client.hpp"
+#include "../includes/partieQT.hpp"
+
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
@@ -189,6 +191,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	MyReadFile.close();
 
+
 	gameInfo->carte = new Map(largeur, hauteur, map);
 
 	for (int i=0;i<currentParams.nbr_equipes;i++){
@@ -198,13 +201,14 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	//remplis le vecteur des lombris
 	for (int i=0;i<obj.lomb_size();i++){
-		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(), obj.lomb(i).pos_x(), obj.lomb(i).pos_y(), '0'+ obj.lomb(i).team_lomb(),100, obj.lomb(i).name_lomb()));
+		gameInfo->spriteVector.push_back(new Lombric_c(obj.lomb(i).id_lomb(),obj.lomb(i).team_lomb()-1, obj.lomb(i).pos_x(), obj.lomb(i).pos_y(), '0'+ obj.lomb(i).team_lomb(),100, obj.lomb(i).name_lomb()));
 		gameInfo->teamsVector[obj.lomb(i).team_lomb()-1]->addLomb(dynamic_cast<Lombric_c*>(gameInfo->spriteVector[i]));
 	}
 
 	//remplis le vecteur des projectiles
 	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
+
 
 	thisGame = gameInfo;
 }
