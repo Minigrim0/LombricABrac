@@ -14,7 +14,7 @@ QRC = rcc -name ressourceWindow
 SOURCES=$(wildcard src/*.cpp)
 SHARED_SOURCES=$(wildcard ../sharedFiles/src/*.cpp)
 SOURCES_MOC=$(wildcard includes/*.hpp)
-SOURCES_QRC = $(wildcard UI/*.qrc)
+SOURCES_QRC = $(wildcard ./*.qrc)
 SOURCES_UI=$(wildcard UI/*.ui)
 
 TMP_OBJECTS=$(SOURCES:.cpp=.o)
@@ -26,7 +26,7 @@ TMP_UI=$(SOURCES_UI:.ui=_ui.hpp)
 OBJECTS=$(TMP_OBJECTS:src/%=build/%)
 SHARED_OBJECTS=$(TMP_SHARED_OBJECTS:../sharedFiles/src/%=../sharedFiles/build/%)
 OBJECTS_MOC=$(TMP_SOURCES_MOC:includes/%=build/%)
-OBJECTS_QRC=$(TMP_QRC:UI/%=build/%)
+OBJECTS_QRC=$(TMP_QRC:./%=build/%)
 OBJECTS_UI=$(TMP_UI:UI/%=UI/src/%)
 
 all: pre $(EXECUTABLE)
@@ -61,7 +61,7 @@ build/%_qrc.o: temp/%_qrc.cpp
 	@mkdir -p build
 	@$(CXX) $(COMPILER_FLAGS) $(QT_COMPILER_FLAGS) $(QT_LINKER_FLAGS) -c $< -o $@
 
-temp/%_qrc.cpp: UI/%.qrc
+temp/%_qrc.cpp: ./%.qrc
 	@mkdir -p temp
 	@echo "\e[1;33m >> $^ -> $@\e[0m"
 	@$(QRC) $< -o $@

@@ -1,6 +1,7 @@
 #include "../includes/mainWindow.hpp"
 #include "../includes/partieQT.hpp"
 #include "../includes/menuEnterQT.hpp"
+#include "../includes/menuQT.hpp"
 
 MainWindow::MainWindow(Client *cli, QWidget *parent = nullptr):
 QWidget(parent),
@@ -13,6 +14,7 @@ isHost(false){
     //layout->addWidget(new MenuEnterQT(1,this,client));
     resize(1640,880);
     layout->addWidget(new partieQT(80,this,client));
+    layout->addWidget(new MenuQT(2,this,client));
 
     information.client=client;
     information.id = 1;
