@@ -8,12 +8,12 @@
 #include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
+#include "../includes/user_thread.hpp"
 #include "../includes/game_thread.hpp"
 #include "../proto/src/user.pb.h"
 #include "../includes/connected_player.hpp"
 #include "../includes/zhelpers.hpp"
 
-std::mutex mu;
 std::mutex DataBase_mutex;
 DataBase db("lab.db");
 std::mutex pub_mutex;
@@ -59,7 +59,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 la_poste->envoie_bool(CON_R,1);
                 db.connect_user(true, usr->pseudo());
                 DataBase_mutex.unlock();
-                return 3;
+                return USER_CONNECTED;
             }
             else{
                 la_poste->envoie_bool(CON_R,0);
@@ -201,8 +201,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     inv->set_game_id(0);
                 }
 
-                // Need to get the room invites
-
                 la_poste->envoie_msg(GET_ALL_INVIT, invs.SerializeAsString());
                 break;
             }
@@ -226,9 +224,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case INVI_R:{
-                std::cout << "Sending invite to someone" << std::endl;
                 la_poste->envoie_msg(INVI_R, zmq_msg);
-                std::cout << "Sent" << std::endl;
                 break;
             }
             case FRI_RMV:{
