@@ -27,12 +27,12 @@ int client_thread(int socket_client){
     }
     subscriber.connect("tcp://localhost:5563");
 
-    std::string broker_channel = "";
-    std::string room_channel = "";
+    std::string broker_channel("");
+    std::string room_channel("");
 
-    bool is_on_game = false;
-    std::string game_url = "";
-    bool connected = true;
+    bool is_on_game(false);
+    std::string game_url("");
+    bool connected(true);
 
     while(connected){
         type = 0;
@@ -62,117 +62,92 @@ int client_thread(int socket_client){
         }
 
         type = la_poste.reception_type();
-        if(type != 0)
-            std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
-        if(type == EXIT_FAILURE)
-            connected = false;
+        switch(type){
+            case EXIT_FAILURE:
+                connected = false; // No break 'cause the continue is useful if the user disconnected
+            case 0:
+                continue;
+        }
 
-        if(type != 0){
-            if(is_on_game){
-                ZMQ_msg zmqmsg;
+        std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
 
-                zmqmsg.set_type_message(type);
-                zmqmsg.set_receiver_id(usr.get_id());
+        if(is_on_game){ // If the user is in a game, he'll forward the messages to the room
+            ZMQ_msg zmqmsg;
 
-                if(type == FRI_LS_S){
-                    res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
-                }
-                else if(type == INVI_S){
-                    int online = 0;
-                    int friend_id;
-                    int room_id;
-                    Invitation invit;
+            zmqmsg.set_type_message(type);
+            zmqmsg.set_receiver_id(usr.get_id());
 
-                    la_poste.reception();
-                    invit.ParseFromString(la_poste.get_buffer());
-                    invit.set_type(true);
-
-                    DataBase_mutex.lock();
-                    db.get_user_id(invit.pseudo(), &friend_id);
-                    db.is_online(friend_id, &online);
-                    db.get_room_id_from_owner_id(usr.get_id(), &room_id);
-                    DataBase_mutex.unlock();
-
-                    invit.set_game_id(room_id);
-
-                    if(online){
-                        ZMQ_msg zmqmsg;
-                        invit.set_pseudo(usr.pseudo());
-                        
-                        zmqmsg.set_type_message(INVI_R);
-                        zmqmsg.set_receiver_id(friend_id);
-                        zmqmsg.set_message(invit.SerializeAsString());
-
-                        pub_mutex.lock();
-                        s_sendmore_b(publisher, "all");
-                        s_send_b(publisher, zmqmsg.SerializeAsString());
-                        pub_mutex.unlock();
-                    };
-                }
-                else{
-                    std::cout << "---> Redirecting to room @" << game_url << std::endl;
-                    if(type != INFO_ROOM && type != START){
-                        la_poste.reception();
-                        zmqmsg.set_message(la_poste.get_buffer());
-                    }
-                    else{
-                        zmqmsg.set_message("");
-                    }
-
-                    pub_mutex.lock();
-                    s_sendmore_b(publisher, game_url);
-                    s_send_b(publisher, zmqmsg.SerializeAsString());
-                    pub_mutex.unlock();
-                }
+            if(type == FRI_LS_S){
+                res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+            }
+            else if(type == INVI_S){
+                send_room_invite(&zmqmsg, &la_poste, &usr);
             }
             else{
-                if(type == JOIN_S){
+                std::cout << "---> Redirecting to room @" << game_url << std::endl;
+                if(type != INFO_ROOM && type != START){
                     la_poste.reception();
-                    Join join_msg;
-                    join_msg.ParseFromString(la_poste.get_buffer());
-
-                    int room_id = join_msg.room_id();
-
-                    ZMQ_msg zmqmsg;
-                    zmqmsg.set_type_message(PING);
-                    zmqmsg.set_message("ping");
-                    zmqmsg.set_receiver_id(usr.get_id());
-
-                    std::ostringstream stream;
-                    stream << "room/" << room_id << "/client";
-
-                    pub_mutex.lock();
-                    s_sendmore_b(publisher, stream.str());
-                    s_send_b(publisher, zmqmsg.SerializeAsString());
-                    pub_mutex.unlock();
-
-                    // Waiting for the room to respond
-                    std::string address = s_recv(subscriber);
-                    if(address == ""){ // The room died or is full
-                        la_poste.envoie_bool(JOIN_R, false);
-                    }
-                    else{ // The room responded
-                        is_on_game = true;
-                        game_url = stream.str();
-                        la_poste.envoie_bool(JOIN_R, true);
-                    }
-
-                    continue;
+                    zmqmsg.set_message(la_poste.get_buffer());
+                }
+                else{
+                    zmqmsg.set_message("");
                 }
 
-                res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
-                if(res == 3){
-                    //User connected
-                    std::ostringstream stream;
-                    stream << "users/" << usr.get_id() << "/broker";
-                    broker_channel = stream.str();
-                    subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
-                    stream.str("");
-                    stream.clear();
-                    stream << "users/" << usr.get_id() << "/room";
-                    room_channel = stream.str();
-                    subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+                pub_mutex.lock();
+                s_sendmore_b(publisher, game_url);
+                s_send_b(publisher, zmqmsg.SerializeAsString());
+                pub_mutex.unlock();
+            }
+        }
+        else{
+            if(type == JOIN_S){
+                la_poste.reception();
+                Join join_msg;
+                join_msg.ParseFromString(la_poste.get_buffer());
+
+                int room_id = join_msg.room_id();
+
+                ZMQ_msg zmqmsg;
+                zmqmsg.set_type_message(PING);
+                zmqmsg.set_message("ping");
+                zmqmsg.set_receiver_id(usr.get_id());
+
+                std::ostringstream stream;
+                stream << "room/" << room_id << "/client";
+
+                pub_mutex.lock();
+                s_sendmore_b(publisher, stream.str());
+                s_send_b(publisher, zmqmsg.SerializeAsString());
+                pub_mutex.unlock();
+
+                // Waiting for the room to respond
+                std::string address = s_recv(subscriber);
+                if(address == ""){ // The room died or is full
+                    la_poste.envoie_bool(JOIN_R, false);
                 }
+                else{ // The room responded
+                    is_on_game = true;
+                    game_url = stream.str();
+                    la_poste.envoie_bool(JOIN_R, true);
+                }
+
+                continue;
+            }
+
+            res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+            if(res == USER_CONNECTED){
+                std::ostringstream stream;
+                stream << "users/" << usr.get_id() << "/broker";
+                broker_channel = stream.str();
+                // Connecting the player to the listening channel of the broker
+                subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
+
+                stream.str("");
+                stream.clear();
+                stream << "users/" << usr.get_id() << "/room";
+                room_channel = stream.str();
+                // Connecting the player to the listening channel of the room
+                subscriber.setsockopt(ZMQ_SUBSCRIBE, stream.str().c_str(), strlen(stream.str().c_str()));
             }
         }
     }
