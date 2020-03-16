@@ -63,6 +63,9 @@ void partieQT::initWindow(){
   tempScreenHeight = 0;
   gameScreenWidth = 0;
   gameScreenHeight = 0;
+  //timePressed = 0;
+  //timerPower.setInterval(5);
+  //bazookaSelected = false;
   mainLayout = new QGridLayout;
   gameLabel = new QLabel(this);
   gamePixmap = nullptr;
@@ -160,7 +163,8 @@ void partieQT::drawMap(){
   nBlockWidth = min(nBlockWidth, gameInfo->carte->getLargeur());
   nBlockHeight = min(nBlockHeight, gameInfo->carte->getHauteur());
 
-  gamePixmap = new QPixmap(nBlockWidth*blockWidth, nBlockHeight*blockWidth);
+  gamePixmap = new QPixmap((nBlockWidth+1)*blockWidth, (nBlockHeight+1)*blockWidth);
+  //gamePixmap = new QPixmap(screenWidth, screenHeight);
   gamePixmap->fill(QColor("transparent"));
 
   if(nBlockHeight + camY > gameInfo->carte->getHauteur() ){
@@ -171,8 +175,12 @@ void partieQT::drawMap(){
     camX = gameInfo->carte->getLargeur() - nBlockWidth;
     //mustDrawWall = true;
   }
-  for(int y=camY; y<nBlockHeight+camY; ++y){
-    for (int x=camX; x<nBlockWidth+camX; ++x){
+
+  int limitX = nBlockWidth+camX < gameInfo->carte->getLargeur()?nBlockWidth+1:nBlockWidth;
+  int limitY = nBlockHeight+camY < gameInfo->carte->getHauteur()?nBlockHeight+1:nBlockHeight;
+
+  for(int y=camY; y<limitY+camY; ++y){
+    for (int x=camX; x<limitX+camX; ++x){
       drawMur(x,y);
     }
   }
@@ -205,8 +213,8 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   int pos[2];
   int id = s->getId();
   s->getPos(pos);
-  int x = (pos[0]-camX) * blockWidth;
-  int y = (pos[1]-camY) * blockWidth;
+  int x = (pos[0]-camX)*blockWidth;
+  int y = (pos[1]-camY)*blockWidth;
 
   QPixmap texture;
   switch(s->getSkin()){
@@ -229,11 +237,33 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
       texture = skinSprite[4].scaled(blockWidth, blockWidth);
       break;
   };
-  if (id){
-    int direction = dynamic_cast<Lombric_c*>(s)->getDirection();
+  if (id){//si lombric dans la case
+    Lombric_c* lomb = dynamic_cast<Lombric_c*>(s);
+    int direction = lomb->getDirection();
     texture = texture.transformed(QTransform().scale(-direction,1));
+
+    //Affichage de la barre de vie
+    painter.setBrush(Qt::SolidPattern);
+    QPen pen;
+    int xBarVie = x;
+    int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
+    int largeur = blockWidth * lomb->getLife() / 100;
+    pen.setColor(Qt::red);
+    pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
+    painter.setPen(pen);
+    painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);
+
+    QRect rect(x-blockWidth/2, y - blockWidth, 2*blockWidth, 0.8*blockWidth);
+    pen.setColor(Qt::black);
+    painter.setPen(pen);
+    QString name(lomb->getName().c_str());
+    painter.drawText(rect, Qt::AlignCenter, name);
   }
   painter.drawPixmap(x, y, texture);
+
+}
+
+void partieQT::drawOverlay(){
 
 }
 
@@ -328,8 +358,20 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         blockWidth = tempSizeBlock;
       }
     }
+    /*
+    else if (event->type() == QEvent::MouseButtonPress){
+      bazookaSelected = true;
+      if (bazookaSelected){
+        timerPower.start();
+      }
+    }
+    else if (event->type() == QEvent::MouseButtonRelease){
+      if (bazookaSelected){
+        timerPower.stop();
+      }
+    }*/
 
-    else if (event->type() == QEvent::KeyPress){
+    if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
       int nBlockWidth = screenWidth / blockWidth;
       int nBlockHeight = screenHeight / blockWidth;

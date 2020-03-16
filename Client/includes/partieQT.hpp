@@ -1,8 +1,10 @@
 #ifndef GAME
 #define GAME
 
-#define INIT_SIZE_BLOCK 20
+#define INIT_SIZE_BLOCK 40
 #define MIN_SIZE_BLOCK 10
+#define EPAISSEUR_BAR_VIE 0.1
+
 
 #include <QtWidgets>
 #include <QTimer>
@@ -15,6 +17,8 @@
 #include <QWheelEvent>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QString>
+#include <QRect>
 
 
 #include "client.hpp"
@@ -100,12 +104,15 @@ private:
   QPixmap *textureMur;
   QPixmap *skinSprite;
 
+  //QTimer  timerPower;
+  //uint32_t timePressed;
+  //bool bazookaSelected;
 
   void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
   void drawSprites();
   void drawSprite(Sprite* s, int* oldPos=nullptr, int* newPos=nullptr);
-
+  void drawOverlay();
 
   bool updateSprites(double t);// t = temps actuel en milliseconde
   void moveCurrentLombric(int mouvement);//peut prendre TRANSLATE_MOVE ou JUMP_MOVE en argument
