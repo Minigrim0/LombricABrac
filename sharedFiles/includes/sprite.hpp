@@ -56,6 +56,7 @@ public:
 	//x,y coords du centre de l'explosion, radius -> rayon de l'explosion,
 	//vitesse -> vitesse d'expulsion du lombric (au centre)
 	//t -> moment de l'explosion
+	int getDirection();
 	virtual ~Lombric_c()=default;
 };
 

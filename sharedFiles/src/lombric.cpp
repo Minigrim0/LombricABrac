@@ -81,4 +81,6 @@ void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, 
 	}
 }
 
+int Lombric_c::getDirection(){return direction;}
+
 std::string Lombric_c::getName(){return name;}
