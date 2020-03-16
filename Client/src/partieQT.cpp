@@ -66,6 +66,7 @@ void partieQT::initWindow(){
   mainLayout = new QGridLayout;
   gameLabel = new QLabel(this);
   gamePixmap = nullptr;
+  parent->installEventFilter(this);
   //setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();
@@ -300,21 +301,57 @@ void partieQT::synchronizeLombrics(Degats_lombric d){
 
 bool partieQT::eventFilter(QObject* obj, QEvent* event){
     if (event->type() == QEvent::Wheel){
-        QWheelEvent *mouseScroll = static_cast<QWheelEvent*>(event);
-        QPoint numSteps = mouseScroll->angleDelta()/120;
-        int tempSizeBlock=blockWidth+numSteps.y();
-        if (tempSizeBlock < MIN_SIZE_BLOCK){
-          blockWidth = MIN_SIZE_BLOCK;
-        }
-        else if (tempSizeBlock > gamePixmap->size().width() || tempSizeBlock > gamePixmap->size().height()){
-          blockWidth = min(gamePixmap->size().width(), gamePixmap->size().height());
-        }
-        else{
-          blockWidth = tempSizeBlock;
-        }
-        drawMap();
+      QWheelEvent *mouseScroll = static_cast<QWheelEvent*>(event);
+      QPoint numSteps = mouseScroll->angleDelta()/120;
+      int tempSizeBlock=blockWidth+numSteps.y();
+      if (tempSizeBlock < MIN_SIZE_BLOCK){
+        blockWidth = MIN_SIZE_BLOCK;
       }
+      else if (tempSizeBlock > gamePixmap->size().width() || tempSizeBlock > gamePixmap->size().height()){
+        blockWidth = min(gamePixmap->size().width(), gamePixmap->size().height());
+      }
+      else{
+        blockWidth = tempSizeBlock;
+      }
+      drawMap();
+    }
+
+    if (event->type() == QEvent::KeyPress){
+      QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+      std::cout << "key: " << keyEvent->key() << std::endl;
+      switch (keyEvent->key()) {
+        case Qt::Key_Right://fleche droite poue aller a droite
+          moveCurrentLombric(FORWARD);
+          break;
+        case Qt::Key_Left://fleche gauche pour aller a gauche
+          moveCurrentLombric(BACKWARD);
+          break;
+        case Qt::Key_Space://espace pour sauter
+          moveCurrentLombric(JUMP);
+          break;
+        default:
+          break;
+      }
+      drawMap();
+   }
+
     return false;
+}
+
+void partieQT::moveCurrentLombric(int mouvement){
+  if(tour){
+    int oldPos[2];
+    int newPos[2];
+    std::cout << "Current lonb: " << gameInfo->currentWorms << std::endl;
+    gameInfo->currentWorms->getPos(oldPos);
+    gameInfo->currentWorms->move(mouvement, gameInfo->carte);//déplace le lombric si c'est un mouvement autorisé
+    gameInfo->currentWorms->getPos(newPos);
+    drawSprite(dynamic_cast<Sprite*>(gameInfo->currentWorms), oldPos, newPos);
+    if(oldPos[0] != newPos[0] || oldPos[1] != newPos[1]){//si le lombric à bougé -> il faut le dire au Client
+      uint32_t id = gameInfo->currentWorms->getId();
+      client->updatePos(id, static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]));
+    }
+  }
 }
 
 
