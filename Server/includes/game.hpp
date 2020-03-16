@@ -82,6 +82,7 @@ class Game{
         uint8_t current_player;
         std::vector<Joueur> m_players;
         std::vector<Sprite*> m_lombs;
+        Map* m_map;
 };
 
 #endif

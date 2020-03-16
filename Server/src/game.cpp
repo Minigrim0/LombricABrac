@@ -84,12 +84,18 @@ void Joueur::add_worms(int worm, int nbWorm){
     }
 }
 
+
 Game::Game(uint32_t owner)
 :owner_id(owner),
-current_player(0)
+current_player(0),
+m_map(nullptr)
 {}
 
-Game::~Game(){}
+Game::~Game(){
+    delete m_map;
+    for(size_t index=0;index<m_lombs.size();index++)
+        delete m_lombs[index];
+}
 
 //void Game::set_begin(){
 //    time(&begin);
@@ -478,13 +484,13 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    Map* m = new Map(largeur,hauteur,map_s);
+    Map* m_map = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
         for(int j=0;j<nbr_lomb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m));
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
         }
     }
 
-    obj_partie.setParam(m, m_lombs);
+    obj_partie.setParam(m_map, m_lombs);
 }
