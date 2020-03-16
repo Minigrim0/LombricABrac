@@ -67,6 +67,7 @@ void partieQT::initWindow(){
   tempScreenHeight = 0;
   gameScreenWidth = 0;
   gameScreenHeight = 0;
+  beginShoot = false;
   //timePressed = 0;
   //timerPower.setInterval(5);
   //bazookaSelected = false;
@@ -96,6 +97,7 @@ void partieQT::updateGame(){
 
   //vérifie si le tour a changé
   if(endRound){
+    beginShoot = false;
     std::string nextRound = client->getNextRound();
     if(nextRound.size()){//si on a un string-> on change de tour
       Next_lombric next;
@@ -245,6 +247,11 @@ void partieQT::drawMap(){
     }
   }
 
+  if(beginShoot){
+    int power = getPower();
+    painter.drawRect(50, (nBlockHeight-1)*blockWidth, power, 30);
+  }
+
 
   gameLabel->setScaledContents(true);
   gameLabel->setPixmap(*gamePixmap);
@@ -302,7 +309,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     painter.drawText(rect, Qt::AlignCenter, name);
   }
   else{
-    texture = skinSprite[1];
+    texture = skinSprite[0];
   }
   painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
 
@@ -416,16 +423,47 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         blockWidth = tempSizeBlock;
       }
     }
-    
+
     else if (event->type() == QEvent::MouseButtonPress){
-      bazookaSelected = true;
-      if (bazookaSelected){
-        timerPower.start();
+      QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+      bool changed = false;
+      for (int i=0; i<2; ++i){
+        if (chooseWeaponRects[i].contains(mouseEvent->pos()) && tour){
+          weaponIndex = i;
+          changed = true;
+        }
+      }
+
+      if(!changed && tour){
+        powerShootChrono = std::chrono::high_resolution_clock::now();
+        beginShoot = true;
       }
     }
 
+    else if (event->type() == QEvent::MouseButtonRelease){
+      QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+      if(beginShoot){//time to shoot
+        beginShoot = false;
+        int power = getPower();
+        int xMouse = mouseEvent->x();
+        int yMouse = mouseEvent->y();
 
-    if (event->type() == QEvent::KeyPress){
+        int posLomb[2];
+        gameInfo->currentWorms->getPos(posLomb);
+        int xStart = posLomb[0] * blockWidth;
+        int yStart = posLomb[1] * blockWidth;
+
+        double angle = atan(-static_cast<double>(yMouse-yStart)/static_cast<double>(xMouse-xStart));//angle en radian
+        angle *= 180/PI;
+        if(xMouse<xStart)angle+=180;
+        if(angle<0)angle+=360;
+
+        client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(power), static_cast<uint32_t>(angle));
+        tour = false;
+      }
+    }
+
+    else if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
       int nBlockWidth = screenWidth / blockWidth;
       int nBlockHeight = screenHeight / blockWidth;
@@ -485,6 +523,12 @@ void partieQT::moveCurrentLombric(int mouvement){
       client->updatePos(id, static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]));
     }
   }
+}
+
+int partieQT::getPower(){
+  //temps écoulé
+  double t = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - powerShootChrono).count());
+  return min(100,std::round(t * 100/TIME_FOR_FULL_POWER));
 }
 
 

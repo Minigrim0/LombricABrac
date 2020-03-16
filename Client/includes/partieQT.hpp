@@ -5,6 +5,8 @@
 #define MIN_SIZE_BLOCK 10
 #define EPAISSEUR_BAR_VIE 0.1
 #define RECT_WEAPON_SIZE 3
+#define TIME_FOR_FULL_POWER 1212
+#define PI 3.14159265
 
 
 #include <QtWidgets>
@@ -35,33 +37,7 @@
 #include <ctime>
 #include <vector>
 #include <chrono>
-
-
-class Lombric_QT:public Lombric_c{
-private:
-  QPixmap skin, turnSkin;
-  //static std::vector<QPixmap> weapons;
-  int currentWeapon;
-  bool myTurn;
-  QLabel *skinLabel, *weaponLabel;
-public:
-  Lombric_QT(QPixmap sk, QPixmap turnSk, int id,int x, int y, unsigned long skin, int pv, std::string name_lomb);
-  void setCurrentWeapon(int id);
-  static void setWeaponsSkins(std::vector<QPixmap> weapons);
-  void draw(int width, int height, QWidget* parent);
-};
-
-class Case: public QWidget{
-private:
-  QPixmap texture;
-  std::vector<Lombric_QT*> lombs;
-  QLabel *textureLabel;
-public:
-  Case(QPixmap texture, QWidget* parent=nullptr);
-  void addLomb(Lombric_QT* lomb);
-  void removeLomb(Lombric_QT* lomb);
-  void draw(int width, int height);//height & width
-};
+#include <math.h>
 
 // This is the declaration of our partieQT class
 // The definition/implementation is in mainwidget.cpp
@@ -90,13 +66,15 @@ private:
 
   std::chrono::_V2::system_clock::time_point initTime;
 
+  std::chrono::_V2::system_clock::time_point powerShootChrono;
+  bool beginShoot;
+
   uint32_t screenWidth, screenHeight, tempScreenWidth, tempScreenHeight;//taille de la console
   uint32_t gameScreenWidth, gameScreenHeight;//taille de la fenêtre qui affiche l'overlay
   uint32_t overlayScreenWidth, overlayScreenHeight;
 
   bool mustDrawWall;
 
-  std::vector<std::vector<Case*>> mapWidget;
 
   QLabel* gameLabel;
   QPixmap* gamePixmap;
@@ -125,6 +103,7 @@ private:
   void initWindow() override;
   void updateGame();
   bool eventFilter(QObject* obj, QEvent* ev) override;
+  int getPower();//return la force en fonction du temps écoulé
 public:
   partieQT(int id, MainWindow *parent, Client* client); //Constructor
   //info run(info information);
