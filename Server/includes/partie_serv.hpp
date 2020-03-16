@@ -9,7 +9,7 @@
 #include <ctime>
 #include <vector>
 
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 #include "../../sharedFiles/includes/map.hpp"
 #include "../../sharedFiles/includes/sprite.hpp"

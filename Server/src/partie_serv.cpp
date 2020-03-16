@@ -84,6 +84,7 @@ bool Partie::updateSprites(int t){
             addDeletedBlock(deletedBlock);
 
             gameInfo->spriteVector.erase(s);
+            *s = nullptr;
             if(!id){
               delete *s;
             }

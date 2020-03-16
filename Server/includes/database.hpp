@@ -5,7 +5,7 @@
 #include <sstream>
 #include "../lib/sqlite3.h"
 #include "../lib/bcrypt.h"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 
 #define DT_USR 1  // Datatype UserConnect
 #define DT_STR 2  // Datatype String
@@ -75,6 +75,8 @@ class DataBase{
         int create_room(int owner_id);
         int get_last_room_id(int *room_id);
         int get_room_id_from_owner_id(int owner_id, int* room_id);
+        int add_player(int room_id, int player_id, int nb_players);
+        int set_final_points(int room_id, int player_id, int nb_players);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

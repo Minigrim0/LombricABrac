@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <ctime>
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../includes/partie_serv.hpp"
 
 class Joueur{
@@ -64,7 +64,7 @@ class Game{
 
 
         uint32_t who_next();
-        void end_round();
+        void end_round(int* current_step);
         void spawn_lombric();
 
     private:

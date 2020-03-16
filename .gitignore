@@ -11,8 +11,8 @@ out.txt
 input
 Server/lib/cppzmq/
 Server/lib/libzmq/
-Server/cpl_proto/
 Client/proto/src/
+Server/proto/src/
 Client/temp/
 Client/UI/src/
 .gdb_history

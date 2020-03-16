@@ -2,7 +2,7 @@
 #include <sstream>
 
 #include "../includes/database.hpp"
-#include "../cpl_proto/user.pb.h"
+#include "../proto/src/user.pb.h"
 #include "../lib/bcrypt.h"
 
 // Static attribute must be declared before class methods
@@ -663,6 +663,32 @@ int DataBase::get_room_id_from_owner_id(int owner_id, int* room_id){
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_id, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::add_player(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::set_final_points(int room_id, int player_id, int nb_players){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
     catch_error();
 
     return m_rc;
