@@ -10,11 +10,15 @@ Sprite* findById(std::vector<Sprite*>& data, uint32_t id){
 }
 
 void deleteinfoPartie_s(infoPartie_s* s){
-	for(auto sp = s->spriteVector.begin(); sp!=s->spriteVector.end(); ++sp){
+	for(auto sp = s->spriteVector.begin(); sp != s->spriteVector.end(); ++sp){
 		delete (*sp);
 	}
 
-	for(auto sp = s->teamsVector.begin(); sp!=s->teamsVector.end(); ++sp){
+	for(auto sp = s->teamsVector.begin(); sp != s->teamsVector.end(); ++sp){
+		delete (*sp);
+	}
+
+	for(auto sp = s->armesVector.begin(); sp != s->armesVector.end(); ++sp){
 		delete (*sp);
 	}
 
