@@ -16,13 +16,17 @@ gameInfo(nullptr){
     QPixmap("images/blocs/blocSolide.png")
   };
 
-  skinSprite = new QPixmap[5]{
+  skinSprite = new QPixmap[2]{
     QPixmap("images/bomb.png"),
     QPixmap("images/lombrics/lomb1.png"),
-    QPixmap("images/lombrics/lomb1.png"),
-    QPixmap("images/lombrics/lomb1.png"),
-    QPixmap("images/lombrics/lomb1.png")
   };
+
+  skinWeapons = new QPixmap[2]{
+    QPixmap("images/weapons/bazooka.png"),
+    QPixmap("images/weapons/baseballbat.png")
+  };
+
+  chooseWeaponRects = new QRect[2];//on a que 2 armes
 }
 
 void partieQT::update(){
@@ -193,7 +197,6 @@ void partieQT::drawMap(){
   painter.setBrush(Qt::SolidPattern);
   QPen pen;
   pen.setColor(Qt::black);
-  pen.setWidth(blockWidth*2);
   painter.setPen(pen);
   QString name(text.c_str());
   painter.drawText(blockWidth, blockWidth, name);
@@ -221,6 +224,26 @@ void partieQT::drawMap(){
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
   painter.drawText(blockWidth, 3*blockWidth, nameLomb);
+
+
+  //Affichage du choix des armes
+  if(tour){
+    int xRect = blockWidth;
+    painter.setBrush(Qt::NoBrush);
+    pen.setWidth(blockWidth/6);
+    for(int i=0; i<2; ++i){
+      if(i == weaponIndex){
+          pen.setColor(Qt::red);
+      }else{pen.setColor(Qt::black);}
+      painter.setPen(pen);
+      int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
+      chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*blockWidth, RECT_WEAPON_SIZE*blockWidth);
+
+      QPixmap skin = skinWeapons[i].scaled(chooseWeaponRects[i].width(), chooseWeaponRects[i].height());
+      painter.drawRect(chooseWeaponRects[i]);
+      painter.drawPixmap(chooseWeaponRects[i], skin);
+    }
+  }
 
 
   gameLabel->setScaledContents(true);
@@ -256,27 +279,8 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   int y = (pos[1]-camY)*blockWidth;
 
   QPixmap texture;
-  switch(s->getSkin()){
-    case PROJECTILE_SKIN:
-      texture = skinSprite[0].scaled(blockWidth, blockWidth);
-      break;
-    case '1':
-      texture = skinSprite[1].scaled(blockWidth, blockWidth);
-      break;
-    case '2':
-      texture = skinSprite[2].scaled(blockWidth, blockWidth);
-      break;
-    case '3':
-      texture = skinSprite[3].scaled(blockWidth, blockWidth);
-      break;
-    case '4':
-      texture = skinSprite[4].scaled(blockWidth, blockWidth);
-      break;
-    default:
-      texture = skinSprite[4].scaled(blockWidth, blockWidth);
-      break;
-  };
   if (id){//si lombric dans la case
+    texture = skinSprite[1];
     Lombric_c* lomb = dynamic_cast<Lombric_c*>(s);
     int direction = lomb->getDirection();
     texture = texture.transformed(QTransform().scale(-direction,1));
@@ -297,7 +301,10 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     QString name(lomb->getName().c_str());
     painter.drawText(rect, Qt::AlignCenter, name);
   }
-  painter.drawPixmap(x, y, texture);
+  else{
+    texture = skinSprite[1];
+  }
+  painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
 
 }
 
@@ -409,18 +416,14 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         blockWidth = tempSizeBlock;
       }
     }
-    /*
+    
     else if (event->type() == QEvent::MouseButtonPress){
       bazookaSelected = true;
       if (bazookaSelected){
         timerPower.start();
       }
     }
-    else if (event->type() == QEvent::MouseButtonRelease){
-      if (bazookaSelected){
-        timerPower.stop();
-      }
-    }*/
+
 
     if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
@@ -488,4 +491,6 @@ void partieQT::moveCurrentLombric(int mouvement){
 partieQT::~partieQT(){
   delete[] textureMur;
   delete[] skinSprite;
+  delete[] skinWeapons;
+  delete[] chooseWeaponRects;
 }

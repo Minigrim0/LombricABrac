@@ -4,6 +4,7 @@
 #define INIT_SIZE_BLOCK 40
 #define MIN_SIZE_BLOCK 10
 #define EPAISSEUR_BAR_VIE 0.1
+#define RECT_WEAPON_SIZE 3
 
 
 #include <QtWidgets>
@@ -103,10 +104,9 @@ private:
 
   QPixmap *textureMur;
   QPixmap *skinSprite;
+  QPixmap *skinWeapons;
 
-  //QTimer  timerPower;
-  //uint32_t timePressed;
-  //bool bazookaSelected;
+  QRect *chooseWeaponRects;
 
   void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
