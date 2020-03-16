@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/Resources/cropped-1920-1080-521477.jpg);
+   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
 font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
 </string>
   </property>
@@ -89,8 +89,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Créer une partie</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-play-64.png</normaloff>:/icons/Resources/icons8-play-64.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-play-64.png</normaloff>:/icons/UI/Resources/icons8-play-64.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -125,8 +125,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Créer / Modifier son équipe</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-hydra-48.png</normaloff>:/icons/Resources/icons8-hydra-48.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-hydra-48.png</normaloff>:/icons/UI/Resources/icons8-hydra-48.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -161,8 +161,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Classement</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-bookmark-100.png</normaloff>:/icons/Resources/icons8-bookmark-100.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-bookmark-100.png</normaloff>:/icons/UI/Resources/icons8-bookmark-100.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -197,8 +197,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Historique</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-bookmark-64.png</normaloff>:/icons/Resources/icons8-bookmark-64.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-bookmark-64.png</normaloff>:/icons/UI/Resources/icons8-bookmark-64.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -233,8 +233,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Amis</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-friends-64.png</normaloff>:/icons/Resources/icons8-friends-64.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-friends-64.png</normaloff>:/icons/UI/Resources/icons8-friends-64.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -269,8 +269,8 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
         <string>Se déconnecter</string>
        </property>
        <property name="icon">
-        <iconset resource="images_widget.qrc">
-         <normaloff>:/icons/Resources/icons8-export-64.png</normaloff>:/icons/Resources/icons8-export-64.png</iconset>
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-export-64.png</normaloff>:/icons/UI/Resources/icons8-export-64.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -301,7 +301,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
   </layout>
  </widget>
  <resources>
-  <include location="images_widget.qrc"/>
+  <include location="../images_widget.qrc"/>
  </resources>
  <connections/>
 </ui>
