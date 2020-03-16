@@ -194,6 +194,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   QPainter painter(gamePixmap);
 
   int pos[2];
+  int id = s->getId();
   s->getPos(pos);
 
   int x = pos[0] * blockWidth;
@@ -220,6 +221,10 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
       texture = skinSprite[4].scaled(blockWidth, blockWidth);
       break;
   };
+  if (id){
+    int direction = dynamic_cast<Lombric_c*>(s)->getDirection();
+    texture = texture.transformed(QTransform().scale(-direction,1));
+  }
   painter.drawPixmap(x, y, texture);
 
 }
@@ -316,9 +321,8 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
       drawMap();
     }
 
-    if (event->type() == QEvent::KeyPress){
+    else if (event->type() == QEvent::KeyPress){
       QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-      std::cout << "key: " << keyEvent->key() << std::endl;
       switch (keyEvent->key()) {
         case Qt::Key_Right://fleche droite poue aller a droite
           moveCurrentLombric(FORWARD);
@@ -333,6 +337,10 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
           break;
       }
       drawMap();
+   }
+
+   else if (event->type() == QEvent::MouseButtonPress){
+
    }
 
     return false;

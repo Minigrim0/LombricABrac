@@ -14,6 +14,7 @@
 #include <QKeyEvent>
 #include <QWheelEvent>
 #include <QPainter>
+#include <QMouseEvent>
 
 
 #include "client.hpp"
