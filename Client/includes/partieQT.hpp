@@ -91,7 +91,7 @@ private:
   void drawMur(int x, int y);//dessine 1 mur
   void drawSprites();
   void drawSprite(Sprite* s, int* oldPos=nullptr, int* newPos=nullptr);
-  void setPenColor(Lombric_c* lomb, QPen *pen);
+  void setPenColor(Lombric_c* lomb, QPainter *painter);
 
   bool updateSprites(double t);// t = temps actuel en milliseconde
   void moveCurrentLombric(int mouvement);//peut prendre TRANSLATE_MOVE ou JUMP_MOVE en argument
