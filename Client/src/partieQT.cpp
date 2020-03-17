@@ -252,7 +252,7 @@ void partieQT::drawMap(){
   if(beginShoot){
     //DRAW POWER BAR
     int power = getPower();
-    
+
     painter.setPen(Qt::red);
     painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, 200, 30);
     painter.setBrush(Qt::red);
@@ -458,7 +458,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         }
       }
 
-      if(!changed && tour){
+      if(!changed && tour && weaponIndex != -1 ){
         powerShootChrono = std::chrono::high_resolution_clock::now();
         beginShoot = true;
       }
