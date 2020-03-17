@@ -25,13 +25,21 @@ Ensuite pour lancer le serveur, il suffit de taper
 ```
 
 ## Partie client
-Pour compiler et lancer le client, tapez les commandes suivantes dans votre terminal
+Dépendance: ncurses et qt5
+```
+	sudo apt-get install libncurses-dev qt5*
+```
+
+Pour compiler:
 ```
 	cd Client
-	sudo apt-get install libncurses-dev
 	make
 ```
 Ensuite, vous pouvez lancer le client en utilisant
 ```
 	./lombricABrac <adresse du serveur> <port du serveur>
+```
+Pour ne pas utiliser l'interface graphique mais la console:
+```
+	./lombricABrac <adresse du serveur> <port du serveur> nogui
 ```
