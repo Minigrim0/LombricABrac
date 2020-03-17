@@ -8,12 +8,12 @@
 #include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
+#include "../includes/user_thread.hpp"
 #include "../includes/game_thread.hpp"
 #include "../proto/src/user.pb.h"
 #include "../includes/connected_player.hpp"
 #include "../includes/zhelpers.hpp"
 
-std::mutex mu;
 std::mutex DataBase_mutex;
 DataBase db("lab.db");
 std::mutex pub_mutex;
@@ -59,31 +59,14 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 la_poste->envoie_bool(CON_R,1);
                 db.connect_user(true, usr->pseudo());
                 DataBase_mutex.unlock();
-                return 3;
+                return USER_CONNECTED;
             }
             else{
                 la_poste->envoie_bool(CON_R,0);
             }
         }
-        else{
-            int id = 0;
-            db.get_user_id(usr->pseudo(), &id);
-            if(id > 0){ // A user with the same pseudonym exists
-                la_poste->envoie_bool(CON_R, 0);
-            }
-            else{
-                db.register_user(usr->pseudo(),usr->password());
-                int user_id;
-                db.get_user_id(usr->pseudo(), &user_id);
-                usr->set_id(user_id);
-                usr->set_auth(true);
-                for(int i=0;i<8;i++){
-                    db.add_lombric(user_id, i, "anélonyme");
-                }
-                la_poste->envoie_bool(CON_R, 1);
-                DataBase_mutex.unlock();
-                return 3;
-            }
+        else{ // The player has no account yet
+            register_user(la_poste, usr);
         }
     }
     else if(usr->is_auth()){
@@ -201,8 +184,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     inv->set_game_id(0);
                 }
 
-                // Need to get the room invites
-
                 la_poste->envoie_msg(GET_ALL_INVIT, invs.SerializeAsString());
                 break;
             }
@@ -226,9 +207,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case INVI_R:{
-                std::cout << "Sending invite to someone" << std::endl;
                 la_poste->envoie_msg(INVI_R, zmq_msg);
-                std::cout << "Sent" << std::endl;
                 break;
             }
             case FRI_RMV:{
@@ -307,4 +286,65 @@ void create_room_thread(ZMQ_msg zmqmsg){
     s_sendmore_b(publisher, stream.str());
     s_send_b(publisher, partie_r.SerializeAsString());
     pub_mutex.unlock();
+}
+
+
+// Cases
+bool send_room_invite(ZMQ_msg *zmqmsg, Listener *la_poste, ConnectedPlayer *usr){
+    int online = 0;
+    int friend_id;
+    int room_id;
+    Invitation invit;
+
+    la_poste->reception();
+    invit.ParseFromString(la_poste->get_buffer());
+    invit.set_type(true);
+
+    DataBase_mutex.lock();
+    db.get_user_id(invit.pseudo(), &friend_id);
+    db.is_online(friend_id, &online);
+    db.get_room_id_from_owner_id(usr->get_id(), &room_id);
+    DataBase_mutex.unlock();
+
+    invit.set_game_id(room_id);
+
+    if(online){
+        ZMQ_msg zmqmsg;
+        invit.set_pseudo(usr->pseudo());
+
+        zmqmsg.set_type_message(INVI_R);
+        zmqmsg.set_receiver_id(friend_id);
+        zmqmsg.set_message(invit.SerializeAsString());
+
+        pub_mutex.lock();
+        s_sendmore_b(publisher, "all");
+        s_send_b(publisher, zmqmsg.SerializeAsString());
+        pub_mutex.unlock();
+
+        return true;
+    };
+
+    return false;
+}
+
+int register_user(Listener* la_poste, ConnectedPlayer *usr){
+    int id = 0;
+    db.get_user_id(usr->pseudo(), &id);
+
+    if(id > 0){ // A user with the same pseudonym exists
+        la_poste->envoie_bool(CON_R, 0);
+        return 0;
+    }
+
+    db.register_user(usr->pseudo(),usr->password());
+    int user_id;
+    db.get_user_id(usr->pseudo(), &user_id);
+    usr->set_id(user_id);
+    usr->set_auth(true);
+    for(int i=0;i<8;i++){
+        db.add_lombric(user_id, i, "anélonyme");
+    }
+    la_poste->envoie_bool(CON_R, 1);
+    DataBase_mutex.unlock();
+    return USER_CONNECTED;
 }

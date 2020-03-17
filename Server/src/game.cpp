@@ -1,139 +1,137 @@
 #include <iostream>
 #include <ctime>
-#include <sstream>
 #include <fstream>
 
 #include "../includes/game.hpp"
 #include "../includes/game_thread.hpp"
 #include "../includes/utils.hpp"
-#include "../includes/connected_player.hpp"
 #include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../proto/src/user.pb.h"
 
-
-Joueur::Joueur()
-:m_Equipe(0),
-m_player_id(0),
-m_channel(""),
-m_current_lombric(0),
-m_is_current_player(false),
-m_pseudo("")
-{
-    for(int i=0;i<8;i++)
-        m_Lombrics[i] = 0;
-}
-
-Joueur::~Joueur(){}
-
-uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t cur_lomb=0;cur_lomb<nbr_lomb;cur_lomb++){
-        if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
-            m_current_lombric++;
-            m_current_lombric=m_current_lombric>nbr_lomb?0:m_current_lombric;
-            return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
-        }
-    }
-
-    return 0;
-}
-
-void Joueur::set_nb_lombs(uint8_t nb_lombs){
-    nbr_lomb = nb_lombs;
-}
-
-void Joueur::sendMessage(std::string msg){
-    pub_mutex.lock();
-    s_sendmore_b(publisher, m_channel);
-    s_send_b(publisher, msg);
-    pub_mutex.unlock();
-}
-
-void Joueur::set_pseudo(std::string pseudo){
-    m_pseudo = pseudo;
-}
-
-void Joueur::set_equipe(uint8_t equipe){
-    m_Equipe = equipe;
-}
-
-void Joueur::set_player_id(int id){
-    m_player_id = id;
-    std::ostringstream stream;
-    stream << "users/" << id << "/room";
-    m_channel = stream.str();
-}
-
-void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<nbr_lomb;i++){
-        if(m_Lombrics[i] == static_cast<unsigned int>(id)){
-            m_current_lombric = i;
-        }
-    }
-}
-
-void Joueur::set_current_player(bool current){
-    m_is_current_player = current;
-}
-
-void Joueur::add_worms(int worm, int nbWorm){
-    for(int x=0;x<nbWorm;x++){
-        if(m_Lombrics[x] == 0){
-            m_Lombrics[x] = worm;
-            return;
-        }
-    }
-}
-
 Game::Game(uint32_t owner)
-:owner_id(owner),
-current_player(0)
-{}
+:m_owner_id(owner),
+m_current_player_id(0),
+m_map(nullptr)
+{
+    set_map(INIT_MAP_ID);
+    set_nb_lombs(INIT_NB_LOMBS);
+    set_nb_teams(INIT_NB_TEAMS);
+    set_round_time(INIT_ROUND_TIME);
+    set_global_time(INIT_GLOBAL_TIME);
+}
 
-Game::~Game(){}
-
-//void Game::set_begin(){
-//    time(&begin);
-//}
-
-void Game::set_round_time(){
-    time(&time_round);
+Game::~Game(){
+    delete m_map;
+    for(size_t index=0;index<m_lombs.size();index++)
+        delete m_lombs[index];
 }
 
 void Game::set_lomb(uint8_t nb_lomb){
-    nbr_lomb = nb_lomb;
+    m_lomb_nb = nb_lomb;
     for(uint8_t x;x<m_players.size();x++){
         m_players[x].set_nb_lombs(nb_lomb);
     }
 }
 
-//bool Game::check_time(){
-//    return (difftime(time(NULL),begin) > time_game);
-//}
+void Game::set_nb_lombs(uint8_t nbr_lombs){m_lomb_nb = nbr_lombs;}
+void Game::set_map(uint8_t id_map){m_map_id = id_map;}
+void Game::set_nb_teams(uint8_t nbr_teams){m_team_nb = nbr_teams;}
+void Game::set_round_time(int round_time){m_max_time_round = round_time;}
+void Game::set_global_time(int global_time){m_max_time_game = global_time;}
+
+void Game::add_user(ZMQ_msg *zmq_msg){
+    UserConnect usr;
+    infoRoom room;
+    Joueur newPlayer;
+
+    //Setting the informations of the room in infoRoom object
+    room.set_nbr_lomb(static_cast<uint32_t>(m_lomb_nb));
+    room.set_map(static_cast<uint32_t>(m_map_id));
+    room.set_nbr_eq(static_cast<uint32_t>(m_team_nb));
+    room.set_time_round(m_max_time_round);
+
+    for(size_t i = 0;i<m_players.size();i++){
+        Join_groupe_r* joueur = room.add_joueur();
+        joueur->set_pseudo(m_players[i].get_pseudo());
+        joueur->set_id(m_players[i].get_id());
+    }
+
+    // Changinf the zmqmsg message to the informations of the room
+    zmq_msg->set_message(room.SerializeAsString());
+
+    newPlayer.set_player_id(zmq_msg->receiver_id());
+    newPlayer.set_nb_lombs(m_lomb_nb);
+
+    // Sending the informations to the user
+    newPlayer.sendMessage(zmq_msg->SerializeAsString());
+
+    End_tour lombs;
+
+    DataBase_mutex.lock();
+    db.get_x_lombrics(zmq_msg->receiver_id(), m_lomb_nb, &lombs);
+    db.get_user(zmq_msg->receiver_id(), &usr);
+    DataBase_mutex.unlock();
+
+    for(int x=0;x<m_lomb_nb;x++)
+        newPlayer.add_worms(lombs.id_lomb_mort(x), m_lomb_nb);
+
+    newPlayer.set_pseudo(usr.pseudo());
+
+    Usr_add usr_add;
+    usr_add.set_pseudo(usr.pseudo());
+    zmq_msg->set_type_message(USR_ADD);
+    zmq_msg->set_message(usr.SerializeAsString());
+
+    m_players.push_back(newPlayer);
+
+    for(size_t i = 0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+
+bool Game::check_time(){
+    return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
+}
 
 bool Game::check_round_time(){
-    return (difftime(time(NULL),time_round) > time_round_game);
+    return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
 }
 
-uint32_t Game::who_next(){
-    return m_players[current_player].getNextLombricId(&obj_partie, nbr_lomb);
+uint32_t Game::get_next_lombric_id(){
+    return m_players[m_current_player_id].getNextLombricId(&m_game_object, m_lomb_nb);
 }
 
-// Handles the events where a user quits
-void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
-    //If the message is not of type QUIT, we dont care
-    if(zmq_msg.type_message() != QUIT_ROOM)
-        return;
 
-    // Else, we go trough the player vector to delete the player that has quit
-    for(size_t user_index=0;user_index<m_players.size();user_index++){
-        if(m_players[user_index].get_id() == zmq_msg.receiver_id()){
-            m_players.erase(m_players.begin() + user_index);
+void Game::set_users_team(ZMQ_msg *zmq_msg){
+    Join_groupe_s request;
+    Join_groupe_r groupe_r;
+    UserConnect usr;
+    request.ParseFromString(zmq_msg->message());
+
+    // Getting user's pseudonym
+    DataBase_mutex.lock();
+    db.get_user(zmq_msg->receiver_id() ,&usr);
+    DataBase_mutex.unlock();
+
+    groupe_r.set_pseudo(usr.pseudo());
+    groupe_r.set_id(request.id());
+
+    // Setting up the message to send to everyone
+    zmq_msg->set_type_message(JOIN_GROUP_R);
+    zmq_msg->set_message(groupe_r.SerializeAsString());
+
+    // Setting the user in the good team
+    for(size_t i=0;i<m_players.size();i++){
+        if(zmq_msg->receiver_id() == m_players[i].get_id()){
+            m_players[i].set_equipe(request.id());
+            break;
         }
     }
 
-    // Finally, if the vector is empty, we delete the game thread
-    if(m_players.empty()){
-        *current_step = STEP_GAMEEND;
+    //Sending the informations about the user who changed team
+    for(size_t i = 0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
     }
 }
 
@@ -156,93 +154,19 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         pub_mutex.unlock();
     }
     else if(zmq_msg.type_message() == JOIN_GROUP_S){
-        Join_groupe_s request;
-        Join_groupe_r groupe_r;
-        UserConnect usr;
-        request.ParseFromString(zmq_msg.message());
-
-        // Getting user's pseudonym
-        DataBase_mutex.lock();
-        db.get_user(zmq_msg.receiver_id() ,&usr);
-        DataBase_mutex.unlock();
-
-        groupe_r.set_pseudo(usr.pseudo());
-        groupe_r.set_id(request.id());
-
-        // Setting up the message to send to everyone
-        zmq_msg.set_type_message(JOIN_GROUP_R);
-        zmq_msg.set_message(groupe_r.SerializeAsString());
-
-        // Setting the user in the good team
-        for(size_t i=0;i<m_players.size();i++){
-            if(zmq_msg.receiver_id() == m_players[i].get_id()){
-                m_players[i].set_equipe(request.id());
-                break;
-            }
-        }
-
-        //Sending the informations about the user who changed team
-        for(size_t i = 0;i<m_players.size();i++){
-            m_players[i].sendMessage(zmq_msg.SerializeAsString());
-        }
+        set_users_team(&zmq_msg);
     }
     else if(zmq_msg.type_message() == INFO_ROOM){
-        UserConnect usr;
-        infoRoom room;
-        Joueur newPlayer;
-
-        //Setting the informations of the room in infoRoom object
-        room.set_nbr_lomb(static_cast<uint32_t>(nbr_lomb));
-        room.set_map(static_cast<uint32_t>(map_id));
-        room.set_nbr_eq(static_cast<uint32_t>(nbr_eq));
-        room.set_time_round(time_round_game);
-
-        for(size_t i = 0;i<m_players.size();i++){
-            Join_groupe_r* joueur = room.add_joueur();
-            joueur->set_pseudo(m_players[i].get_pseudo());
-            joueur->set_id(m_players[i].get_id());
-        }
-
-        // Changinf the zmqmsg message to the informations of the room
-        zmq_msg.set_message(room.SerializeAsString());
-
-        newPlayer.set_player_id(zmq_msg.receiver_id());
-        newPlayer.set_nb_lombs(nbr_lomb);
-
-        // Sending the informations to the user
-        newPlayer.sendMessage(zmq_msg.SerializeAsString());
-
-        End_tour lombs;
-
-        DataBase_mutex.lock();
-        db.get_x_lombrics(zmq_msg.receiver_id(), nbr_lomb, &lombs);
-        db.get_user(zmq_msg.receiver_id(), &usr);
-        DataBase_mutex.unlock();
-
-        for(int x=0;x<nbr_lomb;x++)
-            newPlayer.add_worms(lombs.id_lomb_mort(x), nbr_lomb);
-
-        newPlayer.set_pseudo(usr.pseudo());
-
-        Usr_add usr_add;
-        usr_add.set_pseudo(usr.pseudo());
-        zmq_msg.set_type_message(USR_ADD);
-        zmq_msg.set_message(usr.SerializeAsString());
-
-        m_players.push_back(newPlayer);
-
-        for(size_t i = 0;i<m_players.size();i++){
-            m_players[i].sendMessage(zmq_msg.SerializeAsString());
-        }
+        add_user(&zmq_msg);
     }
-    else if(zmq_msg.receiver_id() == owner_id){
+    else if(zmq_msg.receiver_id() == m_owner_id){
         // Room admin actions
         switch(zmq_msg.type_message()){
             case MAP_MOD:{
                 zmq_msg.set_type_message(MAP_MOD);
                 Map_mod map_m;
                 map_m.ParseFromString(zmq_msg.message());
-                map_id = map_m.id();
+                m_map_id = map_m.id();
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -253,7 +177,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 zmq_msg.set_type_message(NB_EQ_MOD);
                 Nbr_eq_mod eq_m;
                 eq_m.ParseFromString(zmq_msg.message());
-                nbr_eq = eq_m.nbr_eq();
+                m_team_nb = eq_m.nbr_eq();
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -261,30 +185,24 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 }
                 break;
             }
-            //case TIME_MOD:{
-            //    zmq_msg.set_type_message(TIME_MOD);
-            //    Time_mod time_m;
-            //    time_m.ParseFromString(zmq_msg.message());
-            //    time_game = time_m.time();
-            //
-            //    pub_mutex.lock();
-            //    for(int i = 0;i<4;i++){
-            //        stream.str("");
-            //        stream.clear();
-            //        if(player_id[i] > 0){
-            //            stream << "users/" << player_id[i] << "/room";
-            //            s_sendmore_b(publisher, stream.str());
-            //            s_send_b(publisher, zmq_msg.SerializeAsString());
-            //        }
-            //    }
-            //    pub_mutex.unlock();
-            //    break;
-            //}
+            case TIME_MOD:{
+                zmq_msg.set_type_message(TIME_MOD);
+                Time_mod time_m;
+                time_m.ParseFromString(zmq_msg.message());
+                m_max_time_game = time_m.time();
+
+                pub_mutex.lock();
+                for(size_t i=0;i<m_players.size();i++){
+                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
+                }
+                pub_mutex.unlock();
+                break;
+            }
             case TIME_ROUND_MOD:{
                 zmq_msg.set_type_message(TIME_ROUND_MOD);
                 Time_mod time_r_m;
                 time_r_m.ParseFromString(zmq_msg.message());
-                time_round_game = time_r_m.time();
+                m_max_time_round = time_r_m.time();
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -295,7 +213,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 zmq_msg.set_type_message(NB_LOMB_MOD);
                 Nbr_lomb_mod nbr_lomb_m;
                 nbr_lomb_m.ParseFromString(zmq_msg.message());
-                nbr_lomb = nbr_lomb_m.nbr_lomb();
+                m_lomb_nb = nbr_lomb_m.nbr_lomb();
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -306,6 +224,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 //Setting current game step to STEP_GAME
                 *current_step = STEP_GAME;
                 spawn_lombric();
+                time(&m_begin_time_game);
+                time(&m_begin_time_round);
 
                 zmq_msg.set_type_message(START);
                 infoPartie_p msg;
@@ -347,12 +267,12 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 zmq_msg.Clear();
                 zmq_msg.set_type_message(NEXT_ROUND);
                 Next_lombric lomb;
-                lomb.set_id_lomb(who_next());
+                lomb.set_id_lomb(get_next_lombric_id());
                 std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
-                obj_partie.setCurrentLomb(lomb.id_lomb());
+                m_game_object.setCurrentLomb(lomb.id_lomb());
 
                 for(size_t i=0;i<m_players.size();i++){
-                    if(i == current_player){
+                    if(i == m_current_player_id){
                         lomb.set_is_yours(true);
                         zmq_msg.set_message(lomb.SerializeAsString());
                         m_players[i].sendMessage(zmq_msg.SerializeAsString());
@@ -376,13 +296,13 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
     switch(zmq_msg.type_message()){
         case POS_LOMB_S:{
-            obj_partie.moveCurrentLombric(zmq_msg.message());
+            m_game_object.moveCurrentLombric(zmq_msg.message());
             zmq_msg.set_type_message(POS_LOMB_R);
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
             //le mouvement peut impliquer la fin du tour
-            if(obj_partie.isTourFinish())end_round(current_step);
+            if(m_game_object.isTourFinish())end_round(current_step);
             break;
         }
         case SHOOT:{
@@ -393,7 +313,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
 
             std::vector<std::string> res;
-            res = obj_partie.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
+            res = m_game_object.useWeapon(zmq_msg.message()); // 1: liste_proj 2:degats
 
             zmq_msg.set_type_message(UPDATE_WALL);
             zmq_msg.set_message(res[0]);
@@ -407,7 +327,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
 
             std::cout << "All is send" << std::endl;
-            obj_partie.waitAnimationTime();
+            m_game_object.waitAnimationTime();
             end_round(current_step);
             break;
         }
@@ -421,21 +341,19 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
 
-    set_round_time();
-
-    std::cout << "Previous player : " << static_cast<int>(current_player) << std::endl;
+    std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
 
     do{
-        current_player++;
-        if(current_player >= m_players.size())
-            current_player = 0;
+        m_current_player_id++;
+        if(m_current_player_id >= m_players.size())
+            m_current_player_id = 0;
 
-        next_lomb_id = who_next();
+        next_lomb_id = get_next_lombric_id();
         std::cout << "Next lomb id : " << next_lomb_id << std::endl;
-        std::cout << "Current player : " << static_cast<int>(current_player) << std::endl;
+        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
     }while(next_lomb_id == 0);
 
-    obj_partie.setCurrentLomb(next_lomb_id);
+    m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
     if(false) //Si endgame
@@ -445,7 +363,7 @@ void Game::end_round(int *current_step){
     lomb.set_id_lomb(next_lomb_id);
 
     for(size_t i=0;i<m_players.size();i++){
-        if(i == current_player){
+        if(i == m_current_player_id){
             lomb.set_is_yours(true);
             std::cout << "Tour de " << i << std::endl;
             zmq_msg.set_message(lomb.SerializeAsString());
@@ -457,7 +375,7 @@ void Game::end_round(int *current_step){
             m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
     }
-    time(&time_round);
+    time(&m_begin_time_round);
 }
 
 void Game::spawn_lombric(){
@@ -466,7 +384,7 @@ void Game::spawn_lombric(){
     uint32_t hauteur;
     uint32_t largeur;
 
-    stream << "../map/" << static_cast<int>(map_id) << ".map";
+    stream << "../map/" << static_cast<int>(m_map_id) << ".map";
     std::ifstream MyReadFile(stream.str());
     std::getline (MyReadFile, myText);
     std::stringstream(myText) >> hauteur >> largeur;
@@ -478,13 +396,32 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    Map* m = new Map(largeur,hauteur,map_s);
+    Map* m_map = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
-        for(int j=0;j<nbr_lomb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m));
+        for(int j=0;j<m_lomb_nb;j++){
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
         }
     }
 
-    obj_partie.setParam(m, m_lombs);
+    m_game_object.setParam(m_map, m_lombs);
+}
+
+// Handles the events where a user quits
+void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
+    //If the message is not of type QUIT, we dont care
+    if(zmq_msg.type_message() != QUIT_ROOM)
+        return;
+
+    // Else, we go trough the player vector to delete the player that has quit
+    for(size_t user_index=0;user_index<m_players.size();user_index++){
+        if(m_players[user_index].get_id() == zmq_msg.receiver_id()){
+            m_players.erase(m_players.begin() + user_index);
+        }
+    }
+
+    // Finally, if the vector is empty, we delete the game thread
+    if(m_players.empty()){
+        *current_step = STEP_GAMEEND;
+    }
 }

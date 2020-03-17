@@ -13,6 +13,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
     bool game_running = true;
     int current_step = STEP_ROOM;
     Game current_game(owner);
+
     ZMQ_msg zmqmsg;
 
     zmq::context_t context(1);
@@ -42,9 +43,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
                     size_t opt_value = 500;
                     subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
                 }
-                //current_game.set_begin();
 
-                current_game.set_round_time();
                 while(current_step == STEP_GAME){
                     //if(current_game.check_time()){
                     //    //mort subite

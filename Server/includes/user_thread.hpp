@@ -3,6 +3,8 @@
 
 #include "database.hpp"
 
+#define USER_CONNECTED 1
+
 int client_thread(int socket_client);
 
 #endif

@@ -56,7 +56,7 @@ public:
 	inline std::string getName(){return name;}
 	inline int getId(){return id;}
 	inline int getDegat(){return degat;}
-	~Arme()=default;
+	virtual ~Arme()=default;
 };
 
 
