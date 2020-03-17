@@ -1,4 +1,6 @@
 #include "../includes/client.hpp"
+#include "../includes/partieQT.hpp"
+
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
@@ -189,6 +191,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	MyReadFile.close();
 
+
 	gameInfo->carte = new Map(largeur, hauteur, map);
 
 	for (int i=0;i<currentParams.nbr_equipes;i++){
@@ -205,6 +208,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	//remplis le vecteur des projectiles
 	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
+
 
 	thisGame = gameInfo;
 }

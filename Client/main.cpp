@@ -6,6 +6,15 @@
 #include <thread>
 #include <cerrno>
 
+//je sais pas trop pourquoi
+#undef scroll
+#undef border
+#undef timeout
+#include <QObject>
+#include <QApplication>
+
+#include "includes/mainWindow.hpp"
+
 #include <fstream>
 
 
@@ -13,7 +22,6 @@
 #include <fstream>
 #include <sstream>
 
-#include "includes/UI.hpp"
 
 using namespace std;
 /*
@@ -44,39 +52,30 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    // system("resize -s 30 100
-
-    Menu_jeu_window menu_window;
-    Menu_entrer enter_window;
-    Menu_log_in login_window;
-    Menu_creation_partie create_window;
-    Warning_leave_window leave_window;
-    Warning_del_friend_window del_friend_window;
-    Warning_popup_window popup_window;
-    Liste_ami_window friends_window;
-    Salon_Attente salon_attente_window;
-    Menu_creation_equipe_lombric creation_changement_lombric;
-    Wait_window wait_window;
-    Menu_invite_amis demande_amis;
-    Historique_window historique_window;
-    Request_history_window request_history;
-    Ami_window ami_window;
-    info information;
-    information.id=1;
-    information.ishost=FALSE;
-    information.notif = 0;
-    information.notif_invit = 0;
-
-    if(argc != 3){
-        std::cout << "Il faut exactement 2 arguments (adresse du serveur et port)" << std::endl;
+    bool gui=true;
+    if(argc < 3){
+        std::cout << "Il faut minimum 2 arguments (adresse du serveur et port)" << std::endl;
         return EXIT_FAILURE;
     }
+    if(argc > 4){
+      std::cout << "Trop d'arguments" << std::endl;
+      return EXIT_FAILURE;
+    }
+    if(argc == 4){
+      if(std::string(argv[3]) == "nogui"){
+        gui = false;
+      }
+      else{
+        std::cout << "WARNING: Argument '" << argv[3] << "' inconnu (remplacer par nogui)" << std::endl;
+      }
+    }
+
     int port = strtol(argv[2],NULL,10);
     if(errno || !port){
         std::cout << "Mauvais port, est-ce un entier ?" << std::endl;
         return EXIT_FAILURE;
     }
-    information.client = new Client(argv[1], port);
+    Client* client = new Client(argv[1], port);
 
     if(errno){
         std::cout << "Vous n'avez malheureusement pas réussi à vous connecter avec le serveur" << std::endl;
@@ -90,10 +89,37 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    std::thread t(&Client::run,information.client);
+    std::thread t(&Client::run,client);
 
-    // information = enter_window.run(information);
-    while(1){
+    if(gui){
+        QApplication app(argc, argv);
+        MainWindow mw(client, nullptr);
+        mw.show();
+        app.exec();
+    }else{
+        Menu_jeu_window menu_window;
+        Menu_entrer enter_window;
+        Menu_log_in login_window;
+        Menu_creation_partie create_window;
+        Warning_leave_window leave_window;
+        Warning_del_friend_window del_friend_window;
+        Warning_popup_window popup_window;
+        Liste_ami_window friends_window;
+        Salon_Attente salon_attente_window;
+        Menu_creation_equipe_lombric creation_changement_lombric;
+        Wait_window wait_window;
+        Menu_invite_amis demande_amis;
+        Historique_window historique_window;
+        Request_history_window request_history;
+        Ami_window ami_window;
+        info information;
+        information.id=1;
+        information.ishost=FALSE;
+        information.notif = 0;
+        information.notif_invit = 0;
+        information.client = client;
+
+        while(1){
         if (information.id == -1){ //on quitte le programme
             information.client->quit();
             break;
@@ -212,6 +238,11 @@ int main(int argc, char** argv)
                 information = gameWin->run(information);
                 break;
         }
+    }
+
+
+
+
     }
 
     t.join();

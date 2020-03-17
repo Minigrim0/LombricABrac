@@ -8,7 +8,7 @@ uint32_t Map::getLargeur(){return largeur;}
 uint32_t Map::getHauteur(){return hauteur;}
 
 bool Map::isTypeBloc(uint32_t x, uint32_t y, char type){
-    return x<largeur && y<hauteur and mur[y][x] == type;
+    return x<largeur && y<hauteur && x>=0 && y>=0 && mur[y][x] == type;
 }
 
 int Map::getColor(uint32_t x,uint32_t y){
@@ -51,7 +51,7 @@ std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
         double y1 = yCircle + yExplosion;
         double y2 = -yCircle + yExplosion;
         for(int y = y2; y <= y1; ++y){
-            if(x>=0 && y>=0 && x<largeur && y<hauteur){
+            if(isTypeBloc(x,y,LIGHT_WALL)){
                 setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
                 res.push_back(x);
                 res.push_back(y);

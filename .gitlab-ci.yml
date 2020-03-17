@@ -13,6 +13,6 @@ compile:
   - make
   - make init_db
   - ./init_db true
-  - echo "TESTING CLIENT"
-  - cd ../Client/
-  - make
+  #- echo "TESTING CLIENT"
+  #- cd ../Client/
+  #- make
