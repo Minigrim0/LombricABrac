@@ -223,7 +223,7 @@ void partieQT::drawMap(){
   painter.drawText(blockWidth, 2*blockWidth, currentTour);
 
   //affiche nom lombric qui joue
-  setPenColor(lomb, &pen);
+  setPenColor(lomb, &painter);
   painter.setPen(pen);
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
@@ -295,18 +295,17 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     texture = texture.transformed(QTransform().scale(-direction,1));
 
     //Affichage de la barre de vie
-    painter.setBrush(Qt::NoBrush);
-    QPen pen;
     int color;
     int xBarVie = x;
     int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
     int largeur = blockWidth * lomb->getLife() / 100;
-    setPenColor(lomb, &pen);
-    //pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
-    painter.setPen(pen);
-    painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE);
-    painter.setBrush(Qt::SolidPattern);
-    painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);
+    setPenColor(lomb, &painter);
+
+    //painter.setPen(pen);
+    painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);// remplissage bar vie
+
+    painter.setBrush(Qt::NoBrush);
+    painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
 
     QRect rect(x-blockWidth/2, y - blockWidth, 2*blockWidth, 0.8*blockWidth);
     QString name(lomb->getName().c_str());
@@ -332,19 +331,23 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
 
 }
 
-void partieQT::setPenColor(Lombric_c* lomb, QPen *pen){
+void partieQT::setPenColor(Lombric_c* lomb, QPainter *painter){
   switch(lomb->getTeamId()){
     case 0:
-      pen->setColor(Qt::darkBlue);
+      painter->setPen(Qt::darkYellow);
+      painter->setBrush(Qt::darkYellow);
       break;
     case 1:
-      pen->setColor(Qt::green);
+      painter->setPen(Qt::darkGreen);
+      painter->setBrush(Qt::darkGreen);
       break;
     case 2:
-      pen->setColor(Qt::darkYellow);
+      painter->setPen(Qt::darkBlue);
+      painter->setBrush(Qt::darkBlue);
       break;
     case 3:
-      pen->setColor(Qt::darkMagenta);
+      painter->setPen(Qt::darkMagenta);
+      painter->setBrush(Qt::darkMagenta);
       break;
   }
 }
