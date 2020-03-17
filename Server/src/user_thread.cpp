@@ -49,7 +49,7 @@ int client_thread(int socket_client){
                     std::cout << "Redirecting zmq message " << static_cast<int>(type) << " to the client" << std::endl;
                     la_poste.envoie_msg(type, zmqmsg.message());
                 }
-                else if(type == ADD_ROOM_R){
+                else if(type == CLIENT_CREATE_ROOM_RESPONSE){
                     is_on_game = true;
                     game_url = zmqmsg.message();
                 }
@@ -77,10 +77,10 @@ int client_thread(int socket_client){
             zmqmsg.set_type_message(type);
             zmqmsg.set_receiver_id(usr.get_id());
 
-            if(type == FRI_LS_S){
+            if(type == CLIENT_ASK_FRIENDSHIP_LIST){
                 res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
             }
-            else if(type == INVI_S){
+            else if(type == CLIENT_SEND_INVITE){
                 send_room_invite(&zmqmsg, &la_poste, &usr);
             }
             else{
@@ -100,7 +100,7 @@ int client_thread(int socket_client){
             }
         }
         else{
-            if(type == JOIN_S){
+            if(type == CLIENT_JOIN_REQUEST){
                 la_poste.reception();
                 Join join_msg;
                 join_msg.ParseFromString(la_poste.get_buffer());
@@ -123,12 +123,12 @@ int client_thread(int socket_client){
                 // Waiting for the room to respond
                 std::string address = s_recv(subscriber);
                 if(address == ""){ // The room died or is full
-                    la_poste.envoie_bool(JOIN_R, false);
+                    la_poste.envoie_bool(SERVER_JOIN_RESPONSE, false);
                 }
                 else{ // The room responded
                     is_on_game = true;
                     game_url = stream.str();
-                    la_poste.envoie_bool(JOIN_R, true);
+                    la_poste.envoie_bool(SERVER_JOIN_RESPONSE, true);
                 }
 
                 continue;
@@ -155,7 +155,7 @@ int client_thread(int socket_client){
     if(is_on_game){ // Telling the room the user quit
         std::cout << "Telling room on " << game_url << " that the user quit" << std::endl;
         ZMQ_msg zmqmsg;
-        zmqmsg.set_type_message(QUIT_ROOM);
+        zmqmsg.set_type_message(CLIENT_QUIT_ROOM);
         zmqmsg.set_receiver_id(usr.get_id());
         zmqmsg.set_message(usr.pseudo());
 

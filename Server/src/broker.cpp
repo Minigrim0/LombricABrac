@@ -29,7 +29,7 @@ int broker_thread(){
         if(zmqmsg.receiver_id() == 0){
             std::cout << "---interpreting---> local" << std::endl;
             switch(zmqmsg.type_message()){
-                case ADD_ROOM_S:{
+                case CLIENT_CREATE_ROOM:{
                     create_room_thread(zmqmsg);
                     break;
                 }

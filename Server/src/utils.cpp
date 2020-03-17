@@ -47,7 +47,7 @@ void catch_error(int res, int is_perror, const char* msg, int nb_to_close, ...){
 
 int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* usr, std::string zmq_msg){
     DataBase_mutex.lock();
-    if(msg_type == CON_S){
+    if(msg_type == CLIENT_AUTHENTIFICATION){
         la_poste->reception();
         usr->ParseFromString(la_poste->get_buffer());
         if(usr->isregister()){ // si joueur a deja un compte
@@ -56,13 +56,13 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
                 usr->set_auth(true);
-                la_poste->envoie_bool(CON_R,1);
+                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE,1);
                 db.connect_user(true, usr->pseudo());
                 DataBase_mutex.unlock();
                 return USER_CONNECTED;
             }
             else{
-                la_poste->envoie_bool(CON_R,0);
+                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE,0);
             }
         }
         else{ // The player has no account yet
@@ -71,7 +71,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
     }
     else if(usr->is_auth()){
         switch(msg_type){
-            case CHAT_S:{
+            case CLIENT_SEND_MESSAGE:{
                 Chat chat_ob;
                 la_poste->reception();
                 chat_ob.ParseFromString(la_poste->get_buffer());
@@ -104,23 +104,23 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     chat->set_pseudo(usr.pseudo());
                     chat->set_msg(chat_r.msgs(a).msg());
                 }
-                la_poste->envoie_msg(CHAT_R, final_chat.SerializeAsString());
+                la_poste->envoie_msg(SERVER_MESSAGE_TRANSFER, final_chat.SerializeAsString());
                 break;
             }
-            case INVI_S:{
+            case CLIENT_SEND_INVITE:{
                 Invitation invit;
                 la_poste->reception();
                 invit.ParseFromString(la_poste->get_buffer());
 
                 break;
             }
-            case GET_LOMB:{
+            case GET_LOMBRIC_NAMES:{
                 Lomb_r lomb_r;
                 db.get_lombrics(usr->get_id(), &lomb_r);
-                la_poste->envoie_msg(LOMB_R, lomb_r.SerializeAsString());
+                la_poste->envoie_msg(GET_LOMBRIC_NAMES_RESPONSE, lomb_r.SerializeAsString());
                 break;
             }
-            case LOMB_MOD:{
+            case UPDATE_LOMBRICS_NAMES:{
                 Lomb_mod modif;
                 la_poste->reception();
                 modif.ParseFromString(la_poste->get_buffer());
@@ -134,7 +134,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 History_r history_list;
                 int user_r_id;db.get_user_id(r_history.pseudo(), &user_r_id);
                 db.get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
-                la_poste->envoie_msg(HISTORY_R, history_list.SerializeAsString());
+                la_poste->envoie_msg(SERVER_HISTORY_RESPONSE, history_list.SerializeAsString());
                 break;
             }
             case GET_RANK:{
@@ -143,10 +143,10 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 r_rank.ParseFromString(la_poste->get_buffer());
                 Rank_r rank_list;
                 db.get_rank(r_rank.first_player(),r_rank.nbr_player(), &rank_list);
-                la_poste->envoie_msg(RANK_R, rank_list.SerializeAsString());
+                la_poste->envoie_msg(SERVER_RANK_RESPONSE, rank_list.SerializeAsString());
                 break;
             }
-            case FRI_ADD:{
+            case CLIENT_ASK_FRIENDSHIP:{
                 Fri_add fri;
                 int online = 0;
                 la_poste->reception();
@@ -161,7 +161,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     invit.set_type(false);
                     invit.set_pseudo(usr->get_pseudo());
 
-                    zmqmsg.set_type_message(INVI_R);
+                    zmqmsg.set_type_message(SERVER_RECEIVE_INVITE);
                     zmqmsg.set_receiver_id(friend_id);
                     zmqmsg.set_message(invit.SerializeAsString());
 
@@ -172,7 +172,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 }
                 break;
             }
-            case GET_ALL_INVIT:{
+            case CLIENT_ASKS_ALL_INVITATIONS:{
                 Invitation_r invs;
                 Fri_ls_r list_asks;
                 db.get_friend_invites(usr->get_id(), &list_asks);
@@ -184,10 +184,10 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                     inv->set_game_id(0);
                 }
 
-                la_poste->envoie_msg(GET_ALL_INVIT, invs.SerializeAsString());
+                la_poste->envoie_msg(CLIENT_ASKS_ALL_INVITATIONS, invs.SerializeAsString());
                 break;
             }
-            case FRI_ACCEPT:{
+            case CLIENT_ACCEPT_FRIENDSHIP:{
                 Fri_accept fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -200,17 +200,17 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 }
                 break;
             }
-            case FRI_LS_S:{
+            case CLIENT_ASK_FRIENDSHIP_LIST:{
                 Fri_ls_r fri;
                 db.get_friend_list(usr->get_id(), &fri);
-                la_poste->envoie_msg(FRI_LS_R, fri.SerializeAsString());
+                la_poste->envoie_msg(SERVER_RESPONDS_FRIENDSHIP_LIST, fri.SerializeAsString());
                 break;
             }
-            case INVI_R:{
-                la_poste->envoie_msg(INVI_R, zmq_msg);
+            case SERVER_RECEIVE_INVITE:{
+                la_poste->envoie_msg(SERVER_RECEIVE_INVITE, zmq_msg);
                 break;
             }
-            case FRI_RMV:{
+            case CLIENT_DELETE_FRIENDSHIP:{
                 Fri_rmv fri;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
@@ -218,12 +218,12 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.remove_friend(usr->get_id(), friend_id);
                 break;
             }
-            case ADD_ROOM_S:{
+            case CLIENT_CREATE_ROOM:{
                 Create_room room;
                 room.set_usr_id(usr->get_id());
                 ZMQ_msg msg;
                 msg.set_receiver_id(0);
-                msg.set_type_message(ADD_ROOM_S);
+                msg.set_type_message(CLIENT_CREATE_ROOM);
                 msg.set_message(room.SerializeAsString());
                 pub_mutex.lock();
                 s_sendmore_b(publisher, "all");
@@ -275,7 +275,7 @@ void create_room_thread(ZMQ_msg zmqmsg){
     owner_usr.ParseFromString(zmqmsg.message());
 
     partie_r.set_receiver_id(owner_usr.usr_id());
-    partie_r.set_type_message(ADD_ROOM_R);
+    partie_r.set_type_message(CLIENT_CREATE_ROOM_RESPONSE);
     partie_r.set_message(stream.str());
 
     stream.str("");
@@ -312,7 +312,7 @@ bool send_room_invite(ZMQ_msg *zmqmsg, Listener *la_poste, ConnectedPlayer *usr)
         ZMQ_msg zmqmsg;
         invit.set_pseudo(usr->pseudo());
 
-        zmqmsg.set_type_message(INVI_R);
+        zmqmsg.set_type_message(SERVER_RECEIVE_INVITE);
         zmqmsg.set_receiver_id(friend_id);
         zmqmsg.set_message(invit.SerializeAsString());
 
@@ -332,7 +332,7 @@ int register_user(Listener* la_poste, ConnectedPlayer *usr){
     db.get_user_id(usr->pseudo(), &id);
 
     if(id > 0){ // A user with the same pseudonym exists
-        la_poste->envoie_bool(CON_R, 0);
+        la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 0);
         return 0;
     }
 
@@ -344,7 +344,7 @@ int register_user(Listener* la_poste, ConnectedPlayer *usr){
     for(int i=0;i<8;i++){
         db.add_lombric(user_id, i, "anélonyme");
     }
-    la_poste->envoie_bool(CON_R, 1);
+    la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 1);
     DataBase_mutex.unlock();
     return USER_CONNECTED;
 }

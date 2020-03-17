@@ -9,7 +9,7 @@ void Client::chatSend(std::string m, std::string destinataire){
 	obj.set_msg(m);
 
 	obj.SerializeToString(&msg.text); //convertis en string pour l'envoyer au serveur
-	msg.type = CHAT_S;
+	msg.type = CLIENT_SEND_MESSAGE;
 
 	sendMutex.lock();
 	sendMessage(msg);
@@ -21,10 +21,10 @@ stringTable Client::getFriendList(){
 
 	stringTable res{0,nullptr};
 
-	m.type = FRI_LS_S;
+	m.type = CLIENT_ASK_FRIENDSHIP_LIST;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	std::string* reponse = waitAnswers(FRI_LS_R,m);
+	std::string* reponse = waitAnswers(SERVER_RESPONDS_FRIENDSHIP_LIST,m);
 
 	Fri_ls_r obj;
 	obj.ParseFromString(*reponse); //reconvertit le string recu en struct
@@ -50,7 +50,7 @@ void Client::delFriend(std::string destinataire){
 	obj.set_user(destinataire);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = FRI_RMV;
+	m.type = CLIENT_DELETE_FRIENDSHIP;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -66,7 +66,7 @@ void Client::addFriend(std::string user){
 	obj.set_pseudo(user);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = FRI_ADD;
+	m.type = CLIENT_ASK_FRIENDSHIP;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -96,7 +96,7 @@ void Client::acceptFriend(std::string username, bool ok){
 	obj.set_user(username);
 
 	obj.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur
-	m.type = FRI_ACCEPT;
+	m.type = CLIENT_ACCEPT_FRIENDSHIP;
 
 	sendMutex.lock();
 	sendMessage(m);

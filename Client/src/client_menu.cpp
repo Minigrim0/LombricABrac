@@ -11,9 +11,9 @@ bool Client::connection(std::string username, std::string password, bool inscrip
 	obj.set_isregister(inscription);
 
 	obj.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur
-	m.type = CON_S;
+	m.type = CLIENT_AUTHENTIFICATION;
 
-	std::string* reponse = waitAnswers(CON_R, m); //envoie le message au serveur et attends la réponse
+	std::string* reponse = waitAnswers(AUTHENTIFICATION_RESPONSE, m); //envoie le message au serveur et attends la réponse
 
 	bool res = (*reponse)[0];
 
@@ -37,7 +37,7 @@ void Client::quit(){
 
 void Client::createRoom(){
 	message m{};
-	m.type = ADD_ROOM_S;
+	m.type = CLIENT_CREATE_ROOM;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
 	sendMutex.lock();
@@ -47,7 +47,7 @@ void Client::createRoom(){
 
 void Client::quitRoom(){
 	message m{};
-	m.type = QUIT_ROOM;
+	m.type = CLIENT_QUIT_ROOM;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
 	sendMutex.lock();
@@ -74,7 +74,7 @@ void Client::addToGame(std::string destinataire){
 	obj.set_pseudo(destinataire);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur pour l'envoyer au serveur
-	m.type = INVI_S;
+	m.type = CLIENT_SEND_INVITE;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -92,9 +92,9 @@ bool Client::joinPartie(int room_id){
 	//obj.set_accept(ok);
 
 	obj.SerializeToString(&m.text);//convetis en string
-	m.type = JOIN_S;
+	m.type = CLIENT_JOIN_REQUEST;
 
-	std::string* reponse = waitAnswers(JOIN_R, m);//m.text de la réponse
+	std::string* reponse = waitAnswers(SERVER_JOIN_RESPONSE, m);//m.text de la réponse
 
 	bool res = (*reponse)[0];
 
@@ -108,10 +108,10 @@ stringTable Client::getLombricsName(){
 
 	stringTable res{0,nullptr};
 
-	m.type = GET_LOMB;
+	m.type = GET_LOMBRIC_NAMES;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	std::string* reponse = waitAnswers(LOMB_R,m);//m.text de la réponse
+	std::string* reponse = waitAnswers(GET_LOMBRIC_NAMES_RESPONSE,m);//m.text de la réponse
 
 	//construction de la structure à envoyer a l'affichage à partir de la réponse du serveur
 	Lomb_r obj;
@@ -130,10 +130,10 @@ stringTable Client::getLombricsName(){
 
 std::vector<invitation> Client::afficheAllInvits(){
 	message m{};
-	m.type = GET_ALL_INVIT;
+	m.type = CLIENT_ASKS_ALL_INVITATIONS;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	std::string* reponse = waitAnswers(GET_ALL_INVIT,m); //m.text de la réponse du serveur
+	std::string* reponse = waitAnswers(CLIENT_ASKS_ALL_INVITATIONS,m); //m.text de la réponse du serveur
 
 	//construction de la structure à envoyer a l'affichage à partir de la réponse du serveur
 	Invitation_r obj;
@@ -161,7 +161,7 @@ historyTable Client::get_history(std::string user, uint32_t first_game, uint32_t
 	m.type = GET_HISTORY;
 	obj_s.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur pour l'envoyer au serveur pour l'envois au serveur
 
-	std::string* reponse = waitAnswers(HISTORY_R,m); //envoie struct et recois l'historique
+	std::string* reponse = waitAnswers(SERVER_HISTORY_RESPONSE,m); //envoie struct et recois l'historique
 
 	History_r obj_r; //obj dans lequel on place la struct que le serveur envoie
 	obj_r.ParseFromString(*reponse);
@@ -206,7 +206,7 @@ playerRank Client::getRank(uint32_t nbr_players){
 	m.type = GET_RANK;
 	obj_s.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur pour l'envoyer au serveur pour l'envoyer au serveur
 
-	std::string* reponse = waitAnswers(RANK_R,m); //m.text de la réponse
+	std::string* reponse = waitAnswers(SERVER_RANK_RESPONSE,m); //m.text de la réponse
 
 	//construction de la structure à envoyer a l'affichage à partir de la réponse du serveur
 	Rank_r obj_r;
@@ -242,7 +242,7 @@ void Client::changeTeam(uint32_t id_equipe){
 	obj.set_id(id_equipe);
 
 	obj.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur pour l'envoyer au serveur pour l'envoyer au serveur
-	m.type = JOIN_GROUP_S;
+	m.type = CLIENT_JOIN_TEAM;
 
 	sendMutex.lock();
 	sendMessage(m);

@@ -79,7 +79,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 
     Usr_add usr_add;
     usr_add.set_pseudo(usr.pseudo());
-    zmq_msg->set_type_message(USR_ADD);
+    zmq_msg->set_type_message(SERVER_USER_JOINED);
     zmq_msg->set_message(usr.SerializeAsString());
 
     m_players.push_back(newPlayer);
@@ -118,7 +118,7 @@ void Game::set_users_team(ZMQ_msg *zmq_msg){
     groupe_r.set_id(request.id());
 
     // Setting up the message to send to everyone
-    zmq_msg->set_type_message(JOIN_GROUP_R);
+    zmq_msg->set_type_message(CLIENT_JOINED_TEAM_RESPONSE);
     zmq_msg->set_message(groupe_r.SerializeAsString());
 
     // Setting the user in the good team
@@ -153,7 +153,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         s_send_b(publisher, zmq_msg.SerializeAsString());
         pub_mutex.unlock();
     }
-    else if(zmq_msg.type_message() == JOIN_GROUP_S){
+    else if(zmq_msg.type_message() == CLIENT_JOIN_TEAM){
         set_users_team(&zmq_msg);
     }
     else if(zmq_msg.type_message() == INFO_ROOM){
@@ -162,8 +162,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     else if(zmq_msg.receiver_id() == m_owner_id){
         // Room admin actions
         switch(zmq_msg.type_message()){
-            case MAP_MOD:{
-                zmq_msg.set_type_message(MAP_MOD);
+            case CLIENT_MODIFY_MAP:{
+                zmq_msg.set_type_message(CLIENT_MODIFY_MAP);
                 Map_mod map_m;
                 map_m.ParseFromString(zmq_msg.message());
                 m_map_id = map_m.id();
@@ -173,8 +173,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 }
                 break;
             }
-            case NB_EQ_MOD:{
-                zmq_msg.set_type_message(NB_EQ_MOD);
+            case CLIENT_MODIFY_NB_TEAMS:{
+                zmq_msg.set_type_message(CLIENT_MODIFY_NB_TEAMS);
                 Nbr_eq_mod eq_m;
                 eq_m.ParseFromString(zmq_msg.message());
                 m_team_nb = eq_m.nbr_eq();
@@ -185,8 +185,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 }
                 break;
             }
-            case TIME_MOD:{
-                zmq_msg.set_type_message(TIME_MOD);
+            case CLIENT_MODIFY_TIME:{
+                zmq_msg.set_type_message(CLIENT_MODIFY_TIME);
                 Time_mod time_m;
                 time_m.ParseFromString(zmq_msg.message());
                 m_max_time_game = time_m.time();
@@ -198,8 +198,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 pub_mutex.unlock();
                 break;
             }
-            case TIME_ROUND_MOD:{
-                zmq_msg.set_type_message(TIME_ROUND_MOD);
+            case CLIENT_MODIFY_ROUND_TIME:{
+                zmq_msg.set_type_message(CLIENT_MODIFY_ROUND_TIME);
                 Time_mod time_r_m;
                 time_r_m.ParseFromString(zmq_msg.message());
                 m_max_time_round = time_r_m.time();
@@ -209,8 +209,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 }
                 break;
             }
-            case NB_LOMB_MOD:{
-                zmq_msg.set_type_message(NB_LOMB_MOD);
+            case CLIENT_MODIFY_NB_LOMBRICS:{
+                zmq_msg.set_type_message(CLIENT_MODIFY_NB_LOMBRICS);
                 Nbr_lomb_mod nbr_lomb_m;
                 nbr_lomb_m.ParseFromString(zmq_msg.message());
                 m_lomb_nb = nbr_lomb_m.nbr_lomb();
@@ -410,7 +410,7 @@ void Game::spawn_lombric(){
 // Handles the events where a user quits
 void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
     //If the message is not of type QUIT, we dont care
-    if(zmq_msg.type_message() != QUIT_ROOM)
+    if(zmq_msg.type_message() != CLIENT_QUIT_ROOM)
         return;
 
     // Else, we go trough the player vector to delete the player that has quit
@@ -419,6 +419,17 @@ void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
             m_players.erase(m_players.begin() + user_index);
         }
     }
+
+    zmq_msg.set_type_message(SERVER_CLIENT_QUITTED_ROOM);
+    newUser user;
+    user.set_pseudo(zmq_msg.message());
+    zmq_msg.set_message(user.SerializeAsString());
+
+    pub_mutex.lock();
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg.SerializeAsString());
+    }
+    pub_mutex.unlock();
 
     // Finally, if the vector is empty, we delete the game thread
     if(m_players.empty()){

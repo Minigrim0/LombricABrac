@@ -57,11 +57,11 @@ int Client::run(){
 			/*Messages inattendus:*/
 			msgMutex.lock();
 			switch (msg.type) {
-				case CHAT_R: //on a recu un chat
+				case SERVER_MESSAGE_TRANSFER: //on a recu un chat
 					chatRcv(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case INVI_R: //on a recu une invitation de partie
+				case SERVER_RECEIVE_INVITE: //on a recu une invitation de partie
 					invite(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
@@ -98,7 +98,7 @@ int Client::run(){
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
-				case JOIN_GROUP_R: {//quelqu'un a changé d'équipe
+				case CLIENT_JOINED_TEAM_RESPONSE: {//quelqu'un a changé d'équipe
 					Join_groupe_r obj;
 					obj.ParseFromString(msg.text);
 					inNewTeam.push_back({obj.pseudo(),obj.id()});
@@ -107,33 +107,33 @@ int Client::run(){
 				}
 
 				//paramètres changés:
-				case USR_ADD: //un joueur à été jouté dans le salon d'attente
+				case SERVER_USER_JOINED: //un joueur à été jouté dans le salon d'attente
 					nvJoueur(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case USR_REM: //un joueur à été jouté dans le salon d'attente
+				case SERVER_CLIENT_QUITTED_ROOM: //un joueur à été jouté dans le salon d'attente
 					{newUser obj;
 					obj.ParseFromString(msg.text); //convertis en struct proto-buff
 					playersGone.push_back(obj.pseudo());
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
-				case MAP_MOD: //L'hôte a changé de map
+				case CLIENT_MODIFY_MAP: //L'hôte a changé de map
 					changeMap(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case TIME_MOD: //L'hôte a changé le temps de la partie
+				case CLIENT_MODIFY_TIME: //L'hôte a changé le temps de la partie
 					changeTime(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case TIME_ROUND_MOD: //L'hôte a changé le temps d'une partie
+				case CLIENT_MODIFY_ROUND_TIME: //L'hôte a changé le temps d'une partie
 					changeTimeRound(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case NB_LOMB_MOD: //L'hôte a changé le nombre de lombrics
+				case CLIENT_MODIFY_NB_LOMBRICS: //L'hôte a changé le nombre de lombrics
 					changeNbrLombs(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
-				case NB_EQ_MOD: //L'hôte a changé le nombre de lombrics
+				case CLIENT_MODIFY_NB_TEAMS: //L'hôte a changé le nombre de lombrics
 					changeNbrEq(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;

@@ -8,7 +8,7 @@ void Client::setMap(uint32_t id_map){
 	obj.set_id(id_map);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = MAP_MOD;
+	m.type = CLIENT_MODIFY_MAP;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -23,7 +23,7 @@ void Client::setTime(uint32_t time){
 	obj.set_time(time);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = TIME_MOD;
+	m.type = CLIENT_MODIFY_TIME;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -38,7 +38,7 @@ void Client::setTimeRound(uint32_t time_round){
 	obj.set_time(time_round);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = TIME_ROUND_MOD;
+	m.type = CLIENT_MODIFY_ROUND_TIME;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -53,7 +53,7 @@ void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 	obj.set_nbr_lomb(nbr_lomb);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = NB_LOMB_MOD;
+	m.type = CLIENT_MODIFY_NB_LOMBRICS;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -68,7 +68,7 @@ void Client::set_nbr_equipes(uint32_t nbr_eq){
 	obj.set_nbr_eq(nbr_eq);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = NB_EQ_MOD;
+	m.type = CLIENT_MODIFY_NB_TEAMS;
 
 	sendMutex.lock();
 	sendMessage(m);
@@ -84,7 +84,7 @@ void Client::setLombricName(uint32_t id, std::string name){
 	obj.set_name_lomb(name);
 
 	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
-	m.type = LOMB_MOD;
+	m.type = UPDATE_LOMBRICS_NAMES;
 
 	sendMutex.lock();
 	sendMessage(m);

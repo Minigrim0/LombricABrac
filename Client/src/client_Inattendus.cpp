@@ -46,7 +46,7 @@ std::vector<chat_r> Client::getConvo(std::string username){
 	obj.SerializeToString(&m.text); //convertis en string pour l'envoyer au serveur
 	m.type = GET_CONVO;
 
-	std::string* reponse = waitAnswers(CHAT_R, m); //envoie le message au serveur et attends la réponse
+	std::string* reponse = waitAnswers(SERVER_MESSAGE_TRANSFER, m); //envoie le message au serveur et attends la réponse
 
 	Chat_r obj_r;
 	std::vector<chat_r> res;
