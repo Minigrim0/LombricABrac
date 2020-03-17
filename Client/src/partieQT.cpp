@@ -250,10 +250,14 @@ void partieQT::drawMap(){
   }
 
   if(beginShoot){
+    //DRAW POWER BAR
     int power = getPower();
-    painter.drawRect(50, (nBlockHeight-1)*blockWidth, power, 30);
+    
+    painter.setPen(Qt::red);
+    painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, 200, 30);
+    painter.setBrush(Qt::red);
+    painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, power*2, 30);
   }
-
 
   gameLabel->setScaledContents(true);
   gameLabel->setPixmap(*gamePixmap);
