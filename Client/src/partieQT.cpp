@@ -224,7 +224,8 @@ void partieQT::drawMap(){
 
   //affiche nom lombric qui joue
   setPenColor(lomb, &painter);
-  painter.setPen(pen);
+  painter.setBrush(Qt::NoBrush);
+
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
   painter.drawText(blockWidth, 3*blockWidth, nameLomb);
