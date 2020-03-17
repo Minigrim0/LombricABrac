@@ -224,7 +224,8 @@ void partieQT::drawMap(){
 
   //affiche nom lombric qui joue
   setPenColor(lomb, &painter);
-  painter.setPen(pen);
+  painter.setBrush(Qt::NoBrush);
+
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
   painter.drawText(blockWidth, 3*blockWidth, nameLomb);
@@ -252,7 +253,7 @@ void partieQT::drawMap(){
   if(beginShoot){
     //DRAW POWER BAR
     int power = getPower();
-    
+
     painter.setPen(Qt::red);
     painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, 200, 30);
     painter.setBrush(Qt::red);
