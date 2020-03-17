@@ -251,13 +251,15 @@ void partieQT::drawMap(){
   }
 
   if(beginShoot){
-    //DRAW POWER BAR
-    int power = getPower();
+    //Dessine bar de chargement
+    if (weaponIndex==0){
+      int power = getPower();
 
-    painter.setPen(Qt::red);
-    painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, 200, 30);
-    painter.setBrush(Qt::red);
-    painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, power*2, 30);
+      painter.setPen(Qt::red);
+      painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, 200, 30);
+      painter.setBrush(Qt::red);
+      painter.drawRect((nBlockWidth/2)*blockWidth, (nBlockHeight-2)*blockWidth, power*2, 30);
+    }
   }
 
   gameLabel->setScaledContents(true);
