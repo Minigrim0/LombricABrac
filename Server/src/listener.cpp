@@ -132,8 +132,7 @@ int Listener::envoie_msg(uint8_t type_msg, std::string msg){
         return EXIT_FAILURE;
     }
 
-    m_str_parser = static_cast<char*>(malloc (sizeof(char) * m_len_char));
-    char* tmp_parser = m_str_parser;
+    m_str_parser = new char[m_len_char];
     if(!m_str_parser){
         perror("Initialization of the parser buffer");
         return EXIT_FAILURE;
@@ -153,7 +152,7 @@ int Listener::envoie_msg(uint8_t type_msg, std::string msg){
         perror("Unable to send message\n");
         return EXIT_FAILURE;
     }
-    free(tmp_parser);
+    delete[] m_str_parser; 
     return EXIT_SUCCESS;
 }
 
