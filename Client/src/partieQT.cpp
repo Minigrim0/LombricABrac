@@ -60,6 +60,7 @@ void partieQT::initWindow(){
   gameParam = client->getParamsPartie();
   camX = 0;
   camY = 0;
+  changed=false;
   blockWidth = INIT_SIZE_BLOCK;
   screenWidth = 0;
   screenHeight = 0;
@@ -97,6 +98,7 @@ void partieQT::updateGame(){
 
   //vérifie si le tour a changé
   if(endRound){
+    weaponIndex = -1;
     beginShoot = false;
     std::string nextRound = client->getNextRound();
     if(nextRound.size()){//si on a un string-> on change de tour
@@ -293,15 +295,17 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     texture = texture.transformed(QTransform().scale(-direction,1));
 
     //Affichage de la barre de vie
-    painter.setBrush(Qt::SolidPattern);
+    painter.setBrush(Qt::NoBrush);
     QPen pen;
     int color;
     int xBarVie = x;
     int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
     int largeur = blockWidth * lomb->getLife() / 100;
     setPenColor(lomb, &pen);
-    pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
+    //pen.setWidth(blockWidth*EPAISSEUR_BAR_VIE);
     painter.setPen(pen);
+    painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE);
+    painter.setBrush(Qt::SolidPattern);
     painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);
 
     QRect rect(x-blockWidth/2, y - blockWidth, 2*blockWidth, 0.8*blockWidth);
@@ -312,6 +316,19 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     texture = skinSprite[0];
   }
   painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
+
+  if (id){
+    Lombric_c* lomb = dynamic_cast<Lombric_c*>(s);
+    int direction = lomb->getDirection();
+    Lombric_c* thisLomb = gameInfo->currentWorms;
+    //draw weapons
+    if (weaponIndex!=-1 && changed && lomb->getName() == thisLomb->getName()){
+      QPixmap textureWeapon;
+      textureWeapon = skinWeapons[weaponIndex];
+      textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
+      painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+    }
+  }
 
 }
 
@@ -426,7 +443,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
 
     else if (event->type() == QEvent::MouseButtonPress){
       QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-      bool changed = false;
+      changed = false;
       for (int i=0; i<2; ++i){
         if (chooseWeaponRects[i].contains(mouseEvent->pos()) && tour){
           weaponIndex = i;

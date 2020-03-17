@@ -48,7 +48,7 @@ private:
 
   infoPartie_s* gameInfo; // toutes les infos de la partie (enfin presque)
 
-  uint32_t weaponIndex; //id de l'arme
+  int weaponIndex; //id de l'arme
 
   tour_s tourParam;
 
@@ -75,6 +75,7 @@ private:
 
   bool mustDrawWall;
 
+  bool changed;
 
   QLabel* gameLabel;
   QPixmap* gamePixmap;
