@@ -22,6 +22,7 @@
 #include <fstream>
 #include <sstream>
 
+invitationsVect globalInvitations;//variable globale pour les invitations
 
 using namespace std;
 /*
@@ -125,9 +126,9 @@ int main(int argc, char** argv)
             break;
         }
 
-        std::vector<invitation> tmp_vect = information.client->getInvitations();
-        information.vec_invit.reserve(tmp_vect.size() + information.vec_invit.size());
-        information.vec_invit.insert(information.vec_invit.end(), tmp_vect.begin(), tmp_vect.end());
+        //std::vector<invitation> tmp_vect = information.client->getInvitations();
+        //information.vec_invit.reserve(tmp_vect.size() + information.vec_invit.size());
+        //information.vec_invit.insert(information.vec_invit.end(), tmp_vect.begin(), tmp_vect.end());
 
         switch(information.id){
             case 1://on rentre dans le menu entrer

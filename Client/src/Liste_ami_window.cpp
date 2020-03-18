@@ -56,7 +56,10 @@ info Liste_ami_window::run(info information)
   if (information.id==23)
   {
     information.notif_invit=0;
-    len_tab=static_cast<int>(information.vec_invit.size());
+    globalInvitations.mut.lock();
+    len_tab=static_cast<int>(globalInvitations.invits.size());
+    globalInvitations.notif=false;
+    globalInvitations.mut.unlock();
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";
     msg2="Appuyer sur ENTER pour accepter l'invitation ou sur 'q' pour renier.";
   }
@@ -117,20 +120,22 @@ info Liste_ami_window::run(info information)
       }
     if (information.id==23)
     {
-      if (information.vec_invit[static_cast<unsigned int>(i)].type == TRUE )
+      globalInvitations.mut.lock();
+      if (globalInvitations.invits[static_cast<unsigned int>(i)].type == TRUE )
       {
-        string invit_jeu = "Invitation de jeu : " + information.vec_invit[static_cast<unsigned int>(i)].text;
+        string invit_jeu = "Invitation de jeu : " + globalInvitations.invits[static_cast<unsigned int>(i)].text;
         print_string_window(win, y+n, (max_x/2), invit_jeu);
         n+=2;
         nbr_printed++;
       }
-      if (information.vec_invit[static_cast<unsigned int>(i)].type == FALSE)
+      if (globalInvitations.invits[static_cast<unsigned int>(i)].type == FALSE)
       {
-        string invit_ami = "Demande d'ami : " + information.vec_invit[static_cast<unsigned int>(i)].text;
+        string invit_ami = "Demande d'ami : " + globalInvitations.invits[static_cast<unsigned int>(i)].text;
         print_string_window(win, y+n, (max_x/2), invit_ami);
         n+=2;
         nbr_printed++;
       }
+      globalInvitations.mut.unlock();
     }
     if (information.id==24)
     {
@@ -186,7 +191,7 @@ info Liste_ami_window::run(info information)
             }
             if (information.id==23)
             {
-              print_string_window(win, y_save+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
+              print_string_window(win, y_save+n, (max_x/2), globalInvitations.invits[static_cast<unsigned int>(i)].text);
               n+=2;
             }
             if (information.id==24)
@@ -244,7 +249,7 @@ info Liste_ami_window::run(info information)
 
             if (information.id==23)
             {
-              print_string_window(win, y_save+n, (max_x/2), information.vec_invit[static_cast<unsigned int>(i)].text);
+              print_string_window(win, y_save+n, (max_x/2), globalInvitations.invits[static_cast<unsigned int>(i)].text);
               n+=2;
             }
             if (information.id==24)
@@ -305,7 +310,7 @@ info Liste_ami_window::run(info information)
       /*vector<invitation>::iterator i_double_save;
       i_double_save = information.vec_invit.begin();
       information.vec_invit.erase(i_double_save +i_save);*/
-      information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], FALSE);
+      information.client->acceptInvitation(i_save, FALSE);
       information.id =2;
       break;
     }
@@ -345,19 +350,19 @@ info Liste_ami_window::run(info information)
 
         if (information.id==23)
         {
-          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==TRUE)
+          if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==TRUE)
           {
-            information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(i_save, TRUE);
             information.id = 28;
             break;
           }
-          if (information.vec_invit[static_cast<unsigned int>(i_save)].type==FALSE)
+          if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==FALSE)
           {
-            information.client->acceptInvitation(&information.vec_invit[static_cast<unsigned int>(i_save)], TRUE);
+            information.client->acceptInvitation(i_save, TRUE);
             information.id = 2;
             break;
           }
-          information.vec_invit.erase(information.vec_invit.begin()+i_save);
+          //information.vec_invit.erase(information.vec_invit.begin()+i_save);
         }
     }
     usleep(MENU_SLEEP_TIME);

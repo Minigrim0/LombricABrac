@@ -18,6 +18,9 @@ bool Client::connection(std::string username, std::string password, bool inscrip
 	bool res = (*reponse)[0];
 
 	delete reponse;
+	if(res){
+		getAllInvits();
+	}
 	return res;
 }
 
@@ -128,7 +131,7 @@ stringTable Client::getLombricsName(){
 	return res; //renvoie la struct stringTable
 }
 
-std::vector<invitation> Client::afficheAllInvits(){
+void Client::getAllInvits(){
 	message m{};
 	m.type = CLIENT_ASKS_ALL_INVITATIONS;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
@@ -141,11 +144,13 @@ std::vector<invitation> Client::afficheAllInvits(){
 
 	std::vector<invitation> res;
 	//remplissage du vecteur à envoyer à l'affichage
+	globalInvitations.mut.lock();
+	globalInvitations.invits.clear();
 	for(int i=0;i<obj.invits_size();i++){
-		res.push_back({obj.invits(i).type(),obj.invits(i).pseudo(),obj.invits(i).game_id()});
+		globalInvitations.invits.push_back({obj.invits(i).type(),obj.invits(i).pseudo(),obj.invits(i).game_id()});
 	}
+	globalInvitations.mut.unlock();
 	delete reponse;
-	return res;
 }
 
 

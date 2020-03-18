@@ -48,15 +48,31 @@ info Menu_jeu_window::run(info information)
   len_arrow= static_cast<int>(arrow.size());
   print_string_window(win, y, x, arrow);
   keypad(win, true);
-
+  nodelay(win, TRUE);//pour que les getch ne soient bloquant
   while(1)
   {
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
     int len_vec= static_cast<int>(new_msg.size());
 
+    globalInvitations.mut.lock();
+    if(globalInvitations.notif){
+      globalInvitations.notif = false;
+      tab[3] += "*";
+      //clear();
+      n=0;
+      for (int i = 0; i < 8; i++)
+      {
+        print_string_window(win, new_y+n, (max_x/2)-4, tab[i]);
+        n+=2;
+        refresh();
+      }
+    }
+    globalInvitations.mut.unlock();
+
     if (len_vec !=0){
       information.notif=1;
-      tab[5] = " Ami(s) * ";
+      tab[5] += "*";
+      //clear();
       n=0;
       for (int i = 0; i < 8; i++)
       {

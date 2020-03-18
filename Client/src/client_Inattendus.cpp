@@ -27,14 +27,11 @@ void Client::invite(message& m){
 	std::string text = "echo Invitation de : " + obj.pseudo() + " >> out.txt";
 	system(text.c_str());
 
-	invitations.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
-}
+	globalInvitations.mut.lock();
+	globalInvitations.invits.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur
+	globalInvitations.notif = true;
+	globalInvitations.mut.unlock();
 
-
-std::vector<invitation> Client::getInvitations(){
-	std::vector<invitation> res = invitations;
-	invitations.clear(); //vide vecteur
-	return res; //renvoie le vecteur de demandes d'amis
 }
 
 std::vector<chat_r> Client::getConvo(std::string username){

@@ -133,7 +133,6 @@ info Menu_log_in::run(info information)
           if (connected)
           {
             string pseudo= string(ok[0]);
-            information.vec_invit = information.client->afficheAllInvits();
             information.username=pseudo;
             information.id=2;
             break;
@@ -159,7 +158,6 @@ info Menu_log_in::run(info information)
           if (isenregistrer)
           {
             string pseudo= string(ok[0]);
-            information.vec_invit = information.client->afficheAllInvits();
             information.username=pseudo;
             information.id=2;
             break;
