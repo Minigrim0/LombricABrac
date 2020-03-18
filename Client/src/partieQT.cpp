@@ -4,23 +4,25 @@
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client),
 gameInfo(nullptr){
-  //installEventFilter(this);
   installEventFilter(this);
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
 
+  //images des blocks
   textureMur = new QPixmap[3]{
     QPixmap("images/blocs/air.png"),
     QPixmap("images/blocs/bloc.png"),
     QPixmap("images/blocs/blocSolide.png")
   };
 
+  //images projectil et lombric
   skinSprite = new QPixmap[2]{
     QPixmap("images/bomb.png"),
     QPixmap("images/lombrics/lomb1.png"),
   };
 
+  //images des armes
   skinWeapons = new QPixmap[2]{
     QPixmap("images/weapons/bazooka.png"),
     QPixmap("images/weapons/baseballbat.png")
@@ -92,9 +94,7 @@ void partieQT::updateGame(){
   //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
   if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
-  //std::cout << "gonna draw" <<std::endl;
   drawMap();
-  //std::cout << "done drawing" <<std::endl;
 
   //vérifie si le tour a changé
   if(endRound){
@@ -187,12 +187,15 @@ void partieQT::drawMap(){
   int limitX = nBlockWidth+camX < gameInfo->carte->getLargeur()?nBlockWidth+1:nBlockWidth;
   int limitY = nBlockHeight+camY < gameInfo->carte->getHauteur()?nBlockHeight+1:nBlockHeight;
 
+  //dessine les murs
   for(int y=camY; y<limitY+camY; ++y){
     for (int x=camX; x<limitX+camX; ++x){
       drawMur(x,y);
     }
   }
+
   drawSprites();
+
   //affichage temps endRound
   std::string text;
   text =  "Temps restant: " + std::to_string(gameParam.time_round - spentTime)+" secondes";
@@ -202,11 +205,18 @@ void partieQT::drawMap(){
   QPen pen;
   pen.setColor(Qt::black);
   painter.setPen(pen);
+
+
+  QFont font("Cursive", 12);
+  font.setItalic(true);
+  font.setBold(true);
+  painter.setFont(font);
+
   QString name(text.c_str());
   painter.drawText(blockWidth, blockWidth, name);
 
 
-  //affichage tour
+  //affichage info tour
   Lombric_c* lomb = gameInfo->currentWorms;
 
   if (!lomb){
@@ -217,6 +227,7 @@ void partieQT::drawMap(){
   } else{
     text = "Attendez votre tour...";
   }
+
   pen.setColor(Qt::black);
   painter.setPen(pen);
   QString currentTour(text.c_str());
@@ -341,20 +352,20 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
 void partieQT::setPenColor(Lombric_c* lomb, QPainter *painter){
   switch(lomb->getTeamId()){
     case 0:
-      painter->setPen(Qt::darkYellow);
-      painter->setBrush(Qt::darkYellow);
+      painter->setPen(Qt::darkBlue);
+      painter->setBrush(Qt::darkBlue);
       break;
     case 1:
       painter->setPen(Qt::darkGreen);
       painter->setBrush(Qt::darkGreen);
       break;
     case 2:
-      painter->setPen(Qt::darkBlue);
-      painter->setBrush(Qt::darkBlue);
-      break;
-    case 3:
       painter->setPen(Qt::darkMagenta);
       painter->setBrush(Qt::darkMagenta);
+      break;
+    case 3:
+      painter->setPen(Qt::darkYellow);
+      painter->setBrush(Qt::darkYellow);
       break;
   }
 }
@@ -471,6 +482,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
       QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
       if(beginShoot){//time to shoot
         beginShoot = false;
+        //calcul puissance
         int power = getPower();
         int xMouse = mouseEvent->x();
         int yMouse = mouseEvent->y();
@@ -480,11 +492,13 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         int xStart = posLomb[0] * blockWidth;
         int yStart = posLomb[1] * blockWidth;
 
+        //calcul de l'angle
         double angle = atan(-static_cast<double>(yMouse-yStart)/static_cast<double>(xMouse-xStart));//angle en radian
         angle *= 180/PI;
         if(xMouse<xStart)angle+=180;
-        if(angle<0)angle+=180;
+        else if(angle<0)angle+=360;
 
+        //utilise l'arme
         client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(power), static_cast<uint32_t>(angle));
         tour = false;
       }

@@ -22,6 +22,8 @@
 #include <QMouseEvent>
 #include <QString>
 #include <QRect>
+#include <QFont>
+
 
 
 #include "client.hpp"
