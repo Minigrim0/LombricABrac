@@ -38,14 +38,13 @@ void Client::quit(){
 	running = false; //arréte la boucle du thread
 }
 
-void Client::createRoom(){
+bool Client::createRoom(){
 	message m{};
 	m.type = CLIENT_CREATE_ROOM;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
 
-	sendMutex.lock();
-	sendMessage(m);
-	sendMutex.unlock();
+	std::string* reponse = waitAnswers(CLIENT_CREATE_ROOM_RESPONSE, m); //envoie le message au serveur et attends la réponse
+	return (*reponse)[0];
 }
 
 void Client::quitRoom(){

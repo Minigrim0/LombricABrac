@@ -219,16 +219,23 @@ info Menu_creation_partie::run(info information)
         }
         else
         {
+          bool isOk = true;//devient false s'il y'a un problème à la création d'une room
           if (information.id != 221)
           {
-            information.client->createRoom();
+            isOk = information.client->createRoom();
           }
-          information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
-          information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
-          information.client->setMap(static_cast<uint32_t>(nombre4));//la map
-          information.client->set_nbr_equipes(static_cast<uint32_t>(nombre1));
-          information.id=28;
-          break;
+          if(isOk){
+              information.client->setTimeRound(static_cast<uint32_t>(nombre3));//durée par tours
+              information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
+              information.client->setMap(static_cast<uint32_t>(nombre4));//la map
+              information.client->set_nbr_equipes(static_cast<uint32_t>(nombre1));
+              information.id=28;
+              break;
+          }
+          else{
+              information.id=2;
+              break;
+          }
         }
       case 263: //si c'est DELETE, on retourne en arriere
         boucle=0;
