@@ -152,7 +152,7 @@ int Listener::envoie_msg(uint8_t type_msg, std::string msg){
         perror("Unable to send message\n");
         return EXIT_FAILURE;
     }
-    delete[] m_str_parser; 
+    //delete[] m_str_parser; 
     return EXIT_SUCCESS;
 }
 
