@@ -483,7 +483,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         double angle = atan(-static_cast<double>(yMouse-yStart)/static_cast<double>(xMouse-xStart));//angle en radian
         angle *= 180/PI;
         if(xMouse<xStart)angle+=180;
-        if(angle<0)angle+=360;
+        if(angle<0)angle+=180;
 
         client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(power), static_cast<uint32_t>(angle));
         tour = false;
