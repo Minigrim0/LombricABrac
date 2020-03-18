@@ -21,6 +21,25 @@
 #include <list>
 #include <vector>
 
+/*
+on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier
+si c'est une invitation à une partie ou un ajout d'amis
+*/
+struct invitation{
+	bool type;//vrai si invitation partie, faux si demande d'ami
+	std::string text;//texte à afficher
+	uint32_t id_partie;
+};
+
+//structure qui seront globales
+struct invitationsVect{
+	std::vector<invitation> invits;
+	bool notif=false;
+	std::mutex mut;
+};
+extern invitationsVect globalInvitations;
+//****
+
 struct lombricPos{ //position d'un lombric
 	int id_lomb;
 	int pos_x;
@@ -55,15 +74,6 @@ struct playerRank{ //tableau(trié) des joueurs dans le classement et de leurs p
 	uint32_t* points;
 };
 
-/*
-on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier
-si c'est une invitation à une partie ou un ajout d'amis
-*/
-struct invitation{
-	bool type;//vrai si invitation partie, faux si demande d'ami
-	std::string text;//texte à afficher
-	uint32_t id_partie;
-};
 
 struct paramsPartie{
 	uint32_t map;
@@ -117,7 +127,7 @@ private:
 	std::string newRound = "";
 
 	std::vector<chat_r> messageRcv;//vecteur de tous les messages recus
-	std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
+	//std::vector<invitation> invitations; //vecteur de toutes les invitations(amis et partie)
 	std::vector<std::string> newPlayers;//vecteurs de tous les nouveau joueurs dans le salon d'attente
 	std::vector<lombricPos> movedLomb;//vecteur des lombrics déplacés
 	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
@@ -199,17 +209,16 @@ public:
 	void endGame();//fin de la partie
 	void endTour(std::vector<uint32_t> deadLombrics);//fin du tour
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
-	std::vector<invitation> afficheAllInvits();
+	void getAllInvits();
 	infoRoom_s getInfoRoom(); //infos de la room
 	bool getIsEnded(){return end;};//si partie est finie
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
-	bool acceptInvitation(invitation* inv, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
+	bool acceptInvitation(int index, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
 	infoPartie_s* getGameInfo();//renvoie les info(struct infoPartie_s) de la partie
 
 	//méthodes sur les messages inattendus
 	std::vector<chat_r> getNewMsg(); //renvoie le vecteur de messages (nom + msg)
-	std::vector<invitation> getInvitations(); //renvoie le vecteur d'invitations(type + nom). MESSAGE INATTENDU
 	std::vector<chat_r> getConvo(std::string username);//renvoie tous les messages avec un amis choisi
 	std::vector<std::string> getNewPlayers();//revoie les nouveau joueurs dans le salon d'attente
 	std::vector<lombricPos> getNewLombPos();//renvoie un vecteur des lombrics bougés

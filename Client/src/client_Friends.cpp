@@ -74,15 +74,18 @@ void Client::addFriend(std::string user){
 }
 
 
-bool Client::acceptInvitation(invitation* inv, bool ok){
+bool Client::acceptInvitation(int index, bool ok){
 	bool res;
-	if(inv->type){ //invitation en partie
-		res = joinPartie(inv->id_partie);
+	if(globalInvitations.invits[index].type){ //invitation en partie
+		res = joinPartie(globalInvitations.invits[index].id_partie);
 	}
-	else if(!inv->type){ //invitation d'amis
-		acceptFriend(inv->text, ok);
+	else{ //invitation d'amis
+		acceptFriend(globalInvitations.invits[index].text, ok);
 		res = true;
 	}
+	globalInvitations.mut.lock();
+	globalInvitations.invits.erase(globalInvitations.invits.begin()+index);
+	globalInvitations.mut.unlock();
 	return res;
 }
 

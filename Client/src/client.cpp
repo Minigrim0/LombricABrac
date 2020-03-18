@@ -2,9 +2,18 @@
 #include <cstdlib>
 #include <fstream>
 #include <sstream>
-Client::Client(char* adresse, uint16_t port):msg({}),sendMutex(),msgMutex(),reponseAttendue(0),client_socket(),started(false),changed(false),messageRcv(),invitations(),thisGame(nullptr),currentParams({}){
+Client::Client(char* adresse, uint16_t port):
+msg({}),
+sendMutex(),
+msgMutex(),
+reponseAttendue(0),
+client_socket(),
+started(false),
+changed(false),
+messageRcv(),
+thisGame(nullptr),
+currentParams({}){
 	int res;
-
 	struct sockaddr_in server_addr, client_addr;
 
 	//init du sockaddr du serveur
