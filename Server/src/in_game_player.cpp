@@ -18,10 +18,10 @@ m_pseudo("")
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t cur_lomb=0;cur_lomb<nbr_lomb;cur_lomb++){
-        if(obj_partie->isLombAlive(m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb])){
-            m_current_lombric++;
-            m_current_lombric=m_current_lombric>nbr_lomb?0:m_current_lombric;
+    for(uint8_t cur_lomb=1;cur_lomb<nbr_lomb;cur_lomb++){
+        uint32_t id_lombric_checked = (cur_lomb+m_current_lombric)%nbLomb;
+        if(obj_partie->isLombAlive(m_Lombrics[id_lombric_checked])){
+            m_current_lombric=id_lombric_checked;
             return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
         }
     }

@@ -84,11 +84,12 @@ bool Partie::updateSprites(int t){
             std::vector<int> deletedBlock = (*s)->deathMove(gameInfo,t);
             addDeletedBlock(deletedBlock);
 
-            gameInfo->spriteVector.erase(s);
             *s = nullptr;
+            std::cout << "Sprite is dead, his id: " << id << std::endl;
             if(!id){
               delete *s;
             }
+            gameInfo->spriteVector.erase(s);
         }
         else{
           ++s;
@@ -126,6 +127,7 @@ void Partie::addDeletedBlock(std::vector<int> v){
 
 bool Partie::isLombAlive(int id){
     Lombric_c* lomb =  dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id));
+    std::cout << "Find worms " << id << ": " << lomb << std::endl;
     if(!lomb)return false;
     return lomb->getLife()>0;
 }
