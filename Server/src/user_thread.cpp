@@ -52,6 +52,7 @@ int client_thread(int socket_client){
                 else if(type == CLIENT_CREATE_ROOM_RESPONSE){
                     is_on_game = true;
                     game_url = zmqmsg.message();
+                    la_poste.envoie_bool(CLIENT_CREATE_ROOM_RESPONSE, true);
                 }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
