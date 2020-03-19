@@ -4,6 +4,10 @@
     <file>UI/Resources/cropped-1920-1080-521477.jpg</file>
   </qresource>
   <qresource prefix="icons">
+    <file>UI/Resources/delete.png</file>
+    <file>UI/Resources/login.png</file>
+    <file>UI/Resources/left-arrow.png</file>
+    <file>UI/Resources/back.png</file>
     <file>UI/Resources/icons8-bookmark-64.png</file>
     <file>UI/Resources/icons8-bookmark-100.png</file>
     <file>UI/Resources/icons8-export-64.png</file>

@@ -1,7 +1,6 @@
 #include "../includes/mainWindow.hpp"
 #include "../includes/partieQT.hpp"
-#include "../includes/menuEnterQT.hpp"
-#include "../includes/menuQT.hpp"
+#include "../includes/LesFenetres_QT.hpp"
 
 MainWindow::MainWindow(Client *cli, QWidget *parent = nullptr):
 QWidget(parent),
