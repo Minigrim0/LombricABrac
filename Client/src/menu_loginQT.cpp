@@ -4,8 +4,7 @@
 
 Menu_LoginQT::Menu_LoginQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
+
   Ui::Menu_LoginWidget page;
-  //page.setupUi(this);
-
-
+  page.setupUi(this);
 }
