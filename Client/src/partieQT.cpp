@@ -213,7 +213,12 @@ void partieQT::drawMap(){
   painter.setFont(font);
 
   QString name(text.c_str());
-  painter.drawText(blockWidth, blockWidth, name);
+  if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+    painter.drawText(blockWidth, blockWidth, name);
+  } else{
+    painter.drawText(INIT_SIZE_BLOCK, INIT_SIZE_BLOCK, name);
+  }
+
 
 
   //affichage info tour
@@ -231,7 +236,11 @@ void partieQT::drawMap(){
   pen.setColor(Qt::black);
   painter.setPen(pen);
   QString currentTour(text.c_str());
-  painter.drawText(blockWidth, 2*blockWidth, currentTour);
+  if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+    painter.drawText(blockWidth, 2*blockWidth, currentTour);
+  } else{
+    painter.drawText(INIT_SIZE_BLOCK, 2*INIT_SIZE_BLOCK, currentTour);
+  }
 
   //affiche nom lombric qui joue
   setPenColor(lomb, &painter);
@@ -239,7 +248,11 @@ void partieQT::drawMap(){
 
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
-  painter.drawText(blockWidth, 3*blockWidth, nameLomb);
+  if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+    painter.drawText(blockWidth, 3*blockWidth, nameLomb);
+  } else{
+    painter.drawText(INIT_SIZE_BLOCK, 3*INIT_SIZE_BLOCK, nameLomb);
+  }
 
 
   //Affichage du choix des armes
@@ -253,8 +266,14 @@ void partieQT::drawMap(){
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
       int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
-      chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*blockWidth, RECT_WEAPON_SIZE*blockWidth);
+      if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+        chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*blockWidth, RECT_WEAPON_SIZE*blockWidth);
+      } else{
+        xRect = INIT_SIZE_BLOCK;
+        yRect = (screenHeight/INIT_SIZE_BLOCK  - (i+1)*(RECT_WEAPON_SIZE+1)) * INIT_SIZE_BLOCK;
+        chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK);
 
+      }
       QPixmap skin = skinWeapons[i].scaled(chooseWeaponRects[i].width(), chooseWeaponRects[i].height());
       painter.drawRect(chooseWeaponRects[i]);
       painter.drawPixmap(chooseWeaponRects[i], skin);
@@ -325,7 +344,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     painter.setBrush(Qt::NoBrush);
     painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
 
-    QRect rect(x-blockWidth/2, y - blockWidth, 2*blockWidth, 0.8*blockWidth);
+    QRect rect(x-blockWidth, y - blockWidth, 3*blockWidth, 0.8*blockWidth);
     QString name(lomb->getName().c_str());
     painter.drawText(rect, Qt::AlignCenter, name);
   }
