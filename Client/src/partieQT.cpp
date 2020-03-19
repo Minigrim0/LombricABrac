@@ -489,8 +489,8 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
 
         int posLomb[2];
         gameInfo->currentWorms->getPos(posLomb);
-        int xStart = posLomb[0] * blockWidth;
-        int yStart = posLomb[1] * blockWidth;
+        int xStart = (posLomb[0] - camX) * blockWidth;
+        int yStart = (posLomb[1] - camY) * blockWidth;
 
         //calcul de l'angle
         double angle = atan(-static_cast<double>(yMouse-yStart)/static_cast<double>(xMouse-xStart));//angle en radian
@@ -499,6 +499,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         else if(angle<0)angle+=360;
 
         //utilise l'arme
+        std::cout << "Angle: " << angle << std::endl;
         client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(power), static_cast<uint32_t>(angle));
         tour = false;
       }
@@ -554,7 +555,6 @@ void partieQT::moveCurrentLombric(int mouvement){
   if(tour){
     int oldPos[2];
     int newPos[2];
-    std::cout << "Current lonb: " << gameInfo->currentWorms << std::endl;
     gameInfo->currentWorms->getPos(oldPos);
     gameInfo->currentWorms->move(mouvement, gameInfo->carte);//déplace le lombric si c'est un mouvement autorisé
     gameInfo->currentWorms->getPos(newPos);
