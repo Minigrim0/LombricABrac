@@ -10,6 +10,7 @@ Objet qui s'occuppe du switch des fenêtres
 #include "client.hpp"
 #include "UI.hpp"
 #include "windowQT.hpp"
+#include "maccroWindow.hpp"
 
 class MainWindow : public QWidget
 {
@@ -26,7 +27,7 @@ public:
     MainWindow(Client *cli, QWidget *parent);
     Client* getClient();
     virtual ~MainWindow()=default;
-    
+
 public slots:
     void setPage(int index);
 };

@@ -9,11 +9,14 @@ isHost(false){
     setWindowTitle("Lombric à Brac");
     layout = new QStackedLayout();
 
+
     //ajout de toutes les fenêtres
     //layout->addWidget(new MenuEnterQT(1,this,client));
     resize(1640,880);
-    layout->addWidget(new partieQT(80,this,client));
-    //layout->addWidget(new MenuQT(2,this,client));
+    layout->addWidget(new partieQT(GAME_SCREEN,this,client));
+    //layout->addWidget(new MenuQT(MAIN_MENU_SCREEN,this,client));
+    layout->addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,client));
+
 
     information.client=client;
     information.id = 1;
