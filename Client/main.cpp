@@ -14,6 +14,7 @@
 #include <QApplication>
 
 #include "includes/mainWindow.hpp"
+#include "includes/maccroWindow.hpp"
 
 #include <fstream>
 
@@ -131,56 +132,56 @@ int main(int argc, char** argv)
         //information.vec_invit.insert(information.vec_invit.end(), tmp_vect.begin(), tmp_vect.end());
 
         switch(information.id){
-            case 1://on rentre dans le menu entrer
+            case INIT_SCREEN://on rentre dans le menu entrer
                 information = enter_window.run(information);
                 break;
-            case 11: //menu log avec message "Se connecter"
+            case LOGIN_SCREEN: //menu log avec message "Se connecter"
                 information = login_window.run(information);
                 break;
-            case 12: //menu log avec message "S'enregistrer"
+            case REGISTER_SCREEN: //menu log avec message "S'enregistrer"
                 information = login_window.run(information);
                 break;
-            case 2: //menu principal
+            case MAIN_MENU_SCREEN: //menu principal
                 information = menu_window.run(information);
                 break;
-            case 70: //pour l instant "trouver une partie" dirige vers une window attente
+            case WAITING_SCREEN: //pour l instant "trouver une partie" dirige vers une window attente
                 information = wait_window.run(information);
                 break;
-            case 22: //lance window création_partie
+            case SET_GAME_PARAM: //lance window création_partie
                 information = create_window.run(information);
                 break;
-            case 221: //lance window création partie depuis le salon d'attente (si l'hote veut changer les paramètres)
+            case CHANGE_GAME_PARAM: //lance window création partie depuis le salon d'attente (si l'hote veut changer les paramètres)
                 information = create_window.run(information);
                 break;
-            case 23:{ //lance window pour voir ses invitations
+            case INVITATIONS_SCREEN:{ //lance window pour voir ses invitations
                 information = friends_window.run(information);
                 break;
             }
-            case 24: //lance le classement
+            case CLASSEMENT_SCREEN: //lance le classement
                 information = friends_window.run(information);
                 break;
-            case 25: //lance la liste d'ami
+            case LIST_FRIENDS_SCREEN: //lance la liste d'ami
                 information = friends_window.run(information);
                 break;
-            case 26: //lance l'historique
+            case HISTORIQUE_SCREEN: //lance l'historique
                 information = historique_window.run(information);
                 break;
-            case 27: //pour aller dans le tchat et discuter avec ses amis (pour peur qu'il en ait)
+            case CHAT_SCREEN: //pour aller dans le tchat et discuter avec ses amis (pour peur qu'il en ait)
                 information = friends_window.run(information);
                 break;
-            case 28: //rentre dans le salon d'attente
+            case ROOM_SCREEN: //rentre dans le salon d'attente
                 information = salon_attente_window.run(information);
                 break;
-            case 29: //pour créer / modifier son équipe de lombric
+            case SET_LOMBRIC_TEAM_SCREEN: //pour créer / modifier son équipe de lombric
                 information= creation_changement_lombric.run(information);
                 break;
-            case 30: //lance la window liste ami si l'hote veut inviter des gens à la partie (depuis le salon d'attente)
+            case INVIT_FRIEND_TO_GAME_SCREEN: //lance la window liste ami si l'hote veut inviter des gens à la partie (depuis le salon d'attente)
                 information = friends_window.run(information);
                 break;
-            case 31: //appel la window demande d'amis
+            case INVIT_NEW_FRIEND_SCREEN: //appel la window demande d'amis
                 information= demande_amis.run(information);
                 break;
-            case 32: //lance ami_window pour consulter les options concernants les amis
+            case FRIENDS_SCREEN: //lance ami_window pour consulter les options concernants les amis
                 information = ami_window.run(information);
                 break;
             case 53: //lance le warning avec "Historique vide."
@@ -216,10 +217,10 @@ int main(int argc, char** argv)
             case 591: //lance le warning avec "Le troisième paramètre n'est pas correcte." (depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case 60: //lance la window vérification (pour voir si l'ulisateur veut vraiment revenir au login)
+            case WARNING_DECONNECTION_DCREEN: //lance la window vérification (pour voir si l'ulisateur veut vraiment revenir au login)
                 information= leave_window.run(information);
                 break;
-            case 61: //lance la window vérification supprimer ami
+            case WARNING_DEL_FRIEND_SCREEN: //lance la window vérification supprimer ami
                 information = del_friend_window.run(information);
                 break;
             case 62: //lance pop up pseuod existant
@@ -234,7 +235,7 @@ int main(int argc, char** argv)
             case 71: //lance la fenetre où l'utilisateur devra entrer le nom de qui il veut voir l'historique
                 information = request_history.run(information);
                 break;
-            case 80:
+            case GAME_SCREEN:
                 Window* gameWin = new Partie(information.client);
                 information = gameWin->run(information);
                 break;
