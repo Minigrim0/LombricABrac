@@ -21,6 +21,8 @@ class Joueur{
 
         void add_worms(int worm, int nbWorm);
 
+        bool is_still_alive(Partie* obj_partie);
+
         inline uint32_t get_id() const{return m_player_id;};
         inline std::string get_pseudo() const{return m_pseudo;};
         inline bool is_current_player() const{return m_is_current_player;};

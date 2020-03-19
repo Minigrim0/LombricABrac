@@ -28,7 +28,7 @@ Game::~Game(){
 
 void Game::set_lomb(uint8_t nb_lomb){
     m_lomb_nb = nb_lomb;
-    for(uint8_t x;x<m_players.size();x++){
+    for(uint8_t x = 0;x<m_players.size();x++){
         m_players[x].set_nb_lombs(nb_lomb);
     }
 }
@@ -356,8 +356,19 @@ void Game::end_round(int *current_step){
     m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
-    if(false) //Si endgame
-        (*current_step)++;
+    size_t player_alive =0;
+    for(size_t i=0;i<m_players.size();i++){
+      if(m_players[i].is_still_alive(&m_game_object)){
+        player_alive += 1;
+      }
+    }
+    if(player_alive <= 1) //Si endgame
+      zmq_msg.set_type_message(END_GAME);
+      // Telling everyone that a player shot
+      for(size_t i=0;i<m_players.size();i++){
+          m_players[i].sendMessage(zmq_msg.SerializeAsString());
+      }
+      (*current_step)++;
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);
