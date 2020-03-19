@@ -118,7 +118,7 @@ info Menu_log_in::run(info information)
 
       case 10:
         boucle=0;
-        if (information.id==11)
+        if (information.id==LOGIN_SCREEN)
         {
           bool connected;
           if (len_str_pseudo != 0 || len_str_password != 0)
@@ -134,16 +134,16 @@ info Menu_log_in::run(info information)
           {
             string pseudo= string(ok[0]);
             information.username=pseudo;
-            information.id=2;
+            information.id=MAIN_MENU_SCREEN;
             break;
           }
           else
           {
-            information.id=51;
+            information.id=WARNING_WRONG_DATA_IN_LOGIN_SCREEN;
             break;
           }
         }
-        if (information.id==12)
+        if (information.id==REGISTER_SCREEN)
         {
           bool isenregistrer;
           if (len_str_pseudo != 0 || len_str_password != 0)
@@ -159,21 +159,21 @@ info Menu_log_in::run(info information)
           {
             string pseudo= string(ok[0]);
             information.username=pseudo;
-            information.id=2;
+            information.id=MAIN_MENU_SCREEN;
             break;
           }
           else
           {
-            information.id=62;
+            information.id=WARNING_PSEUDO_ALREADY_EXIST_SCREEN;
             break;
           }
         }
-        information.id=2;
+        information.id=MAIN_MENU_SCREEN;
 
         break;
       case 263:
         boucle=0;
-        information.id=1;
+        information.id=INIT_SCREEN;
         break;
 
       default:

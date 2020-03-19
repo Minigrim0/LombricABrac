@@ -33,11 +33,11 @@ info Liste_ami_window::run(info information)
   playerRank rank;
   string tableau_joueur[18];
   uint32_t points_ranger[18];
-  if (information.id==25 || information.id==30 || information.id==27)
+  if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
   {
     liste_ami=information.client->getFriendList();
     len_tab=liste_ami.size;
-    if (information.id==27 && information.notif==1)
+    if (information.id==CHAT_SCREEN && information.notif==1)
     {
       for (int i=0;i<len_tab;i++)
       {
@@ -53,7 +53,7 @@ info Liste_ami_window::run(info information)
     }
     msg2= "Appuyer sur ENTER pour delete un ami.";
   }
-  if (information.id==23)
+  if (information.id==INVITATIONS_SCREEN)
   {
     information.notif_invit=0;
     globalInvitations.mut.lock();
@@ -63,7 +63,7 @@ info Liste_ami_window::run(info information)
     msg1="Voici votre liste d'invitation (Appuyer sur RETURN pour revenir en arrière)";
     msg2="Appuyer sur ENTER pour accepter l'invitation ou sur 'q' pour renier.";
   }
-  if (information.id==24)
+  if (information.id==CLASSEMENT_SCREEN)
   {
     rank=information.client->getRank(10);
     len_tab=rank.size;
@@ -73,11 +73,11 @@ info Liste_ami_window::run(info information)
       rank.pseudo[i]= "Pseudo : " + rank.pseudo[i]+ " score: " + to_string(rank.points[i]);
     }
   }
-  if (information.id==30)
+  if (information.id==INVIT_FRIEND_TO_GAME_SCREEN)
   {
     msg1="Voici votre liste d'amis (Appuyer sur ENTER pour inviter la personne)";
   }
-  if (information.id == 27)
+  if (information.id == CHAT_SCREEN)
   {
     msg2= "Appuyer sur ENTER pour choisir un ami.";
   }
@@ -95,7 +95,7 @@ info Liste_ami_window::run(info information)
 
   //print le titre
   print_string_window(win, y-3, (max_x/2)-(len_str/2), msg1);
-  if (information.id==25 || information.id == 23 || information.id == 27)
+  if (information.id==LIST_FRIENDS_SCREEN || information.id == INVITATIONS_SCREEN || information.id == CHAT_SCREEN)
   {
     len_str=static_cast<int>(msg2.size());
     print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
@@ -112,13 +112,13 @@ info Liste_ami_window::run(info information)
     }
     else
     {
-    if (information.id==25 || information.id==30 || information.id==27)
+    if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
       {
         print_string_window(win, y+n, (max_x/2), liste_ami.table[i]);
         n+=2;
         nbr_printed++;
       }
-    if (information.id==23)
+    if (information.id==INVITATIONS_SCREEN)
     {
       globalInvitations.mut.lock();
       if (globalInvitations.invits[static_cast<unsigned int>(i)].type == TRUE )
@@ -137,7 +137,7 @@ info Liste_ami_window::run(info information)
       }
       globalInvitations.mut.unlock();
     }
-    if (information.id==24)
+    if (information.id==CLASSEMENT_SCREEN)
     {
       print_string_window(win, y+n, (max_x/2), rank.pseudo[i]);
       n+=2;
@@ -176,7 +176,7 @@ info Liste_ami_window::run(info information)
           len_str=static_cast<int>(msg1.size());
           print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
 
-          if (information.id==25 || information.id ==23 || information.id == 27)
+          if (information.id==LIST_FRIENDS_SCREEN || information.id ==INVITATIONS_SCREEN || information.id == CHAT_SCREEN)
           {
             len_str=static_cast<int>(msg2.size());
             print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
@@ -184,17 +184,17 @@ info Liste_ami_window::run(info information)
 
           for (i = key; i < nbr_printed+key; i++)
           {
-            if (information.id==25 || information.id==30 || information.id==27)
+            if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), liste_ami.table[i]);
               n+=2;
             }
-            if (information.id==23)
+            if (information.id==INVITATIONS_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), globalInvitations.invits[static_cast<unsigned int>(i)].text);
               n+=2;
             }
-            if (information.id==24)
+            if (information.id==CLASSEMENT_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), rank.pseudo[i]);
               n+=2;
@@ -233,7 +233,7 @@ info Liste_ami_window::run(info information)
           len_str=static_cast<int>(msg1.size());
           print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
 
-          if (information.id==25 || information.id ==23 || information.id == 27)
+          if (information.id==LIST_FRIENDS_SCREEN || information.id ==INVITATIONS_SCREEN || information.id == CHAT_SCREEN)
           {
             len_str=static_cast<int>(msg2.size());
             print_string_window(win, 2,(max_x/2)-(len_str/2), msg2);
@@ -241,18 +241,18 @@ info Liste_ami_window::run(info information)
 
           for (i = key; i < nbr_printed+key; i++)
           {
-            if (information.id==25 || information.id==30 || information.id==27)
+            if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), liste_ami.table[i]);
               n+=2;
             }
 
-            if (information.id==23)
+            if (information.id==INVITATIONS_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), globalInvitations.invits[static_cast<unsigned int>(i)].text);
               n+=2;
             }
-            if (information.id==24)
+            if (information.id==CLASSEMENT_SCREEN)
             {
               print_string_window(win, y_save+n, (max_x/2), rank.pseudo[i]);
               n+=2;
@@ -284,24 +284,24 @@ info Liste_ami_window::run(info information)
   }
     if (touch == 263)//263 == touche delete
     {
-      if (information.id==30)
+      if (information.id==INVIT_FRIEND_TO_GAME_SCREEN)
       {
-        information.id=28;
+        information.id=ROOM_SCREEN;
         break;
       }
-      if (information.id == 24)
+      if (information.id == CLASSEMENT_SCREEN)
       {
-        information.id = 2;
+        information.id = MAIN_MENU_SCREEN;
         break;
       }
-      if (information.id == 23)
+      if (information.id == INVITATIONS_SCREEN)
       {
-        information.id = 2;
+        information.id = MAIN_MENU_SCREEN;
         break;
       }
       else
       {
-        information.id = 32;
+        information.id = FRIENDS_SCREEN;
         break;
       }
     }
@@ -311,12 +311,12 @@ info Liste_ami_window::run(info information)
       i_double_save = information.vec_invit.begin();
       information.vec_invit.erase(i_double_save +i_save);*/
       information.client->acceptInvitation(i_save, FALSE);
-      information.id =2;
+      information.id =MAIN_MENU_SCREEN;
       break;
     }
     if (touch == 10)
     {
-        if (information.id==27)
+        if (information.id==CHAT_SCREEN)
         {
 
           clear();
@@ -331,35 +331,35 @@ info Liste_ami_window::run(info information)
               }
             }
           }
-          information.id=2;
+          information.id=MAIN_MENU_SCREEN;
           information=msg_envoyer.run(information);
           break;
         }
-        if (information.id==25)
+        if (information.id==LIST_FRIENDS_SCREEN)
         {
           information.friends=liste_ami.table[i_save];
-          information.id=61;
+          information.id=WARNING_DEL_FRIEND_SCREEN;
           break;
         }
-        if (information.id==30)
+        if (information.id==INVIT_FRIEND_TO_GAME_SCREEN)
         {
           information.client->addToGame(liste_ami.table[i_save]);
-          information.id=28;
+          information.id=ROOM_SCREEN;
           break;
         }
 
-        if (information.id==23)
+        if (information.id==INVITATIONS_SCREEN)
         {
           if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==TRUE)
           {
             information.client->acceptInvitation(i_save, TRUE);
-            information.id = 28;
+            information.id = ROOM_SCREEN;
             break;
           }
           if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==FALSE)
           {
             information.client->acceptInvitation(i_save, TRUE);
-            information.id = 2;
+            information.id = MAIN_MENU_SCREEN;
             break;
           }
           //information.vec_invit.erase(information.vec_invit.begin()+i_save);

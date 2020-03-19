@@ -156,11 +156,11 @@ info Menu_creation_equipe_lombric::run(info information)
           string str= string(name[i]);
           information.client->setLombricName(i,str);
         }
-        information.id=2;
+        information.id=MAIN_MENU_SCREEN;
         boucle=0;
         break;
       case 263:
-        information.id=2;
+        information.id=MAIN_MENU_SCREEN;
         boucle=0;
       default:
         break;

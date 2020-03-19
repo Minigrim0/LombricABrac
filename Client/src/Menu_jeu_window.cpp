@@ -137,49 +137,49 @@ info Menu_jeu_window::run(info information)
       {
         //leave_window
         information.client->deconnection();
-        information.id = 60;
+        information.id = WARNING_DECONNECTION_SCREEN;
         break;
       }
       if (y == posStart_arrow+12)
       {
         //request historique
-        information.id = 71;
+        information.id = HISTORY_REQUEST_SCREEN;
         break;
       }
       if (y == posStart_arrow+10)
       {
         //ami
-        information.id = 32;
+        information.id = FRIENDS_SCREEN;
         break;
       }
       if (y == posStart_arrow+8)
       {
         //classement
-        information.id = 24;
+        information.id = CLASSEMENT_SCREEN;
         break;
       }
       if (y == posStart_arrow+6)
       // voir ses invitations
       {
-        information.id = 23;
+        information.id = INVITATIONS_SCREEN;
         break;
       }
       if (y == posStart_arrow+4)
       // créer/modifier equipe de lombric
       {
-        information.id = 29;
+        information.id = SET_LOMBRIC_TEAM_SCREEN;
         break;
       }
       if (y == posStart_arrow+2)
       // création partie
       {
-        information.id = 22;
+        information.id = SET_GAME_PARAM;
         break;
       }
       if (y == posStart_arrow)
       {
         //Trouver une partie(wait_window pour l'instant)
-        information.id = 70;
+        information.id = WAITING_SCREEN;
         break;
       }
     }

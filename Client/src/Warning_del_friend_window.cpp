@@ -83,13 +83,13 @@ info Warning_del_friend_window::run(info information)
     {
       if ( x == x_arrow1)
       {
-        information.id = 25;
+        information.id = LIST_FRIENDS_SCREEN;
         break;
       }
       if (x == x_arrow2)
       {
         information.client->delFriend(information.friends);
-        information.id = 25;
+        information.id = LIST_FRIENDS_SCREEN;
         break;
       }
 

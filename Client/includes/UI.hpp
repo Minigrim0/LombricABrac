@@ -6,6 +6,7 @@
 #include <vector>
 #include "client.hpp"
 #include "../../sharedFiles/includes/maccroAffichage.hpp"
+#include "maccroWindow.hpp"
 
 using namespace std;
 

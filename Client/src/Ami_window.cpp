@@ -81,23 +81,23 @@ info Ami_window::run(info information)
     {
       if (y == posStart_arrow+6)
       {//reviens au menu
-        information.id = 2;
+        information.id = MAIN_MENU_SCREEN;
         break;
       }
       if (y== posStart_arrow+4)
       {
         //discuter avec ses mais
-        information.id = 27;
+        information.id = CHAT_SCREEN;
         break;
       }
       if (y == posStart_arrow+2)
       {//consulter liste amis
-          information.id = 25;
+          information.id = LIST_FRIENDS_SCREEN;
           break;
       }
       if (y == posStart_arrow)
       {//envoyer demande ami
-          information.id = 31;
+          information.id = INVIT_NEW_FRIEND_SCREEN;
           break;
       }
 

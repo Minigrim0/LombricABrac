@@ -84,18 +84,18 @@ info Menu_entrer::run(info information)
         if (pos_y==(hauteur/2)+1)
         {
           infini=0;
-          information.id=-1;
+          information.id=LEAVE;
           break;
         }
         if (pos_y==(hauteur/2)-5)
         {
-          information.id=11;
+          information.id=LOGIN_SCREEN;
           infini=0;
           break;
         }
         if (pos_y==(hauteur/2)-2)
         {
-          information.id=12;
+          information.id=REGISTER_SCREEN;
           infini=0;
           break;
         }

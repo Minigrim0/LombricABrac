@@ -154,73 +154,73 @@ info Menu_creation_partie::run(info information)
         boucle=0;
         if (set >= 2 || ret >= 2 || set+ret > 2)
         {
-          if (information.id == 221)
+          if (information.id == CHANGE_GAME_PARAM)
           {
-            information.id = 561;
+            information.id = WARNING_SECOND_COME_WRONG_PARAMETERS_SCREEN;
             break;
           }
           else
           {
-            information.id = 56;
+            information.id = WARNING_FIRST_COME_WRONG_PARAMETERS_SCREEN;
             break;
           }
         }
         if(!setting_one)
         {
-          if (information.id == 221)
+          if (information.id == CHANGE_GAME_PARAM)
           {
-            information.id = 571;
+            information.id = WARNING_SECOND_COME_WRONG_FIRST_PARA_SCREEN;
             break;
           }
           else
           {
-            information.id = 57;
+            information.id = WARNING_FIRST_COME_WRONG_FIRST_PARA_SCREEN;
             break;
           }
         }
         if(!setting_two)
         {
-          if (information.id == 221)
+          if (information.id == CHANGE_GAME_PARAM)
           {
-            information.id = 581;
+            information.id = WARNING_SECOND_COME_WROND_SECOND_PARA_SCREEN;
             break;
           }
           else
           {
-            information.id = 58;
+            information.id = WARNING_FIRST_COME_WROND_SECOND_PARA_SCREEN;
             break;
           }
         }
         if(!setting_three)
         {
-          if (information.id == 221)
+          if (information.id == CHANGE_GAME_PARAM)
           {
-            information.id = 591;
+            information.id = WARNING_SECOND_COME_WRONG_THIRD_PARA_SCREEN;
             break;
           }
           else
           {
-            information.id = 59;
+            information.id = WARNING_FIRST_COME_WRONG_THIRD_PARA_SCREEN;
             break;
           }
         }
         if(!setting_four)
         {
-          if (information.id == 221)
+          if (information.id == CHANGE_GAME_PARAM)
           {
-            information.id = 631;
+            information.id = WARNING_SECOND_COME_WRONG_FOUR_PARA_SCREEN;
             break;
           }
           else
           {
-            information.id = 63;
+            information.id = WARNING_FIRST_COME_WRONG_FOUR_PARA_SCREEN;
             break;
           }
         }
         else
         {
           bool isOk = true;//devient false s'il y'a un problème à la création d'une room
-          if (information.id != 221)
+          if (information.id != CHANGE_GAME_PARAM)
           {
             isOk = information.client->createRoom();
           }
@@ -229,17 +229,17 @@ info Menu_creation_partie::run(info information)
               information.client->set_nrb_lombrics(static_cast<uint32_t>(nombre2));//nombre lombrics
               information.client->setMap(static_cast<uint32_t>(nombre4));//la map
               information.client->set_nbr_equipes(static_cast<uint32_t>(nombre1));
-              information.id=28;
+              information.id=ROOM_SCREEN;
               break;
           }
           else{
-              information.id=2;
+              information.id=MAIN_MENU_SCREEN;
               break;
           }
         }
       case 263: //si c'est DELETE, on retourne en arriere
         boucle=0;
-        information.id=2;
+        information.id=MAIN_MENU_SCREEN;
         break;
 
       default:

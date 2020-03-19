@@ -43,20 +43,20 @@ info Warning_popup_window::run(info information)
     usleep(MENU_SLEEP_TIME);
   }
 
-  if (information.id == 561 || information.id == 571 || information.id == 581 || information.id == 591)
+  if (information.id == WARNING_SECOND_COME_WRONG_PARAMETERS_SCREEN || information.id == WARNING_SECOND_COME_WRONG_FIRST_PARA_SCREEN || information.id == WARNING_SECOND_COME_WROND_SECOND_PARA_SCREEN || information.id == WARNING_SECOND_COME_WRONG_THIRD_PARA_SCREEN)
   {
-    information.id = 28;
+    information.id = ROOM_SCREEN;
   }
 
   else
   {
-    if (information.id==51 || information.id == 62)
+    if (information.id==WARNING_WRONG_DATA_IN_LOGIN_SCREEN || information.id == WARNING_PSEUDO_ALREADY_EXIST_SCREEN)
     {
-      information.id=1;
+      information.id=INIT_SCREEN;
     }
     else
     {
-      information.id = 2;
+      information.id = MAIN_MENU_SCREEN;
     }
   }
   clear();

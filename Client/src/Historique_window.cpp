@@ -158,7 +158,7 @@ info Historique_window::run(info information)
   }
     if (touch == 263)//263 == touche delete
     {
-      information.id = 2;
+      information.id = MAIN_MENU_SCREEN;
       break;
     }
     usleep(MENU_SLEEP_TIME);

@@ -215,7 +215,7 @@ info Salon_Attente::run(info information)
       partie_lance = information.client->isStarted();
       if (partie_lance)
       {
-        information.id = 80;
+        information.id = GAME_SCREEN;
         break;
       }
     }
@@ -349,26 +349,26 @@ info Salon_Attente::run(info information)
           if ( x == x_arrow1)
           {
 
-            information.id = 2;
+            information.id = MAIN_MENU_SCREEN;
             running = false;
             break;
           }
           if (x == x_arrow2 && information.ishost)
           {
-            information.id = 221;
+            information.id = CHANGE_GAME_PARAM;
             running = false;
             break;
           }
           if (x == x_arrow3 && information.ishost)
           {
-            information.id = 30;
+            information.id = INVIT_FRIEND_TO_GAME_SCREEN;
             running = false;
             break;
           }
           if (x== x_arrow4 && information.ishost)
           {
             information.client->startGame();
-            information.id=80;
+            information.id=GAME_SCREEN;
             running = false;
             break;
           }

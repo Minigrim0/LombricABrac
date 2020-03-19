@@ -83,12 +83,12 @@ info Warning_leave_window::run(info information)
     {
       if ( x == x_arrow1)
       {
-        information.id = 2;
+        information.id = MAIN_MENU_SCREEN;
         break;
       }
       if (x == x_arrow2)
       {
-        information.id = 1;
+        information.id = INIT_SCREEN;
         break;
       }
 

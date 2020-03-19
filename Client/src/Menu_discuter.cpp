@@ -113,7 +113,7 @@ info discuter::run(info information)
       }
       if (ok==263)
       {
-        information.id=32;
+        information.id=FRIENDS_SCREEN;
         break;
       }
       if (ok=='r')

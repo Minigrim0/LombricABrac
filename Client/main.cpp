@@ -184,55 +184,58 @@ int main(int argc, char** argv)
             case FRIENDS_SCREEN: //lance ami_window pour consulter les options concernants les amis
                 information = ami_window.run(information);
                 break;
-            case 53: //lance le warning avec "Historique vide."
+            case WARNING_EMPTY_HISTORIC_SCREEN: //lance le warning avec "Historique vide."
                 information= popup_window.run(information);
                 break;
-            case 54: //lance le warning avec "T'es dernier mdr."
+            case WARNING_EMPTY_RANKE_SCREEN: //lance le warning avec "T'es dernier mdr."
                 information = popup_window.run(information);
                 break;
-            case 55: //lance le warning avec "Ce pseudo n'existe pas."
+            case WARNING_WRONG_PSEUDO_SCREEN: //lance le warning avec "Ce pseudo n'existe pas."
                 information = popup_window.run(information);
                 break;
-            case 56: //lance le warning avec "Les paramètres entrés sont incorrcetes" (si l'utlisateur modifie la partie la premiere fois (depuis le menu principal))
+            case WARNING_FIRST_COME_WRONG_PARAMETERS_SCREEN: //lance le warning avec "Les paramètres entrés sont incorrcetes" (si l'utlisateur modifie la partie la premiere fois (depuis le menu principal))
                 information = popup_window.run(information);
                 break;
-            case 561: //lance le warning avec "Les paramètres entrés sont incorrcetes" (si l'utlisateur modifie la partie depuis le salon d'attente)
+            case WARNING_SECOND_COME_WRONG_PARAMETERS_SCREEN: //lance le warning avec "Les paramètres entrés sont incorrcetes" (si l'utlisateur modifie la partie depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case 57: //lance le warning avec "Le premier paramètre n'est pas correcte." (pour la première fois)
+            case WARNING_FIRST_COME_WRONG_FIRST_PARA_SCREEN: //lance le warning avec "Le premier paramètre n'est pas correcte." (pour la première fois)
                 information = popup_window.run(information);
                 break;
-            case 571: //lance le warning avec "Le premier paramètre n'est pas correcte." (depuis le salon d'attente)
+            case WARNING_SECOND_COME_WRONG_FIRST_PARA_SCREEN: //lance le warning avec "Le premier paramètre n'est pas correcte." (depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case 58: //lance le warning avec "Le deuxieme paramètre n'est pas correcte." (pour la première fois)
+            case WARNING_FIRST_COME_WROND_SECOND_PARA_SCREEN: //lance le warning avec "Le deuxieme paramètre n'est pas correcte." (pour la première fois)
                 information = popup_window.run(information);
                 break;
-            case 581: //lance le warning avec "Le deuxieme paramètre n'est pas correcte." (depuis le salon d'attente)
+            case WARNING_SECOND_COME_WROND_SECOND_PARA_SCREEN: //lance le warning avec "Le deuxieme paramètre n'est pas correcte." (depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case 59: //lance le warning avec "Le troisième paramètre n'est pas correcte." (pour la première fois)
+            case WARNING_FIRST_COME_WRONG_THIRD_PARA_SCREEN: //lance le warning avec "Le troisième paramètre n'est pas correcte." (pour la première fois)
                 information = popup_window.run(information);
                 break;
-            case 591: //lance le warning avec "Le troisième paramètre n'est pas correcte." (depuis le salon d'attente)
+            case WARNING_SECOND_COME_WRONG_THIRD_PARA_SCREEN: //lance le warning avec "Le troisième paramètre n'est pas correcte." (depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case WARNING_DECONNECTION_DCREEN: //lance la window vérification (pour voir si l'ulisateur veut vraiment revenir au login)
+            case WARNING_DECONNECTION_SCREEN: //lance la window vérification (pour voir si l'ulisateur veut vraiment revenir au login)
                 information= leave_window.run(information);
                 break;
             case WARNING_DEL_FRIEND_SCREEN: //lance la window vérification supprimer ami
                 information = del_friend_window.run(information);
                 break;
-            case 62: //lance pop up pseuod existant
+            case WARNING_PSEUDO_ALREADY_EXIST_SCREEN: //lance pop up pseuod existant
                 information = popup_window.run(information);
                 break;
-            case 63: //lance pop up problème para 4
+            case WARNING_FIRST_COME_WRONG_FOUR_PARA_SCREEN: //lance pop up problème para 4
                 information = popup_window.run(information);
                 break;
-            case 51: //lance pop up pseudo ou mot de passe incorrect
+            case WARNING_SECOND_COME_WRONG_FOUR_PARA_SCREEN://lance pop up probleme para 4 (depuis le salon d'attente)
                 information = popup_window.run(information);
                 break;
-            case 71: //lance la fenetre où l'utilisateur devra entrer le nom de qui il veut voir l'historique
+            case WARNING_WRONG_DATA_IN_LOGIN_SCREEN: //lance pop up pseudo ou mot de passe incorrect
+                information = popup_window.run(information);
+                break;
+            case HISTORY_REQUEST_SCREEN: //lance la fenetre où l'utilisateur devra entrer le nom de qui il veut voir l'historique
                 information = request_history.run(information);
                 break;
             case GAME_SCREEN:
