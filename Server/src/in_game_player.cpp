@@ -18,11 +18,14 @@ m_pseudo("")
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t cur_lomb=1;cur_lomb<nbr_lomb;cur_lomb++){
-        uint32_t id_lombric_checked = (cur_lomb+m_current_lombric)%nbLomb;
+    for(uint8_t next_lomb=1;next_lomb<nbr_lomb;next_lomb++){
+        uint32_t id_lombric_checked = (next_lomb+m_current_lombric)%nbLomb;
         if(obj_partie->isLombAlive(m_Lombrics[id_lombric_checked])){
             m_current_lombric=id_lombric_checked;
-            return m_Lombrics[(cur_lomb+m_current_lombric)%nbLomb];
+            return m_Lombrics[(next_lomb+m_current_lombric)%nbLomb];
+        }
+        else{
+
         }
     }
 
@@ -31,6 +34,9 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
 
 void Joueur::set_nb_lombs(uint8_t nb_lombs){
     nbr_lomb = nb_lombs;
+    //m_Lombrics = new uint32_t[nbr_lomb];
+    //for(int i=0;i<nbr_lomb;i++)
+    //    m_Lombrics[i] = 0;
 }
 
 void Joueur::sendMessage(std::string msg){
@@ -74,4 +80,13 @@ void Joueur::add_worms(int worm, int nbWorm){
             return;
         }
     }
+}
+
+bool Joueur::is_still_alive(Partie* obj_partie){
+  for(uint8_t j=0;j<nbr_lomb;j++){
+    if(obj_partie->isLombAlive(m_Lombrics[j])){
+      return true;
+    }
+  }
+  return false;
 }
