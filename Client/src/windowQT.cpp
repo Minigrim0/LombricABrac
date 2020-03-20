@@ -1,15 +1,18 @@
 #include "../includes/windowQT.hpp"
 
-WindowQT::WindowQT(int id, MainWindow *parent, Client* client):
+WindowQT::WindowQT(int id, MainWindow *parent, Client* cli):
 QWidget(parent),
 parent(parent),
 id(id),
 intervalle(0),
-client(client),
+signalMapper(nullptr),
+client(cli),
 timer(nullptr)
 {
     signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(int)), parent, SLOT(setPage(int)));
+
+    client = parent->getClient();
 }
 
 int WindowQT::getId(){

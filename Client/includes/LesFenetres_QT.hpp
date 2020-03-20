@@ -1,8 +1,12 @@
 #ifndef LesFenetres_QT
 #define LesFenetres_QT
 
+#include "client.hpp"
 #include "mainWindow.hpp"
+#include "maccroWindow.hpp"
 #include "windowQT.hpp"
+
+#include "../UI/src/Menu_LoginQt_ui.hpp"
 #include <QPushButton>
 #include <QLabel>
 
@@ -39,9 +43,16 @@ public:
 };
 
 class Menu_LoginQT: public WindowQT{
+    Q_OBJECT
+private:
+    Ui::Menu_LoginWidget *page;
 public:
     Menu_LoginQT(int id, MainWindow *parent, Client* cli);
-    virtual ~Menu_LoginQT()=default;
+    void initWindow() override;
+    virtual ~Menu_LoginQT();
+private slots:
+    void connection();
+
 };
 
 class Menu_RegisterQT: public WindowQT{

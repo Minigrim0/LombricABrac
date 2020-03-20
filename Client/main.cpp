@@ -26,31 +26,6 @@
 invitationsVect globalInvitations;//variable globale pour les invitations
 
 using namespace std;
-/*
-   premier menu = 1
-   login = 11
-   s'enregsiter = 12
-   menu principal = 2
-   trouver une partie = 21
-   creer une partie = 22
-   changer option depuis wait_room = 221
-   voir ses invitation = 23
-   Classement = 24
-   liste amis = 25
-   historique = 26
-   discuter avec ses amis = 27;
-   salon attente = 28;
-   creer/changer equipe de lombric=29
-   envoyer demande de jeu=30
-   envoyer demande d'amis = 31
-   ami_window = 32
-   warning pop up = 5
-   Wait_window = 70
-   warning leave = 60 (quand il se deconncete  == -1 retourne au login )
-   warning del_friend = 61
-   quitter  = -1
-
- */
 
 int main(int argc, char** argv)
 {

@@ -10,8 +10,9 @@ isHost(false){
     setWindowTitle("Lombric à Brac");
     resize(1080,720);
 
-    addWidget(new partieQT(GAME_SCREEN,this,client));
-    addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,client));
+    std::cout << "Client 1 :" << client << std::endl;
+    addWidget(new partieQT(GAME_SCREEN,this,cli));
+    addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli));
 
 
     information.client=client;
@@ -20,7 +21,7 @@ isHost(false){
     information.notif = 0;
     information.notif_invit = 0;
 
-    setPage(INIT_SCREEN);
+    setPage(LOGIN_SCREEN);
 }
 
 Client* MainWindow::getClient(){
