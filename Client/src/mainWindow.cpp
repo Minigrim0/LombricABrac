@@ -13,7 +13,7 @@ isHost(false){
     std::cout << "Client 1 :" << client << std::endl;
     addWidget(new partieQT(GAME_SCREEN,this,cli));
     addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli));
-
+    addWidget(new Menu_EnterQT(INIT_SCREEN,this,cli));
 
     information.client=client;
     information.id = INIT_SCREEN;
