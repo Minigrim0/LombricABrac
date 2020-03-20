@@ -4,7 +4,7 @@
 MenuEnterQT::MenuEnterQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client)
 {
-    message = new QLabel("Menu de connection");
+    /*message = new QLabel("Menu de connection");
 
     connectButton = new QPushButton("Connection", this);
     signalMapper->setMapping(connectButton, 11);
@@ -25,6 +25,6 @@ WindowQT(id, parent, client)
     layout -> addWidget(connectButton);
     layout -> addWidget(registerButton);
     layout -> addWidget(leaveButton);
-    setLayout(layout);
+    setLayout(layout);*/
 
 }

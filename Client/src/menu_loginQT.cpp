@@ -8,6 +8,7 @@ WindowQT(id, parent, client){
     signalMapper->setMapping(page->Return_Menu_LoginToolButton, INIT_SCREEN);
     connect(page->Return_Menu_LoginToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
+
     connect(page->Connect_UserToolButton, SIGNAL(clicked()), this, SLOT(connection()));
 }
 

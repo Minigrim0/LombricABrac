@@ -111,7 +111,7 @@ public:
   partieQT(int id, MainWindow *parent, Client* client); //Constructor
   //info run(info information);
   ~partieQT(); // Destructor
-public slots:
+private slots:
   void update();
 };
 

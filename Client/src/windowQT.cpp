@@ -9,10 +9,9 @@ signalMapper(nullptr),
 client(cli),
 timer(nullptr)
 {
+    client = parent->getClient();
     signalMapper = new QSignalMapper(this);
     connect(signalMapper, SIGNAL(mapped(int)), parent, SLOT(setPage(int)));
-
-    client = parent->getClient();
 }
 
 int WindowQT::getId(){

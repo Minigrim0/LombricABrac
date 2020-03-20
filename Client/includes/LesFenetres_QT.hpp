@@ -8,8 +8,11 @@
 
 #include "../UI/src/Menu_LoginQt_ui.hpp"
 #include "../UI/src/Menu_EnterQt_ui.hpp"
+#include "../UI/src/AmisQt_ui.hpp"
 #include <QPushButton>
 #include <QLabel>
+#include <string>
+#include <vector>
 
 class MainWindow;
 
@@ -30,9 +33,19 @@ public:
 };
 
 class AmisQT: public WindowQT{
+    Q_OBJECT
+private:
+    Ui::AmisWidget *page;
+    stringTable friendsList;
+    std::string chooseFriend;
+    std::vector<chat_r> chooseConvo;
 public:
     AmisQT(int id, MainWindow *parent, Client* cli);
-    virtual ~AmisQT()=default;
+    void initWindow() override;
+    virtual ~AmisQT();
+private slots:
+    void changeFriend(QString);
+    void update();
 };
 
 class DetailsQT: public WindowQT{
@@ -57,7 +70,6 @@ public:
     virtual ~Menu_LoginQT();
 private slots:
     void connection();
-
 };
 
 class Menu_RegisterQT: public WindowQT{

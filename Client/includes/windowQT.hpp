@@ -14,9 +14,9 @@ private:
     int id;
     int intervalle;
 protected:
-    QSignalMapper *signalMapper;
     MainWindow *parent;
     Client* client;
+    QSignalMapper* signalMapper;
     QTimer* timer;
 public:
     WindowQT(int id, MainWindow *parent, Client* cli);
