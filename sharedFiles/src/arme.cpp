@@ -58,5 +58,7 @@ void BatteBaseball::shoot(infoPartie_s* inf, double t){
 			}
 		}
 	}
-
 }
+
+PassTour::PassTour(std::string n, int i, int initS, int d):Arme(n, i, initS, d){}
+void PassTour::shoot(infoPartie_s* info, double t){}

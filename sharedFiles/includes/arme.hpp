@@ -76,5 +76,12 @@ public:
 	~BatteBaseball()=default;
 };
 
+class PassTour:public Arme{
+public:
+	PassTour(std::string n, int i, int initS, int d);
+	void shoot(infoPartie_s* info, double t) override;
+	~PassTour()=default;
+};
+
 
 #endif

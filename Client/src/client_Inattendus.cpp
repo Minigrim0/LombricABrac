@@ -205,6 +205,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	//remplis le vecteur des projectiles
 	gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
+	gameInfo->armesVector.push_back(new PassTour("PassTour", 0, 0, 0));
 
 
 	thisGame = gameInfo;

@@ -66,7 +66,7 @@ int Client::run(){
 			/*Messages inattendus:*/
 			msgMutex.lock();
 			switch (msg.type) {
-				case SERVER_MESSAGE_TRANSFER: //on a recu un chat
+				case NOTIF: //on a recu un chat
 					chatRcv(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;

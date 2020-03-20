@@ -14,6 +14,7 @@ void Partie::setParam(Map* m, std::vector<Sprite*> listLomb){
     gameInfo = new infoPartie_s{m, listLomb, std::vector<Arme*>(),nullptr, 0, std::vector<Equipe*>()};
     gameInfo->armesVector.push_back(new LanceMissile("Lance 'o'", 1, 25, -25, 4));
     gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
+    gameInfo->armesVector.push_back(new PassTour("PassTour", 0, 0, 0));
 }
 
 std::vector<std::string> Partie::useWeapon(std::string tir){
