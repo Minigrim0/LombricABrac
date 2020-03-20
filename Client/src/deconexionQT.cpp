@@ -4,7 +4,15 @@
 
 DeconexionQT::DeconexionQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  Ui::DeconexionWidget page;
-  //page.setupUi(this);
+  page = new Ui::DeconexionWidget;
+  page->setupUi(this);
 
+}
+
+void DeconexionQT::initWindow(){
+    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+}
+
+DeconexionQT::~DeconexionQT(){
+    delete page;
 }

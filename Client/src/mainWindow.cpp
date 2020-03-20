@@ -15,6 +15,7 @@ isHost(false){
     addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli));
     addWidget(new Menu_EnterQT(INIT_SCREEN,this,cli));
     //addWidget(new AmisQT(FRIENDS_SCREEN,this,cli));
+    //addWidget(new MenuQT(MAIN_MENU_SCREEN, this,cli));
 
     information.client=client;
     information.id = INIT_SCREEN;
