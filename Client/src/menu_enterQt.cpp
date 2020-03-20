@@ -7,8 +7,13 @@ WindowQT(id, parent, client){
   page = new Ui::Menu_EnterWidget;
   page->setupUi(this);
 
-  signalMapper->setMapping(page->LeaveApplicationToolButton, LEAVE);
-  connect(page->LeaveApplicationToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+  connect(page->LeaveApplicationToolButton, SIGNAL(clicked()), parent, SLOT(quit()));
+
+  signalMapper->setMapping(page->ConnectToolButton, LOGIN_SCREEN);
+  connect(page->ConnectToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(page->RegisterToolButton, REGISTER_SCREEN);
+  connect(page->RegisterToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
 }
 
