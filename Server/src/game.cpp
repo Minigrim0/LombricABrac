@@ -356,19 +356,21 @@ void Game::end_round(int *current_step){
     m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
-    size_t player_alive =0;
+    uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
       if(m_players[i].is_still_alive(&m_game_object)){
         player_alive += 1;
       }
     }
-    if(player_alive <= 1) //Si endgame
+    std::cout << "joueur en vie : " << player_alive << std::endl;
+    if(player_alive <= 1){ //Si endgame
       zmq_msg.set_type_message(END_GAME);
       // Telling everyone that a player shot
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
       }
       (*current_step)++;
+    }
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);
