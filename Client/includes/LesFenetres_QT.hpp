@@ -7,6 +7,7 @@
 #include "windowQT.hpp"
 
 #include "../UI/src/Menu_LoginQt_ui.hpp"
+#include "../UI/src/Menu_EnterQt_ui.hpp"
 #include <QPushButton>
 #include <QLabel>
 
@@ -19,9 +20,13 @@ public:
 };
 
 class Menu_EnterQT: public WindowQT{
+  Q_OBJECT
+private:
+  Ui::Menu_EnterWidget *page;
 public:
     Menu_EnterQT(int id, MainWindow *parent, Client* cli);
-    virtual ~Menu_EnterQT()=default;
+    void initWindow() override;
+    virtual ~Menu_EnterQT();
 };
 
 class AmisQT: public WindowQT{
