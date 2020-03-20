@@ -6,17 +6,16 @@ Objet qui s'occuppe du switch des fenêtres
 #define MAIN_WINDOW
 
 #include <QtWidgets>
+#include <QStackedWidget>
 #include <QStackedLayout>
 #include "client.hpp"
 #include "UI.hpp"
 #include "windowQT.hpp"
 #include "maccroWindow.hpp"
 
-class MainWindow : public QWidget
+class MainWindow : public QStackedWidget
 {
     Q_OBJECT
-private:
-    QStackedLayout *layout;
 protected:
     Client* client;
     bool isHost;

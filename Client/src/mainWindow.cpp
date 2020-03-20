@@ -4,19 +4,14 @@
 #include "../includes/maccroWindow.hpp"
 
 MainWindow::MainWindow(Client *cli, QWidget *parent = nullptr):
-QWidget(parent),
+QStackedWidget(parent),
 client(cli),
 isHost(false){
     setWindowTitle("Lombric à Brac");
-    layout = new QStackedLayout();
-
-
-    //ajout de toutes les fenêtres
-    //layout->addWidget(new MenuEnterQT(1,this,client));
     resize(1080,720);
-    layout->addWidget(new partieQT(GAME_SCREEN,this,client));
-    //layout->addWidget(new MenuQT(MAIN_MENU_SCREEN,this,client));
-    layout->addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,client));
+
+    addWidget(new partieQT(GAME_SCREEN,this,client));
+    addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,client));
 
 
     information.client=client;
@@ -24,9 +19,8 @@ isHost(false){
     information.ishost = false;
     information.notif = 0;
     information.notif_invit = 0;
-    setLayout(layout);
 
-    setPage(1);
+    setPage(INIT_SCREEN);
 }
 
 Client* MainWindow::getClient(){
@@ -56,12 +50,13 @@ void MainWindow::setPage(int index){
 
     while (!find){
       information.id = index;
-      for(int i=0; i<layout->count();++i){
-          WindowQT* currentWidget = dynamic_cast<WindowQT*>(layout->widget(i));
+      for(int i=0; i<count();++i){
+          WindowQT* currentWidget = dynamic_cast<WindowQT*>(widget(i));
+
           int currentIndex = currentWidget->getId();
           currentWidget->stopTimer();
           if(currentIndex == index){
-            layout->setCurrentIndex(i);
+            setCurrentIndex(i);
             currentWidget->initWindow();
             currentWidget->startTimer();
             find = true;
