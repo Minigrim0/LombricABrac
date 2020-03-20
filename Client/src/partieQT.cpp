@@ -32,7 +32,7 @@ gameInfo(nullptr){
 }
 
 void partieQT::update(){
-  //std::cout << "update" <<std::eusedWeaponndl;
+  //std::cout << "update" <<std::endl;
   QSize size = parent->size();
 
   if (size.height()!=screenHeight || size.width()!=screenWidth){
@@ -77,7 +77,9 @@ void partieQT::initWindow(){
   mainLayout = new QGridLayout;
   gameLabel = new QLabel(this);
   gamePixmap = nullptr;
+  installEventFilter(this);
   parent->installEventFilter(this);
+  show();
   //setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();

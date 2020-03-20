@@ -21,7 +21,7 @@ isHost(false){
     information.notif = 0;
     information.notif_invit = 0;
 
-    setPage(LOGIN_SCREEN);
+    setPage(INIT_SCREEN);
 }
 
 Client* MainWindow::getClient(){
@@ -48,18 +48,23 @@ void MainWindow::setPage(int index){
     Request_history_window request_history;
     Ami_window ami_window;
 
-
+    setStyleSheet("background-mage: none);");
+    hide();
     while (!find){
       information.id = index;
       for(int i=0; i<count();++i){
           WindowQT* currentWidget = dynamic_cast<WindowQT*>(widget(i));
 
           int currentIndex = currentWidget->getId();
+          currentWidget->hide();
           currentWidget->stopTimer();
           if(currentIndex == index){
             setCurrentIndex(i);
             currentWidget->initWindow();
             currentWidget->startTimer();
+            currentWidget->show();
+            update();
+            show();
             find = true;
           }
       }
