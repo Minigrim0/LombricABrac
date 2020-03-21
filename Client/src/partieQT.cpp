@@ -28,7 +28,7 @@ gameInfo(nullptr){
     QPixmap("images/weapons/baseballbat.png")
   };
 
-  chooseWeaponRects = new QRect[2];//on a que 2 armes
+  chooseWeaponRects = new QRect[3];//on a que 2 armes
 }
 
 void partieQT::update(){
@@ -262,23 +262,35 @@ void partieQT::drawMap(){
     int xRect = blockWidth;
     painter.setBrush(Qt::NoBrush);
     pen.setWidth(blockWidth/6);
-    for(int i=0; i<2; ++i){
+    for(int i=0; i<3; ++i){
       if(i == weaponIndex){
           pen.setColor(Qt::red);
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
       int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
       if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+        if (i==2){
+          xRect = blockWidth*i*RECT_WEAPON_SIZE;
+          yRect = (nBlockHeight - 1 - (i-2)*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
+        }
         chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*blockWidth, RECT_WEAPON_SIZE*blockWidth);
       } else{
         xRect = INIT_SIZE_BLOCK;
         yRect = (screenHeight/INIT_SIZE_BLOCK  - (i+1)*(RECT_WEAPON_SIZE+1)) * INIT_SIZE_BLOCK;
+        if (i==2){
+          xRect = INIT_SIZE_BLOCK*i*RECT_WEAPON_SIZE;
+          yRect = (screenHeight/INIT_SIZE_BLOCK  - (i-1)*(RECT_WEAPON_SIZE+1)) * INIT_SIZE_BLOCK;
+        }
         chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK);
-
       }
-      QPixmap skin = skinWeapons[i].scaled(chooseWeaponRects[i].width(), chooseWeaponRects[i].height());
+      if (i==2){
+        painter.drawText(chooseWeaponRects[i], Qt::AlignCenter,  "Skip");
+      }
       painter.drawRect(chooseWeaponRects[i]);
-      painter.drawPixmap(chooseWeaponRects[i], skin);
+      if (i < 2){
+        QPixmap skin = skinWeapons[i].scaled(chooseWeaponRects[i].width(), chooseWeaponRects[i].height());
+        painter.drawPixmap(chooseWeaponRects[i], skin);
+      }
     }
   }
 
@@ -360,7 +372,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int direction = lomb->getDirection();
     Lombric_c* thisLomb = gameInfo->currentWorms;
     //draw weapons
-    if (weaponIndex!=-1 && changed && lomb == thisLomb){
+    if (weaponIndex!=-1 && weaponIndex!=2 && changed && lomb == thisLomb){
       QPixmap textureWeapon;
       textureWeapon = skinWeapons[weaponIndex];
       textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
@@ -486,22 +498,28 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
     else if (event->type() == QEvent::MouseButtonPress){
       QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
       changed = false;
-      for (int i=0; i<2; ++i){
+      for (int i=0; i<3; ++i){
         if (chooseWeaponRects[i].contains(mouseEvent->pos()) && tour){
           weaponIndex = i;
           changed = true;
         }
       }
+      if (changed && weaponIndex==2){
+        client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(0), static_cast<uint32_t>(0));
+        tour = false;
+      }
 
-      if(!changed && tour && weaponIndex != -1 ){
+      else if(!changed && tour && weaponIndex != -1){
         powerShootChrono = std::chrono::high_resolution_clock::now();
         beginShoot = true;
+
       }
     }
 
     else if (event->type() == QEvent::MouseButtonRelease){
       QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
       if(beginShoot){//time to shoot
+
         beginShoot = false;
         //calcul puissance
         int power = getPower();
@@ -522,6 +540,8 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         //utilise l'arme
         std::cout << "Angle: " << angle << std::endl;
         client->shoot(static_cast<uint32_t>(weaponIndex), static_cast<uint32_t>(power), static_cast<uint32_t>(angle));
+        std::cout << "done"<<std::endl;
+
         tour = false;
       }
     }
