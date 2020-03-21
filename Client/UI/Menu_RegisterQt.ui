@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
+ <class>Menu_RegisterWidget</class>
  <widget class="QWidget" name="Menu_RegisterWidget">
   <property name="geometry">
    <rect>

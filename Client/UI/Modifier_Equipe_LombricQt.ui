@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Modifier_EquipeWidget</class>
+ <widget class="QWidget" name="Modifier_EquipeWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>934</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
+font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QGroupBox" name="Modif_EuipeGroupBox">
+     <property name="styleSheet">
+      <string notr="true">color: qlineargradient(spread:repeat, x1:0.835821, y1:0.119, x2:1, y2:0, stop:0 rgba(255, 28, 103, 255), stop:1 rgba(255, 255, 255, 255));</string>
+     </property>
+     <property name="title">
+      <string>les noms de vos lombrics</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <layout class="QGridLayout" name="Modif_EquipeGridLayout">
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="Lombric_DeuxLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="Lombric_UnLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="Lombric_TroisLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="Lombric_CinqLabel">
+          <property name="text">
+           <string>Lombric 5</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="Lombric_QuatreLabel">
+          <property name="text">
+           <string>Lombric 4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QLabel" name="Lombric_SeptLabel">
+          <property name="text">
+           <string>Lombric 7</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <widget class="QLabel" name="Lombric_SixLabel">
+          <property name="text">
+           <string>Lombric 6</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="Lombric_DeuxLabel">
+          <property name="text">
+           <string>Lombric 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="3">
+         <widget class="QLabel" name="Lombric_HuitLabel">
+          <property name="text">
+           <string>Lombric 8</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="4">
+         <widget class="QToolButton" name="Apply_Modif_EquipeToolButton">
+          <property name="text">
+           <string>Appliquer</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images_widget.qrc">
+            <normaloff>:/icons/UI/Resources/login.png</normaloff>:/icons/UI/Resources/login.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QLineEdit" name="Lombric_SeptLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QLineEdit" name="Lombric_SixLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="4">
+         <widget class="QLineEdit" name="Lombric_HuitLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="Lombric_TroisLabel">
+          <property name="text">
+           <string>Lombric 3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="Lombric_UnLabel">
+          <property name="text">
+           <string>Lombric 1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLineEdit" name="Lombric_CinqLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLineEdit" name="Lombric_QuatreLineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+          </property>
+          <property name="maxLength">
+           <number>20</number>
+          </property>
+          <property name="placeholderText">
+           <string>Par défault</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="6" column="0">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="9" column="0">
+         <widget class="QToolButton" name="Return_From_Modif_EquipeToolButton">
+          <property name="text">
+           <string>Retour</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images_widget.qrc">
+            <normaloff>:/icons/UI/Resources/left-arrow.png</normaloff>:/icons/UI/Resources/left-arrow.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="10" column="0">
+         <spacer name="verticalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>Lombric_UnLineEdit</tabstop>
+  <tabstop>Lombric_SeptLineEdit</tabstop>
+  <tabstop>Lombric_QuatreLineEdit</tabstop>
+  <tabstop>Lombric_DeuxLineEdit</tabstop>
+  <tabstop>Lombric_TroisLineEdit</tabstop>
+  <tabstop>Apply_Modif_EquipeToolButton</tabstop>
+  <tabstop>Return_From_Modif_EquipeToolButton</tabstop>
+  <tabstop>Lombric_SixLineEdit</tabstop>
+  <tabstop>Lombric_HuitLineEdit</tabstop>
+  <tabstop>Lombric_CinqLineEdit</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../images_widget.qrc"/>
+ </resources>
+ <connections/>
+</ui>
