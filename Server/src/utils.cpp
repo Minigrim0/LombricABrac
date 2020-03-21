@@ -77,12 +77,11 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 chat_ob.ParseFromString(la_poste->get_buffer());
                 int receiver_id;db.get_user_id(chat_ob.pseudo(), &receiver_id);
                 db.send_message(usr->get_id(), receiver_id, chat_ob.msg());
-                Chat_broker chat_br;
-                chat_br.set_usr_id(usr->get_id());
+                chat_ob.set_pseudo(usr->get_pseudo());//met l'auteur du message dans pseudo
                 ZMQ_msg msg;
                 msg.set_receiver_id(receiver_id);
                 msg.set_type_message(CHAT_BROKER);
-                msg.set_message(chat_br.SerializeAsString());
+                msg.set_message(chat_ob.SerializeAsString());
                 pub_mutex.lock();
                 s_sendmore_b(publisher, "all");
                 s_send_b(publisher, msg.SerializeAsString());
@@ -232,13 +231,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case CHAT_BROKER:{
-                Chat_broker chat_broker;
-                chat_broker.ParseFromString(zmq_msg);
-                convo_s convo;
-                UserConnect usrcnt;
-                db.get_user(chat_broker.usr_id(), &usrcnt);
-                convo.set_pseudo(usrcnt.pseudo());
-                la_poste->envoie_msg(NOTIF, convo.SerializeAsString());
+                la_poste->envoie_msg(NOTIF, zmq_msg);
                 break;
             }
             case DECO:
