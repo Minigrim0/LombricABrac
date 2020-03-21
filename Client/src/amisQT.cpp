@@ -47,13 +47,13 @@ void AmisQT::changeFriend(QString selectFriend){
 }
 
 void AmisQT::update(){
-    std::vector<chat_r> newMessage = client->getNewMsg();
+    /*std::vector<chat_r> newMessage = client->getNewMsg();
     for(auto chat = chooseConvo.begin(); chat != chooseConvo.end(); ++chat){
         if((*chat).username == chooseFriend){
             std::string message = (*chat).username+": "+(*chat).text;
             page->Tchat_display_plainTextEdit->appendPlainText(QString(message.c_str()));
         }
-    }
+    }*/
 }
 
 AmisQT::~AmisQT(){
