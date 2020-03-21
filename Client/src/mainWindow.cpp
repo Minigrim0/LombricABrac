@@ -10,11 +10,10 @@ isHost(false){
     setWindowTitle("Lombric à Brac");
     resize(1080,720);
 
-    //std::cout << "Client 1 :" << client << std::endl;
     addWidget(new partieQT(GAME_SCREEN,this,cli));
     addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli));
     addWidget(new Menu_EnterQT(INIT_SCREEN,this,cli));
-    //addWidget(new AmisQT(FRIENDS_SCREEN,this,cli));
+    addWidget(new AmisQT(FRIENDS_SCREEN,this,cli));
 
     information.client=client;
     information.id = INIT_SCREEN;
@@ -50,7 +49,6 @@ void MainWindow::setPage(int index){
     Ami_window ami_window;
 
     setStyleSheet("background-mage: none);");
-    hide();
     while (!find){
       information.id = index;
       for(int i=0; i<count();++i){
@@ -71,6 +69,7 @@ void MainWindow::setPage(int index){
       }
 
       if(!find){
+          hide();
           switch(index){
               case INIT_SCREEN://on rentre dans le menu entrer
                   information = enter_window.run(information);
@@ -179,8 +178,8 @@ void MainWindow::setPage(int index){
                   information = request_history.run(information);
                   break;
               case GAME_SCREEN:
-                  //Window* gameWin = new Partie(information.client);
-                  //information = gameWin->run(information);
+                  Window* gameWin = new Partie(information.client);
+                  information = gameWin->run(information);
                   break;
             }
             index = information.id;
