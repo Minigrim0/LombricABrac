@@ -18,13 +18,12 @@ info discuter::run(info information)
     string intro1="Appuyez sur ENTER si vous voulez ecrire.";
     string intro2="Appuyez SUR RETURN si vous voulez quitter.";
     string intro3= "Appuyer sur 'r' pour refresh les messages";
-    int len_str_msg_confirmation=static_cast<int>(msg_confirmation.size());
     int len_str_msg_annulation=static_cast<int>(msg_annulation.size());
     int len_str_intro1=static_cast<int>(intro1.size());
-    int len_str_intro2=static_cast<int>(intro2.size());
-    char str[39];
-    bzero(str, 39);
     initscr();
+    nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
+    noecho();
+    keypad(stdscr,TRUE);
     WINDOW *msg_envoyer,*confirmer,*message,*convo;
     getmaxyx(stdscr,len_str,largeur);
     convo=newwin(15,39,3,2);
@@ -32,8 +31,8 @@ info discuter::run(info information)
     msg_envoyer= newwin(3,40,20,largeur/2 -20);
     confirmer= newwin(4,50,24,largeur/2 -len_str_msg_annulation/2);
     box(msg_envoyer,0,0);
-    refresh();
-    wrefresh(msg_envoyer);
+    //refresh();
+    //wrefresh(msg_envoyer);
     len_str= static_cast<int>(titre.size());
     draw(1,largeur/2 - len_str/2,titre.c_str());
 
@@ -42,17 +41,10 @@ info discuter::run(info information)
 
     len_str= static_cast<int>(intro3.size());
     draw(2,largeur/2 -len_str/2,intro3.c_str());
-    refresh();
-    wrefresh(msg_envoyer);
-    keypad(confirmer,TRUE);
-    keypad(message,TRUE);
-    len_str=38;
-
-    nodelay(msg_envoyer, TRUE);//pour que les getch ne soient bloquant
-    nodelay(confirmer, TRUE);//pour que les getch ne soient bloquant
-    nodelay(message, TRUE);//pour que les getch ne soient bloquant
-    nodelay(convo, TRUE);//pour que les getch ne soient bloquant
-
+    //refresh();
+    //wrefresh(msg_envoyer);
+    //keypad(confirmer,TRUE);
+    //len_str=38;
 
     std::vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
     int size= static_cast<int>(recu.size());
@@ -65,7 +57,7 @@ info discuter::run(info information)
     std::string string_message;
     bool mustDraw=true;
     bool running = true;
-    noecho();
+    //noecho();
     while(running)
     {
       if(mustDraw){
@@ -73,9 +65,10 @@ info discuter::run(info information)
           int decalage=0;
 
           print_string_window(msg_envoyer, 1, 1, string_message);
-          if (size>5)
+          wclear(convo);
+          if (total.size()>5)
           {
-            for (int i=size-6;i<total.size();i++ )
+            for (int i=total.size()-6;i<total.size();i++ )
             {
               print_string_window(convo,2+decalage,5,total.at(i));
               decalage+=2;
@@ -91,7 +84,8 @@ info discuter::run(info information)
           }
       }
 
-      int input=getch();
+      nodelay(stdscr, true);
+      int input=wgetch(stdscr);
       if (input==10)//enter -> on envoie
       {
         if(string_message.size()){
