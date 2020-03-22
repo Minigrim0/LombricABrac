@@ -8,7 +8,6 @@
 
 #include "../UI/src/Menu_LoginQt_ui.hpp"
 #include "../UI/src/Menu_EnterQt_ui.hpp"
-#include "../UI/src/Menu_RegisterQt_ui.hpp"
 #include "../UI/src/MenuQt_ui.hpp"
 #include "../UI/src/Salon_HoteQt_ui.hpp"
 #include "../UI/src/Salon_InviteeQt_ui.hpp"
@@ -61,6 +60,8 @@ public:
     virtual ~AmisQT();
 private slots:
     void changeFriend(QString);
+    void addFriend();
+    void sendMessage();
     void update();
 };
 
@@ -95,16 +96,6 @@ public:
     virtual ~Menu_LoginQT();
 private slots:
     void connection();
-};
-
-class Menu_RegisterQT: public WindowQT{
-    Q_OBJECT
-private:
-    Ui::Menu_RegisterWidget *page;
-public:
-    Menu_RegisterQT(int id, MainWindow *parent, Client* cli);
-    void initWindow() override;
-    virtual ~Menu_RegisterQT();
 };
 
 class Parametre_PartieQT: public WindowQT{
