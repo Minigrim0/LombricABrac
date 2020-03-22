@@ -1,4 +1,5 @@
 #include "../includes/partieQT.hpp"
+#include "../includes/maccroWindow.hpp"
 #define min(a,b) a<b?a:b
 
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
@@ -96,70 +97,75 @@ void partieQT::updateGame(){
   //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
   if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
-  drawMap();
+  if (client->getIsEnded()){
+    parent->setPage(END_SCREEN);
+  }else{
 
-  //vérifie si le tour a changé
-  if(endRound){
-    weaponIndex = -1;
-    beginShoot = false;
-    std::string nextRound = client->getNextRound();
-    if(nextRound.size()){//si on a un string-> on change de tour
-      Next_lombric next;
-      next.ParseFromString(nextRound);
-      spentTime = 0;
-      t0 = time(NULL);
-      tour = next.is_yours();
-      gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
+    drawMap();
 
-      synchronizeLombrics(lombricUpdatedByServ);
-      lombricUpdatedByServ.Clear();
+    //vérifie si le tour a changé
+    if(endRound){
+      weaponIndex = -1;
+      beginShoot = false;
+      std::string nextRound = client->getNextRound();
+      if(nextRound.size()){//si on a un string-> on change de tour
+        Next_lombric next;
+        next.ParseFromString(nextRound);
+        spentTime = 0;
+        t0 = time(NULL);
+        tour = next.is_yours();
+        gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
 
-      synchronizeMap(destroyByServ);
-      blockDeleted.clear();
-      //destroyByServ.Clear();
-      endRound = false;
+        synchronizeLombrics(lombricUpdatedByServ);
+        lombricUpdatedByServ.Clear();
+
+        synchronizeMap(destroyByServ);
+        blockDeleted.clear();
+        //destroyByServ.Clear();
+        endRound = false;
+      }
     }
-  }
 
-  //vérifie s'il y'a un tir a effectuer
-  std::vector<std::string> sVect = client->getTableUpdate();
-  if(sVect.size()){
-    Tir tirInfo;
-    tirInfo.ParseFromString(sVect[0]);
-    Arme* usedWeapon = gameInfo->armesVector[tirInfo.id_arme()];
-    usedWeapon->setForce(tirInfo.force());
-    usedWeapon->setAngle(tirInfo.angle());
-    usedWeapon->shoot(gameInfo, t);
+    //vérifie s'il y'a un tir a effectuer
+    std::vector<std::string> sVect = client->getTableUpdate();
+    if(sVect.size()){
+      Tir tirInfo;
+      tirInfo.ParseFromString(sVect[0]);
+      Arme* usedWeapon = gameInfo->armesVector[tirInfo.id_arme()];
+      usedWeapon->setForce(tirInfo.force());
+      usedWeapon->setAngle(tirInfo.angle());
+      usedWeapon->shoot(gameInfo, t);
 
-    destroyByServ.ParseFromString(sVect[1]);
-    lombricUpdatedByServ.ParseFromString(sVect[2]);
+      destroyByServ.ParseFromString(sVect[1]);
+      lombricUpdatedByServ.ParseFromString(sVect[2]);
 
-    spentTime = gameParam.time_round;//force la fin du tour
-  }
-
-  //update du time
-  uint32_t tempTime = static_cast<uint32_t>(difftime(time(NULL),t0));
-  //on refresh seulement quand le temps a changé
-  //si le spendTime == gameParam.time_round -> plus besoin d'update on attends la fin du tour
-  if (tempTime != spentTime && spentTime!=gameParam.time_round){
-    spentTime = tempTime;
-    if(spentTime >= gameParam.time_round){//alors c'est la fin du tour
-      tour = false;
-      spentTime = gameParam.time_round;
+      spentTime = gameParam.time_round;//force la fin du tour
     }
-  }
 
-  //synchronisation avec le serveur des déplacements des autres lombrics
-  std::vector<lombricPos> movedLombs = client->getNewLombPos();
-  if(!tour){
-    for (auto lombPos = movedLombs.begin();lombPos!=movedLombs.end();++lombPos){
-      int pos[2];
-      Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,(*lombPos).id_lomb));
-      lomb->getPos(pos);
-      //drawMur(pos[0], pos[1]);
-      pos[0] = static_cast<int>((*lombPos).pos_x);
-      pos[1] = static_cast<int>((*lombPos).pos_y);
-      lomb->setPos(pos);//définit les nouvelles coordonnées du lombric
+    //update du time
+    uint32_t tempTime = static_cast<uint32_t>(difftime(time(NULL),t0));
+    //on refresh seulement quand le temps a changé
+    //si le spendTime == gameParam.time_round -> plus besoin d'update on attends la fin du tour
+    if (tempTime != spentTime && spentTime!=gameParam.time_round){
+      spentTime = tempTime;
+      if(spentTime >= gameParam.time_round){//alors c'est la fin du tour
+        tour = false;
+        spentTime = gameParam.time_round;
+      }
+    }
+
+    //synchronisation avec le serveur des déplacements des autres lombrics
+    std::vector<lombricPos> movedLombs = client->getNewLombPos();
+    if(!tour){
+      for (auto lombPos = movedLombs.begin();lombPos!=movedLombs.end();++lombPos){
+        int pos[2];
+        Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,(*lombPos).id_lomb));
+        lomb->getPos(pos);
+        //drawMur(pos[0], pos[1]);
+        pos[0] = static_cast<int>((*lombPos).pos_x);
+        pos[1] = static_cast<int>((*lombPos).pos_y);
+        lomb->setPos(pos);//définit les nouvelles coordonnées du lombric
+      }
     }
   }
 }
