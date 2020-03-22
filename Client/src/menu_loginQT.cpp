@@ -15,13 +15,15 @@ isConnection(isCon){
         page->Connect_UserToolButton->setText("S'inscrire");
     }
 
-
     connect(page->Connect_UserToolButton, SIGNAL(clicked()), this, SLOT(connection()));
 }
 
 
 void Menu_LoginQT::initWindow(){
     parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+
+    page->PasswordlineEdit->clear();
+    page->PseudolineEdit->clear();
 }
 
 void Menu_LoginQT::connection(){
