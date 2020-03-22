@@ -23,7 +23,7 @@ public:
 	uint32_t getId();
 	unsigned long getSkin();
 	void getPos(int *pos);//rempli le tableau pos des coordonnées x et y
-	void setPos(int* newPos);
+	virtual void setPos(int* newPos);
 	void setMovement(double speedX, double speedY, double gravity, int type, double t);//type = type de mouvement (default=PARABOLE)
 	bool isInMovement();
 	void deleteMovement();
@@ -46,6 +46,7 @@ private:
 public:
 	Lombric_c(int id,int idTeam,int x, int y, unsigned long skin, int pv, std::string name_lomb);
 	Lombric_c(int id, int pv, Map* carte);//constructeur pour le seveur
+	void setPos(int* newPos) override;
 	bool update(Map* carte, double t) override;//update laa position
 	void move(int type, Map* carte);//gestion du déplacement (ctrl par le user)
 	inline void addLife(int n){vie += n;}

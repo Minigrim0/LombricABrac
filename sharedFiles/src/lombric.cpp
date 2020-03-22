@@ -87,6 +87,11 @@ void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, 
 	}
 }
 
+void Lombric_c::setPos(int* newPos){
+	direction = newPos[0] < posX?-1:1;
+	Sprite::setPos(newPos); 
+}
+
 int Lombric_c::getDirection(){return direction;}
 
 int Lombric_c::getTeamId(){return teamId;}
