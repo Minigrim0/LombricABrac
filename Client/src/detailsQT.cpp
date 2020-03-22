@@ -1,6 +1,5 @@
 #include "../includes/LesFenetres_QT.hpp"
 
-#include "../UI/src/DetailsQt_ui.hpp"
 
 DetailsQT::DetailsQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
@@ -18,6 +17,11 @@ WindowQT(id, parent, client){
 
 void DetailsQT::initWindow(){
     parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    page->Nom_Classement_treeWidget->clear();
+    page->Score_Classement_treeWidget->clear();
+    QTreeWidgetItem *item = new QTreeWidgetItem(page->Nom_Classement_treeWidget);
+    item->setText(0, "je m'appelle l'ovni");
+    page->Nom_Classement_treeWidget->addTopLevelItem(item);
 }
 
 DetailsQT::~DetailsQT(){
