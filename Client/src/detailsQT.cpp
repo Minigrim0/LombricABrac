@@ -7,6 +7,12 @@ WindowQT(id, parent, client){
   page = new Ui::DetailsWidget;
   page->setupUi(this);
 
+  signalMapper->setMapping(page->Return_HistoriqueToolButton, MAIN_MENU_SCREEN);
+  connect(page->Return_HistoriqueToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(page->Return_ClassementToolButton, MAIN_MENU_SCREEN);
+  connect(page->Return_ClassementToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 }
 
 

@@ -7,6 +7,12 @@ WindowQT(id, parent, client){
   page = new Ui::Parametre_PartieWidget;
   page->setupUi(this);
 
+  signalMapper->setMapping(page->Return_Parametre_PArtietoolButton, MAIN_MENU_SCREEN);
+  connect(page->Return_Parametre_PArtietoolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(page->Apply_ParametretoolButton, ROOM_SCREEN);
+  connect(page->Apply_ParametretoolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 
 
 }

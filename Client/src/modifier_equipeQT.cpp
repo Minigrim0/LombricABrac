@@ -7,6 +7,9 @@ WindowQT(id, parent, client){
   page = new Ui::Modifier_EquipeWidget;
   page->setupUi(this);
 
+  signalMapper->setMapping(page->Return_From_Modif_EquipeToolButton, MAIN_MENU_SCREEN);
+  connect(page->Return_From_Modif_EquipeToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 }
 
 void Modifier_EquipeQT::initWindow(){

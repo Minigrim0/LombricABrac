@@ -11,12 +11,17 @@ isHost(false){
     resize(1080,720);
 
     addWidget(new partieQT(GAME_SCREEN,this,cli));
-    //addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli, true));
-    //addWidget(new Menu_LoginQT(REGISTER_SCREEN,this,cli, false));
-    //addWidget(new Menu_EnterQT(INIT_SCREEN,this,cli));
-    //addWidget(new AmisQT(FRIENDS_SCREEN,this,cli));
-    //addWidget(new MenuQT(MAIN_MENU_SCREEN, this,cli));
-    //addWidget(new EndGame(END_SCREEN, this,cli));
+    addWidget(new Menu_LoginQT(LOGIN_SCREEN,this,cli, true));
+    addWidget(new Menu_LoginQT(REGISTER_SCREEN,this,cli, false));
+    addWidget(new Menu_EnterQT(INIT_SCREEN,this,cli));
+    addWidget(new AmisQT(FRIENDS_SCREEN,this,cli));
+    addWidget(new MenuQT(MAIN_MENU_SCREEN, this,cli));
+    addWidget(new Parametre_PartieQT(SET_GAME_PARAM,this, cli));
+    addWidget(new DetailsQT(DETAILS_SCREEN, this, cli));
+    addWidget(new Modifier_EquipeQT(SET_LOMBRIC_TEAM_SCREEN, this, cli));
+    addWidget(new Salon_HoteQT(ROOM_SCREEN, this, cli));
+    addWidget(new Salon_HoteQT(ROOM_INVITEE_SCREEN, this ,cli));
+    
 
     information.client=client;
     information.id = INIT_SCREEN;

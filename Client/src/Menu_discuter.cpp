@@ -47,79 +47,85 @@ info discuter::run(info information)
     keypad(confirmer,TRUE);
     keypad(message,TRUE);
     len_str=38;
-    while(1)
+
+    nodelay(msg_envoyer, TRUE);//pour que les getch ne soient bloquant
+    nodelay(confirmer, TRUE);//pour que les getch ne soient bloquant
+    nodelay(message, TRUE);//pour que les getch ne soient bloquant
+    nodelay(convo, TRUE);//pour que les getch ne soient bloquant
+
+
+    std::vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
+    int size= static_cast<int>(recu.size());
+    vector<string> total;
+
+    for (unsigned int i=0;i<static_cast<unsigned int>(size);i++ )
     {
-      vector<chat_r> recu=information.client->getConvo(information.friends); //recu=getconvo(username);
-      int size= static_cast<int>(recu.size());
-      string total[size];
-      for (unsigned int i=0;i<static_cast<unsigned int>(size);i++ )
-      {
-        total[static_cast<int>(i)]= recu[i].username+ ": "+ recu[i].text;
-      }
-      int decalage=0;
-      if (size>5)
-      {
-        for (int i=size-6;i<size;i++ )
-        {
-          print_string_window(convo,2+decalage,5,total[i]);
-          decalage+=2;
-        }
-      }
-      else
-      {
-        for (int i=0;i<size;i++ )
-        {
-          print_string_window(convo,2+decalage,5,total[i]);
-          decalage+=2;
-        }
-      }
-      print_string_window(message,1,1,intro1);
-      print_string_window(message,2,1,intro2);
-      effacer_caractere_window(confirmer,1,1,len_str_msg_confirmation);
-      effacer_caractere_window(confirmer,2,1,len_str_msg_annulation);
-      effacer_caractere_window(msg_envoyer,1,1,len_str);
-      noecho();
-      int ok=wgetch(message);
-      if (ok==10)
-      {
-        echo();
-        effacer_caractere_window(message,1,1,len_str_intro1);
-        effacer_caractere_window(message,2,1,len_str_intro2);
+      total.push_back(recu[i].username+ ": "+ recu[i].text);
+    }
+    std::string string_message;
+    bool mustDraw=true;
+    bool running = true;
+    noecho();
+    while(running)
+    {
+      if(mustDraw){
+          mustDraw = false;
+          int decalage=0;
 
-        mvwgetnstr(msg_envoyer,1,1,str,38);
-        curs_set(FALSE);// enleve le curseur
-        print_string_window(confirmer,1,1,msg_confirmation);
-        print_string_window(confirmer,2,1,msg_annulation);
-
-        noecho();
-        while(1)
-        {
-          int chara=wgetch(confirmer);
-          if (chara==10)
+          print_string_window(msg_envoyer, 1, 1, string_message);
+          if (size>5)
           {
-            string envoyer_msg= string(str);
-            information.client->chatSend(envoyer_msg, information.friends);
-            wclear(convo);
-            break;
+            for (int i=size-6;i<total.size();i++ )
+            {
+              print_string_window(convo,2+decalage,5,total.at(i));
+              decalage+=2;
+            }
           }
-
-          if (chara==263)
+          else
           {
-            break;
+            for (int i=0;i<total.size();i++ )
+            {
+              print_string_window(convo,2+decalage,5,total.at(i));
+              decalage+=2;
+            }
           }
-          usleep(MENU_SLEEP_TIME);
-        }
+      }
 
-      }
-      if (ok==263)
+      int input=getch();
+      if (input==10)//enter -> on envoie
       {
-        information.id=FRIENDS_SCREEN;
-        break;
+        if(string_message.size()){
+            information.client->chatSend(string_message, information.friends);
+            total.push_back(information.username+ ": "+string_message);
+        }
+        effacer_caractere_window(msg_envoyer, 1, 1, string_message.size());
+        string_message.clear();
       }
-      if (ok=='r')
+      else if(input==263)
       {
-        wclear(convo);
+        if(string_message.size()){
+            effacer_caractere_window(msg_envoyer, 1, 1, string_message.size()+2);
+            string_message.pop_back();
+            mustDraw = true;
+        }
+        else{
+            information.id=FRIENDS_SCREEN;
+            running = false;
+        }
       }
+      else if (input != ERR)//un caractère a été attrapé
+      {
+        effacer_caractere_window(msg_envoyer, 1, 1, string_message.size());
+        string_message += char(input);
+        mustDraw = true;
+      }
+
+      //update des nouveaux messages
+      std::vector<chat_r> newMsg = information.client->getNewMsg();
+      for(auto msg=newMsg.begin(); msg != newMsg.end(); ++msg){
+          total.push_back((*msg).username+ ": "+(*msg).text);
+      }
+      usleep(MENU_SLEEP_TIME);
     }
 
 
