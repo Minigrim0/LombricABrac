@@ -34,10 +34,7 @@ void AmisQT::initWindow(){
 void AmisQT::changeFriend(QString selectFriend){
     chooseFriend = selectFriend.toStdString();
     if(chooseFriend == "")return;
-    std::cout << "getting chat with " << chooseFriend << std::endl;
     chooseConvo = client->getConvo(chooseFriend);
-    std::cout << "get it" << std::endl;
-
 
     page->Tchat_display_plainTextEdit->clear();
     for(auto chat = chooseConvo.begin(); chat != chooseConvo.end(); ++chat){
@@ -48,7 +45,8 @@ void AmisQT::changeFriend(QString selectFriend){
 
 void AmisQT::update(){
     std::vector<chat_r> newMessage = client->getNewMsg();
-    for(auto chat = chooseConvo.begin(); chat != chooseConvo.end(); ++chat){
+    for(auto chat = newMessage.begin(); chat != newMessage.end(); ++chat){
+        std::cout << "Message de " << (*chat).username << std::endl;
         if((*chat).username == chooseFriend){
             std::string message = (*chat).username+": "+(*chat).text;
             page->Tchat_display_plainTextEdit->appendPlainText(QString(message.c_str()));
