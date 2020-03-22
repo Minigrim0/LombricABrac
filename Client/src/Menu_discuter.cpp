@@ -65,9 +65,10 @@ info discuter::run(info information)
           int decalage=0;
 
           print_string_window(msg_envoyer, 1, 1, string_message);
-          if (size>5)
+          wclear(convo);
+          if (total.size()>5)
           {
-            for (int i=size-6;i<total.size();i++ )
+            for (int i=total.size()-6;i<total.size();i++ )
             {
               print_string_window(convo,2+decalage,5,total.at(i));
               decalage+=2;
@@ -83,6 +84,7 @@ info discuter::run(info information)
           }
       }
 
+      nodelay(stdscr, true);
       int input=wgetch(stdscr);
       if (input==10)//enter -> on envoie
       {
