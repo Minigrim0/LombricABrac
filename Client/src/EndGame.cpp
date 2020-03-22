@@ -31,7 +31,7 @@ void EndGame::initWindow(){
     for (int j=0; j<teams.size();++j){//affiches équipes dans l'ordre
       if (teams[j]->getLife()==life[i]){
         QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
-        std::string text = std::to_string(i+1) + ") "+ teams[i]->getName();
+        std::string text = std::to_string(j+1) + ") "+ teams[i]->getName();
         item->setText(0,QString::fromStdString(text));
         page->EquipeTreeWidget->addTopLevelItem(item);
 
