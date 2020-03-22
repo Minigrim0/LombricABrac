@@ -378,7 +378,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int direction = lomb->getDirection();
     Lombric_c* thisLomb = gameInfo->currentWorms;
     //draw weapons
-    if (weaponIndex!=-1 && weaponIndex!=2 && changed && lomb == thisLomb){
+    if (weaponIndex!=-1 && weaponIndex!=2 && lomb == thisLomb){
       QPixmap textureWeapon;
       textureWeapon = skinWeapons[weaponIndex];
       textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
