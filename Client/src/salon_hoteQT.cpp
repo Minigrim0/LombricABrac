@@ -7,6 +7,9 @@ WindowQT(id, parent, client){
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
 
+  signalMapper->setMapping(page->Leave_roomToolButton, MAIN_MENU_SCREEN);
+  connect(page->Leave_roomToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 }
 
 

@@ -7,6 +7,9 @@ WindowQT(id, parent, client){
   page = new Ui::Salon_InviteeWidget;
   page->setupUi(this);
 
+  signalMapper->setMapping(page->Leave_room_InviteeToolButton, MAIN_MENU_SCREEN);
+  connect(page->Leave_room_InviteeToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 
 }
 
