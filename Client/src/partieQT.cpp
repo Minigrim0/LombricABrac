@@ -384,6 +384,20 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
       textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
       painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
     }
+    if(lomb == thisLomb){//dessin du triangle au dessus du joueur actif
+        int xTriangle = x + blockWidth/2;//x de la pointe du bas du triangle
+        int yTriangle = y - blockWidth;//y de la pointe du bas du triangle
+        int height = blockWidth;//hauteur du triangle
+
+        QPainterPath path;
+        path.moveTo(xTriangle,yTriangle);
+        path.lineTo(xTriangle+tan(PI/6)*height,yTriangle-height);
+        path.lineTo(xTriangle-tan(PI/6)*height,yTriangle-height);
+        path.lineTo(xTriangle,yTriangle);
+
+        painter.setPen(Qt::NoPen);
+        painter.fillPath(path, QBrush(QColor ("red")));
+    }
   }
 
 }
