@@ -86,8 +86,9 @@ class Menu_LoginQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::Menu_LoginWidget *page;
+    bool isConnection;
 public:
-    Menu_LoginQT(int id, MainWindow *parent, Client* cli);
+    Menu_LoginQT(int id, MainWindow *parent, Client* cli, bool isCon);//isConnection a false si c'est une inscription
     void initWindow() override;
     virtual ~Menu_LoginQT();
 private slots:
