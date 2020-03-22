@@ -145,10 +145,13 @@ class Modifier_EquipeQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::Modifier_EquipeWidget *page;
+    stringTable OldLombricName;
 public:
     Modifier_EquipeQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~Modifier_EquipeQT();
+private slots:
+    void ChangeNameLombric();
 };
 
 #endif
