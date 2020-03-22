@@ -25,7 +25,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
 background-color: rgb(0, 0, 0);</string>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="iconSize">
       <size>
@@ -150,126 +150,6 @@ background-color: rgb(0, 0, 0);</string>
              <string>Nom</string>
             </property>
            </column>
-           <item>
-            <property name="text">
-             <string>salut</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>New Item</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Simo,</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>ismaroco</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Emma</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>morty</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>tamere</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>tonperemdr</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>j'ai plus dimagination</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>aaaaaaaaaaaaaaaaaaaaaaaaa</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item row="1" column="3">
@@ -338,56 +218,6 @@ background-color: rgb(0, 0, 0);</string>
              <string>Score</string>
             </property>
            </column>
-           <item>
-            <property name="text">
-             <string>123</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>120</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>100</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>97</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>78</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>67</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>49</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>35</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>23</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>12</string>
-            </property>
-           </item>
           </widget>
          </item>
         </layout>
@@ -399,8 +229,13 @@ background-color: rgb(0, 0, 0);</string>
   </layout>
  </widget>
  <tabstops>
+  <tabstop>Tab_DetailsWidget</tabstop>
   <tabstop>Name_pseudo_Historique_lineEdit</tabstop>
   <tabstop>Historique_display_plainTextEdit</tabstop>
+  <tabstop>Return_HistoriqueToolButton</tabstop>
+  <tabstop>Nom_Classement_treeWidget</tabstop>
+  <tabstop>Return_ClassementToolButton</tabstop>
+  <tabstop>Score_Classement_treeWidget</tabstop>
  </tabstops>
  <resources>
   <include location="../images_widget.qrc"/>
