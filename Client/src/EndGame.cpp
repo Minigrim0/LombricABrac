@@ -1,4 +1,5 @@
 #include "../includes/LesFenetres_QT.hpp"
+
 #include <QTreeWidgetItem>
 #include <QString>
 
@@ -22,25 +23,27 @@ void EndGame::initWindow(){
     life.push_back(teams[i]->getLife());
   }
   for (const auto &i: life){ //trie equipes plus de vies à moins de vie
-    sort(life.begin(), life.end());
+    sort(life.begin(), life.end(), greater<int>());
   }
+  life.erase( unique( life.begin(), life.end() ), life.end() );
 
-
-  QTreeWidgetItem * item = new QTreeWidgetItem();
   for (int i=0; i<life.size();++i){
     for (int j=0; j<teams.size();++j){//affiches équipes dans l'ordre
       if (teams[j]->getLife()==life[i]){
-
-        std::string text = "1) "+ teams[i]->getName();
-        item->setText(i,QString::fromStdString(text));
+        QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
+        std::string text = std::to_string(j+1) + ") "+ teams[i]->getName();
+        item->setText(0,QString::fromStdString(text));
         page->EquipeTreeWidget->addTopLevelItem(item);
 
         //affiche noms des lombric par equipe
-        for (int i=0; i<teams[i]->getLombric().size();++i){
-
-          text = teams[i]->getLombric()[i]->getName() + " " + std::to_string(teams[i]->getLombric()[i]->getLife());
-          item->setText(i*teams[i]->getLombric().size(),QString::fromStdString(text));
-          page->JoueurTreeWidget->addTopLevelItem(item);
+        for (int i=0; i<teams[j]->getLombric().size();++i){
+          QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
+          QTreeWidgetItem * item2 = new QTreeWidgetItem(page->JoueurTreeWidget);
+          text = teams[j]->getLombric()[i]->getName() + " " + std::to_string(teams[j]->getLombric()[i]->getLife()) + "hp";
+          std::cout << text << std::endl;
+          item->setText(0,QString::fromStdString(""));
+          item2->setText(0,QString::fromStdString(text));
+          page->JoueurTreeWidget->addTopLevelItem(item2);
         }
       }
     }
