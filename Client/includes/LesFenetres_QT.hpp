@@ -16,6 +16,7 @@
 #include "../UI/src/Modifier_Equipe_LombricQt_ui.hpp"
 #include "../UI/src/Parametre_PartieQt_ui.hpp"
 #include "../UI/src/AmisQt_ui.hpp"
+#include "../UI/src/End_GameQt_ui.hpp"
 
 
 #include <QPushButton>
@@ -29,12 +30,24 @@ class MenuQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::MenuWidget *page;
+    std::vector<Equipe*> teamsVector;
 public:
     MenuQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~MenuQT();
 private slots:
     void deconnection();
+};
+
+class EndGame: public WindowQT{
+    Q_OBJECT
+private:
+    Ui::End_GameWidget *page;
+    std::vector<Equipe*> teams;
+public:
+    EndGame(int id, MainWindow *parent, Client* cli);
+    void initWindow() override;
+    virtual ~EndGame();
 };
 
 class Menu_EnterQT: public WindowQT{
