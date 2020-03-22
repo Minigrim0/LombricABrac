@@ -34,6 +34,8 @@ public:
     MenuQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~MenuQT();
+private slots:
+    void deconnection();
 };
 
 class Menu_EnterQT: public WindowQT{

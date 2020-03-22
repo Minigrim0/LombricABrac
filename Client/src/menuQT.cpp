@@ -19,8 +19,10 @@ WindowQT(id, parent, client){
   signalMapper->setMapping(page->Amis_toolButton, FRIENDS_SCREEN);
   connect(page->Amis_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
-  signalMapper->setMapping(page->Deconexion_toolButton, WARNING_DECONNECTION_SCREEN);
-  connect(page->Deconexion_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+  //signalMapper->setMapping(page->Deconexion_toolButton, WARNING_DECONNECTION_SCREEN);
+  //connect(page->Deconexion_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  connect(page->Deconexion_toolButton, SIGNAL(clicked()), this, SLOT(deconnection()));
 
 }
 
@@ -28,6 +30,11 @@ void MenuQT::initWindow(){
     parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 }
 
+
+void MenuQT::deconnection(){
+    client->deconnection();
+    parent->setPage(INIT_SCREEN);
+}
 
 MenuQT::~MenuQT(){
   delete page;
