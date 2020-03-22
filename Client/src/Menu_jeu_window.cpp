@@ -49,14 +49,16 @@ info Menu_jeu_window::run(info information)
   print_string_window(win, y, x, arrow);
   keypad(win, true);
   nodelay(win, TRUE);//pour que les getch ne soient bloquant
+  bool invitationNotifIsDraw = false;
+  bool chatNotifIsDraw = false;
   while(1)
   {
     vector<chat_r> new_msg=information.client->getNewMsg(); //new_msg=getnewmsg()
     int len_vec= static_cast<int>(new_msg.size());
 
     globalInvitations.mut.lock();
-    if(globalInvitations.notif){
-      globalInvitations.notif = false;
+    if(globalInvitations.notif && !invitationNotifIsDraw){
+      invitationNotifIsDraw = true;
       tab[3] += "*";
       //clear();
       n=0;
@@ -69,7 +71,8 @@ info Menu_jeu_window::run(info information)
     }
     globalInvitations.mut.unlock();
 
-    if (len_vec !=0){
+    if (len_vec !=0 && !chatNotifIsDraw){
+      chatNotifIsDraw = true;
       information.notif=1;
       tab[5] += "*";
       //clear();
