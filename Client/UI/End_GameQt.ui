@@ -50,9 +50,6 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
         <string notr="true">color: rgb(255, 255, 255);
 background-color: rgb(0, 0, 0);</string>
        </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
        <column>
         <property name="text">
          <string>Joueur</string>
@@ -69,20 +66,17 @@ background-color: rgb(0, 0, 0);</string>
        <property name="lineWidth">
         <number>0</number>
        </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
        <property name="showDropIndicator" stdset="0">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="rootIsDecorated">
         <bool>true</bool>
        </property>
        <property name="itemsExpandable">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="expandsOnDoubleClick">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <attribute name="headerVisible">
         <bool>true</bool>

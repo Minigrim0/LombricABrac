@@ -21,7 +21,8 @@ isHost(false){
     addWidget(new Modifier_EquipeQT(SET_LOMBRIC_TEAM_SCREEN, this, cli));
     addWidget(new Salon_HoteQT(ROOM_SCREEN, this, cli));
     addWidget(new Salon_HoteQT(ROOM_INVITEE_SCREEN, this ,cli));
-    
+
+    addWidget(new EndGame(END_SCREEN, this,cli));
 
     information.client=client;
     information.id = INIT_SCREEN;
