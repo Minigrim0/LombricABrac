@@ -56,7 +56,7 @@ void Modifier_EquipeQT::ChangeNameLombric(){
   page->Lombric_SixLineEdit->clear();
   page->Lombric_SeptLineEdit->clear();
   page->Lombric_HuitLineEdit->clear();
-  OldLombricName = client->getLombricsName());
+  OldLombricName = client->getLombricsName();
   page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName.table[0].c_str()));
   page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName.table[1].c_str()));
   page->Lombric_TroisLineEdit->setPlaceholderText(QString(OldLombricName.table[2].c_str()));
