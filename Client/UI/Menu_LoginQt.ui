@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
-    <height>385</height>
+    <width>838</width>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -153,14 +153,28 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="2" colspan="3">
+     <item row="1" column="2" colspan="2">
+      <widget class="QLineEdit" name="PseudolineEdit">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(0, 0, 0);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="maxLength">
+        <number>40</number>
+       </property>
+       <property name="placeholderText">
+        <string>Entrez Pseudo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2" colspan="2">
       <widget class="QLineEdit" name="PasswordlineEdit">
        <property name="styleSheet">
         <string notr="true">background-color: rgb(0, 0, 0);
 color: rgb(255, 255, 255);</string>
        </property>
        <property name="maxLength">
-        <number>25</number>
+        <number>40</number>
        </property>
        <property name="echoMode">
         <enum>QLineEdit::Password</enum>
@@ -170,19 +184,18 @@ color: rgb(255, 255, 255);</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="2" colspan="3">
-      <widget class="QLineEdit" name="PseudolineEdit">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+     <item row="1" column="4">
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="maxLength">
-        <number>25</number>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
        </property>
-       <property name="placeholderText">
-        <string>Entrez Pseudo</string>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>
