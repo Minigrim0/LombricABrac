@@ -39,7 +39,7 @@ void EndGame::initWindow(){
         for (int i=0; i<teams[j]->getLombric().size();++i){
           QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
           QTreeWidgetItem * item2 = new QTreeWidgetItem(page->JoueurTreeWidget);
-          text = teams[j]->getLombric()[i]->getName() + " " + std::to_string(teams[j]->getLombric()[i]->getLife());
+          text = teams[j]->getLombric()[i]->getName() + " " + std::to_string(teams[j]->getLombric()[i]->getLife()) + "hp";
           std::cout << text << std::endl;
           item->setText(0,QString::fromStdString(""));
           item2->setText(0,QString::fromStdString(text));
