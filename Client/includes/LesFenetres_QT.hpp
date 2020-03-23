@@ -17,6 +17,7 @@
 #include "../UI/src/Parametre_PartieQt_ui.hpp"
 #include "../UI/src/AmisQt_ui.hpp"
 #include "../UI/src/End_GameQt_ui.hpp"
+#include "../UI/src/InvitationQt_ui.hpp"
 
 
 #include <QPushButton>
@@ -82,10 +83,15 @@ class DetailsQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::DetailsWidget *page;
+    std::string chooseHistory;
+    playerRank rank;
+    historyTable historique;
 public:
     DetailsQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~DetailsQT();
+private slots:
+    void askHistory();
 };
 
 class DeconexionQT: public WindowQT{
@@ -119,16 +125,22 @@ public:
     Parametre_PartieQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~Parametre_PartieQT();
+private slots:
+    void setPara();
 };
 
 class Salon_HoteQT: public WindowQT{
     Q_OBJECT
 private:
+    int id_screen;
     Ui::Salon_HoteWidget *page;
+    stringTable friendsList;
 public:
     Salon_HoteQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~Salon_HoteQT();
+private slots:
+    void sendGameInvit();
 };
 
 class Salon_InviteeQT: public WindowQT{
@@ -152,6 +164,23 @@ public:
     virtual ~Modifier_EquipeQT();
 private slots:
     void ChangeNameLombric();
+};
+
+class InvitationQT: public WindowQT{
+    Q_OBJECT
+private:
+    Ui::InvitationWidget *page;
+    int row_invit;
+    QListWidgetItem* item_clicked;
+    //std::string name_invit;
+public:
+    InvitationQT(int id, MainWindow *parent, Client* cli);
+    void initWindow() override;
+    virtual ~InvitationQT();
+private slots:
+    void handle_invit(QListWidgetItem * item);
+    void delete_invit();
+    void accept_invit();
 };
 
 #endif

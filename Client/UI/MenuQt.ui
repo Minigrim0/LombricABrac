@@ -117,6 +117,42 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
       </spacer>
      </item>
      <item alignment="Qt::AlignHCenter">
+      <widget class="QToolButton" name="Voir_InvitationToolButton">
+       <property name="styleSheet">
+        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+       </property>
+       <property name="text">
+        <string>Voir ses invitations</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/icons8-invite-64.png</normaloff>:/icons/UI/Resources/icons8-invite-64.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Modif_equipe_toolbutton">
        <property name="styleSheet">
         <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>

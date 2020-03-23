@@ -42,7 +42,7 @@ void Modifier_EquipeQT::ChangeNameLombric(){
   std::string VecNameLombric[8] = {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8};
 
   for (uint32_t nombreLombric = 0; nombreLombric < 8; nombreLombric++){
-    if (VecNameLombric[nombreLombric].compare("") != 0)
+    if (VecNameLombric[nombreLombric].size())
     {
       client->setLombricName(nombreLombric,VecNameLombric[nombreLombric]);
     }

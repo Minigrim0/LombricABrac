@@ -7,8 +7,11 @@ WindowQT(id, parent, client){
   page = new Ui::MenuWidget;
   page->setupUi(this);
 
-  signalMapper->setMapping(page->Create_party_toolButton, SET_GAME_PARAM);
+  signalMapper->setMapping(page->Create_party_toolButton, ROOM_SCREEN);
   connect(page->Create_party_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(page->Voir_InvitationToolButton, INVITATIONS_SCREEN);
+  connect(page->Voir_InvitationToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
   signalMapper->setMapping(page->Modif_equipe_toolbutton, SET_LOMBRIC_TEAM_SCREEN);
   connect(page->Modif_equipe_toolbutton, SIGNAL(clicked()), signalMapper, SLOT(map()));

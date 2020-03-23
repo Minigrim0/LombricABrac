@@ -10,16 +10,34 @@ WindowQT(id, parent, client){
   signalMapper->setMapping(page->Return_Parametre_PArtietoolButton, MAIN_MENU_SCREEN);
   connect(page->Return_Parametre_PArtietoolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
-  signalMapper->setMapping(page->Apply_ParametretoolButton, ROOM_SCREEN);
-  connect(page->Apply_ParametretoolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+  connect(page->Apply_ParametretoolButton, SIGNAL(clicked()), this, SLOT(setPara()));
 
 
 
 }
 void Parametre_PartieQT::initWindow(){
     parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+
 }
 
+void Parametre_PartieQT::setPara(){
+  std::string carte = page->CartecomboBox->currentText().toStdString();
+  int nombre_lombric = page->Nombre_lombricspinBox->value();
+  int nombre_equipe = page->Nombre_equipespinBox->value();
+  int temps_tour = page->Temps_TourspinBox->value();
+  std::cout << carte<<std::endl;
+  std::cout<<nombre_equipe<<std::endl;
+  std::cout<<nombre_lombric<<std::endl;
+  std::cout<<temps_tour<<std::endl;
+
+/*  client->setTimeRound(temps_tour);
+  client->set_nrb_lombrics(nombre_lombric);
+  client->set_nbr_equipes(nombre_equipe);*/
+
+  parent->setPage(ROOM_SCREEN);
+
+
+}
 Parametre_PartieQT::~Parametre_PartieQT(){
     delete page;
 }
