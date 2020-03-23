@@ -26,6 +26,7 @@ class Game{
         void set_nb_teams(uint8_t nbr_teams);
         void set_round_time(int round_time);
         void set_global_time(int global_time);
+        void set_game_id(uint32_t game_id);
         void set_users_team(ZMQ_msg* zmq_msg);
 
         void add_user(ZMQ_msg *zmq_msg);
@@ -40,7 +41,6 @@ class Game{
 
         void handle_room(ZMQ_msg zmq_msg, int* current_step);
         void handle_game(ZMQ_msg zmq_msg, int* current_step);
-
         void handle_quit(ZMQ_msg zmq_msg, int* current_step); // Handles the event where a user quits
 
 
@@ -58,6 +58,7 @@ class Game{
         uint8_t m_team_nb; // Nbr equipes
         uint8_t m_lomb_nb; // nombre lombric par joueur
         uint32_t m_owner_id;
+        uint32_t m_game_id;
         uint8_t m_current_player_id;
         std::vector<Joueur> m_players;
         std::vector<Sprite*> m_lombs;

@@ -10,6 +10,7 @@
 
 Game::Game(uint32_t owner)
 :m_owner_id(owner),
+m_game_id(0),
 m_current_player_id(0),
 m_map(nullptr)
 {
@@ -38,6 +39,39 @@ void Game::set_map(uint8_t id_map){m_map_id = id_map;}
 void Game::set_nb_teams(uint8_t nbr_teams){m_team_nb = nbr_teams;}
 void Game::set_round_time(int round_time){m_max_time_round = round_time;}
 void Game::set_global_time(int global_time){m_max_time_game = global_time;}
+void Game::set_game_id(uint32_t game_id){m_game_id = game_id;}
+
+void Game::set_users_team(ZMQ_msg *zmq_msg){
+    Join_groupe_s request;
+    Join_groupe_r groupe_r;
+    UserConnect usr;
+    request.ParseFromString(zmq_msg->message());
+
+    // Getting user's pseudonym
+    DataBase_mutex.lock();
+    db.get_user(zmq_msg->receiver_id() ,&usr);
+    DataBase_mutex.unlock();
+
+    groupe_r.set_pseudo(usr.pseudo());
+    groupe_r.set_id(request.id());
+
+    // Setting up the message to send to everyone
+    zmq_msg->set_type_message(CLIENT_JOINED_TEAM_RESPONSE);
+    zmq_msg->set_message(groupe_r.SerializeAsString());
+
+    // Setting the user in the good team
+    for(size_t i=0;i<m_players.size();i++){
+        if(zmq_msg->receiver_id() == m_players[i].get_id()){
+            m_players[i].set_equipe(request.id());
+            break;
+        }
+    }
+
+    //Sending the informations about the user who changed team
+    for(size_t i = 0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
 
 void Game::add_user(ZMQ_msg *zmq_msg){
     UserConnect usr;
@@ -89,7 +123,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     }
 }
 
-
+//Verification methods
 bool Game::check_time(){
     return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
 }
@@ -98,42 +132,101 @@ bool Game::check_round_time(){
     return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
 }
 
+
 uint32_t Game::get_next_lombric_id(){
     return m_players[m_current_player_id].getNextLombricId(&m_game_object, m_lomb_nb);
 }
 
+void Game::end_round(int *current_step){
+    std::ostringstream stream;
+    ZMQ_msg zmq_msg;
+    zmq_msg.set_type_message(NEXT_ROUND);
 
-void Game::set_users_team(ZMQ_msg *zmq_msg){
-    Join_groupe_s request;
-    Join_groupe_r groupe_r;
-    UserConnect usr;
-    request.ParseFromString(zmq_msg->message());
+    uint32_t next_lomb_id;
 
-    // Getting user's pseudonym
-    DataBase_mutex.lock();
-    db.get_user(zmq_msg->receiver_id() ,&usr);
-    DataBase_mutex.unlock();
+    std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
 
-    groupe_r.set_pseudo(usr.pseudo());
-    groupe_r.set_id(request.id());
+    do{
+        m_current_player_id++;
+        if(m_current_player_id >= m_players.size())
+            m_current_player_id = 0;
 
-    // Setting up the message to send to everyone
-    zmq_msg->set_type_message(CLIENT_JOINED_TEAM_RESPONSE);
-    zmq_msg->set_message(groupe_r.SerializeAsString());
+        next_lomb_id = get_next_lombric_id();
+        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
+        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
+    }while(next_lomb_id == 0);
 
-    // Setting the user in the good team
+    m_game_object.setCurrentLomb(next_lomb_id);
+
+    // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
+    uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
-        if(zmq_msg->receiver_id() == m_players[i].get_id()){
-            m_players[i].set_equipe(request.id());
-            break;
+      if(m_players[i].is_still_alive(&m_game_object)){
+        player_alive += 1;
+      }
+    }
+    std::cout << "joueurs en vie : " << player_alive << std::endl;
+    if(player_alive <= 1){ //Si endgame
+      zmq_msg.set_type_message(END_GAME);
+      // Telling everyone that a player shot
+      for(size_t i=0;i<m_players.size();i++){
+          m_players[i].sendMessage(zmq_msg.SerializeAsString());
+          DataBase_mutex.lock();
+          db.set_final_points(m_game_id, 0, i);
+          DataBase_mutex.unlock();
+      }
+
+      (*current_step)++;
+    }
+
+    Next_lombric lomb;
+    lomb.set_id_lomb(next_lomb_id);
+
+    for(size_t i=0;i<m_players.size();i++){
+        if(i == m_current_player_id){
+            lomb.set_is_yours(true);
+            std::cout << "Tour de " << i << std::endl;
+            zmq_msg.set_message(lomb.SerializeAsString());
+            m_players[i].sendMessage(zmq_msg.SerializeAsString());
+        }
+        else{
+            lomb.set_is_yours(false);
+            zmq_msg.set_message(lomb.SerializeAsString());
+            m_players[i].sendMessage(zmq_msg.SerializeAsString());
+        }
+    }
+    time(&m_begin_time_round);
+}
+
+void Game::spawn_lombric(){
+    std::ostringstream stream;
+    std::string myText;
+    uint32_t hauteur;
+    uint32_t largeur;
+
+    stream << "../map/" << static_cast<int>(m_map_id) << ".map";
+    std::ifstream MyReadFile(stream.str());
+    std::getline (MyReadFile, myText);
+    std::stringstream(myText) >> hauteur >> largeur;
+    std::vector<std::string> map_s(hauteur);
+
+    for(uint32_t i =0; i<hauteur; i++) {
+        std::getline(MyReadFile, map_s[i]);
+    }
+
+    MyReadFile.close();
+
+    Map* m_map = new Map(largeur,hauteur,map_s);
+
+    for(size_t i=0;i<m_players.size();i++){
+        for(int j=0;j<m_lomb_nb;j++){
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
         }
     }
 
-    //Sending the informations about the user who changed team
-    for(size_t i = 0;i<m_players.size();i++){
-        m_players[i].sendMessage(zmq_msg->SerializeAsString());
-    }
+    m_game_object.setParam(m_map, m_lombs);
 }
+
 
 // Handles events in the room (Change of parameters, user joined, ...)
 void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
@@ -332,92 +425,6 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             break;
         }
     }
-}
-
-void Game::end_round(int *current_step){
-    std::ostringstream stream;
-    ZMQ_msg zmq_msg;
-    zmq_msg.set_type_message(NEXT_ROUND);
-
-    uint32_t next_lomb_id;
-
-    std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
-
-    do{
-        m_current_player_id++;
-        if(m_current_player_id >= m_players.size())
-            m_current_player_id = 0;
-
-        next_lomb_id = get_next_lombric_id();
-        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
-        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
-    }while(next_lomb_id == 0);
-
-    m_game_object.setCurrentLomb(next_lomb_id);
-
-    // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
-    uint32_t player_alive =0;
-    for(size_t i=0;i<m_players.size();i++){
-      if(m_players[i].is_still_alive(&m_game_object)){
-        player_alive += 1;
-      }
-    }
-    std::cout << "joueur en vie : " << player_alive << std::endl;
-    if(player_alive <= 1){ //Si endgame
-      zmq_msg.set_type_message(END_GAME);
-      // Telling everyone that a player shot
-      for(size_t i=0;i<m_players.size();i++){
-          m_players[i].sendMessage(zmq_msg.SerializeAsString());
-      }
-      (*current_step)++;
-    }
-
-    Next_lombric lomb;
-    lomb.set_id_lomb(next_lomb_id);
-
-    for(size_t i=0;i<m_players.size();i++){
-        if(i == m_current_player_id){
-            lomb.set_is_yours(true);
-            std::cout << "Tour de " << i << std::endl;
-            zmq_msg.set_message(lomb.SerializeAsString());
-            m_players[i].sendMessage(zmq_msg.SerializeAsString());
-        }
-        else{
-            lomb.set_is_yours(false);
-            zmq_msg.set_message(lomb.SerializeAsString());
-            m_players[i].sendMessage(zmq_msg.SerializeAsString());
-        }
-    }
-    time(&m_begin_time_round);
-}
-
-void Game::spawn_lombric(){
-    std::ostringstream stream;
-    std::string myText;
-    uint32_t hauteur;
-    uint32_t largeur;
-
-    stream << "../map/" << static_cast<int>(m_map_id) << ".map";
-    std::ifstream MyReadFile(stream.str());
-    std::getline (MyReadFile, myText);
-    std::stringstream(myText) >> hauteur >> largeur;
-    std::vector<std::string> map_s(hauteur);
-
-    for(uint32_t i =0; i<hauteur; i++) {
-        std::getline(MyReadFile, map_s[i]);
-    }
-
-    MyReadFile.close();
-
-    Map* m_map = new Map(largeur,hauteur,map_s);
-
-    for(size_t i=0;i<m_players.size();i++){
-        for(int j=0;j<m_lomb_nb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
-        }
-    }
-
-    m_game_object.setParam(m_map, m_lombs);
 }
 
 // Handles the events where a user quits
