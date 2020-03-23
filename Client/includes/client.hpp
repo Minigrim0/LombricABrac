@@ -146,6 +146,7 @@ private:
 	std::chrono::_V2::system_clock::time_point initTime;//pour mettre le temps entre chaque message
 	message nextMessage;//prochain message à délivrer pour le replay
 	int timeToWait;//temps à attendre avant d'envoyer le prochain message
+	bool isReplay;
 
 
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
@@ -176,8 +177,6 @@ private:
 	void createSaveFile(message& m);
 	void addMessageTosaveFile(message &m);
 
-	bool beginReplay(std::string replayPath);//return true si l'initialisation s'est bien passée
-	void updateReplay();//update les replays
 	void findNextMsg(message& msg, int& time);//renvoie le prochain messsage à utiliser et rempli time avec le temps qu'il faudra attendre avant de lire le prochain message
 
 public:
@@ -246,6 +245,9 @@ public:
 	std::vector<playerTeam> getNewTeam();
 	std::string getNextRound(); //infos du provhain tour
 	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
+
+	bool beginReplay(std::string replayPath);//return true si l'initialisation s'est bien passée
+	void updateReplay();//update les replays
 
 	//thread
 	bool isRunning(){return running;};

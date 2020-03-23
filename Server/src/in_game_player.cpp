@@ -18,17 +18,13 @@ m_pseudo("")
 Joueur::~Joueur(){}
 
 uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
-    for(uint8_t next_lomb=1;next_lomb<nbr_lomb;next_lomb++){
+    for(uint8_t next_lomb=1;next_lomb<=nbr_lomb;next_lomb++){
         uint32_t id_lombric_checked = (next_lomb+m_current_lombric)%nbLomb;
         if(obj_partie->isLombAlive(m_Lombrics[id_lombric_checked])){
             m_current_lombric=id_lombric_checked;
             return m_Lombrics[(next_lomb+m_current_lombric)%nbLomb];
         }
-        else{
-
-        }
     }
-
     return 0;
 }
 
@@ -59,6 +55,14 @@ void Joueur::set_player_id(int id){
     std::ostringstream stream;
     stream << "users/" << id << "/room";
     m_channel = stream.str();
+
+    UserConnect usr;
+
+    DataBase_mutex.lock();
+    db.get_user(id, &usr);
+    DataBase_mutex.unlock();
+
+    set_pseudo(usr.pseudo());
 }
 
 void Joueur::set_current_lomb(int id){
@@ -71,6 +75,17 @@ void Joueur::set_current_lomb(int id){
 
 void Joueur::set_current_player(bool current){
     m_is_current_player = current;
+}
+
+void Joueur::init_worms(int lomb_nb){
+    End_tour lombs;
+
+    DataBase_mutex.lock();
+    db.get_x_lombrics(m_player_id, lomb_nb, &lombs);
+    DataBase_mutex.unlock();
+
+    for(int x=0;x<lomb_nb;x++)
+        add_worms(lombs.id_lomb_mort(x), lomb_nb);
 }
 
 void Joueur::add_worms(int worm, int nbWorm){

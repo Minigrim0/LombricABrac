@@ -160,6 +160,12 @@ public:
   info run(info information) override;
 };
 
+class Choose_replay: public Window
+{
+public:
+    info run(info information) override;
+};
+
 
 class Partie: public Window
 {

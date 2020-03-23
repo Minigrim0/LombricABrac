@@ -681,11 +681,11 @@ int DataBase::add_player(int room_id, int player_id, int player_nb){
     return m_rc;
 }
 
-int DataBase::set_final_points(int room_id, int player_points, int player_nb){
+int DataBase::set_final_points(int room_id, int player_points, int player_index){
     m_stringStream.str("");
     m_stringStream.clear();
 
-    m_stringStream << "UPDATE history set user_" << player_nb << "_points=" << player_points << " WHERE id=" << room_id << ";";
+    m_stringStream << "UPDATE history set user_" << player_index << "_points=" << player_points << " WHERE id=" << room_id << ";";
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
