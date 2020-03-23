@@ -22,7 +22,6 @@ m_map(nullptr)
 }
 
 Game::~Game(){
-    delete m_map;
     for(size_t index=0;index<m_lombs.size();index++)
         delete m_lombs[index];
 }
