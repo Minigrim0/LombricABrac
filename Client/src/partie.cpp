@@ -60,6 +60,7 @@ info Partie::run(info information)
   Degats_lombric lombricUpdatedByServ;
   while (run){
 
+    cli->updateReplay();
     //temps en millisecondes qui s'est écoulé
     double t = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - initTime).count());
     //gestion du resize de la fenêtre

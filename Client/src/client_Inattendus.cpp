@@ -24,8 +24,8 @@ void Client::invite(message& m){
 	Invitation obj;
 	obj.ParseFromString(m.text);
 
-	std::string text = "echo Invitation de : " + obj.pseudo() + " >> out.txt";
-	system(text.c_str());
+	//std::string text = "echo Invitation de : " + obj.pseudo() + " >> out.txt";
+	//system(text.c_str());
 
 	globalInvitations.mut.lock();
 	globalInvitations.invits.push_back({obj.type(), obj.pseudo(), obj.game_id()}); //ajoute demande d'ami dans le vecteur

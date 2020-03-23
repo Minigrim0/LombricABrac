@@ -89,8 +89,8 @@ bool Client::joinPartie(int room_id){
 	//construction de la structure à envoyer au serveur
 	Join obj;
 	obj.set_room_id(room_id);
-	std::string t = "echo ROOM ID : " + std::to_string(room_id) + " >> out.txt";
-	system(t.c_str());
+	//std::string t = "echo ROOM ID : " + std::to_string(room_id) + " >> out.txt";
+	//system(t.c_str());
 	//obj.set_accept(ok);
 
 	obj.SerializeToString(&m.text);//convetis en string

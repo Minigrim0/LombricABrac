@@ -13,6 +13,7 @@ info Choose_replay::run(info information)
 {
     initscr();
     nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
+    keypad(stdscr, true);
     noecho();//empêche d'écrire dans la console
     curs_set(FALSE);//affiche pas le curseur
 
@@ -66,8 +67,17 @@ info Choose_replay::run(info information)
                 }
                 break;
             case ENTER_KEY:
+                information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus));
+                information.id = GAME_SCREEN;
+                running = false;
+                break;
+            case KEY_BACKSPACE:
+                information.id = MAIN_MENU_SCREEN;
+                running = false;
                 break;
         }
     }
     delwin(win);
+
+    return information;
 }
