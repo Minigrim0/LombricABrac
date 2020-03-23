@@ -74,9 +74,9 @@ void Game::set_users_team(ZMQ_msg *zmq_msg){
 }
 
 void Game::add_user(ZMQ_msg *zmq_msg){
-    UserConnect usr;
     infoRoom room;
     Joueur newPlayer;
+    UserConnect usr;
 
     //Setting the informations of the room in infoRoom object
     room.set_nbr_lomb(static_cast<uint32_t>(m_lomb_nb));
@@ -90,7 +90,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
         joueur->set_id(m_players[i].get_id());
     }
 
-    // Changinf the zmqmsg message to the informations of the room
+    // Changing the zmqmsg message to the informations of the room
     zmq_msg->set_message(room.SerializeAsString());
 
     newPlayer.set_player_id(zmq_msg->receiver_id());
@@ -99,17 +99,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     // Sending the informations to the user
     newPlayer.sendMessage(zmq_msg->SerializeAsString());
 
-    End_tour lombs;
-
-    DataBase_mutex.lock();
-    db.get_x_lombrics(zmq_msg->receiver_id(), m_lomb_nb, &lombs);
-    db.get_user(zmq_msg->receiver_id(), &usr);
-    DataBase_mutex.unlock();
-
-    for(int x=0;x<m_lomb_nb;x++)
-        newPlayer.add_worms(lombs.id_lomb_mort(x), m_lomb_nb);
-
-    newPlayer.set_pseudo(usr.pseudo());
+    newPlayer.init_worms(m_lomb_nb);
 
     Usr_add usr_add;
     usr_add.set_pseudo(usr.pseudo());

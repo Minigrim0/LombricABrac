@@ -19,6 +19,8 @@ class Joueur{
         void set_current_lomb(int id);
         void set_current_player(bool current);
 
+        void init_worms(int lomb_nb);
+
         void add_worms(int worm, int nbWorm);
 
         bool is_still_alive(Partie* obj_partie);
