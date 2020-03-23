@@ -365,7 +365,6 @@ void Game::end_round(int *current_step){
     std::cout << "joueur en vie : " << player_alive << std::endl;
     if(player_alive <= 1){ //Si endgame
       zmq_msg.set_type_message(END_GAME);
-      // Telling everyone that a player shot
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
       }
