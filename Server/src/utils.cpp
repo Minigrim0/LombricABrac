@@ -66,7 +66,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
         }
         else{ // The player has no account yet
-            register_user(la_poste, usr);
+            return register_user(la_poste, usr);
         }
     }
     else if(usr->is_auth()){

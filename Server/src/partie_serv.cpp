@@ -85,11 +85,12 @@ bool Partie::updateSprites(int t){
             std::vector<int> deletedBlock = (*s)->deathMove(gameInfo,t);
             addDeletedBlock(deletedBlock);
 
-            *s = nullptr;
+
             std::cout << "Sprite is dead, his id: " << id << std::endl;
             if(!id){
               delete *s;
             }
+            *s = nullptr;
             gameInfo->spriteVector.erase(s);
         }
         else{
