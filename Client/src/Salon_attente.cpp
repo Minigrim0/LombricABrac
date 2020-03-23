@@ -124,7 +124,7 @@ info Salon_Attente::run(info information)
   if (!information.ishost)
   {
     //on print les joueuer deja présents dans la room (on s'arrete quand on rencontre le jouer qui viens de rejoindre)
-    /*for (int i = 0;i<size_repeated; i++)
+    for (int i = 0;i<size_repeated; i++)
     {
       if (joueur_in_room[i].pseudo.compare(information.username) != 0 ) //egale == 0 si les string sont les mêmes
       {
@@ -159,7 +159,7 @@ info Salon_Attente::run(info information)
 
           }
       }
-    }*/
+    }
     print_string_window(pseudo,1,1,information.username);
     len_str=static_cast<int>(titre.size());
     pseudo=newwin(4,20,11,(max_x/2)-len_str/2);

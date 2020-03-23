@@ -364,7 +364,9 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);// remplissage bar vie
 
     painter.setBrush(Qt::NoBrush);
-    painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
+    if (blockWidth >= INIT_SIZE_BLOCK){
+      painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
+    }
 
     QRect rect(x-blockWidth, y - blockWidth, 3*blockWidth, 0.8*blockWidth);
     QString name(lomb->getName().c_str());
