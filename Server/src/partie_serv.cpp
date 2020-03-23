@@ -90,7 +90,7 @@ bool Partie::updateSprites(int t){
             if(!id){
               delete *s;
             }
-            gameInfo->spriteVector[s] = nullptr;
+            *s = nullptr;
             gameInfo->spriteVector.erase(s);
         }
         else{
