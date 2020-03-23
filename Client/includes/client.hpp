@@ -1,7 +1,9 @@
 #ifndef client_
 #define client_
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <chrono>
 
 #define _DEFAULT_SOURCE 1
 
@@ -20,6 +22,7 @@
 #include <mutex>
 #include <list>
 #include <vector>
+#include <ctime>
 
 /*
 on créé une structure une structure invitation car l'affichage les affiche toutes sans différencier
@@ -136,6 +139,11 @@ private:
 	std::vector<std::string>playersGone;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
+
+	ofstream saveFile;//fichier dans lequel sera sauvegarder la carte
+	std::chrono::_V2::system_clock::time_point initTime;//pour mettre le temps entre chaque message
+
+
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
 	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
 	std::string* waitAnswers(uint8_t typeAttendu, message& m);//fonction qui envoie le message et aui attends que la réponse attendue soit reçue
@@ -160,10 +168,13 @@ private:
 	void changeNbrLombs(message& m);
 	void changeNbrEq(message& m);
 
+	//méthode pour les fichiers de replay
+	void createSaveFile(message& m);
+	void addMessageTosaveFile(message &m);
 
 public:
 	Client(char* ip, uint16_t port);
-	~Client(){delete thisGame;}
+	~Client();
 	int run();
 	//méthode utilisées dans le pré-menu
 	bool connection(std::string username, std::string password, bool inscription);//mettre à true le bool s'il s'ajit d'une inscription. Return true si la connection/inscription s'est bien passée

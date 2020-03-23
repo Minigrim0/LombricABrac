@@ -15,5 +15,6 @@ Client/proto/src/
 Server/proto/src/
 Client/temp/
 Client/UI/src/
+Client/replay/
 .gdb_history
 peda-session-server.txt

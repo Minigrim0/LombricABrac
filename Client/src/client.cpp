@@ -77,6 +77,7 @@ int Client::run(){
 				case START: //L'hôte a lancé la partie
 					end = false;
 					notifyStarted(msg);
+					createSaveFile(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case SHOOT://un joueur a tiré
@@ -84,12 +85,14 @@ int Client::run(){
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
 					tableUpdate.push_back(msg.text);
 					mutexPartie.unlock();
+					addMessageTosaveFile(msg);
 					msg.type = 0;
 					break;
 				case UPDATE_WALL://update des murs
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
 					tableUpdate.push_back(msg.text);
 					mutexPartie.unlock();
+					addMessageTosaveFile(msg);
 					msg.type = 0;
 					break;
 
@@ -97,6 +100,7 @@ int Client::run(){
 					mutexPartie.lock(); //s'assure de la reception des 3 messages
 					tableUpdate.push_back(msg.text);
 					mutexPartie.unlock();
+					addMessageTosaveFile(msg);
 					msg.type = 0;
 					break;
 
@@ -104,6 +108,7 @@ int Client::run(){
 					Lomb_pos obj;
 					obj.ParseFromString(msg.text);
 					movedLomb.push_back({obj.id_lomb(),obj.pos_x(),obj.pos_y()});
+					addMessageTosaveFile(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
@@ -148,10 +153,13 @@ int Client::run(){
 					break;
 				case NEXT_ROUND: //début de round
 					newRound = msg.text;
+					addMessageTosaveFile(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				case END_GAME: //Fin partie
 					end = true;
+					addMessageTosaveFile(msg);
+					saveFile.close();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 			}
@@ -256,4 +264,9 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 	msgMutex.unlock();
 	sendMutex.unlock();
 	return res; //renvoie réponse attendue
+}
+
+Client::~Client(){
+	delete thisGame;
+	saveFile.close();
 }
