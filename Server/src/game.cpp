@@ -154,7 +154,7 @@ void Game::end_round(int *current_step){
 
       (*current_step)++;
     }
-    
+
     do{
         m_current_player_id++;
         if(m_current_player_id >= m_players.size())
