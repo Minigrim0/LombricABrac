@@ -98,6 +98,8 @@ void partieQT::updateGame(){
   if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
   if (client->getIsEnded()){
+      removeEventFilter(this);
+      parent->removeEventFilter(this);
     parent->setPage(END_SCREEN);
   }else{
 
