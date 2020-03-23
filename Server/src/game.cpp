@@ -150,9 +150,9 @@ void Game::end_round(int *current_step){
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
-      if(m_players[i].is_still_alive(&m_game_object)){
-        player_alive += 1;
-      }
+        if(m_players[i].is_still_alive(&m_game_object)){
+            player_alive += 1;
+        }
     }
     std::cout << "joueurs en vie : " << player_alive << std::endl;
     if(player_alive <= 1){ //Si endgame
