@@ -18,6 +18,8 @@
 #define NAVIGATE_UP 'i'
 #define NAVIGATE_DOWN 'k'
 
+#define ENTER_KEY '\n'
+
 //AFFICHAGE
 #define VIDE ' '
 #define LIGHT_WALL '#'

@@ -21,7 +21,7 @@ info Menu_jeu_window::run(info information)
   int n=0;
   int len_arrow;
   string msg1 = "LOMBRIC A BRAC";
-  string tab[8] = {" Trouver une partie "," Créer une partie "," Créer/Modifier équipe "," Voir ses invitations  "," Classement "," Ami(s) ", " Historique ", " Se déconnecter "};
+  string tab[9] = {" Trouver une partie "," Créer une partie "," Créer/Modifier équipe "," Voir ses invitations  "," Classement "," Ami(s) ", " Historique ", " Replay", " Se déconnecter "};
   string arrow = "-> ";
   initscr(); //iitizlse la fenetre et set up la mémoire
   noecho(); // ne echo aucune touche du clzvier
@@ -36,7 +36,7 @@ info Menu_jeu_window::run(info information)
   print_string_window(win, 1, (max_x/2)-6, msg1);
 
 
-  for (int i = 0; i < 8; i++)
+  for (int i = 0; i < 9; i++)
   {
     print_string_window(win, y+n, (max_x/2)-4, tab[i]);
     n+=2;
@@ -62,7 +62,7 @@ info Menu_jeu_window::run(info information)
       tab[3] += "*";
       //clear();
       n=0;
-      for (int i = 0; i < 8; i++)
+      for (int i = 0; i < 9; i++)
       {
         print_string_window(win, new_y+n, (max_x/2)-4, tab[i]);
         n+=2;
@@ -77,7 +77,7 @@ info Menu_jeu_window::run(info information)
       tab[5] += "*";
       //clear();
       n=0;
-      for (int i = 0; i < 8; i++)
+      for (int i = 0; i < 9; i++)
       {
         print_string_window(win, new_y+n, (max_x/2)-4, tab[i]);
         n+=2;
@@ -136,11 +136,17 @@ info Menu_jeu_window::run(info information)
     }
     if (touch == 10)
     {
+        if (y== posStart_arrow+16)
+        {
+          //leave_window
+          information.client->deconnection();
+          information.id = INIT_SCREEN;
+          break;
+        }
       if (y== posStart_arrow+14)
       {
-        //leave_window
-        information.client->deconnection();
-        information.id = WARNING_DECONNECTION_SCREEN;
+        //choose replay
+        information.id = CHOOSE_REPLAY_SCREEN;
         break;
       }
       if (y == posStart_arrow+12)
