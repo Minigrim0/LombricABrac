@@ -135,19 +135,6 @@ void Game::end_round(int *current_step){
 
     std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
 
-    do{
-        m_current_player_id++;
-        if(m_current_player_id >= m_players.size())
-            m_current_player_id = 0;
-
-        next_lomb_id = get_next_lombric_id();
-        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
-        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
-    }while(next_lomb_id == 0);
-
-    m_game_object.setCurrentLomb(next_lomb_id);
-
-    // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
         if(m_players[i].is_still_alive(&m_game_object)){
@@ -167,6 +154,20 @@ void Game::end_round(int *current_step){
 
       (*current_step)++;
     }
+    
+    do{
+        m_current_player_id++;
+        if(m_current_player_id >= m_players.size())
+            m_current_player_id = 0;
+
+        next_lomb_id = get_next_lombric_id();
+        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
+        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
+    }while(next_lomb_id == 0);
+
+    m_game_object.setCurrentLomb(next_lomb_id);
+
+    // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);

@@ -24,11 +24,7 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
             m_current_lombric=id_lombric_checked;
             return m_Lombrics[(next_lomb+m_current_lombric)%nbLomb];
         }
-        else{
-
-        }
     }
-
     return 0;
 }
 
