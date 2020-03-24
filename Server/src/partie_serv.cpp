@@ -3,7 +3,9 @@
 #define min(_a,_b) _a<_b?_a:_b
 #define DELTA_T 50 //granularité du temps en millisecondes
 
-Partie::Partie(){}
+Partie::Partie(){
+    srand (time(NULL));
+}
 
 Partie::~Partie(){
     deleteinfoPartie_s(gameInfo);

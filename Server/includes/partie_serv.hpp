@@ -9,6 +9,9 @@
 #include <ctime>
 #include <vector>
 
+#include <time.h>
+#include <stdlib.h>
+
 #include "../proto/src/user.pb.h"
 
 #include "../../sharedFiles/includes/map.hpp"
