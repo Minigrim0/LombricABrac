@@ -44,7 +44,7 @@ info Menu_jeu_window::run(info information)
   new_y=y;
   x = (max_x/2)-7;
   posStart_arrow = y;
-  posEnd_arrow = y+14;
+  posEnd_arrow = y+16;
   len_arrow= static_cast<int>(arrow.size());
   print_string_window(win, y, x, arrow);
   keypad(win, true);
@@ -90,26 +90,6 @@ info Menu_jeu_window::run(info information)
         user_notif[i]=new_msg[static_cast<unsigned int>(i)].username;
       }
       information.notification=user_notif;
-
-    /*vector<invitation> testok= information.client->getInvitations();
-
-    if (static_cast<int>(testok.size()) != 0)
-    {
-      information.notif_invit=1;
-      tab[3] = " Voir ses invitations * ";
-      n=0;
-      for (i = 0; i < 8; i++)
-      {
-        print_string_window(win, new_y+n, (max_x/2)-4, tab[i]);
-        n+=2;
-      }
-      for (unsigned int i=0;i < static_cast<unsigned int >(testok.size());i++)
-      {
-        information.vec_invit.push_back(testok[i]);
-      }
-    }
-    //testok=getInvitations()*/
-
 
     touch = wgetch(win);
     switch (touch) {
