@@ -270,5 +270,5 @@ std::string* Client::waitAnswers(uint8_t typeAttendu, message& m){
 Client::~Client(){
 	delete thisGame;
 	saveFile.close();
-	useSavedFile.close();
+	//useSavedFile.close();
 }

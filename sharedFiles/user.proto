@@ -214,3 +214,9 @@ message ZMQ_msg{
   uint32 type_message = 2;
   bytes message = 3;
 }
+
+
+message Replay_message{
+    uint32 msg_type = 1;
+    uint32 time = 2;
+}

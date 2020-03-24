@@ -140,8 +140,8 @@ private:
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
 
-	std::ofstream saveFile;//fichier dans lequel sera sauvegarder la carte
-	std::ifstream useSavedFile;
+	std::fstream saveFile;//fichier dans lequel sera sauvegarder la carte
+	//std::ifstream useSavedFile;
 
 	std::chrono::_V2::system_clock::time_point initTime;//pour mettre le temps entre chaque message
 	message nextMessage;//prochain message à délivrer pour le replay

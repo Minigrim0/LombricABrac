@@ -1,41 +1,73 @@
 #include "../includes/client.hpp"
+#include "unistd.h"
 
 void Client::createSaveFile(message& m){
     time_t now = time(0);
 	tm *ltm = localtime(&now);
     system("mkdir -p ./replay");
-	std::string fileName = DEFAULT_REPLAY_PATH + std::to_string(1900 + ltm->tm_year) + "_" + std::to_string(1 + ltm->tm_mon) + "_" + std::to_string(ltm->tm_mday) + "_" + std::to_string(1 + ltm->tm_hour) + "h" + std::to_string(1 + ltm->tm_min) + ".replay";
+	std::string fileName = DEFAULT_REPLAY_PATH + std::to_string(getppid()) + std::to_string(1900 + ltm->tm_year) + "_" + std::to_string(1 + ltm->tm_mon) + "_" + std::to_string(ltm->tm_mday) + "_" + std::to_string(1 + ltm->tm_hour) + "h" + std::to_string(1 + ltm->tm_min) + ".replay";
 
-	saveFile.open(fileName);
+	saveFile.open(fileName, std::fstream::out);
+    std::string text = "echo open: " +fileName + " " +std::to_string(saveFile.is_open()) + " >> out.txt";
+    system(text.c_str());
 
-    saveFile << static_cast<int>(m.type) << " " << m.text << std::endl;
+    saveFile.put(static_cast<int>(currentParams.map));
+    saveFile.put(static_cast<int>(currentParams.time));
+    saveFile.put(static_cast<int>(currentParams.time_round));
+    saveFile.put(static_cast<int>(currentParams.nbr_lombs));
+    saveFile.put(static_cast<int>(currentParams.nbr_equipes));
 
     initTime = std::chrono::high_resolution_clock::now();
+    addMessageTosaveFile(m);
 }
 
 void Client::addMessageTosaveFile(message &m){
     int spentTime = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - initTime).count());
     initTime = std::chrono::high_resolution_clock::now();
 
-    saveFile << SAVE_FILE_DELIMITER << spentTime << std::endl;
-    saveFile << static_cast<int>(m.type) << std::endl << m.text << std::endl;
+    //saveFile << static_cast<char>(spentTime) << static_cast<char>(m.type) << static_cast<char>(m.text.size()) <<m.text;
+    Replay_message rep;
+    rep.set_msg_type(m.type);
+    rep.set_time(spentTime);
+    std::string infoMessage = rep.SerializeAsString();
+    saveFile.put(static_cast<int>(infoMessage.size()));
+
+    saveFile.write(infoMessage.c_str(), infoMessage.size());
+
+    saveFile.put(static_cast<int>(m.text.size()));
+    saveFile.write(m.text.c_str(), m.text.size());
+
 }
 
 bool Client::beginReplay(std::string replayPath){
-    useSavedFile.open(replayPath);
+    saveFile.open(replayPath, std::fstream::in);
 
-    if(useSavedFile.is_open()){
+    if(saveFile.is_open()){
         isReplay = true;
+
+        currentParams.map = static_cast<uint32_t>(saveFile.get());
+        currentParams.time = static_cast<uint32_t>(saveFile.get());
+        currentParams.time_round = static_cast<uint32_t>(saveFile.get());
+        currentParams.nbr_lombs = static_cast<uint32_t>(saveFile.get());
+        currentParams.nbr_equipes = static_cast<uint32_t>(saveFile.get());
+
         findNextMsg(nextMessage, timeToWait);
+        if(nextMessage.type == START){
+            notifyStarted(nextMessage);
+        }
+        else{
+            return false;
+        }
         initTime = std::chrono::high_resolution_clock::now();
     }
-    return useSavedFile.is_open();
+
+    return saveFile.is_open();
 }
 
 void Client::updateReplay(){
     if(isReplay){
         int spentTime = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - initTime).count());
-        if(timeToWait >= spentTime){//il faut envoyer le message
+        if(timeToWait <= spentTime){//il faut envoyer le message
             switch(nextMessage.type){
                 case SHOOT:
                     mutexPartie.lock(); //s'assure de la reception des 3 messages
@@ -81,32 +113,18 @@ void Client::updateReplay(){
 void Client::findNextMsg(message& msg, int& time){
     msg.text.clear();
     time = 0;
-    bool find = false;
-    std::string text;
-    std::string line;
-
-    getline(useSavedFile, line);
-    //line.pop_back();//retire le \n
-    msg.type = std::atoi(line.c_str());
-    text = "echo type: " + std::to_string(msg.type) + " >> out.txt";
-    system(text.c_str());
-    //on cherche jusqu'à la balise '\nSAVE_FILE_DELIMITER'
-    while(!find && getline(useSavedFile, line)){
-        if(line.find(SAVE_FILE_DELIMITER) == 0){//on a tous trouvé
-            line = line.replace(0,4, "");
-            //line.pop_back();
-            time = std::atoi(line.c_str());
-            find = true;
-        }else{
-            msg.text += line+'\n';
-        }
+    int size = saveFile.get();
+    std::string infoMessage;
+    for(int i=0;i<size;++i){
+        infoMessage+=saveFile.get();
     }
+    Replay_message rep;
+    rep.ParseFromString(infoMessage);
+    msg.type = rep.msg_type();
+    time = rep.time();
 
-    if(!find){//si la recherche a mal tourné
-        msg.type = END_GAME;
-        msg.text.clear();
-        useSavedFile.close();
-    }else{
-        msg.text.pop_back();//retire le \n final en trop
+    size = saveFile.get();
+    for(int i=0;i<size;++i){
+        msg.text += static_cast<char>(saveFile.get());
     }
 }

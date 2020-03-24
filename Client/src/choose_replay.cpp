@@ -67,8 +67,10 @@ info Choose_replay::run(info information)
                 }
                 break;
             case ENTER_KEY:
-                information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus));
-                information.id = GAME_SCREEN;
+
+                if(information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus))){
+                    information.id = GAME_SCREEN;
+                }
                 running = false;
                 break;
             case KEY_BACKSPACE:
@@ -77,7 +79,10 @@ info Choose_replay::run(info information)
                 break;
         }
     }
+    wclear(win);
+    werase(win);
     delwin(win);
+    //echo();
 
     return information;
 }
