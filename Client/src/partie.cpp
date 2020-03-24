@@ -18,7 +18,7 @@ using namespace std;
 
 Partie::Partie(Client* c)
 :cli(c),
-gameInfo(c->getGameInfo()),
+gameInfo(nullptr),
 weaponIndex(0),
 tour(false),
 endRound(true),
@@ -32,6 +32,9 @@ gameScreenWidth(0),
 gameScreenHeight(0),
 mustRefreshOverlay(true),
 mustDrawWall(false){
+  cli->resetGameParam();
+  gameInfo = c->getGameInfo();
+  
   initscr();
   nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
   noecho();//empêche d'écrire dans la console

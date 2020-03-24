@@ -91,3 +91,12 @@ void Client::endGame(){
 	sendMessage(m);
 	sendMutex.unlock();
 }
+
+bool Client::getIsEnded(){
+	return end;
+}
+
+void Client::resetGameParam(){
+	thisGame = nullptr;//pas besoin de delete, ça a été fait au rpéalable si nécéssaire
+	end = false;
+}

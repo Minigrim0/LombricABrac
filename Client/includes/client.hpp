@@ -229,7 +229,7 @@ public:
 	paramsPartie getParamsPartie();//renvoie les paramètres de la partie
 	void getAllInvits();
 	infoRoom_s getInfoRoom(); //infos de la room
-	bool getIsEnded(){return end;};//si partie est finie
+	bool getIsEnded();//si partie est finie
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	bool acceptInvitation(int index, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
@@ -245,6 +245,8 @@ public:
 	std::vector<playerTeam> getNewTeam();
 	std::string getNextRound(); //infos du provhain tour
 	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
+
+	void resetGameParam();//méthode qui reset les paramètres
 
 	bool beginReplay(std::string replayPath);//return true si l'initialisation s'est bien passée
 	void updateReplay();//update les replays

@@ -54,6 +54,7 @@ void partieQT::update(){
 }
 
 void partieQT::initWindow(){
+  client->resetGameParam();
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
   std::cout << "got game info" <<std::endl;
