@@ -7,7 +7,6 @@ Partie::Partie(){}
 
 Partie::~Partie(){
     deleteinfoPartie_s(gameInfo);
-    delete gameInfo;
 }
 
 void Partie::setParam(Map* m, std::vector<Sprite*> listLomb){
