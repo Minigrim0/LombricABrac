@@ -96,6 +96,7 @@ clean:
 	@rm -f build/*.o
 	@rm -f ../sharedFiles/build/*.o
 	@rm -f temp/*
+	@rm -f proto/src/*
 	@rm -f UI/src/*
 
 run: all
