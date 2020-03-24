@@ -87,9 +87,9 @@ bool Partie::updateSprites(int t){
 
 
             std::cout << "Sprite is dead, his id: " << id << std::endl;
-            if(!id){
+            //if(!id){
               delete *s;
-            }
+            //}
             *s = nullptr;
             gameInfo->spriteVector.erase(s);
         }

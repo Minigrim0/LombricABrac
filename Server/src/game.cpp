@@ -21,10 +21,7 @@ m_map(nullptr)
     set_global_time(INIT_GLOBAL_TIME);
 }
 
-Game::~Game(){
-    for(size_t index=0;index<m_lombs.size();index++)
-        delete m_lombs[index];
-}
+Game::~Game(){}
 
 void Game::set_lomb(uint8_t nb_lomb){
     m_lomb_nb = nb_lomb;
