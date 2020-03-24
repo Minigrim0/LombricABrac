@@ -233,6 +233,10 @@ info Partie::run(info information)
         break;
     }
 
+    if (cli->getIsEnded()){
+        information.id = MAIN_MENU_SCREEN;
+        run = false;
+    }
     usleep(50);//petit temps d'attente sinon mon CPU transpirait
   }
   clear();
