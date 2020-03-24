@@ -71,6 +71,9 @@ void InvitationQT::accept_invit(){
   page->list_AmisWidget->takeItem(row_invit);
   page->Delete_InvitToolButton->setVisible(false);
   page->Accept_InvitToolButton->setVisible(false);
+  if (globalInvitations.invits[static_cast<unsigned int>(row_invit)].type == true){
+    parent->setPage(ROOM_INVITEE_SCREEN);
+  }
 }
 InvitationQT::~InvitationQT(){
   delete page;

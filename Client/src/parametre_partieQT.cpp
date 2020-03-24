@@ -21,20 +21,31 @@ void Parametre_PartieQT::initWindow(){
 }
 
 void Parametre_PartieQT::setPara(){
+
   std::string carte = page->CartecomboBox->currentText().toStdString();
   int nombre_lombric = page->Nombre_lombricspinBox->value();
   int nombre_equipe = page->Nombre_equipespinBox->value();
   int temps_tour = page->Temps_TourspinBox->value();
-  std::cout << carte<<std::endl;
-  std::cout<<nombre_equipe<<std::endl;
-  std::cout<<nombre_lombric<<std::endl;
-  std::cout<<temps_tour<<std::endl;
+  int id_carte= 0;
 
-/*  client->setTimeRound(temps_tour);
+
+  if (carte.compare("Hijacked")){
+    id_carte = 1;
+  }
+  else if(carte.compare("Warzone")){
+    id_carte = 2;
+  }
+  else if(carte.compare("No Man's Land")){
+    id_carte = 3;
+  }
+
+  client->setTimeRound(temps_tour);
   client->set_nrb_lombrics(nombre_lombric);
-  client->set_nbr_equipes(nombre_equipe);*/
+  client->set_nbr_equipes(nombre_equipe);
+  client->setMap(1);
+  usleep(100);
 
-  parent->setPage(ROOM_SCREEN);
+  parent->setPage(CHANGE_GAME_PARAM);
 
 
 }

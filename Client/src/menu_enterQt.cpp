@@ -18,7 +18,7 @@ WindowQT(id, parent, client){
 }
 
 void Menu_EnterQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/background.png);");
 }
 
 Menu_EnterQT::~Menu_EnterQT(){

@@ -70,5 +70,6 @@ void Modifier_EquipeQT::ChangeNameLombric(){
 }
 
 Modifier_EquipeQT::~Modifier_EquipeQT(){
+    delete OldLombricName.table;
     delete page;
 }

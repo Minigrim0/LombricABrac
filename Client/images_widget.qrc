@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="wallpaper">
+    <file>UI/Resources/background.png</file>
     <file>UI/Resources/cropped-1920-1080-515958.jpg</file>
     <file>UI/Resources/cropped-1920-1080-521477.jpg</file>
   </qresource>

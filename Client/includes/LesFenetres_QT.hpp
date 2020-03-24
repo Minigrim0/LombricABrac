@@ -135,12 +135,15 @@ private:
     int id_screen;
     Ui::Salon_HoteWidget *page;
     stringTable friendsList;
+    infoRoom_s infoPartie;
 public:
     Salon_HoteQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~Salon_HoteQT();
 private slots:
     void sendGameInvit();
+    void change_equipe();
+    void play();
 };
 
 class Salon_InviteeQT: public WindowQT{
