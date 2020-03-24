@@ -61,7 +61,8 @@ clean:
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
 	rm -f ../sharedFiles/*.o
-	rm -f cpl_proto/*
+	rm -f proto/src/*
+
 
 hard_clean: clean
 	@echo "\e[0;33m=========== Cleaning libs =============\e[0m"
