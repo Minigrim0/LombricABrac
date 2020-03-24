@@ -16,12 +16,14 @@ vie(pv){}
 void Lombric_c::move(int type, Map* carte){
 	uint32_t newX, newY;
   	bool isPossible = true;//possibilité du mouvement
+	bool isNewDir = false;//si le lombric change de direction, il se retourne mais n'avance pas
 
-  	if (type == FORWARD or type == BACKWARD){
+  	if (type == FORWARD || type == BACKWARD){
+		isNewDir = direction != type;
   		direction = type;
   	}
 
-  	if(!movement){//on peut pas bouger le lombric s'il est en train de tomber
+  	if(!movement && !isNewDir){//on peut pas bouger le lombric s'il est en train de tomber
     	newX = static_cast<uint32_t>(posX + direction);
     	newY = static_cast<uint32_t>(posY);
 
@@ -89,7 +91,7 @@ void Lombric_c::explosed(int xExplosion, int yExplosion, int radius, int degat, 
 
 void Lombric_c::setPos(int* newPos){
 	direction = newPos[0] < posX?-1:1;
-	Sprite::setPos(newPos); 
+	Sprite::setPos(newPos);
 }
 
 int Lombric_c::getDirection(){return direction;}
