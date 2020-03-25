@@ -5,7 +5,6 @@
 Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
-  parent->setObjectName(QStringLiteral("menuWindow"));
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
 
@@ -25,6 +24,7 @@ id_screen(id){
 
 void Salon_HoteQT::initWindow(){
     bool room = true;
+    parent->setObjectName(QStringLiteral("menuWindow"));
 
     page->Equipe_quatreplainTextEdit->setVisible(true);
     page->Equipe_troisplainTextEdit->setVisible(true);
