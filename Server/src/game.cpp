@@ -8,9 +8,9 @@
 #include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../proto/src/user.pb.h"
 
-Game::Game(uint32_t owner)
+Game::Game(uint32_t owner, uint32_t room_id)
 :m_owner_id(owner),
-m_game_id(0),
+m_game_id(room_id),
 m_current_player_id(0),
 m_map(nullptr)
 {
@@ -38,7 +38,6 @@ void Game::set_map(uint8_t id_map){m_map_id = id_map;}
 void Game::set_nb_teams(uint8_t nbr_teams){m_team_nb = nbr_teams;}
 void Game::set_round_time(int round_time){m_max_time_round = round_time;}
 void Game::set_global_time(int global_time){m_max_time_game = global_time;}
-void Game::set_game_id(uint32_t game_id){m_game_id = game_id;}
 
 void Game::set_users_team(ZMQ_msg *zmq_msg){
     Join_groupe_s request;
@@ -148,8 +147,6 @@ void Game::end_round(int *current_step){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
           db.set_final_points(m_game_id, 0, i+1);
       }
-
-      db.close_room(m_game_id);
       DataBase_mutex.unlock();
 
       (*current_step)++;
@@ -228,7 +225,12 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             zmq_msg.set_message("false");
         }
 
-        stream << "users/" << zmq_msg.receiver_id() << "/room";
+        if(zmq_msg.receiver_id() != 0){
+            stream << "users/" << zmq_msg.receiver_id() << "/room";
+        }
+        else{
+            stream << "all";
+        }
 
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());

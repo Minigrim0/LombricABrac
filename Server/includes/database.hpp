@@ -17,6 +17,7 @@
 #define DT_FRI 8  // Datatype Fri_ls_r
 #define DT_RID 9  // Datatype Fri_ls_r
 #define DT_END 10 // Datatype Fri_ls_r
+#define DT_RIN 11 // Datatype Block_Destroy (repeated int)
 
 class DataBase{
     public:
@@ -78,6 +79,7 @@ class DataBase{
         int add_player(int room_id, int player_id, int nb_players);
         int set_final_points(int room_id, int player_points, int player_index);
         int close_room(int room_id);
+        int get_all_opened_rooms(Block_Destroy *room_list);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

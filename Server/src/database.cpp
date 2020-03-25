@@ -129,6 +129,9 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
         case DT_END:
             static_cast<End_tour*>(data_container)->add_id_lomb_mort(atoi(argv[0]));
             break;
+        case DT_RIN:
+            static_cast<Block_Destroy*>(data_container)->add_coord(atoi(argv[0]));
+            break;
         default:
             std::cout << "> Error, datatype not recognized" << std::endl;
     }
@@ -702,6 +705,21 @@ int DataBase::close_room(int room_id){
     m_sql_request = m_stringStream.str();
 
     m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::get_all_opened_rooms(Block_Destroy *room_list){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "SELECT id FROM history WHERE finished=False;";
+    m_sql_request = m_stringStream.str();
+
+    m_data_type = DT_RIN;
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, room_list, &m_zErrMsg);
     catch_error();
 
     return m_rc;

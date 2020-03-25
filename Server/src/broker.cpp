@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 
 // Shared dependencies between server and client
 #include "../../sharedFiles/includes/comm_macros.hpp"
@@ -13,6 +14,7 @@ int broker_thread(){
     zmq::socket_t subscriber(context, ZMQ_SUB);
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
+    std::queue<uint32_t> waiting_players;
 
     ZMQ_msg zmqmsg;
     std::ostringstream stream_obj;
@@ -31,6 +33,18 @@ int broker_thread(){
             switch(zmqmsg.type_message()){
                 case CLIENT_CREATE_ROOM:{
                     create_room_thread(zmqmsg);
+                    break;
+                }
+                case CLIENT_LOOKUP_MATCH:{
+                    waiting_players.push(zmqmsg.receiver_id());
+                    Block_Destroy open_rooms;
+                    DataBase_mutex.lock();
+                    db.get_all_opened_rooms(&open_rooms);
+                    DataBase_mutex.unlock();
+                    // Go through all rooms
+                    for(int room_index=0;room_index<open_rooms.coord_size();room_index++){
+                        // Ping the room
+                    }
                     break;
                 }
                 default:

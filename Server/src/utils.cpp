@@ -263,7 +263,7 @@ void create_room_thread(ZMQ_msg zmqmsg){
     stream.str("");
     stream.clear();
     stream << "room/" << room_id << "/client";
-    std::thread tobj(game_thread, stream.str(), owner_usr.usr_id());
+    std::thread tobj(game_thread, stream.str(), room_id, owner_usr.usr_id());
     tobj.detach();
 
     ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
