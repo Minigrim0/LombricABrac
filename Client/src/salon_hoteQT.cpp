@@ -5,6 +5,7 @@
 Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
+  parent->setObjectName(QStringLiteral("menuWindow"));
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
 
@@ -28,7 +29,12 @@ void Salon_HoteQT::initWindow(){
     vector<playerTeam> joueur_in_room;
     bool room;
 
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    page->Equipe_quatreplainTextEdit->setVisible(true);
+    page->Equipe_troisplainTextEdit->setVisible(true);
+    page->Equipe_quatreLabel->setVisible(true);
+    page->Equipe_troisLabel->setVisible(true);
+
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 
     if (id_screen == ROOM_SCREEN){
       std::cout<<"eeeeeeeeh salut"<<std::endl;
@@ -78,7 +84,7 @@ void Salon_HoteQT::initWindow(){
       page->Equipe_quatreLabel->setVisible(false);
       page->Equipe_troisLabel->setVisible(false);
     }
-    else if(nbr_equipe == 3)
+    if(nbr_equipe == 3)
     {
       page->Equipe_quatreplainTextEdit->setVisible(false);
       page->Equipe_quatreLabel->setVisible(false);

@@ -14,9 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
-color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));
-font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -103,8 +101,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="3" column="3" colspan="2">
       <widget class="QLineEdit" name="PasswordlineEdit">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+        <string notr="true"/>
        </property>
        <property name="maxLength">
         <number>40</number>
@@ -147,8 +144,7 @@ color: rgb(255, 255, 255);</string>
      <item row="1" column="3" colspan="2">
       <widget class="QLineEdit" name="PseudolineEdit">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+        <string notr="true"/>
        </property>
        <property name="maxLength">
         <number>40</number>

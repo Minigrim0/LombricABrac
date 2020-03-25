@@ -4,6 +4,8 @@ AmisQT::AmisQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, cli),
 chooseFriend("")
 {
+    parent->setObjectName(QStringLiteral("menuWindow"));
+
     page = new Ui::AmisWidget;
     page->setupUi(this);
 
@@ -26,7 +28,7 @@ chooseFriend("")
 }
 
 void AmisQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     std::cout << "Start init" << std::endl;
 
     timer = new QTimer(this);

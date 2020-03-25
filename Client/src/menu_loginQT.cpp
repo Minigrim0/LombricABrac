@@ -3,6 +3,8 @@
 Menu_LoginQT::Menu_LoginQT(int id, MainWindow *parent, Client* cli, bool isCon):
 WindowQT(id, parent, client),
 isConnection(isCon){
+    parent->setObjectName(QStringLiteral("menuWindow"));
+
     page = new Ui::Menu_LoginWidget;
     page->setupUi(this);
 
@@ -20,7 +22,7 @@ isConnection(isCon){
 
 
 void Menu_LoginQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 
     page->PasswordlineEdit->clear();
     page->PseudolineEdit->clear();

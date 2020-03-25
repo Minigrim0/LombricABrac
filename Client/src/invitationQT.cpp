@@ -2,6 +2,7 @@
 
 InvitationQT::InvitationQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
+  parent->setObjectName(QStringLiteral("menuWindow"));
 
   page = new Ui::InvitationWidget;
   page->setupUi(this);
@@ -21,7 +22,7 @@ WindowQT(id, parent, client){
 
 void InvitationQT::initWindow(){
 
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     page->list_AmisWidget->clear();
     std::string display_text;
     page->Delete_InvitToolButton->setVisible(false);

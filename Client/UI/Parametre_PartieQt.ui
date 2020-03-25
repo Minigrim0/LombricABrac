@@ -14,14 +14,13 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
-font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QGroupBox" name="Parametre_PartiegroupBox">
      <property name="styleSheet">
-      <string notr="true">color: qlineargradient(spread:repeat, x1:0.835821, y1:0.119, x2:1, y2:0, stop:0 rgba(255, 28, 103, 255), stop:1 rgba(255, 255, 255, 255));</string>
+      <string notr="true"/>
      </property>
      <property name="title">
       <string>Paramètre de la partie</string>
@@ -58,8 +57,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
         <item row="1" column="2">
          <widget class="QSpinBox" name="Nombre_equipespinBox">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+           <string notr="true"/>
           </property>
           <property name="frame">
            <bool>true</bool>
@@ -98,8 +96,7 @@ color: rgb(255, 255, 255);</string>
         <item row="7" column="2">
          <widget class="QComboBox" name="CartecomboBox">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+           <string notr="true"/>
           </property>
           <item>
            <property name="text">
@@ -134,8 +131,7 @@ color: rgb(255, 255, 255);</string>
         <item row="3" column="2">
          <widget class="QSpinBox" name="Nombre_lombricspinBox">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+           <string notr="true"/>
           </property>
           <property name="minimum">
            <number>1</number>
@@ -214,8 +210,7 @@ color: rgb(255, 255, 255);</string>
         <item row="5" column="2">
          <widget class="QSpinBox" name="Temps_TourspinBox">
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+           <string notr="true"/>
           </property>
           <property name="minimum">
            <number>10</number>
