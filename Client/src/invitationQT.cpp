@@ -24,9 +24,11 @@ void InvitationQT::initWindow(){
 
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     page->list_AmisWidget->clear();
-    std::string display_text;
     page->Delete_InvitToolButton->setVisible(false);
     page->Accept_InvitToolButton->setVisible(false);
+
+    std::string display_text;
+
     globalInvitations.mut.lock();
     int len_tab = static_cast<int>(globalInvitations.invits.size());
     globalInvitations.notif = false;
@@ -45,9 +47,35 @@ void InvitationQT::initWindow(){
     }
     globalInvitations.mut.unlock();
 
+  /*  timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &InvitationQT::update_invit);
+    setTimerIntervalle(200);*/
+
 }
 
+/*void InvitationQT::update_invit(){
+  std::string display_text;
 
+  globalInvitations.mut.lock();
+  int len_tab = static_cast<int>(globalInvitations.invits.size());
+  globalInvitations.notif = false;
+  for (int i = 0; i < len_tab; i++)
+  {
+    if (globalInvitations.invits[static_cast<unsigned int>(i)].type == true )
+    {
+      display_text = "Invitation jeu de : " + globalInvitations.invits[static_cast<unsigned int>(i)].text;
+      page->list_AmisWidget->addItem(QString(display_text.c_str()));
+    }
+    if (globalInvitations.invits[static_cast<unsigned int>(i)].type == false )
+    {
+      display_text = "Demande d'ami de : " + globalInvitations.invits[static_cast<unsigned int>(i)].text;
+      page->list_AmisWidget->addItem(QString(display_text.c_str()));
+    }
+  }
+  globalInvitations.mut.unlock();
+
+
+}*/
 void InvitationQT::handle_invit(QListWidgetItem* item){
   item_clicked = item;
   row_invit = page->list_AmisWidget->currentRow();
