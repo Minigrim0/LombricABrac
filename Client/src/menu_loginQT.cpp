@@ -32,6 +32,7 @@ void Menu_LoginQT::connection(){
 
     bool con = client->connection(username, password, isConnection);
     if(con){
+        parent->setUsername(username);
         parent->setPage(MAIN_MENU_SCREEN);
     }else{
         parent->setPage(WARNING_WRONG_DATA_IN_LOGIN_SCREEN);
