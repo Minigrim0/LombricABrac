@@ -14,7 +14,7 @@ WindowQT(id, parent, client){
 }
 
 void Salon_InviteeQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 }
 
 Salon_InviteeQT::~Salon_InviteeQT(){

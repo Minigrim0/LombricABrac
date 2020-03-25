@@ -55,14 +55,11 @@ void partieQT::update(){
 }
 
 void partieQT::initWindow(){
-    setStyleSheet("");
-    parent->setStyleSheet("");
-
-  parent->setObjectName(QStringLiteral("partie"));
   client->resetGameParam();
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
   std::cout << "got game info" <<std::endl;
+
   weaponIndex = 0;
   tour = false;
   endRound = true;
@@ -132,6 +129,8 @@ void partieQT::updateGame(){
         //destroyByServ.Clear();
         endRound = false;
       }
+      update();
+      parent->update();
     }
 
     //vérifie s'il y'a un tir a effectuer
