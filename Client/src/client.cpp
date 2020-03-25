@@ -13,7 +13,8 @@ changed(false),
 messageRcv(),
 thisGame(nullptr),
 currentParams({}),
-isReplay(false){
+isReplay(false),
+currentWeapon(0){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -160,6 +161,12 @@ int Client::run(){
 					changeNbrEq(msg);
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
+				case SERVER_DIFFERENT_WEAPON:
+				{Change_weapon obj;
+				obj.ParseFromString(msg.text); //convertis en struct proto-buff
+				setWeaponId(obj.id_weapon());
+				msg.type = 0;//pour qu'un nouveau message puisse être lu
+				break;}
 				case NEXT_ROUND: //début de round
 					newRound = msg.text;
 					addMessageTosaveFile(msg);

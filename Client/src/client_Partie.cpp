@@ -100,3 +100,21 @@ void Client::resetGameParam(){
 	thisGame = nullptr;//pas besoin de delete, ça a été fait au rpéalable si nécéssaire
 	end = false;
 }
+
+int Client::getCurrentWeapon(){
+	return currentWeapon;
+}
+
+void Client::changeWeapon(uint32_t id){
+	message m{};
+	m.type = CLIENT_CHANGE_WEAPON;
+	Change_weapon obj;
+	obj.set_id_weapon(id);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur pour l'envoyer au serveur
+
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}

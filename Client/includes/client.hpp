@@ -150,6 +150,8 @@ private:
 	int timeToWait;//temps à attendre avant d'envoyer le prochain message
 	bool isReplay;
 
+	int currentWeapon;
+
 
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
 	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
@@ -232,6 +234,8 @@ public:
 	void getAllInvits();
 	infoRoom_s getInfoRoom(); //infos de la room
 	bool getIsEnded();//si partie est finie
+	int getCurrentWeapon();
+	void changeWeapon(uint32_t id);
 
 	//fct pour éviter que l'affichage se préoccupe des différentes invitations
 	bool acceptInvitation(int index, bool ok);//en fonction de l'invitation acceptée, envoi le bon message au serveur
@@ -248,6 +252,7 @@ public:
 	std::vector<playerTeam> getTeams();
 	std::string getNextRound(); //infos du provhain tour
 	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
+	void setWeaponId(uint32_t id);
 
 	void resetGameParam();//méthode qui reset les paramètres
 
