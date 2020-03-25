@@ -40,10 +40,10 @@ void AmisQT::initWindow(){
     friendsList = client->getFriendList();
 
     page->Tchat_ListcomboBox->clear();
-    for(int i=0; i<friendsList.size; ++i){
-        page->Tchat_ListcomboBox->addItem(QString(friendsList.table[i].c_str()));
+    for(int i=0; i<friendsList.size(); ++i){
+        page->Tchat_ListcomboBox->addItem(QString(friendsList.at(i).c_str()));
     }
-    if(friendsList.size){
+    if(friendsList.size()){
         changeFriend(page->Tchat_ListcomboBox->currentText());
     }
 

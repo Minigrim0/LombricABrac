@@ -56,8 +56,8 @@ void Salon_HoteQT::initWindow(){
       friendsList = client->getFriendList();
 
       page->InvitationComboBox->clear();
-      for(int i=0; i<friendsList.size; ++i){
-          page->InvitationComboBox->addItem(QString(friendsList.table[i].c_str()));
+      for(int i=0; i<friendsList.size(); ++i){
+          page->InvitationComboBox->addItem(QString(friendsList.at(i).c_str()));
       }
     }
     std::string nbr_equipe_str = "";
@@ -142,9 +142,6 @@ void Salon_HoteQT::initWindow(){
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &Salon_HoteQT::update_para);
   setTimerIntervalle(200);
-
-
-
 
 }
 void Salon_HoteQT::sendGameInvit(){
@@ -253,6 +250,5 @@ void Salon_HoteQT::leave_room(){
 
 
 Salon_HoteQT::~Salon_HoteQT(){
-    delete friendsList.table;
     delete page;
 }

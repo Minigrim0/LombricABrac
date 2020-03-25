@@ -29,14 +29,14 @@ info Liste_ami_window::run(info information)
   string h;
   string msg1="Voici votre liste d'amis (Appuyer sur RETURN pour revenir en arrère)";
   string msg2;
-  stringTable liste_ami;
+  std::vector<std::string> liste_ami;
   playerRank rank;
   string tableau_joueur[18];
   uint32_t points_ranger[18];
   if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
   {
     liste_ami=information.client->getFriendList();
-    len_tab=liste_ami.size;
+    len_tab=liste_ami.size();
     if (information.id==CHAT_SCREEN && information.notif==1)
     {
       for (int i=0;i<len_tab;i++)
@@ -44,9 +44,9 @@ info Liste_ami_window::run(info information)
         for (int o=0;o<static_cast<int>(information.notification->size());o++)
         {
 
-          if (liste_ami.table[i]==information.notification[o])
+          if (liste_ami[i]==information.notification[o])
           {
-            liste_ami.table[i]=information.notification[o]+ " *";
+            liste_ami[i]=information.notification[o]+ " *";
           }
         }
       }
@@ -114,7 +114,7 @@ info Liste_ami_window::run(info information)
     {
     if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
       {
-        print_string_window(win, y+n, (max_x/2), liste_ami.table[i]);
+        print_string_window(win, y+n, (max_x/2), liste_ami[i]);
         n+=2;
         nbr_printed++;
       }
@@ -186,7 +186,7 @@ info Liste_ami_window::run(info information)
           {
             if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
             {
-              print_string_window(win, y_save+n, (max_x/2), liste_ami.table[i]);
+              print_string_window(win, y_save+n, (max_x/2), liste_ami[i]);
               n+=2;
             }
             if (information.id==INVITATIONS_SCREEN)
@@ -243,7 +243,7 @@ info Liste_ami_window::run(info information)
           {
             if (information.id==LIST_FRIENDS_SCREEN || information.id==INVIT_FRIEND_TO_GAME_SCREEN || information.id==CHAT_SCREEN)
             {
-              print_string_window(win, y_save+n, (max_x/2), liste_ami.table[i]);
+              print_string_window(win, y_save+n, (max_x/2), liste_ami[i]);
               n+=2;
             }
 
@@ -320,7 +320,7 @@ info Liste_ami_window::run(info information)
         {
 
           clear();
-          information.friends=liste_ami.table[i_save];
+          information.friends=liste_ami[i_save];
           if (information.notif==1)
           {
             for (int i=0;i<static_cast<int>(information.notification->size());i++)
@@ -337,13 +337,13 @@ info Liste_ami_window::run(info information)
         }
         if (information.id==LIST_FRIENDS_SCREEN)
         {
-          information.friends=liste_ami.table[i_save];
+          information.friends=liste_ami[i_save];
           information.id=WARNING_DEL_FRIEND_SCREEN;
           break;
         }
         if (information.id==INVIT_FRIEND_TO_GAME_SCREEN)
         {
-          information.client->addToGame(liste_ami.table[i_save]);
+          information.client->addToGame(liste_ami[i_save]);
           information.id=ROOM_SCREEN;
           break;
         }
