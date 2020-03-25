@@ -31,20 +31,20 @@ void Parametre_PartieQT::setPara(){
   int id_carte= 0;
 
 
-  if (carte.compare("Hijacked")){
+  if (carte.compare("Hijacked") == 0){
     id_carte = 1;
   }
-  else if(carte.compare("Warzone")){
+  else if(carte.compare("Warzone") == 0){
     id_carte = 2;
   }
-  else if(carte.compare("No Man's Land")){
+  else if(carte.compare("No Man's Land") == 0){
     id_carte = 3;
   }
 
   client->setTimeRound(temps_tour);
   client->set_nrb_lombrics(nombre_lombric);
   client->set_nbr_equipes(nombre_equipe);
-  client->setMap(1);
+  client->setMap(id_carte);
   usleep(100);
 
   parent->setPage(CHANGE_GAME_PARAM);

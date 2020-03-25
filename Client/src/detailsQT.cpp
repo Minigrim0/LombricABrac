@@ -43,6 +43,7 @@ void DetailsQT::askHistory(){
   std::string display_message = "";
   std::string display_joueur = "";
 
+  page->Historique_display_plainTextEdit->clear();
   chooseHistory = page->Name_pseudo_Historique_lineEdit->text().toStdString();
   historique = client->get_history(chooseHistory, 0, 10);
   std::cout<<historique.size<<std::endl;
@@ -60,6 +61,9 @@ void DetailsQT::askHistory(){
       }
       page->Historique_display_plainTextEdit->appendPlainText("\n");
     }
+  }
+  else{
+    page->Historique_display_plainTextEdit->appendPlainText("HISTORIQUE VIDE");
   }
   page->Name_pseudo_Historique_lineEdit->clear();
 

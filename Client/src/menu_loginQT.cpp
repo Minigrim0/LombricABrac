@@ -31,9 +31,23 @@ void Menu_LoginQT::initWindow(){
 void Menu_LoginQT::connection(){
     std::string username = page->PseudolineEdit->text().toStdString();
     std::string password = page->PasswordlineEdit->text().toStdString();
+    std::string space = " ";
+    std::string index;
+    bool isSpace;
 
+    for (unsigned int i = 0; i < username.size(); i++){
+
+      index = username[i];
+      if(!index.compare(space))
+      {
+        isSpace = true;
+      }
+      else{
+        isSpace = false;
+      }
+    }
     bool con = client->connection(username, password, isConnection);
-    if(con){
+    if(con && !isSpace){
         parent->setUsername(username);
         parent->setPage(MAIN_MENU_SCREEN);
     }else{

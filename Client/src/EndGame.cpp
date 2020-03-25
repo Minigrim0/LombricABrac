@@ -6,6 +6,7 @@
 EndGame::EndGame(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, cli)
 {
+  parent->setObjectName(QStringLiteral("menuWindow"));
   page = new Ui::End_GameWidget;
   page->setupUi(this);
 

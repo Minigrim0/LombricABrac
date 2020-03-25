@@ -78,7 +78,6 @@ void Salon_HoteQT::initWindow(){
     //########################################################""
 
     if(id_screen == ROOM_SCREEN || id_screen == ROOM_INVITEE_SCREEN){
-      std::cout << "azertyuiop"<<std::endl;
 
       infoPartie = client->getInfoRoom();
       joueur_in_room = infoPartie.pseudos;
@@ -110,12 +109,26 @@ void Salon_HoteQT::initWindow(){
             break;
         }
       }
+      switch (map) {
+        case 1:
+          map_str = "Hijacked";
+          break;
+        case 2:
+          map_str = "Warzone";
+          break;
+        case 3:
+          map_str = "No Man's Land";
+          break;
+        default:
+          break;
+      }
 
       nbr_equipe_str = "Nombre d'équipes : " + to_string(nbr_equipe);
       nbr_lombric_str = "Nombre max lombric : " + to_string(nbr_lombric);
       time_round_str = "Temps max/tour : " + to_string(time_round);
-      //map_str = "Carte : " + to_string(map);
-      //page->CarteLabel->setText()
+      map_str = "Carte : " + map;
+
+      page->CarteLabel->setText(QString(map_str.c_str()));
       page->Nombre_LombricLabel->setText(QString(nbr_lombric_str.c_str()));
       page->Nombre_EquipeLabel->setText(QString(nbr_equipe_str.c_str()));
       page->Temps_MaxTourLabel->setText(QString(time_round_str.c_str()));
@@ -142,6 +155,9 @@ void Salon_HoteQT::initWindow(){
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &Salon_HoteQT::update_para);
   setTimerIntervalle(200);
+
+
+
 
 }
 void Salon_HoteQT::sendGameInvit(){
@@ -179,7 +195,9 @@ void Salon_HoteQT::update_para(){
   for (int i = 0; i< len_tab; i++)
   {
     pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
+    std::cout << "pseudo  : "<<pseudo <<std::endl;
     current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
+    std::cout << "équipe  : "<<current_equipe<<std::endl;
     switch (current_equipe) {
       case 1:
         page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
@@ -198,11 +216,26 @@ void Salon_HoteQT::update_para(){
     }
   }
 
+  switch (map) {
+    case 1:
+      map_str = "Hijacked";
+      break;
+    case 2:
+      map_str = "Warzone";
+      break;
+    case 3:
+      map_str = "No Man's Land";
+      break;
+    default:
+      break;
+  }
+
   nbr_equipe_str = "Nombre d'équipes : " + to_string(nbr_equipe);
   nbr_lombric_str = "Nombre max lombric : " + to_string(nbr_lombric);
   time_round_str = "Temps max/tour : " + to_string(time_round);
-  //map_str = "Carte : " + to_string(map);
-  //page->CarteLabel->setText()
+  map_str = "Carte : " + map;
+
+  page->CarteLabel->setText(QString(map_str.c_str()));
   page->Nombre_LombricLabel->setText(QString(nbr_lombric_str.c_str()));
   page->Nombre_EquipeLabel->setText(QString(nbr_equipe_str.c_str()));
   page->Temps_MaxTourLabel->setText(QString(time_round_str.c_str()));

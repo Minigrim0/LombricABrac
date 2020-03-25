@@ -31,6 +31,9 @@ void Modifier_EquipeQT::initWindow(){
 }
 
 void Modifier_EquipeQT::ChangeNameLombric(){
+  std::string space = " ";
+  std::string index;
+  bool isSpace;
 
   std::string lombric1 = page->Lombric_UnLineEdit->text().toStdString();
   std::string lombric2 = page->Lombric_DeuxLineEdit->text().toStdString();
@@ -44,7 +47,19 @@ void Modifier_EquipeQT::ChangeNameLombric(){
   std::string VecNameLombric[8] = {lombric1,lombric2,lombric3,lombric4,lombric5,lombric6,lombric7,lombric8};
 
   for (uint32_t nombreLombric = 0; nombreLombric < 8; nombreLombric++){
-    if (VecNameLombric[nombreLombric].size())
+
+    for (unsigned int i = 0; i < VecNameLombric[nombreLombric].size(); i++){
+
+      index = VecNameLombric[nombreLombric][i];
+      if(!index.compare(space))
+      {
+        isSpace = true;
+      }
+      else{
+        isSpace = false;
+      }
+    }
+    if (VecNameLombric[nombreLombric].size() && !isSpace)
     {
       client->setLombricName(nombreLombric,VecNameLombric[nombreLombric]);
     }

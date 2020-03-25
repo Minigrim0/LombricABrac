@@ -160,7 +160,7 @@
        </property>
        <property name="icon">
         <iconset resource="../images_widget.qrc">
-         <normaloff>:/icons/UI/Resources/icons8-hydra-48.png</normaloff>:/icons/UI/Resources/icons8-hydra-48.png</iconset>
+         <normaloff>:/icons/UI/Resources/lomb1.png</normaloff>:/icons/UI/Resources/lomb1.png</iconset>
        </property>
        <property name="iconSize">
         <size>
