@@ -46,8 +46,13 @@ int client_thread(int socket_client){
                 type = zmqmsg.type_message();
 
                 if(address == room_channel){
-                    std::cout << "Redirecting zmq message " << static_cast<int>(type) << " to the client" << std::endl;
-                    la_poste.envoie_msg(type, zmqmsg.message());
+                    if(contents == std::to_string(ROOM_CLOSED)){
+                        is_on_game = false;
+                    }
+                    else{
+                        std::cout << "Redirecting zmq message " << static_cast<int>(type) << " to the client" << std::endl;
+                        la_poste.envoie_msg(type, zmqmsg.message());
+                    }
                 }
                 else if(type == CLIENT_CREATE_ROOM_RESPONSE){
                     is_on_game = true;

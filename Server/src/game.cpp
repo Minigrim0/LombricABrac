@@ -21,7 +21,10 @@ m_map(nullptr)
     set_global_time(INIT_GLOBAL_TIME);
 }
 
-Game::~Game(){}
+Game::~Game(){
+    for(size_t index=0;index<m_players.size();index++)
+        m_players[index].sendMessage(std::to_string(ROOM_CLOSED));
+}
 
 void Game::set_lomb(uint8_t nb_lomb){
     m_lomb_nb = nb_lomb;
@@ -440,6 +443,6 @@ void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
 
     // Finally, if the vector is empty, we delete the game thread
     if(m_players.empty()){
-        *current_step = STEP_GAMEEND;
+        *current_step = STEP_ENDSCREEN;
     }
 }

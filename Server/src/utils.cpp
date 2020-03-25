@@ -258,6 +258,8 @@ void create_room_thread(ZMQ_msg zmqmsg){
     db.get_last_room_id(&room_id);
     DataBase_mutex.unlock();
 
+    std::cout << "Creating new room with ID : " << room_id << std::endl;
+
     stream.str("");
     stream.clear();
     stream << "room/" << room_id << "/client";
