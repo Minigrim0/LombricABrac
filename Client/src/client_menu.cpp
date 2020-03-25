@@ -276,9 +276,13 @@ infoRoom_s Client::getInfoRoom(){
 	res.time_round = obj.time_round();
 	currentParams.time_round = obj.time_round();
 
+	infoJoueurs.clear();
 	for (int i=0; i<obj.joueur_size();++i){
 		res.pseudos.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
 	}
+
+	std::vector<playerTeam> infoJoueurs = res.pseudos;
+
 
 	delete reponse;
 	return res;
