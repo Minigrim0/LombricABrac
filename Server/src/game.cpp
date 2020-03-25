@@ -131,26 +131,25 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
 
-    std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
-
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
         if(m_players[i].is_still_alive(&m_game_object)){
             player_alive += 1;
         }
     }
-    std::cout << "joueurs en vie : " << player_alive << std::endl;
     if(player_alive <= 1){ //Si endgame
       zmq_msg.set_type_message(END_GAME);
-      // Telling everyone that a player shot
+      DataBase_mutex.lock();
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
-          DataBase_mutex.lock();
           db.set_final_points(m_game_id, 0, i);
-          DataBase_mutex.unlock();
       }
 
+      db.close_room(m_game_id);
+      DataBase_mutex.unlock();
+
       (*current_step)++;
+      return;
     }
 
     do{
@@ -159,8 +158,6 @@ void Game::end_round(int *current_step){
             m_current_player_id = 0;
 
         next_lomb_id = get_next_lombric_id();
-        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
-        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
     }while(next_lomb_id == 0);
 
     m_game_object.setCurrentLomb(next_lomb_id);
