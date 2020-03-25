@@ -59,7 +59,7 @@ void MainWindow::setPage(int index){
     Request_history_window request_history;
     Ami_window ami_window;
 
-    setStyleSheet("background-mage: none);");
+    //setStyleSheet("background-mage: none);");
     while (!find){
       information.id = index;
       for(int i=0; i<count();++i){
@@ -73,6 +73,8 @@ void MainWindow::setPage(int index){
             currentWidget->initWindow();
             currentWidget->startTimer();
             currentWidget->show();
+            currentWidget->setFocus();
+            currentWidget->repaint();
             update();
             show();
             find = true;
@@ -80,7 +82,7 @@ void MainWindow::setPage(int index){
       }
 
       if(!find){
-          hide();
+          //hide();
           switch(index){
               case INIT_SCREEN://on rentre dans le menu entrer
                   information = enter_window.run(information);

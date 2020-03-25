@@ -1,0 +1,19 @@
+QToolButton {
+    background-color: red;
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    border-color: beige;
+    font: bold 14px;
+    min-width: 10em;
+    padding: 6px;
+}
+QToolButton:pressed {
+    background-color: rgb(224, 0, 0);
+    border-style: inset;
+}
+
+
+QWidget#menuWindow{
+    border-image: url(./UI/Resources/background.png);
+}

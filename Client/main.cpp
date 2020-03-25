@@ -70,6 +70,13 @@ int main(int argc, char** argv)
 
     if(gui){
         QApplication app(argc, argv);
+
+        QFile File("./UI/style.qss");
+         File.open(QFile::ReadOnly);
+         QString StyleSheet = QLatin1String(File.readAll());
+
+         app.setStyleSheet(StyleSheet);
+
         MainWindow mw(client, nullptr);
         mw.show();
         app.exec();

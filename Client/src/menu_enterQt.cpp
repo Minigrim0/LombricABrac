@@ -4,6 +4,7 @@
 
 Menu_EnterQT::Menu_EnterQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
+    parent->setObjectName(QStringLiteral("menuWindow"));
   page = new Ui::Menu_EnterWidget;
   page->setupUi(this);
 
@@ -18,7 +19,7 @@ WindowQT(id, parent, client){
 }
 
 void Menu_EnterQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/background.png);");
+    //parent->setStyleSheet("border-image: url(:/wallpaper/UI/Resources/background.png);");
 }
 
 Menu_EnterQT::~Menu_EnterQT(){
