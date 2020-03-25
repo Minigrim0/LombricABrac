@@ -220,3 +220,7 @@ message Replay_message{
     uint32 msg_type = 1;
     uint32 time = 2;
 }
+
+message Change_weapon{
+  uint32 id_weapon = 1;
+}

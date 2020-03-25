@@ -288,6 +288,9 @@ void partieQT::drawMap(){
     for(int i=0; i<3; ++i){
       if(i == weaponIndex){ //cadre bloc arme
           pen.setColor(Qt::red);
+
+          //client->changeWeapon(static_cast<uint32_t>(i)); //en attente que le serveur gère message
+
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
       int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
@@ -405,9 +408,9 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int direction = lomb->getDirection();
     Lombric_c* thisLomb = gameInfo->currentWorms;
     //draw weapons
-    if (weaponIndex!=2 && lomb == thisLomb){
+    if (client->getCurrentWeapon()!=2 && lomb == thisLomb){
       QPixmap textureWeapon;
-      textureWeapon = skinWeapons[weaponIndex];
+      textureWeapon = skinWeapons[client->getCurrentWeapon()];
       textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
       painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
     }
