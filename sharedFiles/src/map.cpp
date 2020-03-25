@@ -4,7 +4,7 @@ Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m):
 largeur(l),
 hauteur(h),
 mur(m),
-waterLevel(3){
+waterLevel(0){
 }
 
 uint32_t Map::getLargeur(){return largeur;}
