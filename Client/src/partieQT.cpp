@@ -55,6 +55,10 @@ void partieQT::update(){
 }
 
 void partieQT::initWindow(){
+    setStyleSheet("");
+    parent->setStyleSheet("");
+
+  parent->setObjectName(QStringLiteral("partie"));
   client->resetGameParam();
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
