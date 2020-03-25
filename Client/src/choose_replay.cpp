@@ -43,13 +43,19 @@ info Choose_replay::run(info information)
             box(win,0,0);
             print_string_window(win, 1, width/2, "Choisissez un replay");
 
-            int taille = vectorReplays.size()>height-3?height-3:vectorReplays.size();
+            height -= 3;//hauteur disponible pour afficher les infos
+            height /= 2;//ça n'a aucun sens
+
+            std::string text = "echo Height: " + std::to_string(height) + " >> out.txt";
+            system(text.c_str());
+
+            int taille = vectorReplays.size()-decalage>height?height:vectorReplays.size()-decalage;
 
             for(int i=decalage; i<taille+decalage; ++i){
-                print_string_window(win, 2*i+3, width/2, vectorReplays[i]);
+                print_string_window(win, 2*(i-decalage)+3, width/2, vectorReplays[i]);
             }
 
-            print_string_window(win, 2*focus+3, width/2 - 3, "->");
+            print_string_window(win, 2*(focus-decalage)+3, width/2 - 3, "->");
         }
         switch(wgetch(win)){
             case NAVIGATE_UP:
@@ -63,7 +69,7 @@ info Choose_replay::run(info information)
                 if(focus < vectorReplays.size()-1){
                     ++focus;
                     must_draw = true;
-                    if(focus>decalage+height-3)++decalage;
+                    if(focus+decalage>=height)++decalage;
                 }
                 break;
             case ENTER_KEY:
