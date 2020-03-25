@@ -8,6 +8,8 @@ chooseFriend("")
 
     page = new Ui::AmisWidget;
     page->setupUi(this);
+    page->Tchat_display_plainTextEdit->clear();
+
 
     connect(page->Tchat_ListcomboBox, SIGNAL(currentTextChanged(QString)), this, SLOT(changeFriend(QString)));
 
@@ -78,6 +80,8 @@ void AmisQT::sendMessage(){
     page->Tchat_input_lineEdit->clear();
     if(message.size() && destinataire.size()){
         client->chatSend(message, destinataire);
+        std::string newMsg = parent->getUsername()+": "+message;
+        page->Tchat_display_plainTextEdit->appendPlainText(QString(newMsg.c_str()));
     }
 }
 

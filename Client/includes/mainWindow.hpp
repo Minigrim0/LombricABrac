@@ -19,6 +19,7 @@ class MainWindow : public QStackedWidget
 protected:
     Client* client;
     bool isHost;
+    std::string username;
 
     info information;
 
@@ -27,6 +28,9 @@ public:
     Client* getClient();
     virtual ~MainWindow()=default;
 
+    void setUsername(std::string);
+    std::string getUsername();
+    
 public slots:
     void setPage(int index);
 };
