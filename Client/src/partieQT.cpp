@@ -11,10 +11,11 @@ gameInfo(nullptr){
   setTimerIntervalle(50);
 
   //images des blocks
-  textureMur = new QPixmap[3]{
+  textureMur = new QPixmap[4]{
     QPixmap("images/blocs/air.png"),
     QPixmap("images/blocs/bloc.png"),
-    QPixmap("images/blocs/blocSolide.png")
+    QPixmap("images/blocs/blocSolide.png"),
+    QPixmap("images/blocs/eau.png")
   };
 
   //images projectil et lombric
@@ -325,7 +326,13 @@ void partieQT::drawMap(){
 
 void partieQT::drawMur(int x, int y){//dessine le pos ème mur du tableau
   QPainter painter(gamePixmap);
-  int numColor = gameInfo->carte->getColor(x,y)-1;
+  int waterLevel = gameInfo->carte->getWaterLevel();
+  int numColor;
+  if (y >= gameInfo->carte->getHauteur() - waterLevel){
+    numColor = 3;
+  }else{
+    numColor = gameInfo->carte->getColor(x,y)-1;
+  }
   QPixmap texture = textureMur[numColor].scaled(blockWidth, blockWidth);
   x-=camX;
   y-=camY;
