@@ -34,12 +34,10 @@ void Salon_HoteQT::initWindow(){
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 
     if (id_screen == ROOM_SCREEN){
-      std::cout<<"eeeeeeeeh salut"<<std::endl;
       room = client->createRoom();
     }
 
     if(!room){
-      std::cout << "Room non crée" << std::endl;
       parent->setPage(MAIN_MENU_SCREEN);
       }
     else{
@@ -169,7 +167,6 @@ void Salon_HoteQT::update_para(){
 
   //on clear les plain text edit
   //########################################################""
-  std::cout<<"je sui dans le timer"<<std::endl;
   joueur_in_room = client->getTeams();
   Para_partie = client->getParamsPartie();
   map = Para_partie.map;
@@ -178,7 +175,6 @@ void Salon_HoteQT::update_para(){
   time_round = Para_partie.time_round;
 
   len_tab = static_cast<int>(joueur_in_room.size());
-  std::cout<<"taille tab :"<<len_tab<<std::endl;
   page->Equipe_uneplainTextEdit->clear();
   page->Equipe_deuxplainTextEdit->clear();
   page->Equipe_troisplainTextEdit->clear();
@@ -187,8 +183,6 @@ void Salon_HoteQT::update_para(){
   {
     pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
     current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
-    std::cout<<"pseudo :"<<pseudo<<std::endl;
-    std::cout<<"équipe :"<<current_equipe<<std::endl;
     switch (current_equipe) {
       case 1:
         page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
@@ -233,7 +227,6 @@ void Salon_HoteQT::update_para(){
     page->Equipe_quatreplainTextEdit->setVisible(false);
     page->Equipe_quatreLabel->setVisible(false);
   }
-  std::cout << "salut" << std::endl;
 
 }
 
@@ -250,7 +243,7 @@ void Salon_HoteQT::change_equipe(){
 }
 
 void Salon_HoteQT::leave_room(){
-  
+
   if (id_screen == ROOM_INVITEE_SCREEN){
   client->quitRoom();
   parent->setPage(MAIN_MENU_SCREEN);
