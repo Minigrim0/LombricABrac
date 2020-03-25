@@ -279,10 +279,8 @@ infoRoom_s Client::getInfoRoom(){
 	infoJoueurs.clear();
 	for (int i=0; i<obj.joueur_size();++i){
 		res.pseudos.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
+		infoJoueurs.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
 	}
-
-	std::vector<playerTeam> infoJoueurs = res.pseudos;
-
 
 	delete reponse;
 	return res;

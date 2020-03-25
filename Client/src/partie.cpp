@@ -489,5 +489,5 @@ void Partie::synchronizeLombrics(Degats_lombric d){
 }
 
 Partie::~Partie(){
-  deleteinfoPartie_s(gameInfo);
+  if(gameInfo)deleteinfoPartie_s(gameInfo);
 }

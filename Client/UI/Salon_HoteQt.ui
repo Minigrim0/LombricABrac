@@ -14,9 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
-color: qlineargradient(spread:repeat, x1:0.835821, y1:0.119, x2:1, y2:0, stop:0 rgba(255, 28, 103, 255), stop:1 rgba(255, 255, 255, 255));
-font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -90,7 +88,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="14" column="2" alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Lets_PlayToolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Lancer la patie</string>
@@ -158,7 +156,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="14" column="1" alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Change_ParametreToolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Paramètre partie</string>
@@ -168,7 +166,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="6" column="2">
       <widget class="QPlainTextEdit" name="Equipe_deuxplainTextEdit">
        <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);</string>
+        <string notr="true">color: rgb(173, 127, 168);</string>
        </property>
        <property name="plainText">
         <string/>
@@ -223,7 +221,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="14" column="0" alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Leave_roomToolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Quitter</string>
@@ -240,8 +238,7 @@ font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
      <item row="5" column="1" alignment="Qt::AlignTop">
       <widget class="QComboBox" name="InvitationComboBox">
        <property name="styleSheet">
-        <string notr="true">color: rgb(255, 255, 255);
-background-color: rgb(0, 0, 0);</string>
+        <string notr="true"/>
        </property>
        <item>
         <property name="text">
@@ -285,8 +282,7 @@ background-color: rgb(0, 0, 0);</string>
      <item row="1" column="1">
       <widget class="QSpinBox" name="Choix_EquipeSpinBox">
        <property name="styleSheet">
-        <string notr="true">background-color: rgb(0, 0, 0);
-color: rgb(255, 255, 255);</string>
+        <string notr="true"/>
        </property>
        <property name="minimum">
         <number>1</number>

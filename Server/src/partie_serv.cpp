@@ -3,12 +3,12 @@
 #define min(_a,_b) _a<_b?_a:_b
 #define DELTA_T 50 //granularité du temps en millisecondes
 
-Partie::Partie(){
+Partie::Partie():gameInfo(nullptr){
     srand (time(NULL));
 }
 
 Partie::~Partie(){
-    deleteinfoPartie_s(gameInfo);
+    if(gameInfo)deleteinfoPartie_s(gameInfo);
 }
 
 void Partie::setParam(Map* m, std::vector<Sprite*> listLomb){

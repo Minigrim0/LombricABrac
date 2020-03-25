@@ -144,6 +144,8 @@ private slots:
     void sendGameInvit();
     void change_equipe();
     void play();
+    void update_para();
+    void leave_room();
 };
 
 class Salon_InviteeQT: public WindowQT{
@@ -184,6 +186,7 @@ private slots:
     void handle_invit(QListWidgetItem * item);
     void delete_invit();
     void accept_invit();
+    //void update_invit();
 };
 
 #endif

@@ -14,9 +14,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
-font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
-</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -37,7 +35,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item>
       <widget class="QLabel" name="Titre_MenuLabel">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="lineWidth">
         <number>1</number>
@@ -83,7 +81,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Create_party_toolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Créer une partie</string>
@@ -119,7 +117,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Voir_InvitationToolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Voir ses invitations</string>
@@ -155,7 +153,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Modif_equipe_toolbutton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Créer / Modifier son équipe</string>
@@ -191,7 +189,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Details_toolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Details</string>
@@ -227,7 +225,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Amis_toolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Amis</string>
@@ -263,7 +261,7 @@ font: 75 oblique 11pt &quot;Tlwg Typist&quot;;
      <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Deconexion_toolButton">
        <property name="styleSheet">
-        <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Se déconnecter</string>

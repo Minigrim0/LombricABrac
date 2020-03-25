@@ -4,6 +4,8 @@
 
 Modifier_EquipeQT::Modifier_EquipeQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
+  parent->setObjectName(QStringLiteral("menuWindow"));
+
   page = new Ui::Modifier_EquipeWidget;
   page->setupUi(this);
 
@@ -15,7 +17,7 @@ WindowQT(id, parent, client){
 }
 
 void Modifier_EquipeQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     OldLombricName = client->getLombricsName();
     page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName.table[0].c_str()));
     page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName.table[1].c_str()));
