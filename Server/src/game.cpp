@@ -87,6 +87,10 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 
     m_players.push_back(newPlayer);
 
+    for(size_t i = 0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+
     //Setting the informations of the room in infoRoom object
     room.set_nbr_lomb(static_cast<uint32_t>(m_lomb_nb));
     room.set_map(static_cast<uint32_t>(m_map_id));
@@ -102,9 +106,8 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     // Changing the zmqmsg message to the informations of the room
     zmq_msg->set_message(room.SerializeAsString());
 
-    for(size_t i = 0;i<m_players.size();i++){
-        m_players[i].sendMessage(zmq_msg->SerializeAsString());
-    }
+    // Sending the room informations to the newly created user
+    newPlayer.sendMessage(zmq_msg->SerializeAsString());
 }
 
 //Verification methods
