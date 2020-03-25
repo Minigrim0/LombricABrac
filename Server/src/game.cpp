@@ -74,6 +74,19 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     Joueur newPlayer;
     UserConnect usr;
 
+    // Create new user and add him in the vector
+    newPlayer.set_player_id(zmq_msg->receiver_id());
+    newPlayer.set_nb_lombs(m_lomb_nb);
+
+    newPlayer.init_worms(m_lomb_nb);
+
+    Usr_add usr_add;
+    usr_add.set_pseudo(usr.pseudo());
+    zmq_msg->set_type_message(SERVER_USER_JOINED);
+    zmq_msg->set_message(usr.SerializeAsString());
+
+    m_players.push_back(newPlayer);
+
     //Setting the informations of the room in infoRoom object
     room.set_nbr_lomb(static_cast<uint32_t>(m_lomb_nb));
     room.set_map(static_cast<uint32_t>(m_map_id));
@@ -88,21 +101,6 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 
     // Changing the zmqmsg message to the informations of the room
     zmq_msg->set_message(room.SerializeAsString());
-
-    newPlayer.set_player_id(zmq_msg->receiver_id());
-    newPlayer.set_nb_lombs(m_lomb_nb);
-
-    // Sending the informations to the user
-    newPlayer.sendMessage(zmq_msg->SerializeAsString());
-
-    newPlayer.init_worms(m_lomb_nb);
-
-    Usr_add usr_add;
-    usr_add.set_pseudo(usr.pseudo());
-    zmq_msg->set_type_message(SERVER_USER_JOINED);
-    zmq_msg->set_message(usr.SerializeAsString());
-
-    m_players.push_back(newPlayer);
 
     for(size_t i = 0;i<m_players.size();i++){
         m_players[i].sendMessage(zmq_msg->SerializeAsString());
@@ -423,6 +421,7 @@ void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
     // Else, we go trough the player vector to delete the player that has quit
     for(size_t user_index=0;user_index<m_players.size();user_index++){
         if(m_players[user_index].get_id() == zmq_msg.receiver_id()){
+            std::cout << "User " << user_index << " left the room" << std::endl;
             m_players.erase(m_players.begin() + user_index);
         }
     }
