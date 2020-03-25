@@ -108,7 +108,7 @@ void partieQT::updateGame(){
 
     //vérifie si le tour a changé
     if(endRound){
-      weaponIndex = -1;
+      weaponIndex = 0;
       beginShoot = false;
       std::string nextRound = client->getNextRound();
       if(nextRound.size()){//si on a un string-> on change de tour
@@ -272,13 +272,13 @@ void partieQT::drawMap(){
     painter.setBrush(Qt::NoBrush);
     pen.setWidth(blockWidth/6);
     for(int i=0; i<3; ++i){
-      if(i == weaponIndex){
+      if(i == weaponIndex){ //cadre bloc arme
           pen.setColor(Qt::red);
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
       int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
-      if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
-        if (i==2){
+      if (blockWidth <= INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+        if (i==2){ // Block passer tour
           xRect = blockWidth*i*RECT_WEAPON_SIZE;
           yRect = (nBlockHeight - 1 - (i-2)*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
         }
@@ -290,13 +290,15 @@ void partieQT::drawMap(){
           xRect = INIT_SIZE_BLOCK*i*RECT_WEAPON_SIZE;
           yRect = (screenHeight/INIT_SIZE_BLOCK  - (i-1)*(RECT_WEAPON_SIZE+1)) * INIT_SIZE_BLOCK;
         }
-        chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK, RECT_WEAPON_SIZE*INIT_SIZE_BLOCK);
+        chooseWeaponRects[i] = QRect(xRect, yRect, RECT_WEAPON_SIZE*(INIT_SIZE_BLOCK-MIN_SIZE_BLOCK), RECT_WEAPON_SIZE*(INIT_SIZE_BLOCK-MIN_SIZE_BLOCK));
       }
-      if (i==2){
+
+
+      if (i==2){ // Block passer tour
         painter.drawText(chooseWeaponRects[i], Qt::AlignCenter,  "Skip");
       }
       painter.drawRect(chooseWeaponRects[i]);
-      if (i < 2){
+      if (i < 2){ // Block choix arme
         QPixmap skin = skinWeapons[i].scaled(chooseWeaponRects[i].width(), chooseWeaponRects[i].height());
         painter.drawPixmap(chooseWeaponRects[i], skin);
       }
@@ -383,7 +385,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int direction = lomb->getDirection();
     Lombric_c* thisLomb = gameInfo->currentWorms;
     //draw weapons
-    if (weaponIndex!=-1 && weaponIndex!=2 && lomb == thisLomb){
+    if (weaponIndex!=2 && lomb == thisLomb){
       QPixmap textureWeapon;
       textureWeapon = skinWeapons[weaponIndex];
       textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
@@ -534,7 +536,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
         tour = false;
       }
 
-      else if(!changed && tour && weaponIndex != -1){
+      else if(!changed && tour){
         powerShootChrono = std::chrono::high_resolution_clock::now();
         beginShoot = true;
 
