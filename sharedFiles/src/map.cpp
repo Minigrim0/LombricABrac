@@ -1,6 +1,10 @@
 #include "../includes/map.hpp"
 
-Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m):largeur(l), hauteur(h), mur(m){
+Map::Map(uint32_t l, uint32_t h, std::vector<std::string> m):
+largeur(l),
+hauteur(h),
+mur(m),
+waterLevel(0){
 }
 
 uint32_t Map::getLargeur(){return largeur;}
@@ -61,14 +65,15 @@ std::vector<int> Map::explose(int xExplosion, int yExplosion, int radius){
     return res;
 }
 
-void Map::explose(std::vector<int> coords){
-    auto point = coords.begin();
-    while (point != coords.end()){
-        int x = *(point++);
-        int y = *(point++);
-        setBloc(static_cast<uint32_t>(x),static_cast<uint32_t>(y),AIR);
-  }
+int Map::getWaterLevel(){
+    return waterLevel;
 }
+
+void Map::setWaterLevel(int newLevel){
+    waterLevel = newLevel;
+}
+
+void Map::increaseWaterLevel(){++waterLevel;}
 
 Map::~Map(){
 }

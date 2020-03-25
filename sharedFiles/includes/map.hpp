@@ -15,6 +15,7 @@ class Map{
 private:
 	uint32_t largeur, hauteur;
 	std::vector<std::string> mur;
+	int waterLevel;
 public:
 	Map(uint32_t l, uint32_t h, std::vector<std::string>  m);
 	uint32_t getLargeur();
@@ -26,11 +27,10 @@ public:
 
 	std::vector<int> explose(int xExplosion, int yExplosion, int radius);//génère une explosion sur la carte
 	//renvoie les liste des blocs détruits
-	void explose(std::vector<int> coords);//détruit tous les blocs dans le vecteur de int
-	//coords est un vecteur de taille pair les données vont 2 par 2  (x et y de chaque bloc)
 
-	//vitesse -> vitesse de propultion des lombrics au centre de cette explosion
-	//degat -> degat au centre de l'explosion à appliauer sur les worms
+	int getWaterLevel();
+	void setWaterLevel(int newLevel);
+	void increaseWaterLevel();
 
 	~Map();
 };
