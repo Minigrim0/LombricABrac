@@ -16,6 +16,8 @@ Objet qui s'occuppe du switch des fenêtres
 class MainWindow : public QStackedWidget
 {
     Q_OBJECT
+private:
+    QString StyleSheet;
 protected:
     Client* client;
     bool isHost;
@@ -30,7 +32,7 @@ public:
 
     void setUsername(std::string);
     std::string getUsername();
-    
+
 public slots:
     void setPage(int index);
 };

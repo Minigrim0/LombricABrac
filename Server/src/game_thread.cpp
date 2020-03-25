@@ -8,11 +8,11 @@
 #include "../includes/utils.hpp"
 #include "../proto/src/user.pb.h"
 
-int game_thread(std::string chan_sub, uint32_t owner){
+int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){
 
     bool game_running = true;
     int current_step = STEP_ROOM;
-    Game current_game(owner);
+    Game current_game(owner, room_id);
 
     ZMQ_msg zmqmsg;
 
@@ -64,7 +64,10 @@ int game_thread(std::string chan_sub, uint32_t owner){
             }
             case STEP_ENDSCREEN:
                 std::cout << "You're in the end screen" << std::endl;
-                
+                std::cout << "Closing room " << room_id << " in DataBase." << std::endl;
+                DataBase_mutex.lock();
+                db.close_room(room_id);
+                DataBase_mutex.unlock();
                 game_running = false;
                 break;
             default:
@@ -73,7 +76,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
         }
     }
 
-    std::cout << "Closing room " << chan_sub << std::endl;
+    std::cout << "Closing room " << room_id << std::endl;
 
     return EXIT_SUCCESS;
 }

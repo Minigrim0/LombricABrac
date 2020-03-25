@@ -4,7 +4,7 @@ AmisQT::AmisQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, cli),
 chooseFriend("")
 {
-    parent->setObjectName(QStringLiteral("menuWindow"));
+    //parent->setObjectName(QStringLiteral("menuWindow"));
 
     page = new Ui::AmisWidget;
     page->setupUi(this);

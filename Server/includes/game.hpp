@@ -16,7 +16,7 @@
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
 class Game{
     public:
-        Game(uint32_t owner);
+        Game(uint32_t owner, uint32_t room_id);
         virtual ~Game();
 
         // Game parameters
@@ -26,7 +26,6 @@ class Game{
         void set_nb_teams(uint8_t nbr_teams);
         void set_round_time(int round_time);
         void set_global_time(int global_time);
-        void set_game_id(uint32_t game_id);
         void set_users_team(ZMQ_msg* zmq_msg);
 
         void add_user(ZMQ_msg *zmq_msg);

@@ -215,3 +215,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 
 	thisGame = gameInfo;
 }
+
+void Client::setWeaponId(uint32_t id){
+	currentWeapon = id;
+}

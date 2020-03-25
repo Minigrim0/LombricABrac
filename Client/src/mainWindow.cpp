@@ -32,6 +32,10 @@ isHost(false){
     information.notif = 0;
     information.notif_invit = 0;
 
+    //QFile File("./UI/style.qss");
+    //File.open(QFile::ReadOnly);
+    //StyleSheet = QLatin1String(File.readAll());
+
     setPage(INIT_SCREEN);
 }
 
@@ -69,6 +73,8 @@ void MainWindow::setPage(int index){
           currentWidget->hide();
           currentWidget->stopTimer();
           if(currentIndex == index){
+               //setStyleSheet(StyleSheet);
+
             setCurrentIndex(i);
             currentWidget->initWindow();
             currentWidget->startTimer();
