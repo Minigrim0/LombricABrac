@@ -4,6 +4,8 @@
 DetailsQT::DetailsQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 chooseHistory(""){
+  parent->setObjectName(QStringLiteral("menuWindow"));
+
   page = new Ui::DetailsWidget;
   page->setupUi(this);
 
@@ -20,7 +22,7 @@ chooseHistory(""){
 
 
 void DetailsQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     page->Nom_Classement_treeWidget->clear();
     page->Score_Classement_treeWidget->clear();
     rank = client->getRank(15);

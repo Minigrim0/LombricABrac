@@ -64,10 +64,7 @@ int game_thread(std::string chan_sub, uint32_t owner){
             }
             case STEP_ENDSCREEN:
                 std::cout << "You're in the end screen" << std::endl;
-                current_step = STEP_GAMEEND;
-                break;
-            case STEP_GAMEEND: // There's nobody left in the room
-            std::cout << "You're in the end" << std::endl;
+                
                 game_running = false;
                 break;
             default:

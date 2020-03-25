@@ -14,18 +14,16 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);
-font: 75 oblique 13pt &quot;Tlwg Typist&quot;;</string>
+   <string notr="true"/>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QTabWidget" name="Tab_DetailsWidget">
      <property name="styleSheet">
-      <string notr="true">color: qradialgradient(spread:repeat, cx:0.43, cy:0.739, radius:0.5, fx:0.286, fy:0.358, stop:0.402985 rgba(18, 196, 125, 255), stop:1 rgba(255, 255, 255, 255));
-background-color: rgb(0, 0, 0);</string>
+      <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="iconSize">
       <size>
@@ -60,7 +58,7 @@ background-color: rgb(0, 0, 0);</string>
          <item row="2" column="2" alignment="Qt::AlignRight">
           <widget class="QToolButton" name="Return_HistoriqueToolButton">
            <property name="styleSheet">
-            <string notr="true">background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Retour</string>
@@ -86,7 +84,7 @@ background-color: rgb(0, 0, 0);</string>
             <bool>false</bool>
            </property>
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);</string>
+            <string notr="true"/>
            </property>
            <property name="maxLength">
             <number>25</number>
@@ -106,7 +104,7 @@ background-color: rgb(0, 0, 0);</string>
          <item row="1" column="0" colspan="3">
           <widget class="QPlainTextEdit" name="Historique_display_plainTextEdit">
            <property name="styleSheet">
-            <string notr="true">background-color: qlineargradient(spread:repeat, x1:0.835821, y1:0.119, x2:1, y2:0, stop:0 rgba(255, 28, 103, 255), stop:1 rgba(255, 255, 255, 255));</string>
+            <string notr="true"/>
            </property>
            <property name="plainText">
             <string/>
@@ -143,7 +141,7 @@ background-color: rgb(0, 0, 0);</string>
          <item row="1" column="1">
           <widget class="QTreeWidget" name="Nom_Classement_treeWidget">
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);</string>
+            <string notr="true"/>
            </property>
            <column>
             <property name="text">
@@ -168,7 +166,7 @@ background-color: rgb(0, 0, 0);</string>
          <item row="3" column="3">
           <widget class="QToolButton" name="Return_ClassementToolButton">
            <property name="styleSheet">
-            <string notr="true">background-color: qlineargradient(spread:pad, x1:1, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));</string>
+            <string notr="true"/>
            </property>
            <property name="text">
             <string>Retour</string>
@@ -211,7 +209,7 @@ background-color: rgb(0, 0, 0);</string>
          <item row="1" column="2">
           <widget class="QTreeWidget" name="Score_Classement_treeWidget">
            <property name="styleSheet">
-            <string notr="true">color: rgb(255, 255, 255);</string>
+            <string notr="true"/>
            </property>
            <column>
             <property name="text">

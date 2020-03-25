@@ -77,6 +77,7 @@ class DataBase{
         int get_room_id_from_owner_id(int owner_id, int* room_id);
         int add_player(int room_id, int player_id, int nb_players);
         int set_final_points(int room_id, int player_points, int player_index);
+        int close_room(int room_id);
 
     private:
         static uint8_t m_data_type; // The type of data the callback has to deal with

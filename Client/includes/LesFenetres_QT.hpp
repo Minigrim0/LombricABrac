@@ -65,7 +65,7 @@ class AmisQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::AmisWidget *page;
-    stringTable friendsList;
+    std::vector<std::string> friendsList;
     std::string chooseFriend;
     std::vector<chat_r> chooseConvo;
 public:
@@ -134,7 +134,7 @@ class Salon_HoteQT: public WindowQT{
 private:
     int id_screen;
     Ui::Salon_HoteWidget *page;
-    stringTable friendsList;
+    std::vector<std::string> friendsList;
     infoRoom_s infoPartie;
 public:
     Salon_HoteQT(int id, MainWindow *parent, Client* cli);
@@ -144,6 +144,8 @@ private slots:
     void sendGameInvit();
     void change_equipe();
     void play();
+    void update_para();
+    void leave_room();
 };
 
 class Salon_InviteeQT: public WindowQT{
@@ -184,6 +186,7 @@ private slots:
     void handle_invit(QListWidgetItem * item);
     void delete_invit();
     void accept_invit();
+    //void update_invit();
 };
 
 #endif

@@ -79,5 +79,6 @@
 #define DECO 52
 
 #define PING 53
+#define ROOM_CLOSED 54
 
 #endif

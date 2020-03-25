@@ -194,7 +194,7 @@ public:
 	void chatSend(std::string m, std::string destinataire);//envoi du message m à destinataire
 
 	//méthodes utilisées pour les invitaions
-	stringTable getFriendList();//revoie la liste d'amis
+	std::vector<std::string> getFriendList();//revoie la liste d'amis
 	void delFriend(std::string destinataire);//supprimer quelqu'un de sa liste d'amis
 	bool createRoom();//création d'une room
 	void startGame();//host lance la partie

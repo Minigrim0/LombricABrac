@@ -4,6 +4,8 @@
 
 MenuQT::MenuQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
+  parent->setObjectName(QStringLiteral("menuWindow"));
+
   page = new Ui::MenuWidget;
   page->setupUi(this);
 
@@ -30,7 +32,7 @@ WindowQT(id, parent, client){
 }
 
 void MenuQT::initWindow(){
-    parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 }
 
 

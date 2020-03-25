@@ -16,10 +16,10 @@ void Client::chatSend(std::string m, std::string destinataire){
 	sendMutex.unlock();
 }
 
-stringTable Client::getFriendList(){
+	std::vector<std::string> Client::getFriendList(){
 	message m{};
 
-	stringTable res{0,nullptr};
+	std::vector<std::string> res;
 
 	m.type = CLIENT_ASK_FRIENDSHIP_LIST;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
@@ -29,13 +29,9 @@ stringTable Client::getFriendList(){
 	Fri_ls_r obj;
 	obj.ParseFromString(*reponse); //reconvertit le string recu en struct
 
-	//remplis la struct à renvoyer à l'affichage
-	res.size = obj.user_size(); //taille
-	res.table = new std::string[res.size];
-
 	//remplis le tableau d'amis
-	for (int i=0;i<res.size;i++){
-		res.table[static_cast<uint32_t>(i)] = obj.user(i);
+	for (int i=0;i<obj.user_size();i++){
+		res.push_back(obj.user(i));
 	}
 
 	delete reponse;
