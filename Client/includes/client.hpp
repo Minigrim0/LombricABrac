@@ -136,6 +136,8 @@ private:
 	std::vector<infoArme> newWeaponUsed;//vecteur des nouvelles armes utilisées
 	std::vector<std::string> tableUpdate;
 	std::vector<playerTeam> inNewTeam;
+	std::vector<playerTeam> infoJoueurs;
+
 	std::vector<std::string>playersGone;
 	infoPartie_s* thisGame;//infos de cette partie
 	paramsPartie currentParams;//paramètres choisis par l'hote (salon d'attente)
@@ -243,6 +245,7 @@ public:
 	std::vector<infoArme> getNewWeapons();//renvoie un vecteur des nouvelles armes utilisées
 	std::vector<std::string> getTableUpdate();
 	std::vector<playerTeam> getNewTeam();
+	std::vector<playerTeam> getTeams();
 	std::string getNextRound(); //infos du provhain tour
 	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
 

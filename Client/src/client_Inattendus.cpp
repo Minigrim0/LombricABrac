@@ -61,6 +61,7 @@ void Client::nvJoueur(message& m){
 	newUser obj;
 	obj.ParseFromString(m.text); //convertis en struct proto-buff
 	newPlayers.push_back(obj.pseudo()); //ajoute message recu dans le vecteur
+	infoJoueurs.push_back({obj.pseudo(), 0});
 }
 
 std::vector<std::string> Client::getNewPlayers(){
@@ -149,6 +150,10 @@ std::vector<playerTeam> Client::getNewTeam(){
 	std::vector<playerTeam> res = inNewTeam;
 	inNewTeam.clear(); //vide vecteur
 	return res; // renvoie le vecteur de messages recus
+}
+
+std::vector<playerTeam> Client::getTeams(){
+	return infoJoueurs;
 }
 
 std::string Client::getNextRound(){

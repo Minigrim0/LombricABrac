@@ -117,6 +117,14 @@ int Client::run(){
 					Join_groupe_r obj;
 					obj.ParseFromString(msg.text);
 					inNewTeam.push_back({obj.pseudo(),obj.id()});
+
+					for(auto joueur=infoJoueurs.begin();joueur<infoJoueurs.end();++joueur){
+						if (joueur->pseudo == obj.pseudo()){
+							joueur->id_team = obj.id();
+							break;
+						}
+					}
+
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;
 				}
