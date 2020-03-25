@@ -105,6 +105,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 
     // Changing the zmqmsg message to the informations of the room
     zmq_msg->set_message(room.SerializeAsString());
+    zmq_msg->set_type_message(INFO_ROOM);
 
     // Sending the room informations to the newly created user
     newPlayer.sendMessage(zmq_msg->SerializeAsString());
