@@ -146,7 +146,7 @@ void Game::end_round(int *current_step){
       DataBase_mutex.lock();
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
-          db.set_final_points(m_game_id, 0, i);
+          db.set_final_points(m_game_id, 0, i+1);
       }
 
       db.close_room(m_game_id);
