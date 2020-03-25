@@ -210,16 +210,16 @@ void partieQT::drawMap(){
 
   //affichage temps endRound
   std::string text;
-  text =  "Temps restant: " + std::to_string(gameParam.time_round - spentTime)+" secondes";
+  text =  "End: " + std::to_string(gameParam.time - std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - initTime).count())+" secondes";
 
   QPainter painter(gamePixmap);
   painter.setBrush(Qt::SolidPattern);
   QPen pen;
-  pen.setColor(Qt::black);
+  pen.setColor(Qt::red);
   painter.setPen(pen);
 
 
-  QFont font("Cursive", 12);
+  QFont font("Cursive", 10);
   font.setItalic(true);
   font.setBold(true);
   painter.setFont(font);
@@ -231,6 +231,15 @@ void partieQT::drawMap(){
     painter.drawText(INIT_SIZE_BLOCK, INIT_SIZE_BLOCK, name);
   }
 
+  pen.setColor(Qt::black);
+  painter.setPen(pen);
+  text =  "Fin du tour: " + std::to_string(gameParam.time_round - spentTime)+" secondes";
+  QString time(text.c_str());
+  if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
+    painter.drawText(blockWidth, 2*blockWidth, time);
+  } else{
+    painter.drawText(INIT_SIZE_BLOCK, 2*INIT_SIZE_BLOCK, time);
+  }
 
 
   //affichage info tour
@@ -249,9 +258,9 @@ void partieQT::drawMap(){
   painter.setPen(pen);
   QString currentTour(text.c_str());
   if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
-    painter.drawText(blockWidth, 2*blockWidth, currentTour);
+    painter.drawText(blockWidth, 3*blockWidth, currentTour);
   } else{
-    painter.drawText(INIT_SIZE_BLOCK, 2*INIT_SIZE_BLOCK, currentTour);
+    painter.drawText(INIT_SIZE_BLOCK, 3*INIT_SIZE_BLOCK, currentTour);
   }
 
   //affiche nom lombric qui joue
@@ -261,9 +270,9 @@ void partieQT::drawMap(){
   text = lomb->getName()+" joue";
   QString nameLomb(text.c_str());
   if (blockWidth < INIT_SIZE_BLOCK){ //Si gros zoom, on affiche pas les infos trop grosses
-    painter.drawText(blockWidth, 3*blockWidth, nameLomb);
+    painter.drawText(blockWidth, 4*blockWidth, nameLomb);
   } else{
-    painter.drawText(INIT_SIZE_BLOCK, 3*INIT_SIZE_BLOCK, nameLomb);
+    painter.drawText(INIT_SIZE_BLOCK, 4*INIT_SIZE_BLOCK, nameLomb);
   }
 
 

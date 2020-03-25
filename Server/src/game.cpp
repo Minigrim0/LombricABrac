@@ -74,6 +74,23 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     Joueur newPlayer;
     UserConnect usr;
 
+    // Create new user and add him in the vector
+    newPlayer.set_player_id(zmq_msg->receiver_id());
+    newPlayer.set_nb_lombs(m_lomb_nb);
+
+    newPlayer.init_worms(m_lomb_nb);
+
+    Usr_add usr_add;
+    usr_add.set_pseudo(usr.pseudo());
+    zmq_msg->set_type_message(SERVER_USER_JOINED);
+    zmq_msg->set_message(usr.SerializeAsString());
+
+    m_players.push_back(newPlayer);
+
+    for(size_t i = 0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+
     //Setting the informations of the room in infoRoom object
     room.set_nbr_lomb(static_cast<uint32_t>(m_lomb_nb));
     room.set_map(static_cast<uint32_t>(m_map_id));
@@ -89,24 +106,8 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     // Changing the zmqmsg message to the informations of the room
     zmq_msg->set_message(room.SerializeAsString());
 
-    newPlayer.set_player_id(zmq_msg->receiver_id());
-    newPlayer.set_nb_lombs(m_lomb_nb);
-
-    // Sending the informations to the user
+    // Sending the room informations to the newly created user
     newPlayer.sendMessage(zmq_msg->SerializeAsString());
-
-    newPlayer.init_worms(m_lomb_nb);
-
-    Usr_add usr_add;
-    usr_add.set_pseudo(usr.pseudo());
-    zmq_msg->set_type_message(SERVER_USER_JOINED);
-    zmq_msg->set_message(usr.SerializeAsString());
-
-    m_players.push_back(newPlayer);
-
-    for(size_t i = 0;i<m_players.size();i++){
-        m_players[i].sendMessage(zmq_msg->SerializeAsString());
-    }
 }
 
 //Verification methods
@@ -130,26 +131,25 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
 
-    std::cout << "Previous player : " << static_cast<int>(m_current_player_id) << std::endl;
-
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
         if(m_players[i].is_still_alive(&m_game_object)){
             player_alive += 1;
         }
     }
-    std::cout << "joueurs en vie : " << player_alive << std::endl;
     if(player_alive <= 1){ //Si endgame
       zmq_msg.set_type_message(END_GAME);
-      // Telling everyone that a player shot
+      DataBase_mutex.lock();
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
-          DataBase_mutex.lock();
           db.set_final_points(m_game_id, 0, i);
-          DataBase_mutex.unlock();
       }
 
+      db.close_room(m_game_id);
+      DataBase_mutex.unlock();
+
       (*current_step)++;
+      return;
     }
 
     do{
@@ -158,8 +158,6 @@ void Game::end_round(int *current_step){
             m_current_player_id = 0;
 
         next_lomb_id = get_next_lombric_id();
-        std::cout << "Next lomb id : " << next_lomb_id << std::endl;
-        std::cout << "Current player : " << static_cast<int>(m_current_player_id) << std::endl;
     }while(next_lomb_id == 0);
 
     m_game_object.setCurrentLomb(next_lomb_id);
@@ -423,6 +421,7 @@ void Game::handle_quit(ZMQ_msg zmq_msg, int* current_step){
     // Else, we go trough the player vector to delete the player that has quit
     for(size_t user_index=0;user_index<m_players.size();user_index++){
         if(m_players[user_index].get_id() == zmq_msg.receiver_id()){
+            std::cout << "User " << user_index << " left the room" << std::endl;
             m_players.erase(m_players.begin() + user_index);
         }
     }

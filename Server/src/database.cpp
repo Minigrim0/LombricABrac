@@ -693,3 +693,16 @@ int DataBase::set_final_points(int room_id, int player_points, int player_index)
 
     return m_rc;
 }
+
+int DataBase::close_room(int room_id){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "UPDATE history set finished=True WHERE id=" << room_id << ";";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
