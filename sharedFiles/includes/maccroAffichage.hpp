@@ -29,6 +29,7 @@
 #define AIR_COLOR 1
 #define LIGHT_WALL_COLOR 2
 #define SOLID_WALL_COLOR 3
+#define WATER_COLOR 4
 
 #define LOMBRIC_SKIN 'I'
 #define PROJECTILE_SKIN 'o'

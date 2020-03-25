@@ -52,6 +52,7 @@ mustDrawWall(false){
   init_pair(AIR_COLOR, COLOR_BLACK, COLOR_CYAN);
   init_pair(LIGHT_WALL_COLOR, COLOR_BLACK, COLOR_GREEN);
   init_pair(SOLID_WALL_COLOR, COLOR_BLACK, COLOR_RED);
+  init_pair(WATER_COLOR, COLOR_BLACK, COLOR_BLUE);
 
 }
 
@@ -271,13 +272,23 @@ void Partie::drawMur(int pos){//dessine le pos ème mur du tableau
 
   int x = pos%l - static_cast<int>(camX);//position x du bloc à l'écran
   int y = pos/l - static_cast<int>(camY);//position y du bloc à l'écran
-  int numColor = gameInfo->carte->getColor(static_cast<uint32_t>(pos));
-  mvwaddch(gameWin, y, x, VIDE | COLOR_PAIR(numColor));//affiche le bloc
+  int waterLevel = gameInfo->carte->getWaterLevel();
+  if (y >= gameInfo->carte->getHauteur() - waterLevel){
+    mvwaddch(gameWin, y, x, VIDE | COLOR_PAIR(WATER_COLOR));//affiche le bloc
+  }else{
+    int numColor = gameInfo->carte->getColor(static_cast<uint32_t>(pos));
+    mvwaddch(gameWin, y, x, VIDE | COLOR_PAIR(numColor));//affiche le bloc
+  }
 }
 
 void Partie::drawMur(int x, int y){//dessine le mur en x y
-  int numColor = gameInfo->carte->getColor(x,y);
-  mvwaddch(gameWin, y-camY, x-camX, VIDE | COLOR_PAIR(numColor));//affiche le bloc
+  int waterLevel = gameInfo->carte->getWaterLevel();
+  if (y >= gameInfo->carte->getHauteur() - waterLevel){
+    mvwaddch(gameWin, y-camY, x-camX, VIDE | COLOR_PAIR(WATER_COLOR));//affiche le bloc
+  }else{
+    int numColor = gameInfo->carte->getColor(x,y);
+    mvwaddch(gameWin, y-camY, x-camX, VIDE | COLOR_PAIR(numColor));//affiche le bloc
+  }
 }
 
 bool Partie::updateSprites(double t){
