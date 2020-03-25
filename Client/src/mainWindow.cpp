@@ -73,8 +73,6 @@ void MainWindow::setPage(int index){
             currentWidget->initWindow();
             currentWidget->startTimer();
             currentWidget->show();
-            currentWidget->setFocus();
-            currentWidget->repaint();
             update();
             show();
             find = true;
@@ -200,3 +198,10 @@ void MainWindow::setPage(int index){
 
     }
 }
+
+
+void MainWindow::setUsername(std::string name){
+    username = name;
+}
+
+std::string MainWindow::getUsername(){return username;}
