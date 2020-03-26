@@ -336,6 +336,8 @@ void partieQT::drawMap(){
   gameLabel->setScaledContents(true);
   gameLabel->setPixmap(*gamePixmap);
   gameLabel->adjustSize();
+  gameLabel->show();
+  gameLabel->update();
 
 }
 
