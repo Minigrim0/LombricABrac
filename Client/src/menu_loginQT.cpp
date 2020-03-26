@@ -31,28 +31,32 @@ void Menu_LoginQT::initWindow(){
 void Menu_LoginQT::connection(){
     std::string username = page->PseudolineEdit->text().toStdString();
     std::string password = page->PasswordlineEdit->text().toStdString();
-    std::string space = " ";
-    std::string index;
-    bool isSpace;
+    bool username_isSpace = false;
+    bool password_isSpace = false;
 
-    for (unsigned int i = 0; i < username.size(); i++){
+    //on vérifie si les sting ne contiennent que des espaces vides
+    username_isSpace = JustSpace(username);
+    password_isSpace = JustSpace(password);
 
-      index = username[i];
-      if(!index.compare(space))
-      {
-        isSpace = true;
-      }
-      else{
-        isSpace = false;
-      }
-    }
+
     bool con = client->connection(username, password, isConnection);
-    if(con && !isSpace){
+    if(con && !username_isSpace && !password_isSpace){
         parent->setUsername(username);
         parent->setPage(MAIN_MENU_SCREEN);
     }else{
         parent->setPage(WARNING_WRONG_DATA_IN_LOGIN_SCREEN);
     }
+}
+
+bool Menu_LoginQT::JustSpace(std::string text){
+
+    bool isSpace = false;
+    text.erase(remove(text.begin(), text.end(), ' '), text.end());
+    if (!text.size())
+    {
+      isSpace = true;
+    }
+    return isSpace;
 }
 
 Menu_LoginQT::~Menu_LoginQT(){
