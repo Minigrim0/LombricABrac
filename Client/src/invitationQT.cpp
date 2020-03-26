@@ -2,7 +2,7 @@
 
 InvitationQT::InvitationQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  //parent->setObjectName(QStringLiteral("menuWindow"));
+  
 
   page = new Ui::InvitationWidget;
   page->setupUi(this);

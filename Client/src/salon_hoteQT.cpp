@@ -5,7 +5,7 @@
 Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
-    //parent->setObjectName(QStringLiteral("menuWindow"));
+    
 
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);

@@ -3,7 +3,7 @@
 Menu_LoginQT::Menu_LoginQT(int id, MainWindow *parent, Client* cli, bool isCon):
 WindowQT(id, parent, client),
 isConnection(isCon){
-    //parent->setObjectName(QStringLiteral("menuWindow"));
+    
 
     page = new Ui::Menu_LoginWidget;
     page->setupUi(this);

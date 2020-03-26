@@ -32,9 +32,13 @@ isHost(false){
     information.notif = 0;
     information.notif_invit = 0;
 
-    //QFile File("./UI/style.qss");
-    //File.open(QFile::ReadOnly);
-    //StyleSheet = QLatin1String(File.readAll());
+    setObjectName(QStringLiteral("menuWindow"));
+    QFile File("./UI/style.qss");
+    File.open(QFile::ReadOnly);
+    StyleSheet = QLatin1String(File.readAll());
+    setStyleSheet(StyleSheet);
+    update();
+
 
     setPage(INIT_SCREEN);
 }
@@ -63,7 +67,6 @@ void MainWindow::setPage(int index){
     Request_history_window request_history;
     Ami_window ami_window;
 
-    //setStyleSheet("background-mage: none);");
     while (!find){
       information.id = index;
       for(int i=0; i<count();++i){
@@ -73,7 +76,7 @@ void MainWindow::setPage(int index){
           currentWidget->hide();
           currentWidget->stopTimer();
           if(currentIndex == index){
-               //setStyleSheet(StyleSheet);
+            //setStyleSheet(StyleSheet);
 
             setCurrentIndex(i);
             currentWidget->initWindow();
