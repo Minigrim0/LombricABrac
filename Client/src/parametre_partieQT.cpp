@@ -4,7 +4,7 @@
 
 Parametre_PartieQT::Parametre_PartieQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  
+
 
   page = new Ui::Parametre_PartieWidget;
   page->setupUi(this);
@@ -23,33 +23,17 @@ void Parametre_PartieQT::initWindow(){
 }
 
 void Parametre_PartieQT::setPara(){
-
-  std::string carte = page->CartecomboBox->currentText().toStdString();
   int nombre_lombric = page->Nombre_lombricspinBox->value();
   int nombre_equipe = page->Nombre_equipespinBox->value();
   int temps_tour = page->Temps_TourspinBox->value();
-  int id_carte= 0;
-
-
-  if (carte.compare("Hijacked") == 0){
-    id_carte = 1;
-  }
-  else if(carte.compare("Warzone") == 0){
-    id_carte = 2;
-  }
-  else if(carte.compare("No Man's Land") == 0){
-    id_carte = 3;
-  }
+  int id_carte= page->CartecomboBox->currentIndex()+1;
 
   client->setTimeRound(temps_tour);
   client->set_nrb_lombrics(nombre_lombric);
   client->set_nbr_equipes(nombre_equipe);
   client->setMap(id_carte);
-  usleep(100);
 
   parent->setPage(CHANGE_GAME_PARAM);
-
-
 }
 Parametre_PartieQT::~Parametre_PartieQT(){
     delete page;
