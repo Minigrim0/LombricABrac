@@ -6,7 +6,7 @@
 EndGame::EndGame(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, cli)
 {
-  parent->setObjectName(QStringLiteral("menuWindow"));
+
   page = new Ui::End_GameWidget;
   page->setupUi(this);
 
@@ -17,7 +17,7 @@ WindowQT(id, parent, cli)
 void EndGame::initWindow(){
   //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
   teams = client->getGameInfo()->teamsVector;
-
+  client->resetGameParam();
 
   std::vector<int> life;
   for (int i=0; i<teams.size();++i){

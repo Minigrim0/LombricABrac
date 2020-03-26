@@ -4,7 +4,7 @@
 DetailsQT::DetailsQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 chooseHistory(""){
-  //parent->setObjectName(QStringLiteral("menuWindow"));
+  
 
   page = new Ui::DetailsWidget;
   page->setupUi(this);

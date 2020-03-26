@@ -32,9 +32,8 @@ gameScreenWidth(0),
 gameScreenHeight(0),
 mustRefreshOverlay(true),
 mustDrawWall(false){
+  //cli->resetGameParam();
   gameInfo = c->getGameInfo();
-  cli->resetGameParam();
-
 
   initscr();
   nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
@@ -239,8 +238,9 @@ info Partie::run(info information)
     }
 
     if (cli->getIsEnded()){
-        information.id = MAIN_MENU_SCREEN;
-        run = false;
+      cli->resetGameParam();
+      information.id = MAIN_MENU_SCREEN;
+      run = false;
     }
     usleep(50);//petit temps d'attente sinon mon CPU transpirait
   }

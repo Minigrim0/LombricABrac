@@ -11,9 +11,9 @@ class MainWindow;
 class WindowQT: public QWidget{
     Q_OBJECT
 private:
-    int id;
     int intervalle;
 protected:
+    int id;
     MainWindow *parent;
     Client* client;
     QSignalMapper* signalMapper;

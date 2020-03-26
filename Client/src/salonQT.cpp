@@ -2,10 +2,12 @@
 
 #include "../UI/src/Salon_HoteQt_ui.hpp"
 
-Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
+SalonQT::SalonQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
-    //parent->setObjectName(QStringLiteral("menuWindow"));
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &SalonQT::update_para);
+    setTimerIntervalle(200);
 
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
@@ -24,7 +26,7 @@ id_screen(id){
 }
 
 
-void Salon_HoteQT::initWindow(){
+void SalonQT::initWindow(){
     bool room = true;
 
     page->Equipe_quatreplainTextEdit->setVisible(true);
@@ -88,7 +90,6 @@ void Salon_HoteQT::initWindow(){
       time_round = infoPartie.time_round;
 
       len_tab = static_cast<int>(joueur_in_room.size());
-      std::cout<<"taille tableau "<<len_tab<<endl;
       for (int i = 0; i< len_tab; i++)
       {
         pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
@@ -152,23 +153,15 @@ void Salon_HoteQT::initWindow(){
         page->Equipe_quatreLabel->setVisible(false);
       }
   }
-
-  timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, &Salon_HoteQT::update_para);
-  setTimerIntervalle(200);
-
-
-
-
 }
-void Salon_HoteQT::sendGameInvit(){
+void SalonQT::sendGameInvit(){
 
   std::string choose_friend = page->InvitationComboBox->currentText().toStdString();
   client->addToGame(choose_friend);
 
 }
 
-void Salon_HoteQT::update_para(){
+void SalonQT::update_para(){
   std::string nbr_equipe_str = "";
   std::string nbr_lombric_str = "";
   std::string time_round_str = "";
@@ -196,9 +189,7 @@ void Salon_HoteQT::update_para(){
   for (int i = 0; i< len_tab; i++)
   {
     pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
-    std::cout << "pseudo  : "<<pseudo <<std::endl;
     current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
-    std::cout << "équipe  : "<<current_equipe<<std::endl;
     switch (current_equipe) {
       case 1:
         page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
@@ -258,22 +249,25 @@ void Salon_HoteQT::update_para(){
     page->Equipe_quatreplainTextEdit->setVisible(false);
     page->Equipe_quatreLabel->setVisible(false);
   }
-
+  //teste si la partie est lancéée
+  if(id_screen == ROOM_INVITEE_SCREEN && client->isStarted()){
+      parent->setPage(GAME_SCREEN);
+  }
 }
 
-void Salon_HoteQT::play(){
+void SalonQT::play(){
   client->startGame();
   parent->setPage(GAME_SCREEN);
 }
 
-void Salon_HoteQT::change_equipe(){
+void SalonQT::change_equipe(){
 
   int equipe = page->Choix_EquipeSpinBox->value();
   client->changeTeam(equipe);
 
 }
 
-void Salon_HoteQT::leave_room(){
+void SalonQT::leave_room(){
 
   if (id_screen == ROOM_INVITEE_SCREEN){
   client->quitRoom();
@@ -283,6 +277,6 @@ void Salon_HoteQT::leave_room(){
 }
 
 
-Salon_HoteQT::~Salon_HoteQT(){
+SalonQT::~SalonQT(){
     delete page;
 }

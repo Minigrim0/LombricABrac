@@ -4,7 +4,7 @@
 
 Parametre_PartieQT::Parametre_PartieQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  //parent->setObjectName(QStringLiteral("menuWindow"));
+  
 
   page = new Ui::Parametre_PartieWidget;
   page->setupUi(this);

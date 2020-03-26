@@ -4,7 +4,7 @@
 
 Menu_EnterQT::Menu_EnterQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-    //parent->setObjectName(QStringLiteral("menuWindow"));
+    
   page = new Ui::Menu_EnterWidget;
   page->setupUi(this);
 
