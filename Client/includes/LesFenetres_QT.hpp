@@ -112,6 +112,7 @@ private:
 public:
     Menu_LoginQT(int id, MainWindow *parent, Client* cli, bool isCon);//isConnection a false si c'est une inscription
     void initWindow() override;
+    bool JustSpace(string str);
     virtual ~Menu_LoginQT();
 private slots:
     void connection();
@@ -155,6 +156,7 @@ private:
 public:
     Modifier_EquipeQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
+    bool JustSpace_inLomb(string str);
     virtual ~Modifier_EquipeQT();
 private slots:
     void ChangeNameLombric();

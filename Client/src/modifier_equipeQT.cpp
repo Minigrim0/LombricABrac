@@ -33,7 +33,7 @@ void Modifier_EquipeQT::initWindow(){
 void Modifier_EquipeQT::ChangeNameLombric(){
   std::string space = " ";
   std::string index;
-  bool isSpace;
+  bool isSpace_inLomb;
 
   std::string lombric1 = page->Lombric_UnLineEdit->text().toStdString();
   std::string lombric2 = page->Lombric_DeuxLineEdit->text().toStdString();
@@ -48,18 +48,9 @@ void Modifier_EquipeQT::ChangeNameLombric(){
 
   for (uint32_t nombreLombric = 0; nombreLombric < 8; nombreLombric++){
 
-    for (unsigned int i = 0; i < VecNameLombric[nombreLombric].size(); i++){
+    isSpace_inLomb = JustSpace_inLomb(VecNameLombric[nombreLombric]);
 
-      index = VecNameLombric[nombreLombric][i];
-      if(!index.compare(space))
-      {
-        isSpace = true;
-      }
-      else{
-        isSpace = false;
-      }
-    }
-    if (VecNameLombric[nombreLombric].size() && !isSpace)
+    if (VecNameLombric[nombreLombric].size() && !isSpace_inLomb)
     {
       client->setLombricName(nombreLombric,VecNameLombric[nombreLombric]);
     }
@@ -83,6 +74,18 @@ void Modifier_EquipeQT::ChangeNameLombric(){
   page->Lombric_SeptLineEdit->setPlaceholderText(QString(OldLombricName.table[6].c_str()));
   page->Lombric_HuitLineEdit->setPlaceholderText(QString(OldLombricName.table[7].c_str()));
 
+
+}
+
+bool Modifier_EquipeQT::JustSpace_inLomb(std::string text){
+
+  bool isSpace = false;
+  text.erase(remove(text.begin(), text.end(), ' '), text.end());
+  if (!text.size())
+  {
+    isSpace = true;
+  }
+  return isSpace;
 
 }
 

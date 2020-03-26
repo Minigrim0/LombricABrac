@@ -238,8 +238,9 @@ info Partie::run(info information)
     }
 
     if (cli->getIsEnded()){
-        information.id = MAIN_MENU_SCREEN;
-        run = false;
+      cli->resetGameParam();
+      information.id = MAIN_MENU_SCREEN;
+      run = false;
     }
     usleep(50);//petit temps d'attente sinon mon CPU transpirait
   }
