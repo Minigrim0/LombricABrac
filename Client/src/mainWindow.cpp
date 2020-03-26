@@ -19,9 +19,9 @@ isHost(false){
     addWidget(new Parametre_PartieQT(SET_GAME_PARAM,this, cli));
     addWidget(new DetailsQT(DETAILS_SCREEN, this, cli));
     addWidget(new Modifier_EquipeQT(SET_LOMBRIC_TEAM_SCREEN, this, cli));
-    addWidget(new Salon_HoteQT(ROOM_SCREEN, this, cli));
-    addWidget(new Salon_HoteQT(CHANGE_GAME_PARAM, this, cli));//si l'hote a voulu chnagé les para de la partie (comme ça pas besoin de recréer une room)
-    addWidget(new Salon_HoteQT(ROOM_INVITEE_SCREEN, this ,cli));
+    addWidget(new SalonQT(ROOM_SCREEN, this, cli));
+    addWidget(new SalonQT(CHANGE_GAME_PARAM, this, cli));//si l'hote a voulu chnagé les para de la partie (comme ça pas besoin de recréer une room)
+    addWidget(new SalonQT(ROOM_INVITEE_SCREEN, this ,cli));
     addWidget(new InvitationQT(INVITATIONS_SCREEN, this ,cli));
 
     addWidget(new EndGame(END_SCREEN, this,cli));

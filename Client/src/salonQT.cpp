@@ -2,10 +2,12 @@
 
 #include "../UI/src/Salon_HoteQt_ui.hpp"
 
-Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
+SalonQT::SalonQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
-
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, this, &SalonQT::update_para);
+    setTimerIntervalle(200);
 
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
@@ -24,7 +26,7 @@ id_screen(id){
 }
 
 
-void Salon_HoteQT::initWindow(){
+void SalonQT::initWindow(){
     bool room = true;
 
     page->Equipe_quatreplainTextEdit->setVisible(true);
@@ -151,23 +153,15 @@ void Salon_HoteQT::initWindow(){
         page->Equipe_quatreLabel->setVisible(false);
       }
   }
-
-  timer = new QTimer(this);
-  connect(timer, &QTimer::timeout, this, &Salon_HoteQT::update_para);
-  setTimerIntervalle(200);
-
-
-
-
 }
-void Salon_HoteQT::sendGameInvit(){
+void SalonQT::sendGameInvit(){
 
   std::string choose_friend = page->InvitationComboBox->currentText().toStdString();
   client->addToGame(choose_friend);
 
 }
 
-void Salon_HoteQT::update_para(){
+void SalonQT::update_para(){
   std::string nbr_equipe_str = "";
   std::string nbr_lombric_str = "";
   std::string time_round_str = "";
@@ -255,22 +249,25 @@ void Salon_HoteQT::update_para(){
     page->Equipe_quatreplainTextEdit->setVisible(false);
     page->Equipe_quatreLabel->setVisible(false);
   }
-
+  //teste si la partie est lancéée
+  if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
+      parent->setPage(GAME_SCREEN);
+  }
 }
 
-void Salon_HoteQT::play(){
+void SalonQT::play(){
   client->startGame();
   parent->setPage(GAME_SCREEN);
 }
 
-void Salon_HoteQT::change_equipe(){
+void SalonQT::change_equipe(){
 
   int equipe = page->Choix_EquipeSpinBox->value();
   client->changeTeam(equipe);
 
 }
 
-void Salon_HoteQT::leave_room(){
+void SalonQT::leave_room(){
 
   if (id_screen == ROOM_INVITEE_SCREEN){
   client->quitRoom();
@@ -280,6 +277,6 @@ void Salon_HoteQT::leave_room(){
 }
 
 
-Salon_HoteQT::~Salon_HoteQT(){
+SalonQT::~SalonQT(){
     delete page;
 }

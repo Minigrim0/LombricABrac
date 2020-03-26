@@ -129,7 +129,7 @@ private slots:
     void setPara();
 };
 
-class Salon_HoteQT: public WindowQT{
+class SalonQT: public WindowQT{
     Q_OBJECT
 private:
     int id_screen;
@@ -137,25 +137,15 @@ private:
     std::vector<std::string> friendsList;
     infoRoom_s infoPartie;
 public:
-    Salon_HoteQT(int id, MainWindow *parent, Client* cli);
+    SalonQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
-    virtual ~Salon_HoteQT();
+    virtual ~SalonQT();
 private slots:
     void sendGameInvit();
     void change_equipe();
     void play();
     void update_para();
     void leave_room();
-};
-
-class Salon_InviteeQT: public WindowQT{
-    Q_OBJECT
-private:
-    Ui::Salon_InviteeWidget *page;
-public:
-    Salon_InviteeQT(int id, MainWindow *parent, Client* cli);
-    void initWindow() override;
-    virtual ~Salon_InviteeQT();
 };
 
 class Modifier_EquipeQT: public WindowQT{
