@@ -119,11 +119,16 @@ int Client::run(){
 					obj.ParseFromString(msg.text);
 					inNewTeam.push_back({obj.pseudo(),obj.id()});
 
+					bool find = false;
 					for(auto joueur=infoJoueurs.begin();joueur<infoJoueurs.end();++joueur){
 						if (joueur->pseudo == obj.pseudo()){
 							joueur->id_team = obj.id();
+							find = true;
 							break;
 						}
+					}
+					if(!find){
+						infoJoueurs.push_back({obj.pseudo(), obj.id()});
 					}
 
 					msg.type = 0;//pour qu'un nouveau message puisse être lu

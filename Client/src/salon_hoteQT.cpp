@@ -5,7 +5,7 @@
 Salon_HoteQT::Salon_HoteQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 id_screen(id){
-    
+
 
   page = new Ui::Salon_HoteWidget;
   page->setupUi(this);
@@ -88,7 +88,6 @@ void Salon_HoteQT::initWindow(){
       time_round = infoPartie.time_round;
 
       len_tab = static_cast<int>(joueur_in_room.size());
-      std::cout<<"taille tableau "<<len_tab<<endl;
       for (int i = 0; i< len_tab; i++)
       {
         pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
@@ -196,9 +195,7 @@ void Salon_HoteQT::update_para(){
   for (int i = 0; i< len_tab; i++)
   {
     pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
-    std::cout << "pseudo  : "<<pseudo <<std::endl;
     current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
-    std::cout << "équipe  : "<<current_equipe<<std::endl;
     switch (current_equipe) {
       case 1:
         page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
