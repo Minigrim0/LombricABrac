@@ -55,7 +55,7 @@ void partieQT::update(){
 }
 
 void partieQT::initWindow(){
-  client->resetGameParam();
+  //client->resetGameParam();
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
   std::cout << "got game info" <<std::endl;
@@ -448,8 +448,8 @@ void partieQT::setPenColor(Lombric_c* lomb, QPainter *painter){
       painter->setBrush(Qt::darkMagenta);
       break;
     case 3:
-      painter->setPen(Qt::darkYellow);
-      painter->setBrush(Qt::darkYellow);
+      painter->setPen(Qt::darkRed);
+      painter->setBrush(Qt::darkRed);
       break;
   }
 }

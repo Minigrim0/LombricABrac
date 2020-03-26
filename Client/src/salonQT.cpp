@@ -250,7 +250,7 @@ void SalonQT::update_para(){
     page->Equipe_quatreLabel->setVisible(false);
   }
   //teste si la partie est lancéée
-  if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
+  if(id_screen == ROOM_INVITEE_SCREEN && client->isStarted()){
       parent->setPage(GAME_SCREEN);
   }
 }

@@ -32,9 +32,8 @@ gameScreenWidth(0),
 gameScreenHeight(0),
 mustRefreshOverlay(true),
 mustDrawWall(false){
+  //cli->resetGameParam();
   gameInfo = c->getGameInfo();
-  cli->resetGameParam();
-
 
   initscr();
   nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
