@@ -132,7 +132,6 @@ private slots:
 class SalonQT: public WindowQT{
     Q_OBJECT
 private:
-    int id_screen;
     Ui::Salon_HoteWidget *page;
     std::vector<std::string> friendsList;
     infoRoom_s infoPartie;

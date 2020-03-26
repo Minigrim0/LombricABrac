@@ -3,8 +3,7 @@
 #include "../UI/src/Salon_HoteQt_ui.hpp"
 
 SalonQT::SalonQT(int id, MainWindow *parent, Client* cli):
-WindowQT(id, parent, client),
-id_screen(id){
+WindowQT(id, parent, client){
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &SalonQT::update_para);
     setTimerIntervalle(200);
@@ -36,7 +35,7 @@ void SalonQT::initWindow(){
 
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
 
-    if (id_screen == ROOM_SCREEN){
+    if (id == ROOM_SCREEN){
       room = client->createRoom();
     }
 
@@ -47,7 +46,7 @@ void SalonQT::initWindow(){
       std::cout << "Room correctement crée" << std::endl;
     }
 
-    if (id_screen == ROOM_INVITEE_SCREEN)
+    if (id == ROOM_INVITEE_SCREEN)
     {
       page->Lets_PlayToolButton->setVisible(false);
       page->Change_ParametreToolButton->setVisible(false);
@@ -80,7 +79,7 @@ void SalonQT::initWindow(){
     page->Equipe_quatreplainTextEdit->clear();
     //########################################################""
 
-    if(id_screen == ROOM_SCREEN || id_screen == ROOM_INVITEE_SCREEN){
+    if(id == ROOM_SCREEN || id == ROOM_INVITEE_SCREEN){
 
       infoPartie = client->getInfoRoom();
       joueur_in_room = infoPartie.pseudos;
@@ -250,7 +249,7 @@ void SalonQT::update_para(){
     page->Equipe_quatreLabel->setVisible(false);
   }
   //teste si la partie est lancéée
-  if(id_screen == ROOM_INVITEE_SCREEN && client->isStarted()){
+  if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
       parent->setPage(GAME_SCREEN);
   }
 }
@@ -269,7 +268,7 @@ void SalonQT::change_equipe(){
 
 void SalonQT::leave_room(){
 
-  if (id_screen == ROOM_INVITEE_SCREEN){
+  if (id == ROOM_INVITEE_SCREEN){
   client->quitRoom();
   parent->setPage(MAIN_MENU_SCREEN);
   }
