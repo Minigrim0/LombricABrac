@@ -68,6 +68,7 @@ private:
     std::vector<std::string> friendsList;
     std::string chooseFriend;
     std::vector<chat_r> chooseConvo;
+    QListWidgetItem * friend_clicked;
 public:
     AmisQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
@@ -77,6 +78,8 @@ private slots:
     void addFriend();
     void sendMessage();
     void update();
+    void handle_friend(QListWidgetItem * item);
+    void delete_friend();
 };
 
 class DetailsQT: public WindowQT{
@@ -133,6 +136,7 @@ private slots:
 class SalonQT: public WindowQT{
     Q_OBJECT
 private:
+    int id_screen;
     Ui::Salon_HoteWidget *page;
     std::vector<std::string> friendsList;
     infoRoom_s infoPartie;

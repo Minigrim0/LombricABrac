@@ -19,6 +19,9 @@ chooseFriend("")
     signalMapper->setMapping(page->Return_From_TchatToolButton, MAIN_MENU_SCREEN);
     connect(page->Return_From_TchatToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
+    signalMapper->setMapping(page->Return_FromListAmiToolButton, MAIN_MENU_SCREEN);
+    connect(page->Return_FromListAmiToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
     connect(page->Tchat_input_lineEdit, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
 
     connect(page->Send_MessageToolButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
@@ -27,11 +30,19 @@ chooseFriend("")
 
     connect(page->Ajouter_AmiToolButton, SIGNAL(clicked()), this, SLOT(addFriend()));
 
+    connect(page->List_FriendListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(handle_friend(QListWidgetItem*)));
+
+    connect(page->Delete_FriendToolButton, SIGNAL(clicked()), this, SLOT(delete_friend()));
+
+
+
 }
 
 void AmisQT::initWindow(){
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     std::cout << "Start init" << std::endl;
+
+    page->Delete_FriendToolButton->setVisible(false);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &AmisQT::update);
@@ -40,8 +51,11 @@ void AmisQT::initWindow(){
     friendsList = client->getFriendList();
 
     page->Tchat_ListcomboBox->clear();
+    page->List_FriendListWidget->clear();
+
     for(int i=0; i<friendsList.size(); ++i){
         page->Tchat_ListcomboBox->addItem(QString(friendsList.at(i).c_str()));
+        page->List_FriendListWidget->addItem(QString(friendsList.at(i).c_str()));
     }
     if(friendsList.size()){
         changeFriend(page->Tchat_ListcomboBox->currentText());
@@ -91,6 +105,32 @@ void AmisQT::addFriend(){
     if(destinataire.size()){
         client->addFriend(destinataire);
     }
+}
+
+void AmisQT::handle_friend(QListWidgetItem * item){
+
+  friend_clicked = item;
+  page->Delete_FriendToolButton->setVisible(true);
+
+}
+
+void AmisQT::delete_friend(){
+  client->delFriend(friend_clicked->text().toStdString());
+
+  friendsList = client->getFriendList();
+
+  page->Tchat_ListcomboBox->clear();
+  page->List_FriendListWidget->clear();
+
+  for(int i=0; i<friendsList.size(); ++i){
+      page->Tchat_ListcomboBox->addItem(QString(friendsList.at(i).c_str()));
+      page->List_FriendListWidget->addItem(QString(friendsList.at(i).c_str()));
+  }
+  if(friendsList.size()){
+      changeFriend(page->Tchat_ListcomboBox->currentText());
+  }
+
+
 }
 
 AmisQT::~AmisQT(){

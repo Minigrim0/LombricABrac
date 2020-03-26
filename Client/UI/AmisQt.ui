@@ -23,7 +23,7 @@
       <string notr="true"/>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -355,6 +355,73 @@ h</string>
             <enum>Qt::ToolButtonTextBesideIcon</enum>
            </property>
           </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="List_AmiTab">
+      <attribute name="title">
+       <string>Liste d'ami</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QListWidget" name="List_FriendListWidget"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QToolButton" name="Return_FromListAmiToolButton">
+           <property name="text">
+            <string>Retour</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../images_widget.qrc">
+             <normaloff>:/icons/UI/Resources/left-arrow.png</normaloff>:/icons/UI/Resources/left-arrow.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QToolButton" name="Delete_FriendToolButton">
+           <property name="text">
+            <string>Suprrimer cet ami</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../images_widget.qrc">
+             <normaloff>:/icons/UI/Resources/delete.png</normaloff>:/icons/UI/Resources/delete.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>24</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="toolButtonStyle">
+            <enum>Qt::ToolButtonTextBesideIcon</enum>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>
