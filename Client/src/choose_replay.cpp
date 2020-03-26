@@ -76,8 +76,8 @@ info Choose_replay::run(info information)
 
                 if(information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus))){
                     information.id = GAME_SCREEN;
+                    running = false;
                 }
-                running = false;
                 break;
             case KEY_BACKSPACE:
                 information.id = MAIN_MENU_SCREEN;
