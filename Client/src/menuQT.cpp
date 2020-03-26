@@ -4,7 +4,7 @@
 
 MenuQT::MenuQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  
+
 
   page = new Ui::MenuWidget;
   page->setupUi(this);
@@ -23,6 +23,9 @@ WindowQT(id, parent, client){
 
   signalMapper->setMapping(page->Amis_toolButton, FRIENDS_SCREEN);
   connect(page->Amis_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
+  signalMapper->setMapping(page->ReplayToolButton, CHOOSE_REPLAY_SCREEN);
+  connect(page->ReplayToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
 
   //signalMapper->setMapping(page->Deconexion_toolButton, WARNING_DECONNECTION_SCREEN);
   //connect(page->Deconexion_toolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
