@@ -79,13 +79,17 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     // Create new user and add him in the vector
     newPlayer.set_player_id(zmq_msg->receiver_id());
     newPlayer.set_nb_lombs(m_lomb_nb);
-
     newPlayer.init_worms(m_lomb_nb);
 
+    std::string pseudo;
+    db.get_user_username(zmq_msg->receiver_id(), &pseudo);
+    newPlayer.set_pseudo(pseudo);
+    newPlayer.set_equipe(0);
+
     Usr_add usr_add;
-    usr_add.set_pseudo(usr.pseudo());
+    usr_add.set_pseudo(pseudo);
     zmq_msg->set_type_message(SERVER_USER_JOINED);
-    zmq_msg->set_message(usr.SerializeAsString());
+    zmq_msg->set_message(usr_add.SerializeAsString());
 
     m_players.push_back(newPlayer);
 
@@ -102,7 +106,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     for(size_t i = 0;i<m_players.size();i++){
         Join_groupe_r* joueur = room.add_joueur();
         joueur->set_pseudo(m_players[i].get_pseudo());
-        joueur->set_id(m_players[i].get_id());
+        joueur->set_id(m_players[i].get_team());
     }
 
     // Changing the zmqmsg message to the informations of the room
