@@ -257,6 +257,7 @@ public:
 	void resetGameParam();//méthode qui reset les paramètres
 
 	bool beginReplay(std::string replayPath);//return true si l'initialisation s'est bien passée
+	bool gameIsReplay();
 	void updateReplay();//update les replays
 
 	//thread

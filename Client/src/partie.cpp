@@ -88,7 +88,7 @@ info Partie::run(info information)
         spentTime = 0;
         t0 = time(NULL);
         mustRefreshOverlay = true;
-        tour = next.is_yours();
+        tour = next.is_yours() && !cli->gameIsReplay();
         gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
 
         synchronizeLombrics(lombricUpdatedByServ);
