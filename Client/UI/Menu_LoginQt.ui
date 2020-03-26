@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>838</width>
-    <height>588</height>
+    <width>934</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <layout class="QGridLayout" name="Menu_LogingridLayout">
-     <item row="3" column="1">
-      <spacer name="horizontalSpacer_2">
+     <item row="5" column="3">
+      <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -32,27 +32,76 @@
        </property>
       </spacer>
      </item>
-     <item row="5" column="5">
-      <widget class="QToolButton" name="Connect_UserToolButton">
-       <property name="text">
-        <string>Se connecter</string>
+     <item row="5" column="8">
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="icon">
-        <iconset resource="../images_widget.qrc">
-         <normaloff>:/icons/UI/Resources/login.png</normaloff>:/icons/UI/Resources/login.png</iconset>
-       </property>
-       <property name="iconSize">
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
-       <property name="toolButtonStyle">
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
+      </spacer>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="Pseudo_Loginlabel">
+       <property name="text">
+        <string>Pseudo</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
+     <item row="3" column="2">
+      <widget class="QLabel" name="Password_Loginlabel">
+       <property name="text">
+        <string>Mot de passe</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="3" colspan="3">
+      <widget class="QLineEdit" name="PasswordlineEdit">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="maxLength">
+        <number>40</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="placeholderText">
+        <string>Entrez Password</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="6" column="5">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="2" column="5">
       <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -85,36 +134,7 @@
        </property>
       </widget>
      </item>
-     <item row="6" column="4">
-      <spacer name="verticalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="3" column="3" colspan="2">
-      <widget class="QLineEdit" name="PasswordlineEdit">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="maxLength">
-        <number>40</number>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
-       </property>
-       <property name="placeholderText">
-        <string>Entrez Password</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="4">
+     <item row="4" column="5">
       <spacer name="verticalSpacer_3">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -127,73 +147,7 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="Password_Loginlabel">
-       <property name="text">
-        <string>Mot de passe</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="Pseudo_Loginlabel">
-       <property name="text">
-        <string>Pseudo</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="3" colspan="2">
-      <widget class="QLineEdit" name="PseudolineEdit">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="maxLength">
-        <number>40</number>
-       </property>
-       <property name="placeholderText">
-        <string>Entrez Pseudo</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="3">
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="4">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="5" column="0">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="5">
+     <item row="1" column="7">
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -206,8 +160,54 @@
        </property>
       </spacer>
      </item>
-     <item row="5" column="6">
-      <spacer name="horizontalSpacer_5">
+     <item row="0" column="5">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="3" colspan="3">
+      <widget class="QLineEdit" name="PseudolineEdit">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="maxLength">
+        <number>40</number>
+       </property>
+       <property name="placeholderText">
+        <string>Entrez Pseudo</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="7">
+      <widget class="QToolButton" name="Connect_UserToolButton">
+       <property name="text">
+        <string>Se connecter</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/login.png</normaloff>:/icons/UI/Resources/login.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -218,6 +218,16 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="2" column="7">
+      <widget class="QLabel" name="ErreurLabel">
+       <property name="styleSheet">
+        <string notr="true">color: darkRed;</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Erreur survenu lors de la connexion. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Veuillez vérifier si le mot de passe et/ou le pseudo sont correctes.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;(PS : les espaces ne sont pas acceptés)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
