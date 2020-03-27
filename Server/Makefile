@@ -59,7 +59,7 @@ lib/bcrypt.o: lib/bcrypt.c $(wildcard lib/crypt_blowfish/*.c)
 clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
-	rm -f build/buid/*.o
+	rm -f build/*.o
 	rm -f ../sharedFiles/build/*.o
 	rm -f proto/src/*
 
