@@ -44,7 +44,6 @@ void MenuQT::initWindow(){
 void MenuQT::update_invit(){
   vector<chat_r> new_msg=client->getNewMsg(); //new_msg=getnewmsg()
   int len_vec= static_cast<int>(new_msg.size());
-  std::cout<<"taille vec mesg  "<<len_vec<<std::endl;
   globalInvitations.mut.lock();
   if(globalInvitations.notif && !invitationNotifIsDraw){
     invitationNotifIsDraw = true;
