@@ -60,7 +60,7 @@ clean:
 	clear
 	@echo "\e[0;33m============== Cleaning  ==============\e[0m"
 	rm -f build/*.o
-	rm -f ../sharedFiles/*.o
+	rm -f ../sharedFiles/build/*.o
 	rm -f proto/src/*
 
 
