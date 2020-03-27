@@ -19,7 +19,6 @@ void Partie::setParam(Map* m, std::vector<Sprite*> listLomb){
 }
 
 std::vector<std::string> Partie::useWeapon(std::string tir){
-    int t = 0;
     std::vector<std::string> res;
 
     Tir weaponUsed;
@@ -30,16 +29,9 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     Arme* currentWeapon = gameInfo->armesVector[weaponUsed.id_arme()];
     currentWeapon->setForce(weaponUsed.force());
     currentWeapon->setAngle(weaponUsed.angle());
-    currentWeapon->shoot(gameInfo, t);
-
-
-    bool run = true;
-    while (run){
-        //run tant que il y'a des psites en mouvement
-        run = updateSprites(t);//update la positions des sprites à cahque itérations
-        t += 25;
-    }
-    setAnimationTime(t);
+    currentWeapon->shoot(gameInfo, 0);
+    
+    update();
 
     res.push_back(blockDeleted.SerializeAsString());
 
@@ -110,14 +102,7 @@ bool Partie::moveCurrentLombric(std::string s){
     pos[1] = lp.pos_y();
     lomb->setPos(pos);
 
-    int t = 0;
-    bool movement;
-    do{//simule les évantuel mouvements à cause du déplacement du lombrics (chute libre par exemple)
-        movement = updateSprites(t);
-        t += 10;
-    }while(movement);
-
-    std::cout << "End move lomb after " << t << std::endl;
+    update();
 
     return true;
 }
@@ -148,6 +133,17 @@ void Partie::setAnimationTime(int t){
 }
 
 void Partie::waitAnimationTime(){
-    usleep(animationTime);
+    usleep(animationTime*10);//en millisecondes
     animationTime = 0;
+}
+
+void Partie::update(){
+    int t = 0;
+    bool run = true;
+    while (run){
+        //run tant que il y'a des psites en mouvement
+        run = updateSprites(t);//update la positions des sprites à cahque itérations
+        t += 25;
+    }
+    setAnimationTime(t);
 }

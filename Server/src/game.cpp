@@ -139,7 +139,10 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
 
-    if(check_time())m_map->increaseWaterLevel();//si le temps est écoulé -> montée de l'eau
+    if(check_time()){
+        m_map->increaseWaterLevel();//si le temps est écoulé -> montée de l'eau
+        m_game_object.update();
+    }
 
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
