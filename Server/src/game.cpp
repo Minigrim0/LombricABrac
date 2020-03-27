@@ -129,7 +129,12 @@ bool Game::check_round_time(){
 
 
 uint32_t Game::get_next_lombric_id(){
+  if(m_players[m_current_player_id].get_team() == 0){
+    return 0;
+  }
+  else{
     return m_players[m_current_player_id].getNextLombricId(&m_game_object, m_lomb_nb);
+  }
 }
 
 void Game::end_round(int *current_step){
@@ -146,7 +151,10 @@ void Game::end_round(int *current_step){
 
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
-        if(m_players[i].is_still_alive(&m_game_object)){
+        if(m_players[i].get_team() == 0){
+          continue;
+        }
+        else if(m_players[i].is_still_alive(&m_game_object)){
             player_alive += 1;
         }
     }
@@ -155,7 +163,12 @@ void Game::end_round(int *current_step){
       DataBase_mutex.lock();
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
-          db.set_final_points(m_game_id, 0, i+1);
+          if(m_players[i].get_team() == 0){
+              continue;
+          }
+          else{
+              db.set_final_points(m_game_id, 0, i+1);
+          }
       }
       DataBase_mutex.unlock();
 
@@ -217,9 +230,14 @@ void Game::spawn_lombric(){
     m_map = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
+      if(m_players[i].get_team() == 0){
+        continue;
+      }
+      else{
         for(int j=0;j<m_lomb_nb;j++){
             m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
         }
+      }
     }
 
     m_game_object.setParam(m_map, m_lombs);
