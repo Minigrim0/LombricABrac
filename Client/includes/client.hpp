@@ -152,6 +152,8 @@ private:
 
 	int currentWeapon;
 
+	bool matchFind;
+
 
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
 	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
@@ -260,6 +262,8 @@ public:
 	bool gameIsReplay();
 	void updateReplay();//update les replays
 
+	void findMatch();
+	bool matchIsFind();
 	//thread
 	bool isRunning(){return running;};
 };

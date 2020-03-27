@@ -26,7 +26,16 @@ info Wait_window::run(info information)
 
   len_str = static_cast<int>(msg.size());
   print_string_window(win, (max_y/4), (max_x/2)-(len_str/2), msg);
-  getch();
+
+  information.client->findMatch();
+  bool running = true;
+  while(running){
+      if(information.client->matchIsFind()){
+          running = false;
+          information.id = ROOM_SCREEN;
+      }
+      usleep(200);
+  }
   information.id = MAIN_MENU_SCREEN;
   clear();
   delwin(win);
