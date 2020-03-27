@@ -303,11 +303,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 time_m.ParseFromString(zmq_msg.message());
                 m_max_time_game = time_m.time();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
             case CLIENT_MODIFY_ROUND_TIME:{
