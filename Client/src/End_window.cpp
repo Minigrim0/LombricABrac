@@ -37,18 +37,19 @@ info End_window::run(info information){
     }
   }
   //verifie si plusieurs gagnants
-  vector<string> winners;
+  bool noWinner = false;
   for (int i=1; i<teams.size();++i){
     if (teams[i]->getLife() == teams[indexWinner]->getLife()){
-      winners.push_back(teams[i]->getName());
+      noWinner == true;
+      break;
     }
   }
 
 
-  if (winners.size() > 1){
+  if (noWinner){
     msg_winner = "Match null";
   } else {
-    msg_winner = teams[indexWinner]->getName() + " a gagner ! ";
+    msg_winner = teams[indexWinner]->getName() + " a gagné ! ";
   }
 
   string retour = "Retour au menu";
