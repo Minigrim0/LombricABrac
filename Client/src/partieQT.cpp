@@ -214,7 +214,9 @@ void partieQT::drawMap(){
 
   //affichage temps endRound
   std::string text;
-  text =  "End: " + std::to_string(gameParam.time - std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - initTime).count())+" secondes";
+  int timeLeft = gameParam.time - std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - initTime).count();
+  if (timeLeft < 0)timeLeft=0;
+  text =  "End: " + std::to_string(timeLeft)+" secondes";
 
   QPainter painter(gamePixmap);
   painter.setBrush(Qt::SolidPattern);
