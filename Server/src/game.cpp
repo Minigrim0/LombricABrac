@@ -129,12 +129,10 @@ bool Game::check_round_time(){
 
 
 uint32_t Game::get_next_lombric_id(){
-  if(m_players[m_current_player_id].get_team() == 0){
-    return 0;
-  }
-  else{
+    if(m_players[m_current_player_id].get_team() == 0){
+        return 0;
+    }
     return m_players[m_current_player_id].getNextLombricId(&m_game_object, m_lomb_nb);
-  }
 }
 
 void Game::end_round(int *current_step){
