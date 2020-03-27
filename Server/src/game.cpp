@@ -399,6 +399,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
+            m_game_object.waitAnimationTime();
             //le mouvement peut impliquer la fin du tour
             if(m_game_object.isTourFinish())end_round(current_step);
             break;
