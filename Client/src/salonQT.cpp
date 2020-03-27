@@ -67,8 +67,9 @@ void SalonQT::initWindow(){
     std::string time_round_str = "";
     std::string map_str = "";
     std::string pseudo = "";
+    std::string temps_eau_str = "";
     int current_equipe = 0;
-    int nbr_equipe, nbr_lombric, time_round, map, len_tab;
+    int nbr_equipe, nbr_lombric, time_round, map, len_tab, temps_eau;
     vector<playerTeam> joueur_in_room;
     paramsPartie Para_partie;
 
@@ -89,6 +90,7 @@ void SalonQT::initWindow(){
       nbr_equipe = infoPartie.nbr_eq;
       nbr_lombric = infoPartie.nbr_lomb;
       time_round = infoPartie.time_round;
+      temps_eau = infoPartie.time;
 
       len_tab = static_cast<int>(joueur_in_room.size());
       for (int i = 0; i< len_tab; i++)
@@ -132,12 +134,14 @@ void SalonQT::initWindow(){
       nbr_equipe_str = "Nombre d'équipes : " + to_string(nbr_equipe);
       nbr_lombric_str = "Nombre max lombric : " + to_string(nbr_lombric);
       time_round_str = "Temps max/tour : " + to_string(time_round);
+      temps_eau_str = "Temps avant la montée des eaux : " + to_string(temps_eau);
       map_str = "Carte : " + map_str;
 
       page->CarteLabel->setText(QString(map_str.c_str()));
       page->Nombre_LombricLabel->setText(QString(nbr_lombric_str.c_str()));
       page->Nombre_EquipeLabel->setText(QString(nbr_equipe_str.c_str()));
       page->Temps_MaxTourLabel->setText(QString(time_round_str.c_str()));
+      page->Temps_EauLabel->setText(QString(temps_eau_str.c_str()));
 
       page->Equipe_quatreplainTextEdit->setVisible(true);
       page->Equipe_troisplainTextEdit->setVisible(true);

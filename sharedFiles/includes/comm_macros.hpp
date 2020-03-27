@@ -77,12 +77,12 @@
 #define NOTIF 50// : // Dire au client mdr t'as une notif
 #define NEXT_ROUND 51 // Id du lomb qui va jouer
 #define DECO 52
-#define CLIENT_CHANGE_WEAPON 56// : //Joueur change d'amrme
-#define SERVER_DIFFERENT_WEAPON 57
+#define CLIENT_CHANGE_WEAPON 53 // Joueur change d'amrme
+#define SERVER_DIFFERENT_WEAPON 54
 
-#define PING 53
-#define ROOM_CLOSED 54
-#define CLIENT_LOOKUP_MATCH 55
+#define PING 55
+#define ROOM_CLOSED 56
+#define CLIENT_LOOKUP_MATCH 57
 #define CLIENT_LOOKUP_RESPONSE 58
 
 #endif
