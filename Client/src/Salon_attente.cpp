@@ -350,6 +350,7 @@ info Salon_Attente::run(info information)
           {
 
             information.id = MAIN_MENU_SCREEN;
+            information.already_in_room = 0;
             running = false;
             break;
           }
@@ -369,6 +370,7 @@ info Salon_Attente::run(info information)
           {
             information.client->startGame();
             information.id=GAME_SCREEN;
+            information.already_in_room = 0;
             running = false;
             break;
           }

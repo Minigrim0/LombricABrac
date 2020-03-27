@@ -99,7 +99,7 @@ int main(int argc, char** argv)
         information.client = client;
 
         while(1){
-            if (information.id == -1){ //on quitte le programme
+            if (information.id == LEAVE){ //on quitte le programme
                 information.client->quit();
                 break;
             }
