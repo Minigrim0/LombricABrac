@@ -410,12 +410,21 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     int direction = lomb->getDirection();
     Lombric_c* thisLomb = gameInfo->currentWorms;
     //draw weapons
-    if (client->getCurrentWeapon()!=2 && lomb == thisLomb){
-      QPixmap textureWeapon;
-      textureWeapon = skinWeapons[client->getCurrentWeapon()];
-      textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
-      painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+    QPixmap textureWeapon;
+    if (!tour){
+      if (client->getCurrentWeapon()!=2 && lomb == thisLomb){
+        textureWeapon = skinWeapons[client->getCurrentWeapon()];
+        textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
+        painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+      }
+    }else{ //si en local, on demande pas au serveur
+      if (weaponIndex!=2 && lomb == thisLomb){
+        textureWeapon = skinWeapons[weaponIndex];
+        textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
+        painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+      }
     }
+
     if(lomb == thisLomb){//dessin du triangle au dessus du joueur actif
         int xTriangle = x + blockWidth/2;//x de la pointe du bas du triangle
         int yTriangle = y - blockWidth;//y de la pointe du bas du triangle
