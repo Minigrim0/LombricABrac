@@ -66,6 +66,7 @@ void MainWindow::setPage(int index){
     Historique_window historique_window;
     Request_history_window request_history;
     Ami_window ami_window;
+    End_window end_window;
 
     while (!find){
       information.id = index;
@@ -86,6 +87,7 @@ void MainWindow::setPage(int index){
             show();
             find = true;
           }
+        }
       }
 
       if(!find){
@@ -201,12 +203,19 @@ void MainWindow::setPage(int index){
                   Window* gameWin = new Partie(information.client);
                   information = gameWin->run(information);
                   break;
+              /*
+              case END_SCREEN:
+                  information = end_window.run(information);
+                  break;
+              case CHOOSE_REPLAY_SCREEN:{
+                  Window* gameWin = new Choose_replay;
+                  information = gameWin->run(information);
+                  break;
+                }*/
             }
             index = information.id;
         }
-
     }
-}
 
 
 void MainWindow::setUsername(std::string name){

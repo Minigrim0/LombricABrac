@@ -74,10 +74,14 @@ info Partie::run(info information)
     //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
     if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
+    if (information.client->getIsEnded()){
+      information.id=END_SCREEN;
+      return information;
+    }
+
     if(mustDrawWall){
       drawMap(t);
     }
-
 
     //vérifie si le tour a changé
     if(endRound){

@@ -91,6 +91,7 @@ int main(int argc, char** argv)
         Request_history_window request_history;
         Ami_window ami_window;
         info information;
+        End_window end_window;
         information.id=1;
         information.ishost=FALSE;
         information.notif = 0;
@@ -219,6 +220,9 @@ int main(int argc, char** argv)
                     information = gameWin->run(information);
                     break;
                 }
+                case END_SCREEN:
+                  information = end_window.run(information);
+                  break;
                 case CHOOSE_REPLAY_SCREEN:{
                     Window* gameWin = new Choose_replay;
                     information = gameWin->run(information);
