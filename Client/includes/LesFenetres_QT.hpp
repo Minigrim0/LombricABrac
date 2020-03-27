@@ -33,12 +33,17 @@ class MenuQT: public WindowQT{
 private:
     Ui::MenuWidget *page;
     std::vector<Equipe*> teamsVector;
+    bool invitationNotifIsDraw;
+    bool chatNotifIsDraw;
 public:
     MenuQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
     virtual ~MenuQT();
 private slots:
     void deconnection();
+    void update_invit();
+    void handle_notif_invit();
+    void handle_notif_amis();
 };
 
 class EndGame: public WindowQT{
