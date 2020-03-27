@@ -80,9 +80,16 @@
 #define CLIENT_CHANGE_WEAPON 53 // Joueur change d'amrme
 #define SERVER_DIFFERENT_WEAPON 54
 
+<<<<<<< HEAD
 #define PING 55
 #define ROOM_CLOSED 56
 #define CLIENT_LOOKUP_MATCH 57
 #define SERVER_LOOKUP_RESPONSE 58
+=======
+#define PING 53
+#define ROOM_CLOSED 54
+#define CLIENT_LOOKUP_MATCH 55
+#define CLIENT_LOOKUP_RESPONSE 58
+>>>>>>> b13f4f4e26b9dfab84c483460f41769fc7c6db5c
 
 #endif

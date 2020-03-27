@@ -225,7 +225,7 @@
         <string notr="true">color: darkRed;</string>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Erreur survenu lors de la connexion. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Veuillez vérifier si le mot de passe et/ou le pseudo sont correctes.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;(PS : les espaces ne sont pas acceptés)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Erreur survenue lors de la connexion. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;Veuillez vérifier si le mot de passe et/ou le pseudo sont corrects.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#cc0000;&quot;&gt;(PS : les espaces ne sont pas acceptés)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

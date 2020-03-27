@@ -55,15 +55,13 @@ void partieQT::update(){
 }
 
 void partieQT::initWindow(){
-  //client->resetGameParam();
-  std::cout << "getting game info" <<std::endl;
-  gameInfo = client->getGameInfo();
-  std::cout << "got game info" <<std::endl;
-
   weaponIndex = 0;
   tour = false;
   endRound = true;
   gameParam = client->getParamsPartie();
+  std::cout << "getting game info" <<std::endl;
+  gameInfo = client->getGameInfo();
+  std::cout << "got game info" <<std::endl;
   camX = 0;
   camY = 0;
   changed=false;
@@ -93,6 +91,7 @@ void partieQT::initWindow(){
 }
 
 void partieQT::updateGame(){
+    client->updateReplay();
   //temps en millisecondes qui s'est écoulé
   double t = static_cast<double>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - initTime).count());
 
@@ -118,7 +117,7 @@ void partieQT::updateGame(){
         next.ParseFromString(nextRound);
         spentTime = 0;
         t0 = time(NULL);
-        tour = next.is_yours();
+        tour = next.is_yours() && !client->gameIsReplay();
         gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
 
         synchronizeLombrics(lombricUpdatedByServ);
@@ -126,6 +125,8 @@ void partieQT::updateGame(){
 
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
+
+        gameInfo->carte->setWaterLevel(next.water_level());
         //destroyByServ.Clear();
         endRound = false;
       }

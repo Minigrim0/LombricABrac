@@ -128,3 +128,7 @@ void Client::findNextMsg(message& msg, int& time){
         msg.text += static_cast<char>(saveFile.get());
     }
 }
+
+bool Client::gameIsReplay(){
+    return isReplay;
+}

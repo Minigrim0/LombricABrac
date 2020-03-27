@@ -74,10 +74,14 @@ info Partie::run(info information)
     //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
     if(spentTime >= gameParam.time_round && !movement)endRound = true;
 
+    if (information.client->getIsEnded()){
+      information.id=END_SCREEN;
+      return information;
+    }
+
     if(mustDrawWall){
       drawMap(t);
     }
-
 
     //vérifie si le tour a changé
     if(endRound){
@@ -88,7 +92,7 @@ info Partie::run(info information)
         spentTime = 0;
         t0 = time(NULL);
         mustRefreshOverlay = true;
-        tour = next.is_yours();
+        tour = next.is_yours() && !cli->gameIsReplay();
         gameInfo->currentWorms = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector,next.id_lomb()));
 
         synchronizeLombrics(lombricUpdatedByServ);
@@ -96,6 +100,7 @@ info Partie::run(info information)
 
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
+        gameInfo->carte->setWaterLevel(next.water_level());
         //destroyByServ.Clear();
 
         mustRefreshOverlay = true;

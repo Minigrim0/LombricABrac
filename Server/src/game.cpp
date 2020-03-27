@@ -102,6 +102,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     room.set_map(static_cast<uint32_t>(m_map_id));
     room.set_nbr_eq(static_cast<uint32_t>(m_team_nb));
     room.set_time_round(m_max_time_round);
+    room.set_time(m_max_time_game);
 
     for(size_t i = 0;i<m_players.size();i++){
         Join_groupe_r* joueur = room.add_joueur();
@@ -138,6 +139,11 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
 
+    if(check_time()){
+        m_map->increaseWaterLevel();//si le temps est écoulé -> montée de l'eau
+        m_game_object.update();
+    }
+
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
         if(m_players[i].is_still_alive(&m_game_object)){
@@ -171,6 +177,8 @@ void Game::end_round(int *current_step){
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);
+    //std::cout << "Map: " << m_map << std::endl;
+    lomb.set_water_level(m_map->getWaterLevel());
 
     for(size_t i=0;i<m_players.size();i++){
         if(i == m_current_player_id){
@@ -206,7 +214,7 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    Map* m_map = new Map(largeur,hauteur,map_s);
+    m_map = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
         for(int j=0;j<m_lomb_nb;j++){
@@ -359,6 +367,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
                 m_game_object.setCurrentLomb(lomb.id_lomb());
 
+                lomb.set_water_level(0);//preimer tour, le niveau de l'eau est à 0
+
                 for(size_t i=0;i<m_players.size();i++){
                     if(i == m_current_player_id){
                         lomb.set_is_yours(true);
@@ -389,6 +399,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             for(size_t i=0;i<m_players.size();i++){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
+            m_game_object.waitAnimationTime();
             //le mouvement peut impliquer la fin du tour
             if(m_game_object.isTourFinish())end_round(current_step);
             break;

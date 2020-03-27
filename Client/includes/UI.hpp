@@ -166,6 +166,12 @@ public:
     info run(info information) override;
 };
 
+class End_window:public Window
+{
+public:
+  info run(info information) override;
+};
+
 
 class Partie: public Window
 {

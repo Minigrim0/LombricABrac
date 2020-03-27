@@ -107,6 +107,7 @@ struct infoRoom_s{
 	uint32_t nbr_eq;
 	uint32_t map;
 	uint32_t time_round;
+	uint32_t time;
 	std::vector<playerTeam> pseudos;
 };
 
@@ -151,6 +152,8 @@ private:
 	bool isReplay;
 
 	int currentWeapon;
+
+	bool matchFind;
 
 
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
@@ -257,8 +260,11 @@ public:
 	void resetGameParam();//méthode qui reset les paramètres
 
 	bool beginReplay(std::string replayPath);//return true si l'initialisation s'est bien passée
+	bool gameIsReplay();
 	void updateReplay();//update les replays
 
+	void findMatch();
+	bool matchIsFind();
 	//thread
 	bool isRunning(){return running;};
 };

@@ -77,6 +77,8 @@ void SalonQT::initWindow(){
     page->Equipe_deuxplainTextEdit->clear();
     page->Equipe_troisplainTextEdit->clear();
     page->Equipe_quatreplainTextEdit->clear();
+    page->SpectateurplainTextEdit->clear();
+
     //########################################################""
 
     if(id == ROOM_SCREEN || id == ROOM_INVITEE_SCREEN){
@@ -94,6 +96,9 @@ void SalonQT::initWindow(){
         pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
         current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
         switch (current_equipe) {
+          case 0:
+            page->SpectateurplainTextEdit->appendPlainText(QString(pseudo.c_str()));
+            break;
           case 1:
             page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
             break;
@@ -127,7 +132,7 @@ void SalonQT::initWindow(){
       nbr_equipe_str = "Nombre d'équipes : " + to_string(nbr_equipe);
       nbr_lombric_str = "Nombre max lombric : " + to_string(nbr_lombric);
       time_round_str = "Temps max/tour : " + to_string(time_round);
-      map_str = "Carte : " + map;
+      map_str = "Carte : " + map_str;
 
       page->CarteLabel->setText(QString(map_str.c_str()));
       page->Nombre_LombricLabel->setText(QString(nbr_lombric_str.c_str()));
@@ -165,9 +170,10 @@ void SalonQT::update_para(){
   std::string nbr_lombric_str = "";
   std::string time_round_str = "";
   std::string map_str = "";
+  std::string temps_eau_str = " ";
   std::string pseudo = "";
   int current_equipe = 0;
-  int nbr_equipe, nbr_lombric, time_round, map, len_tab;
+  int nbr_equipe, nbr_lombric, time_round, map, len_tab, temps_eau;
   vector<playerTeam> joueur_in_room;
   paramsPartie Para_partie;
 
@@ -179,17 +185,23 @@ void SalonQT::update_para(){
   nbr_equipe = Para_partie.nbr_equipes;
   nbr_lombric = Para_partie.nbr_lombs;
   time_round = Para_partie.time_round;
+  temps_eau = Para_partie.time;
 
   len_tab = static_cast<int>(joueur_in_room.size());
   page->Equipe_uneplainTextEdit->clear();
   page->Equipe_deuxplainTextEdit->clear();
   page->Equipe_troisplainTextEdit->clear();
   page->Equipe_quatreplainTextEdit->clear();
+  page->SpectateurplainTextEdit->clear();
+
   for (int i = 0; i< len_tab; i++)
   {
     pseudo = joueur_in_room[static_cast<unsigned int>(i)].pseudo;
     current_equipe = joueur_in_room[static_cast<unsigned int>(i)].id_team;
     switch (current_equipe) {
+      case 0:
+        page->SpectateurplainTextEdit->appendPlainText(QString(pseudo.c_str()));
+        break;
       case 1:
         page->Equipe_uneplainTextEdit->appendPlainText(QString(pseudo.c_str()));
         break;
@@ -224,12 +236,14 @@ void SalonQT::update_para(){
   nbr_equipe_str = "Nombre d'équipes : " + to_string(nbr_equipe);
   nbr_lombric_str = "Nombre max lombric : " + to_string(nbr_lombric);
   time_round_str = "Temps max/tour : " + to_string(time_round);
-  map_str = "Carte : " + map;
+  temps_eau_str = "Temps avant la montée des eaux : " + to_string(temps_eau);
+  map_str = "Carte : " + map_str;
 
   page->CarteLabel->setText(QString(map_str.c_str()));
   page->Nombre_LombricLabel->setText(QString(nbr_lombric_str.c_str()));
   page->Nombre_EquipeLabel->setText(QString(nbr_equipe_str.c_str()));
   page->Temps_MaxTourLabel->setText(QString(time_round_str.c_str()));
+  page->Temps_EauLabel->setText(QString(temps_eau_str.c_str()));
 
   page->Equipe_quatreplainTextEdit->setVisible(true);
   page->Equipe_troisplainTextEdit->setVisible(true);
@@ -250,7 +264,7 @@ void SalonQT::update_para(){
   }
   //teste si la partie est lancéée
   if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
-      parent->setPage(GAME_SCREEN);
+    parent->setPage(GAME_SCREEN);
   }
 }
 
@@ -260,14 +274,11 @@ void SalonQT::play(){
 }
 
 void SalonQT::change_equipe(){
-
   int equipe = page->Choix_EquipeSpinBox->value();
   client->changeTeam(equipe);
-
 }
 
 void SalonQT::leave_room(){
-
   if (id == ROOM_INVITEE_SCREEN){
   client->quitRoom();
   parent->setPage(MAIN_MENU_SCREEN);

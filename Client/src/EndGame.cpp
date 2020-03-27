@@ -3,6 +3,7 @@
 #include <QTreeWidgetItem>
 #include <QString>
 
+
 EndGame::EndGame(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, cli)
 {
@@ -19,36 +20,46 @@ void EndGame::initWindow(){
   teams = client->getGameInfo()->teamsVector;
   client->resetGameParam();
 
-  std::vector<int> life;
-  for (int i=0; i<teams.size();++i){
-    life.push_back(teams[i]->getLife());
-  }
-  for (const auto &i: life){ //trie equipes plus de vies à moins de vie
-    sort(life.begin(), life.end(), greater<int>());
-  }
-  life.erase( unique( life.begin(), life.end() ), life.end() );
+  QPixmap* gamePixmap = new QPixmap(page->ImageLabel->width(), page->ImageLabel->height());
+  QPainter painter(gamePixmap);
+  QPen pen;
+  pen.setColor(Qt::green);
+  painter.setPen(pen);
 
-  for (int i=0; i<life.size();++i){
-    for (int j=0; j<teams.size();++j){//affiches équipes dans l'ordre
-      if (teams[j]->getLife()==life[i]){
-        QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
-        std::string text = std::to_string(j+1) + ") "+ teams[i]->getName();
-        item->setText(0,QString::fromStdString(text));
-        page->EquipeTreeWidget->addTopLevelItem(item);
+  QFont font("Cursive", 16);
+  font.setItalic(true);
+  font.setBold(true);
+  painter.setFont(font);
 
-        //affiche noms des lombric par equipe
-        for (int i=0; i<teams[j]->getLombric().size();++i){
-          QTreeWidgetItem * item = new QTreeWidgetItem(page->EquipeTreeWidget);
-          QTreeWidgetItem * item2 = new QTreeWidgetItem(page->JoueurTreeWidget);
-          text = teams[j]->getLombric()[i]->getName() + " " + std::to_string(teams[j]->getLombric()[i]->getLife()) + "hp";
-          std::cout << text << std::endl;
-          item->setText(0,QString::fromStdString(""));
-          item2->setText(0,QString::fromStdString(text));
-          page->JoueurTreeWidget->addTopLevelItem(item2);
-        }
-      }
+  //affichage equipe gagnante
+  int indexWinner = 0;
+  for (int i=1; i<teams.size();++i){
+    if (teams[i]->getLife() > teams[i-1]->getLife()){
+      indexWinner = i;
     }
   }
+  //verifie si plusieurs gagnants
+  bool noWinner = false;
+  for (int i=1; i<teams.size();++i){
+    if (teams[i]->getLife() == teams[indexWinner]->getLife()){
+      noWinner == true;
+      break;
+    }
+  }
+
+  string msg_winner;
+  if (noWinner){
+    msg_winner = "Match null";
+  } else {
+    msg_winner = teams[indexWinner]->getName() + " a gagné ! ";
+  }
+
+  QString name(msg_winner.c_str());
+  painter.drawText((page->ImageLabel->width()/2) - msg_winner.length()*10/2, page->ImageLabel->height()/2, name);
+
+  page->ImageLabel->setPixmap(*gamePixmap);
+  page->ImageLabel->adjustSize();
+  page->ImageLabel->show();
 }
 
 EndGame::~EndGame(){
