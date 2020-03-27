@@ -11,7 +11,7 @@
 #define INIT_NB_LOMBS 8
 #define INIT_NB_TEAMS 4
 #define INIT_ROUND_TIME 20
-#define INIT_GLOBAL_TIME 300
+#define INIT_GLOBAL_TIME 30
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
 class Game{

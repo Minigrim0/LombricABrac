@@ -102,6 +102,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     room.set_map(static_cast<uint32_t>(m_map_id));
     room.set_nbr_eq(static_cast<uint32_t>(m_team_nb));
     room.set_time_round(m_max_time_round);
+    room.set_time(m_max_time_game);
 
     for(size_t i = 0;i<m_players.size();i++){
         Join_groupe_r* joueur = room.add_joueur();
@@ -137,6 +138,8 @@ void Game::end_round(int *current_step){
     zmq_msg.set_type_message(NEXT_ROUND);
 
     uint32_t next_lomb_id;
+
+    if(check_time())m_map->increaseWaterLevel();//si le temps est écoulé -> montée de l'eau
 
     uint32_t player_alive =0;
     for(size_t i=0;i<m_players.size();i++){
