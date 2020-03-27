@@ -140,7 +140,7 @@ void Game::end_round(int *current_step){
     uint32_t next_lomb_id;
 
     if(check_time()){
-        m_map->increaseWaterLevel();//si le temps est écoulé -> montée de l'eau
+        m_map->increaseWaterLevel();  // si le temps est écoulé -> montée de l'eau
         m_game_object.update();
     }
 
@@ -150,7 +150,7 @@ void Game::end_round(int *current_step){
             player_alive += 1;
         }
     }
-    if(player_alive <= 1){ //Si endgame
+    if(player_alive <= 1){  // Si endgame
       zmq_msg.set_type_message(END_GAME);
       DataBase_mutex.lock();
       for(size_t i=0;i<m_players.size();i++){
@@ -367,7 +367,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
                 m_game_object.setCurrentLomb(lomb.id_lomb());
 
-                lomb.set_water_level(0);//preimer tour, le niveau de l'eau est à 0
+                lomb.set_water_level(0); // premier tour, le niveau de l'eau est à 0
 
                 for(size_t i=0;i<m_players.size();i++){
                     if(i == m_current_player_id){

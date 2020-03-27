@@ -45,9 +45,6 @@ int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){
                 }
 
                 while(current_step == STEP_GAME){
-                    //if(current_game.check_time()){
-                    //    //mort subite
-                    //}
                     std::string address = s_recv(subscriber);
                     if(address.size()){ // The receive just timed out
                         std::string contents = s_recv(subscriber);
