@@ -71,6 +71,11 @@ int Map::getWaterLevel(){
 
 void Map::setWaterLevel(int newLevel){
     waterLevel = newLevel;
+    if(waterLevel){
+        for(int i = 0; i<largeur; ++i){
+            mur[hauteur-waterLevel][i] = AIR;
+        }
+    }
 }
 
 void Map::increaseWaterLevel(){++waterLevel;}
