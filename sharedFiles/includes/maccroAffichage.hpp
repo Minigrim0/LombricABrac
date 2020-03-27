@@ -58,9 +58,9 @@
 #define MOVE_BACKWARD KEY_LEFT
 #define MOVE_JUMP ' '//space
 
-#define MOVE_CAM_LEFT 'a'
+#define MOVE_CAM_LEFT 'q'
 #define MOVE_CAM_RIGHT 'd'
-#define MOVE_CAM_UP 'w'
+#define MOVE_CAM_UP 'z'
 #define MOVE_CAM_DOWN 's'
 
 	//gestion de la puissance de l'arme

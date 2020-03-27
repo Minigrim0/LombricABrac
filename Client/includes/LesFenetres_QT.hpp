@@ -18,6 +18,7 @@
 #include "../UI/src/AmisQt_ui.hpp"
 #include "../UI/src/End_GameQt_ui.hpp"
 #include "../UI/src/InvitationQt_ui.hpp"
+#include "../UI/src/ReplayQt_ui.hpp"
 
 
 #include <QPushButton>
@@ -183,5 +184,22 @@ private slots:
     void accept_invit();
     //void update_invit();
 };
+
+class ReplayQT: public WindowQT{
+    Q_OBJECT
+private:
+    Ui::ReplayWidget *page;
+    std::vector<std::string> vectorReplays;
+    QListWidgetItem* item_clicked;
+    int row_replay;
+public:
+    ReplayQT(int id, MainWindow *parent, Client* cli);
+    void initWindow() override;
+    virtual ~ReplayQT();
+private slots:
+    void handle_double_clicked(QListWidgetItem * item);
+    void go_replay();
+};
+
 
 #endif

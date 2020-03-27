@@ -83,5 +83,6 @@
 #define PING 53
 #define ROOM_CLOSED 54
 #define CLIENT_LOOKUP_MATCH 55
+#define CLIENT_LOOKUP_RESPONSE 58
 
 #endif

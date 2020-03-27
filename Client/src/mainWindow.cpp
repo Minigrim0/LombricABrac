@@ -23,6 +23,7 @@ isHost(false){
     addWidget(new SalonQT(CHANGE_GAME_PARAM, this, cli));//si l'hote a voulu chnagé les para de la partie (comme ça pas besoin de recréer une room)
     addWidget(new SalonQT(ROOM_INVITEE_SCREEN, this ,cli));
     addWidget(new InvitationQT(INVITATIONS_SCREEN, this ,cli));
+    addWidget(new ReplayQT(CHOOSE_REPLAY_SCREEN, this, cli));
 
     addWidget(new EndGame(END_SCREEN, this,cli));
 

@@ -186,6 +186,7 @@ message End_tour{
 message Next_lombric{
   uint32 id_lomb = 1;
   bool is_yours = 2;
+  uint32 water_level = 3; //indique le niveau de l'eau pour ce tour
 }
 
 message infoPartie_p{

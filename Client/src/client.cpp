@@ -14,7 +14,8 @@ messageRcv(),
 thisGame(nullptr),
 currentParams({}),
 isReplay(false),
-currentWeapon(0){
+currentWeapon(0),
+matchFind(false){
 	int res;
 	struct sockaddr_in server_addr, client_addr;
 
@@ -182,6 +183,9 @@ int Client::run(){
 					addMessageTosaveFile(msg);
 					saveFile.close();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;
+				case CLIENT_LOOKUP_RESPONSE:
+					matchFind = true;
 					break;
 			}
 			msgMutex.unlock();

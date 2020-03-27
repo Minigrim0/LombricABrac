@@ -14,6 +14,8 @@ isConnection(isCon){
     if(isCon){
         page->Connect_UserToolButton->setText("Se connecter");
     }else{
+        page->ErreurLabel->setText("Erreur lors de l'inscription. Pseudo déja utilisé");
+        page->ErreurLabel->setText(QApplication::translate("Menu_LoginWidget", "<html><head/><body><p><span style=\" color:#cc0000;\">Erreur survenue lors de la connexion. </span></p><p><span style=\" color:#cc0000;\">Le pseudo est déja utilisé par un autre utilisateur.</span></p><p><span style=\" color:#cc0000;\"></span></p></body></html>", Q_NULLPTR));
         page->Connect_UserToolButton->setText("S'inscrire");
     }
 

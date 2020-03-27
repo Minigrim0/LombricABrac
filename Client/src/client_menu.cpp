@@ -287,3 +287,17 @@ infoRoom_s Client::getInfoRoom(){
 	delete reponse;
 	return res;
 }
+
+void Client::findMatch(){
+	message m;
+	m.type = CLIENT_LOOKUP_MATCH;
+	m.text = "";
+	matchFind = false;
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+bool Client::matchIsFind(){
+	return matchFind;
+}

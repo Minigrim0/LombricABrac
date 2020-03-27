@@ -171,6 +171,8 @@ void Game::end_round(int *current_step){
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);
+    //std::cout << "Map: " << m_map << std::endl;
+    lomb.set_water_level(m_map->getWaterLevel());
 
     for(size_t i=0;i<m_players.size();i++){
         if(i == m_current_player_id){
@@ -206,7 +208,7 @@ void Game::spawn_lombric(){
 
     MyReadFile.close();
 
-    Map* m_map = new Map(largeur,hauteur,map_s);
+    m_map = new Map(largeur,hauteur,map_s);
 
     for(size_t i=0;i<m_players.size();i++){
         for(int j=0;j<m_lomb_nb;j++){
@@ -358,6 +360,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 lomb.set_id_lomb(get_next_lombric_id());
                 std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
                 m_game_object.setCurrentLomb(lomb.id_lomb());
+
+                lomb.set_water_level(0);//preimer tour, le niveau de l'eau est à 0
 
                 for(size_t i=0;i<m_players.size();i++){
                     if(i == m_current_player_id){
