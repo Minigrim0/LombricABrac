@@ -45,9 +45,6 @@ bool Lombric_c::update(Map* carte, double t){
 		int newPos[2];
 		movement->update(newPos, t);
 
-		//le lombric meurt s'il est sous l'eau/sous la map
-		if(newPos[1] >= carte->getHauteur() - carte->getWaterLevel())vie = 0;
-
 		//s'il est en mouvement et que le bloc en dessous est pas de l'air -> on arrête le mouvement et on oublie les nouvelles coordonnées
 		//et on fait les dégats de CHUUUTE
 		if(!carte->isTypeBloc(static_cast<uint32_t>(newPos[0]), static_cast<uint32_t>(newPos[1]),AIR)){
@@ -68,6 +65,10 @@ bool Lombric_c::update(Map* carte, double t){
 	if(!movement && carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
 		setMovement(0,0, GRAVITY, PARABOLE, t);
 	}
+
+	//le lombric meurt s'il est sous l'eau/sous la map
+	if(posY >= carte->getHauteur() - carte->getWaterLevel())vie = 0;
+
 	if(vie<0)vie=0;
 	return vie;
 }

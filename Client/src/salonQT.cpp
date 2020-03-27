@@ -264,13 +264,11 @@ void SalonQT::update_para(){
   }
   //teste si la partie est lancéée
   if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
-    change_equipe();
     parent->setPage(GAME_SCREEN);
   }
 }
 
 void SalonQT::play(){
-  change_equipe();
   client->startGame();
   parent->setPage(GAME_SCREEN);
 }

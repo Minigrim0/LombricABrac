@@ -196,9 +196,10 @@ message infoPartie_p{
 message infoRoom{
   uint32 nbr_lomb = 1;
   uint32 nbr_eq = 2;
-  uint32 time_round = 3;
-  uint32 map = 4;
-  repeated Join_groupe_r joueur = 5;
+  uint32 time = 3;
+  uint32 time_round = 4;
+  uint32 map = 5;
+  repeated Join_groupe_r joueur = 6;
 
 }
 

@@ -107,6 +107,7 @@ struct infoRoom_s{
 	uint32_t nbr_eq;
 	uint32_t map;
 	uint32_t time_round;
+	uint32_t time;
 	std::vector<playerTeam> pseudos;
 };
 
