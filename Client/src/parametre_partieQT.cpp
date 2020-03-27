@@ -27,11 +27,13 @@ void Parametre_PartieQT::setPara(){
   int nombre_equipe = page->Nombre_equipespinBox->value();
   int temps_tour = page->Temps_TourspinBox->value();
   int id_carte= page->CartecomboBox->currentIndex()+1;
+  int temps_eau = page->Temps_EauspinBox->value();
 
   client->setTimeRound(temps_tour);
   client->set_nrb_lombrics(nombre_lombric);
   client->set_nbr_equipes(nombre_equipe);
   client->setMap(id_carte);
+  client->setTime(temps_eau);
 
   parent->setPage(CHANGE_GAME_PARAM);
 }
