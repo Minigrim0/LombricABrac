@@ -96,6 +96,7 @@ info Partie::run(info information)
 
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
+        gameInfo->carte->setWaterLevel(next.water_level());
         //destroyByServ.Clear();
 
         mustRefreshOverlay = true;

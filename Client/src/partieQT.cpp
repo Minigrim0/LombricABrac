@@ -126,6 +126,8 @@ void partieQT::updateGame(){
 
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
+
+        gameInfo->carte->setWaterLevel(next.water_level());
         //destroyByServ.Clear();
         endRound = false;
       }
