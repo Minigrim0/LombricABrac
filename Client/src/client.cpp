@@ -213,13 +213,11 @@ void Client::sendMessage(message& msg, bool forceSend){
 	res = static_cast<int>(send(client_socket, &msg.type, sizeof(msg.type), 0)); //envoie le type du message
 
 	if (msg.text.size() || forceSend){
-		if (size > 0){
-			res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
-			while (sent_size<size){ //envoie tout le message (string)
-				res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
-				sent_size += static_cast<uint32_t>(res);
-		        parser += res;
-			}
+		res = static_cast<int>(send(client_socket, &packet_size, sizeof(packet_size), 0));//envoie la taille du message
+		while (sent_size<size){ //envoie tout le message (string)
+			res = static_cast<int>(send(client_socket, parser, size-sent_size, 0));
+			sent_size += static_cast<uint32_t>(res);
+	        parser += res;
 		}
 	}
 }

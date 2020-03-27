@@ -56,13 +56,13 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.get_user_id(usr->pseudo(), &user_id);
                 usr->set_id(user_id);
                 usr->set_auth(true);
-                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE,1);
+                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 1);
                 db.connect_user(true, usr->pseudo());
                 DataBase_mutex.unlock();
                 return USER_CONNECTED;
             }
             else{
-                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE,0);
+                la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 0);
             }
         }
         else{ // The player has no account yet
@@ -236,6 +236,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
             case DECO:
                 db.connect_user(false, usr->pseudo());
+                usr->set_id(-1);
                 break;
             default:
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
@@ -326,14 +327,15 @@ int register_user(Listener* la_poste, ConnectedPlayer *usr){
     int id = 0;
     db.get_user_id(usr->pseudo(), &id);
 
-    if(id > 0){ // A user with the same pseudonym exists
+    if(id > 0){  // A user with the same pseudonym exists
         la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 0);
         return 0;
     }
 
-    db.register_user(usr->pseudo(),usr->password());
     int user_id;
+    db.register_user(usr->pseudo(),usr->password());
     db.get_user_id(usr->pseudo(), &user_id);
+    db.connect_user(true, usr->pseudo());
     usr->set_id(user_id);
     usr->set_auth(true);
     for(int i=0;i<8;i++){

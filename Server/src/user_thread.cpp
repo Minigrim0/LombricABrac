@@ -45,7 +45,7 @@ int client_thread(int socket_client){
                 zmqmsg.ParseFromString(contents);
                 type = zmqmsg.type_message();
 
-                if(address == room_channel){
+                if(is_on_game && address == room_channel){
                     if(contents == std::to_string(ROOM_CLOSED)){
                         is_on_game = false;
                     }
@@ -77,7 +77,7 @@ int client_thread(int socket_client){
 
         std::cout << "Client " << usr.get_id() << " >> type: " << static_cast<int>(type) << std::endl;
 
-        if(is_on_game){ // If the user is in a game, he'll forward the messages to the room
+        if(is_on_game){ // If the user is in a game, he'll forward the messages to the room except for a few ones
             ZMQ_msg zmqmsg;
 
             zmqmsg.set_type_message(type);
