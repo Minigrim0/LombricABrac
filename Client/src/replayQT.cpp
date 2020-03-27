@@ -23,6 +23,8 @@ WindowQT(id, parent, cli){
 void ReplayQT::initWindow(){
 
     page->Play_ReplayToolButton->setVisible(false);
+    page->ReplayListWidget->clear();
+    vectorReplays.clear();
 
     DIR* dirp = opendir(DEFAULT_REPLAY_PATH);
     struct dirent * dp;
