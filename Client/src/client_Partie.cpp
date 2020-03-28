@@ -116,6 +116,6 @@ void Client::changeWeapon(uint32_t id){
 
 
 	sendMutex.lock();
-	sendMessage(m);
+	sendMessage(m, true);
 	sendMutex.unlock();
 }

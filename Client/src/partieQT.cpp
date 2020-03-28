@@ -112,6 +112,7 @@ void partieQT::updateGame(){
     //vérifie si le tour a changé
     if(endRound){
       weaponIndex = 0;
+      client->changeWeapon(static_cast<uint32_t>(weaponIndex));
       beginShoot = false;
       std::string nextRound = client->getNextRound();
       if(nextRound.size()){//si on a un string-> on change de tour
@@ -292,8 +293,6 @@ void partieQT::drawMap(){
     for(int i=0; i<3; ++i){
       if(i == weaponIndex){ //cadre bloc arme
           pen.setColor(Qt::red);
-          client->changeWeapon(static_cast<uint32_t>(i)); //en attente que le serveur gère message
-
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
       int yRect = (nBlockHeight - 1 - i*(RECT_WEAPON_SIZE+1)) * blockWidth - RECT_WEAPON_SIZE*blockWidth;
@@ -565,6 +564,7 @@ bool partieQT::eventFilter(QObject* obj, QEvent* event){
       for (int i=0; i<3; ++i){
         if (chooseWeaponRects[i].contains(mouseEvent->pos()) && tour){
           weaponIndex = i;
+          if (weaponIndex!=2)client->changeWeapon(static_cast<uint32_t>(weaponIndex));
           changed = true;
         }
       }
