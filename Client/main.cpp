@@ -235,7 +235,7 @@ int main(int argc, char** argv)
 
 
     }
-
+    client->quit();
     t.join();
     return 0;
 }
