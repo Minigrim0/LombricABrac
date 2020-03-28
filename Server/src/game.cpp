@@ -316,7 +316,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
 
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                    m_players[i].set_equipe(0);
+                    if(m_players[i].get_team() > m_team_nb){//si son équipe n'existe plus
+                        m_players[i].set_equipe(0);
+                    }
                 }
                 break;
             }

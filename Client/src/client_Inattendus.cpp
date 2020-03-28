@@ -128,6 +128,11 @@ void Client::changeNbrEq(message& m){
 	Nbr_eq_mod obj;
 	obj.ParseFromString(m.text);
 	currentParams.nbr_equipes = obj.nbr_eq();
+	for(auto j = infoJoueurs.begin(); j < infoJoueurs.end(); ++j){
+		if(j->id_team > currentParams.nbr_equipes){
+			j->id_team = 0;
+		}
+	}
 }
 //------------------------------------------------------------------------------
 
