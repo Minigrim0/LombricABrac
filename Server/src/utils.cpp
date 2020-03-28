@@ -147,27 +147,37 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             }
             case CLIENT_ASK_FRIENDSHIP:{
                 Fri_add fri;
+                Fri_ls_r friend_list;
                 int online = 0;
                 la_poste->reception();
                 fri.ParseFromString(la_poste->get_buffer());
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
-                db.add_friend(usr->get_id(), friend_id);
-                db.is_online(friend_id, &online);//si le user est online on doit lui envoyer le message
-                if(online){
-                    ZMQ_msg zmqmsg;
+                bool already_inv = false;
+                db.get_all_friend_list(usr->get_id(), &friend_list);
+                for(size_t i = 0; i < friend_list.user_size(); i++){
+                  if(friend_list.user(i) == fri.user()){
+                    already_inv = true;
+                  }
+                }
+                if(!already_inv){
+                  db.add_friend(usr->get_id(), friend_id);
+                  db.is_online(friend_id, &online);//si le user est online on doit lui envoyer le message
+                  if(online){
+                      ZMQ_msg zmqmsg;
 
-                    Invitation invit;
-                    invit.set_type(false);
-                    invit.set_pseudo(usr->get_pseudo());
+                      Invitation invit;
+                      invit.set_type(false);
+                      invit.set_pseudo(usr->get_pseudo());
 
-                    zmqmsg.set_type_message(SERVER_RECEIVE_INVITE);
-                    zmqmsg.set_receiver_id(friend_id);
-                    zmqmsg.set_message(invit.SerializeAsString());
+                      zmqmsg.set_type_message(SERVER_RECEIVE_INVITE);
+                      zmqmsg.set_receiver_id(friend_id);
+                      zmqmsg.set_message(invit.SerializeAsString());
 
-                    pub_mutex.lock();
-                    s_sendmore_b(publisher, "all");
-                    s_send_b(publisher, zmqmsg.SerializeAsString());
-                    pub_mutex.unlock();
+                      pub_mutex.lock();
+                      s_sendmore_b(publisher, "all");
+                      s_send_b(publisher, zmqmsg.SerializeAsString());
+                      pub_mutex.unlock();
+                  }
                 }
                 break;
             }
@@ -236,6 +246,17 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.connect_user(false, usr->pseudo());
                 usr->set_id(-1);
                 break;
+            case CLIENT_LOOKUP_MATCH:{
+                ZMQ_msg msg;
+                msg.set_type_message(CLIENT_LOOKUP_MATCH);
+                msg.set_message("");
+                msg.set_receiver_id(usr->get_id());
+                pub_mutex.lock();
+                s_sendmore_b(publisher, "all");
+                s_send_b(publisher, msg.SerializeAsString());
+                pub_mutex.unlock();
+                break;
+            }
             default:
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }

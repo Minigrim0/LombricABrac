@@ -186,6 +186,7 @@ int Client::run(){
 					break;
 				case CLIENT_LOOKUP_RESPONSE:
 					matchFind = true;
+					msg.type = 0;
 					break;
 			}
 			msgMutex.unlock();
