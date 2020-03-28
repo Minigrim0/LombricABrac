@@ -156,24 +156,32 @@ void Game::end_round(int *current_step){
     }
 
     uint32_t player_alive =0;
+    uint32_t last_player_alive = 0;
     for(size_t i=0;i<m_players.size();i++){
         if(m_players[i].get_team() == 0){
           continue;
         }
         else if(m_players[i].is_still_alive(&m_game_object)){
             player_alive += 1;
+            last_player_alive = i;
         }
     }
     if(player_alive <= 1){  // Si endgame
       zmq_msg.set_type_message(END_GAME);
       DataBase_mutex.lock();
+      size_t j = 1;
       for(size_t i=0;i<m_players.size();i++){
           m_players[i].sendMessage(zmq_msg.SerializeAsString());
           if(m_players[i].get_team() == 0){
               continue;
           }
+          else if(last_player_alive == i){
+              db.set_final_points(m_game_id, 1, j);
+              j++;
+          }
           else{
-              db.set_final_points(m_game_id, 0, i+1);
+              db.set_final_points(m_game_id, 0, j);
+              j++;
           }
       }
       DataBase_mutex.unlock();
@@ -426,6 +434,13 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             if(m_game_object.isTourFinish())end_round(current_step);
             break;
         }
+        case CLIENT_CHANGE_WEAPON:{
+            zmq_msg.set_type_message(SERVER_DIFFERENT_WEAPON);
+            for(size_t i=0;i<m_players.size();i++){
+                m_players[i].sendMessage(zmq_msg.SerializeAsString());
+            }
+            break;
+        }
         case SHOOT:{
             zmq_msg.set_type_message(SHOOT);
             // Telling everyone that a player shot
@@ -452,6 +467,8 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             end_round(current_step);
             break;
         }
+        default:
+          std::cout << "error michel serv : " << zmq_msg.type_message() << std::endl;
     }
 }
 
