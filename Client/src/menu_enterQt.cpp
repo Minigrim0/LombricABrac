@@ -4,11 +4,11 @@
 
 Menu_EnterQT::Menu_EnterQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-    
+
   page = new Ui::Menu_EnterWidget;
   page->setupUi(this);
 
-  //connect(page->LeaveApplicationToolButton, SIGNAL(clicked()), parent, SLOT(quit()));
+  connect(page->LeaveApplicationToolButton, SIGNAL(clicked()), parent, SLOT(close()));
 
   signalMapper->setMapping(page->ConnectToolButton, LOGIN_SCREEN);
   connect(page->ConnectToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
