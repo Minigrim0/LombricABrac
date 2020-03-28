@@ -236,6 +236,17 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.connect_user(false, usr->pseudo());
                 usr->set_id(-1);
                 break;
+            case CLIENT_LOOKUP_MATCH:{
+                ZMQ_msg msg;
+                msg.set_type_message(CLIENT_LOOKUP_MATCH);
+                msg.set_message("");
+                msg.set_receiver_id(usr->get_id());
+                pub_mutex.lock();
+                s_sendmore_b(publisher, "all");
+                s_send_b(publisher, msg.SerializeAsString());
+                pub_mutex.unlock();
+                break;
+            }
             default:
                 std::cout << "ERROR MICHEL : " << static_cast<int>(msg_type) << std::endl;
         }

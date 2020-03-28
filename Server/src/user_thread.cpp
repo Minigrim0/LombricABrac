@@ -59,6 +59,11 @@ int client_thread(int socket_client){
                     game_url = zmqmsg.message();
                     la_poste.envoie_bool(CLIENT_CREATE_ROOM_RESPONSE, true);
                 }
+                else if(type == CLIENT_LOOKUP_RESPONSE){
+                    is_on_game = true;
+                    game_url = "room/" + zmqmsg.message() + "/client";
+                    la_poste.envoie_bool(CLIENT_LOOKUP_RESPONSE, true);
+                }
                 else{
                     res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
                 }

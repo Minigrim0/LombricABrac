@@ -6,8 +6,8 @@
 
 // ZMQ lib file
 #include "../includes/zhelpers.hpp"
-
 #include "../includes/utils.hpp"
+#include "../includes/broker.hpp"
 
 int broker_thread(){
     zmq::context_t context(1);
@@ -33,20 +33,27 @@ int broker_thread(){
             switch(zmqmsg.type_message()){
                 case CLIENT_CREATE_ROOM:{
                     create_room_thread(zmqmsg);
+                    if(waiting_players.size() > 0){
+                        ping_rooms();
+                    }
                     break;
                 }
                 case CLIENT_LOOKUP_MATCH:{
                     waiting_players.push(zmqmsg.receiver_id());
-                    Block_Destroy open_rooms;
-                    DataBase_mutex.lock();
-                    db.get_all_opened_rooms(&open_rooms);
-                    DataBase_mutex.unlock();
-                    // Go through all rooms
-                    for(int room_index=0;room_index<open_rooms.coord_size();room_index++){
-                        // Ping the room
-                    }
+                    ping_rooms();
                     break;
                 }
+                case PING:
+                    if(zmqmsg.message() == "true"){
+                        zmqmsg.set_type_message(CLIENT_LOOKUP_RESPONSE);
+
+                        stream_obj << "users/" << waiting_players.front() << "/broker";
+                        waiting_players.pop();
+                        pub_mutex.lock();
+                        s_sendmore_b(publisher, stream_obj.str());
+                        s_send_b(publisher, zmqmsg.SerializeAsString());
+                        pub_mutex.unlock();
+                    }
                 default:
                     break;
             }
@@ -62,4 +69,28 @@ int broker_thread(){
     }
 
     return EXIT_SUCCESS;
+}
+
+void ping_rooms(){
+    std::cout << "Server is pinging rooms" << std::endl;
+    Block_Destroy open_rooms;
+    DataBase_mutex.lock();
+    db.get_all_opened_rooms(&open_rooms);
+    DataBase_mutex.unlock();
+
+    // Go through all rooms
+    for(int room_index=0;room_index<open_rooms.coord_size();room_index++){
+        ZMQ_msg zmqmsg;
+        zmqmsg.set_type_message(PING);
+        zmqmsg.set_message("ping");
+        zmqmsg.set_receiver_id(0);
+
+        std::ostringstream stream;
+        stream << "room/" << open_rooms.coord(room_index) << "/broker";
+
+        pub_mutex.lock();
+        s_sendmore_b(publisher, stream.str());
+        s_send_b(publisher, zmqmsg.SerializeAsString());
+        pub_mutex.unlock();
+    }
 }
