@@ -20,6 +20,7 @@ info Salon_Attente::run(info information)
   string titre= "Salon d'attente";
   string indication_hote = "Appuyer n'importe quelle touche pour refresh la room.";
   string indication = "Appuyer sur 'a,b,c ou d' respectivement pour l'équipe 1,2,3 ou 4.";
+  string spectateur = "Appuyer sur 'n' pour être spectateur.";
   string msg_attente = "En attente de l'hote...";
   string arrow = "-> ";
   string bouttonPlay = "Lancer partie";
@@ -158,7 +159,9 @@ info Salon_Attente::run(info information)
     len_str=static_cast<int>(titre.size());
     pseudo=newwin(4,20,11,(max_x/2)-len_str/2);
     len_str=static_cast<int>(indication.size());
-    draw(10,(max_x/2)-len_str/2,indication);
+    draw(9,(max_x/2)-len_str/2,indication);
+    len_str=static_cast<int>(spectateur.size());
+    draw(10,(max_x/2)-len_str/2,spectateur);
     refresh();
     keypad(pseudo,true);
     nodelay(pseudo, true);
@@ -201,6 +204,11 @@ info Salon_Attente::run(info information)
               choose_equipe = false;
             }
             break;
+        case 'n':
+          information.client->changeTeam(0);
+          wclear(pseudo);
+          choose_equipe = false;
+
         default:
           break;
         }
