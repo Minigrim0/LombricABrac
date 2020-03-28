@@ -155,18 +155,7 @@ void Game::end_round(int *current_step){
         m_game_object.update();
     }
 
-    uint32_t player_alive =0;
-    uint32_t last_player_alive = 0;
-    for(size_t i=0;i<m_players.size();i++){
-        if(m_players[i].get_team() == 0){
-          continue;
-        }
-        else if(m_players[i].is_still_alive(&m_game_object)){
-            player_alive += 1;
-            last_player_alive = i;
-        }
-    }
-    if(player_alive <= 1){  // Si endgame
+    if(nb_alive_teams() <= 1){  // Si endgame
       zmq_msg.set_type_message(END_GAME);
       DataBase_mutex.lock();
       size_t j = 1;
@@ -175,7 +164,7 @@ void Game::end_round(int *current_step){
           if(m_players[i].get_team() == 0){
               continue;
           }
-          else if(last_player_alive == i){
+          else if(m_players[i].is_still_alive(&m_game_object)){
               db.set_final_points(m_game_id, 1, j);
               j++;
           }
