@@ -27,6 +27,11 @@ class Game{
         void set_round_time(int round_time);
         void set_global_time(int global_time);
         void set_users_team(ZMQ_msg* zmq_msg);
+        void change_map(ZMQ_msg* zmq_msg);
+        void change_nb_teams(ZMQ_msg* zmq_msg);
+        void change_time(ZMQ_msg* zmq_msg);
+        void change_round_time(ZMQ_msg* zmq_msg);
+        void change_nb_lomb(ZMQ_msg* zmq_msg);
 
         void add_user(ZMQ_msg *zmq_msg);
 

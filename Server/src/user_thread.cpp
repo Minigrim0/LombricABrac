@@ -103,7 +103,7 @@ int client_thread(int socket_client){
                 }
 
                 pub_mutex.lock();
-                std::cout << "17" << std::endl;s_sendmore_b(publisher, game_url);
+                s_sendmore_b(publisher, game_url);
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
             }

@@ -71,6 +71,65 @@ void Game::set_users_team(ZMQ_msg *zmq_msg){
     }
 }
 
+void Game::change_map(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_MAP);
+    Map_mod map_m;
+    map_m.ParseFromString(zmq_msg->message());
+    m_map_id = map_m.id();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_nb_teams(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_NB_TEAMS);
+    Nbr_eq_mod eq_m;
+    eq_m.ParseFromString(zmq_msg->message());
+    m_team_nb = eq_m.nbr_eq();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+        if(m_players[i].get_team() > m_team_nb){  // si son équipe n'existe plus
+            m_players[i].set_equipe(0);
+        }
+    }
+}
+
+void Game::change_time(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_TIME);
+    Time_mod time_m;
+    time_m.ParseFromString(zmq_msg->message());
+    m_max_time_game = time_m.time();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_round_time(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_ROUND_TIME);
+    Time_mod time_r_m;
+    time_r_m.ParseFromString(zmq_msg->message());
+    m_max_time_round = time_r_m.time();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_nb_lomb(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_NB_LOMBRICS);
+    Nbr_lomb_mod nbr_lomb_m;
+    nbr_lomb_m.ParseFromString(zmq_msg->message());
+    m_lomb_nb = nbr_lomb_m.nbr_lomb();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+
 void Game::add_user(ZMQ_msg *zmq_msg){
     infoRoom room;
     Joueur newPlayer;
@@ -118,6 +177,7 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     newPlayer.sendMessage(zmq_msg->SerializeAsString());
 }
 
+
 //Verification methods
 bool Game::check_round_time(){
     return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
@@ -129,8 +189,7 @@ bool Game::check_time(){
 
 void Game::nb_alive_teams(){
     uint32_t id_team;
-    for(size_t i = 0; i < 4 ;i++)
-        alive_team[i] = false;
+    bzero(alive_team, 4 * sizeof(bool));
     for(size_t index=0;index<m_players.size();index++){
         id_team = m_players[index].get_team();
         if(id_team != 0)
@@ -300,64 +359,21 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
     else if(zmq_msg.receiver_id() == m_owner_id){
         // Room admin actions
         switch(zmq_msg.type_message()){
-            case CLIENT_MODIFY_MAP:{
-                zmq_msg.set_type_message(CLIENT_MODIFY_MAP);
-                Map_mod map_m;
-                map_m.ParseFromString(zmq_msg.message());
-                m_map_id = map_m.id();
-
-                for(size_t i=0;i<m_players.size();i++){
-                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                }
+            case CLIENT_MODIFY_MAP:
+                change_map(&zmq_msg);
                 break;
-            }
-            case CLIENT_MODIFY_NB_TEAMS:{
-                zmq_msg.set_type_message(CLIENT_MODIFY_NB_TEAMS);
-                Nbr_eq_mod eq_m;
-                eq_m.ParseFromString(zmq_msg.message());
-                m_team_nb = eq_m.nbr_eq();
-
-                for(size_t i=0;i<m_players.size();i++){
-                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                    if(m_players[i].get_team() > m_team_nb){//si son équipe n'existe plus
-                        m_players[i].set_equipe(0);
-                    }
-                }
+            case CLIENT_MODIFY_NB_TEAMS:
+                change_nb_teams(&zmq_msg);
                 break;
-            }
-            case CLIENT_MODIFY_TIME:{
-                zmq_msg.set_type_message(CLIENT_MODIFY_TIME);
-                Time_mod time_m;
-                time_m.ParseFromString(zmq_msg.message());
-                m_max_time_game = time_m.time();
-
-                for(size_t i=0;i<m_players.size();i++){
-                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                }
+            case CLIENT_MODIFY_TIME:
+                change_time(&zmq_msg);
                 break;
-            }
-            case CLIENT_MODIFY_ROUND_TIME:{
-                zmq_msg.set_type_message(CLIENT_MODIFY_ROUND_TIME);
-                Time_mod time_r_m;
-                time_r_m.ParseFromString(zmq_msg.message());
-                m_max_time_round = time_r_m.time();
-
-                for(size_t i=0;i<m_players.size();i++){
-                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                }
+            case CLIENT_MODIFY_ROUND_TIME:
+                change_round_time(&zmq_msg);
                 break;
-            }
-            case CLIENT_MODIFY_NB_LOMBRICS:{
-                zmq_msg.set_type_message(CLIENT_MODIFY_NB_LOMBRICS);
-                Nbr_lomb_mod nbr_lomb_m;
-                nbr_lomb_m.ParseFromString(zmq_msg.message());
-                m_lomb_nb = nbr_lomb_m.nbr_lomb();
-
-                for(size_t i=0;i<m_players.size();i++){
-                    m_players[i].sendMessage(zmq_msg.SerializeAsString());
-                }
+            case CLIENT_MODIFY_NB_LOMBRICS:
+                change_nb_lomb(&zmq_msg);
                 break;
-            }
             case START:{
                 //Setting current game step to STEP_GAME
                 *current_step = STEP_GAME;
@@ -388,9 +404,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                     lomb->set_name_lomb(lomb_name);
                     lomb->set_name_player(user_username);
                     for(size_t index=0;index<m_players.size();index++){
-                        std::cout << "Current player: " << m_players[index].get_id() << std::endl;
                         if(static_cast<int>(m_players[index].get_id()) == lomb_owner_id){
-                            std::cout << "Team: " << m_players[index].get_team() << std::endl;
                             lomb->set_team_lomb(m_players[index].get_team());
                             break;
                         }
@@ -427,7 +441,7 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 break;
             }
             default:
-                break;
+                std::cout << "ERROR PATRICK : " << zmq_msg.type_message() << std::endl;
         }
     }
 }
@@ -442,7 +456,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
                 m_players[i].sendMessage(zmq_msg.SerializeAsString());
             }
             m_game_object.waitAnimationTime();
-            //le mouvement peut impliquer la fin du tour
+            // le mouvement peut impliquer la fin du tour
             if(m_game_object.isTourFinish())end_round(current_step);
             break;
         }

@@ -33,9 +33,9 @@ int broker_thread(){
         stream_obj.clear();
 
         std::string address = s_recv(subscriber);
+        if(address == "") continue; // If timed out -> Try to ping the rooms
         std::string contents = s_recv(subscriber);
 
-        if(address == "") continue; // If timed out -> Try to ping the rooms
 
         zmqmsg.ParseFromString(contents);
         std::cout << "Broker got [" << address << "] '" << zmqmsg.DebugString() << "' " << std::endl;
@@ -72,7 +72,7 @@ int broker_thread(){
                 s_sendmore_b(publisher, stream_obj.str());
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
-                std::cout << "---transfered---> [" << stream_obj.str() << "]" << std::endl;
+                std::cout << "---transfered(" << zmqmsg.type_message() << ")---> [" << stream_obj.str() << "]" << std::endl;
             }
         }
     }
