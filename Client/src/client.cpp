@@ -170,7 +170,7 @@ int Client::run(){
 				case SERVER_DIFFERENT_WEAPON:
 				{Change_weapon obj;
 				obj.ParseFromString(msg.text); //convertis en struct proto-buff
-				setWeaponId(obj.id_weapon());
+				currentWeapon = obj.id_weapon();
 				msg.type = 0;//pour qu'un nouveau message puisse être lu
 				break;}
 				case NEXT_ROUND: //début de round
