@@ -36,7 +36,6 @@ info Wait_window::run(info information)
       }
       usleep(200);
   }
-  information.id = MAIN_MENU_SCREEN;
   clear();
   delwin(win);
   endwin(); //retourne au terminal usuelle et desallou la mémoires

@@ -278,15 +278,14 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
             stream << "all";
         }
 
-        // Resending message to the sender with true if it's free, and false
-        // Else
-
         zmq_msg.set_receiver_id(m_game_id);
 
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
         pub_mutex.unlock();
+
+        std::cout << "\n\nPONG\n\n" << std::endl;
     }
     else if(zmq_msg.type_message() == CLIENT_JOIN_TEAM){
         set_users_team(&zmq_msg);
