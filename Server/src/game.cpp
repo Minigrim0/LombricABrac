@@ -127,12 +127,17 @@ bool Game::check_time(){
     return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
 }
 
-int Game::nb_alive_teams(){
-    int nb_teams = 0;
-    for(size_t index=0;index<m_players.size();index++){
-        nb_teams = static_cast<int>(m_players[index].get_team() != 0);
-    }
-    return nb_teams;
+void Game::nb_alive_teams(){
+  uint32_t id_team;
+  for(size_t i = 0; i < 4 ;i++){
+    alive_team[i] = false;
+  }
+  for(size_t index=0;index<m_players.size();index++){
+    id_team = m_players[index].get_team();
+      if(id_team != 0){
+        alive_team[id_team-1] = true;
+      }
+  }
 }
 
 
@@ -154,8 +159,16 @@ void Game::end_round(int *current_step){
         m_map->increaseWaterLevel();  // si le temps est écoulé -> montée de l'eau
         m_game_object.update();
     }
-
-    if(nb_alive_teams() <= 1){  // Si endgame
+    size_t nbr_team = 0;
+    size_t last_team = 0;
+    nb_alive_teams();
+    for(size_t i = 0; i < 4 ;i++){
+      if(alive_team[i]){
+        nbr_team+=1;
+        last_team = i+1;
+      }
+    }
+    if(nbr_team <= 1){  // Si endgame
       zmq_msg.set_type_message(END_GAME);
       DataBase_mutex.lock();
       size_t j = 1;
@@ -164,7 +177,7 @@ void Game::end_round(int *current_step){
           if(m_players[i].get_team() == 0){
               continue;
           }
-          else if(m_players[i].is_still_alive(&m_game_object)){
+          else if(m_players[i].get_team() == last_team){
               db.set_final_points(m_game_id, 1, j);
               j++;
           }
