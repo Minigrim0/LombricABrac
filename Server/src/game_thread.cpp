@@ -6,6 +6,7 @@
 #include "../includes/game.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
+#include "../includes/broker.hpp"
 #include "../proto/src/user.pb.h"
 
 int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){

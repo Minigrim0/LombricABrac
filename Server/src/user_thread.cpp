@@ -3,11 +3,11 @@
 #include <unistd.h>
 #include <cstring>
 
+#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/user_thread.hpp"
 #include "../includes/game_thread.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/utils.hpp"
-#include "../../sharedFiles/includes/comm_macros.hpp"
 #include "../includes/zhelpers.hpp"
 
 
@@ -61,7 +61,7 @@ int client_thread(int socket_client){
                 }
                 else if(type == CLIENT_LOOKUP_RESPONSE){
                     is_on_game = true;
-                    game_url = "room/" + zmqmsg.message() + "/client";
+                    game_url = "room/" + std::to_string(zmqmsg.receiver_id()) + "/client";
                     la_poste.envoie_bool(CLIENT_LOOKUP_RESPONSE, true);
                 }
                 else{

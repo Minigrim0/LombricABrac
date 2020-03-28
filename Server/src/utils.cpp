@@ -1,11 +1,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstdarg>
-#include <thread>
 #include <sstream>
 
-#include "../includes/utils.hpp"
 #include "../../sharedFiles/includes/comm_macros.hpp"
+#include "../includes/utils.hpp"
 #include "../includes/listener.hpp"
 #include "../includes/database.hpp"
 #include "../includes/user_thread.hpp"
@@ -154,7 +153,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 int friend_id;db.get_user_id(fri.user(), &friend_id);
                 bool already_inv = false;
                 db.get_all_friend_list(usr->get_id(), &friend_list);
-                for(size_t i = 0; i < friend_list.user_size(); i++){
+                for(int i=0;i<friend_list.user_size();i++){
                   if(friend_list.user(i) == fri.user()){
                     already_inv = true;
                   }
@@ -264,43 +263,6 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
 
     DataBase_mutex.unlock();
     return 0;
-}
-
-
-void create_room_thread(ZMQ_msg zmqmsg){
-    Create_room owner_usr;
-    std::ostringstream stream;
-    owner_usr.ParseFromString(zmqmsg.message());
-    int room_id;
-
-    DataBase_mutex.lock();
-    db.create_room(owner_usr.usr_id());
-    db.get_last_room_id(&room_id);
-    DataBase_mutex.unlock();
-
-    std::cout << "Creating new room with ID : " << room_id << std::endl;
-
-    stream.str("");
-    stream.clear();
-    stream << "room/" << room_id << "/client";
-    std::thread tobj(game_thread, stream.str(), room_id, owner_usr.usr_id());
-    tobj.detach();
-
-    ZMQ_msg partie_r; // Message to transfer to the user with the id of the room created
-    owner_usr.ParseFromString(zmqmsg.message());
-
-    partie_r.set_receiver_id(owner_usr.usr_id());
-    partie_r.set_type_message(CLIENT_CREATE_ROOM_RESPONSE);
-    partie_r.set_message(stream.str());
-
-    stream.str("");
-    stream.clear();
-    stream << "users/" << partie_r.receiver_id() << "/broker";
-
-    pub_mutex.lock();
-    s_sendmore_b(publisher, stream.str());
-    s_send_b(publisher, partie_r.SerializeAsString());
-    pub_mutex.unlock();
 }
 
 
