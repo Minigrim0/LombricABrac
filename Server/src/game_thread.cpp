@@ -61,7 +61,6 @@ int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){
                 break;
             }
             case STEP_ENDSCREEN:
-                std::cout << "You're in the end screen" << std::endl;
                 std::cout << "Closing room " << room_id << " in DataBase." << std::endl;
                 DataBase_mutex.lock();
                 db.close_room(room_id);
