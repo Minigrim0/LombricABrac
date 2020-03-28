@@ -5,7 +5,6 @@
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client),
 gameInfo(nullptr){
-  installEventFilter(this);
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
@@ -82,7 +81,6 @@ void partieQT::initWindow(){
   //bazookaSelected = false;
   gamePixmap = nullptr;
   installEventFilter(this);
-  parent->installEventFilter(this);
   show();
   //setLayout(mainLayout);
 
@@ -104,15 +102,12 @@ void partieQT::updateGame(){
 
   if (client->getIsEnded()){
       removeEventFilter(this);
-      parent->removeEventFilter(this);
     parent->setPage(END_SCREEN);
   }else{
     drawMap();
 
     //vérifie si le tour a changé
     if(endRound){
-      weaponIndex = 0;
-      client->changeWeapon(static_cast<uint32_t>(weaponIndex));
       beginShoot = false;
       std::string nextRound = client->getNextRound();
       if(nextRound.size()){//si on a un string-> on change de tour
@@ -420,6 +415,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
         painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
       }
     }else{ //si en local, on demande pas au serveur
+      std::cout << "test: " <<weaponIndex << std::endl;
       if (weaponIndex!=2 && lomb == thisLomb){
         textureWeapon = skinWeapons[weaponIndex];
         textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
