@@ -44,15 +44,12 @@ Client* MainWindow::getClient(){
 
 
 void MainWindow::setPage(int index){
-    information.id = index;
     for(int i=0; i<count();++i){
         WindowQT* currentWidget = dynamic_cast<WindowQT*>(widget(i));
         int currentIndex = currentWidget->getId();
         currentWidget->hide();
         currentWidget->stopTimer();
         if(currentIndex == index){
-            //setStyleSheet(StyleSheet);
-
             setCurrentIndex(i);
             currentWidget->initWindow();
             currentWidget->startTimer();

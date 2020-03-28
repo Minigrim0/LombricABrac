@@ -26,6 +26,7 @@ WindowQT(id, parent, client){
 
 
 void SalonQT::initWindow(){
+    client->resetGameParam();
     bool room = true;
 
     page->Equipe_quatreplainTextEdit->setVisible(true);
