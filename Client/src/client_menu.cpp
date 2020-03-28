@@ -238,7 +238,7 @@ void Client::changeTeam(uint32_t id_equipe){
 	m.type = CLIENT_JOIN_TEAM;
 
 	sendMutex.lock();
-	sendMessage(m);
+	sendMessage(m, true);
 	sendMutex.unlock();
 }
 
@@ -270,9 +270,7 @@ infoRoom_s Client::getInfoRoom(){
 
 
 	infoJoueurs.clear();
-	std::cout << "Get infoRoom" << std::endl;
 	for (int i=0; i<obj.joueur_size();++i){
-		std::cout << obj.joueur(i).pseudo() << " - " << obj.joueur(i).id() << std::endl;
  		res.pseudos.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
 		infoJoueurs.push_back({obj.joueur(i).pseudo(), obj.joueur(i).id()});
 	}

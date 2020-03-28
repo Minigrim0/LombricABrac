@@ -55,6 +55,9 @@ bool Lombric_c::update(Map* carte, double t){
 				vie -= impactSpeed*DOMMAGE_PER_SPEED;
 			}
 		}
+		else if(newPos[1] > carte->getHauteur()){
+			vie = 0;
+		}
 		else{//on change les coordonnées
 			posX = newPos[0];
 			posY = newPos[1];
