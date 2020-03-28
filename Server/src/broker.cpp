@@ -38,11 +38,6 @@ int broker_thread(){
                     }
                     break;
                 }
-                case CLIENT_LOOKUP_MATCH:{
-                    waiting_players.push(zmqmsg.receiver_id());
-                    ping_rooms();
-                    break;
-                }
                 case PING:
                     if(zmqmsg.message() == "true"){
                         zmqmsg.set_type_message(CLIENT_LOOKUP_RESPONSE);
