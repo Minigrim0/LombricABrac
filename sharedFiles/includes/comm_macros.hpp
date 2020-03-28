@@ -30,13 +30,13 @@
 #define UPDATE_LOMBRICS_NAMES 13// : int (uint8_t str) //modif_nom_lomb id_lomb new_nom_lomb
 
 // <-- Room --> //à envoyer quand quelqu'un rejoint une partie pour recevoir les info
-#define CLIENT_CREATE_ROOM 14// : //creation d'un room
-#define CLIENT_CREATE_ROOM_RESPONSE 15// : //réponse creation d'un room
-#define SERVER_USER_JOINED 16// : (uint8_t str) //user_join_party user
-#define CLIENT_MODIFY_MAP 17// : int //map_partie id_map si host
-#define CLIENT_MODIFY_TIME 18// : int //durée nbr_min si host
-#define CLIENT_MODIFY_ROUND_TIME 19// : uint8_t //durée par tour si host
-#define CLIENT_MODIFY_NB_LOMBRICS 20// : int //nombre lombric par joueur si host
+#define CLIENT_CREATE_ROOM 14  // : //creation d'un room
+#define CLIENT_CREATE_ROOM_RESPONSE 15  // : //réponse creation d'un room
+#define SERVER_USER_JOINED 16  // : (uint8_t str) //user_join_party user
+#define CLIENT_MODIFY_MAP 17  // : int //map_partie id_map si host
+#define CLIENT_MODIFY_TIME 18  // : int //durée nbr_min si host
+#define CLIENT_MODIFY_ROUND_TIME 19  // : uint8_t //durée par tour si host
+#define CLIENT_MODIFY_NB_LOMBRICS 20  // : int //nombre lombric par joueur si host
 #define CLIENT_MODIFY_NB_TEAMS 21  // : // nombre équipes si host
 #define CLIENT_JOIN_TEAM 22  // : uint8_t //id_groupe
 #define CLIENT_JOINED_TEAM_RESPONSE 23  // : (uint8_t str) uint8_t //refresh menu user id_groupe
