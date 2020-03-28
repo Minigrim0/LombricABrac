@@ -13,7 +13,6 @@ info Choose_replay::run(info information)
 {
     initscr();
     nodelay(stdscr, TRUE);//pour que les getch ne soient bloquant
-    keypad(stdscr, true);
     noecho();//empêche d'écrire dans la console
     curs_set(FALSE);//affiche pas le curseur
 
@@ -32,6 +31,10 @@ info Choose_replay::run(info information)
     int width, height;
     bool must_draw = true;
     bool running = true;
+    int touch;
+
+    keypad(win, true);
+
 
     while(running){
         if(must_draw){
@@ -57,7 +60,9 @@ info Choose_replay::run(info information)
 
             print_string_window(win, 2*(focus-decalage)+3, width/2 - 3, "->");
         }
-        switch(wgetch(win)){
+        touch = wgetch(win);
+
+        switch(touch){
             case NAVIGATE_UP:
                 if(focus > 0){
                     --focus;
@@ -73,16 +78,19 @@ info Choose_replay::run(info information)
                 }
                 break;
             case ENTER_KEY:
-
-                if(information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus))){
-                    information.id = GAME_SCREEN;
-                    running = false;
+                if (vectorReplays.size()){
+                    if(information.client->beginReplay(DEFAULT_REPLAY_PATH + vectorReplays.at(focus))){
+                        information.id = GAME_SCREEN;
+                        running = false;
+                    }
                 }
                 break;
-            case KEY_BACKSPACE:
+            case 127:
+                std::cout<<"loooooooooooool"<<std::endl;
                 information.id = MAIN_MENU_SCREEN;
                 running = false;
                 break;
+
         }
     }
     wclear(win);

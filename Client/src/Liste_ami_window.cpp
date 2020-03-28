@@ -310,9 +310,11 @@ info Liste_ami_window::run(info information)
       /*vector<invitation>::iterator i_double_save;
       i_double_save = information.vec_invit.begin();
       information.vec_invit.erase(i_double_save +i_save);*/
-      information.client->acceptInvitation(i_save, FALSE);
-      information.id =MAIN_MENU_SCREEN;
-      break;
+      if (len_tab != 0){
+        information.client->acceptInvitation(i_save, FALSE);
+        information.id =MAIN_MENU_SCREEN;
+        break;
+      }
     }
     if (touch == 10)
     {
@@ -337,9 +339,11 @@ info Liste_ami_window::run(info information)
         }
         if (information.id==LIST_FRIENDS_SCREEN)
         {
-          information.friends=liste_ami[i_save];
-          information.id=WARNING_DEL_FRIEND_SCREEN;
-          break;
+          if(liste_ami.size()){
+            information.friends=liste_ami[i_save];
+            information.id=WARNING_DEL_FRIEND_SCREEN;
+            break;
+          }
         }
         if (information.id==INVIT_FRIEND_TO_GAME_SCREEN)
         {
@@ -350,17 +354,19 @@ info Liste_ami_window::run(info information)
 
         if (information.id==INVITATIONS_SCREEN)
         {
-          if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==TRUE)
-          {
-            information.client->acceptInvitation(i_save, TRUE);
-            information.id = ROOM_SCREEN;
-            break;
-          }
-          if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==FALSE)
-          {
-            information.client->acceptInvitation(i_save, TRUE);
-            information.id = MAIN_MENU_SCREEN;
-            break;
+          if (len_tab != 0){
+            if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==TRUE)
+            {
+              information.client->acceptInvitation(i_save, TRUE);
+              information.id = ROOM_SCREEN;
+              break;
+            }
+            if (globalInvitations.invits[static_cast<unsigned int>(i_save)].type==FALSE)
+            {
+              information.client->acceptInvitation(i_save, TRUE);
+              information.id = MAIN_MENU_SCREEN;
+              break;
+            }
           }
           //information.vec_invit.erase(information.vec_invit.begin()+i_save);
         }

@@ -79,6 +79,39 @@
       </spacer>
      </item>
      <item alignment="Qt::AlignHCenter">
+      <widget class="QToolButton" name="Trouver_partieToolButton">
+       <property name="text">
+        <string>Trouver partie</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../images_widget.qrc">
+         <normaloff>:/icons/UI/Resources/search.png</normaloff>:/icons/UI/Resources/search.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>24</width>
+         <height>24</height>
+        </size>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_11">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item alignment="Qt::AlignHCenter">
       <widget class="QToolButton" name="Create_party_toolButton">
        <property name="styleSheet">
         <string notr="true"/>

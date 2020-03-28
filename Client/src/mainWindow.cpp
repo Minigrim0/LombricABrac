@@ -24,6 +24,7 @@ isHost(false){
     addWidget(new SalonQT(ROOM_INVITEE_SCREEN, this ,cli));
     addWidget(new InvitationQT(INVITATIONS_SCREEN, this ,cli));
     addWidget(new ReplayQT(CHOOSE_REPLAY_SCREEN, this, cli));
+    addWidget(new Wait_ScreenQT(WAITING_SCREEN, this, cli));
 
     addWidget(new EndGame(END_SCREEN, this,cli));
 
