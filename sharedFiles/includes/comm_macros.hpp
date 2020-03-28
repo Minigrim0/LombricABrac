@@ -37,10 +37,10 @@
 #define CLIENT_MODIFY_TIME 18// : int //durée nbr_min si host
 #define CLIENT_MODIFY_ROUND_TIME 19// : uint8_t //durée par tour si host
 #define CLIENT_MODIFY_NB_LOMBRICS 20// : int //nombre lombric par joueur si host
-#define CLIENT_MODIFY_NB_TEAMS 21// : // nombre équipes si host
-#define CLIENT_JOIN_TEAM 22// : uint8_t //id_groupe
-#define CLIENT_JOINED_TEAM_RESPONSE 23// : (uint8_t str) uint8_t //refresh menu user id_groupe
-#define START 24 // proto buf infopartie
+#define CLIENT_MODIFY_NB_TEAMS 21  // : // nombre équipes si host
+#define CLIENT_JOIN_TEAM 22  // : uint8_t //id_groupe
+#define CLIENT_JOINED_TEAM_RESPONSE 23  // : (uint8_t str) uint8_t //refresh menu user id_groupe
+#define START 24  // proto buf infopartie
 #define INFO_ROOM 25
 #define SERVER_CLIENT_QUITTED_ROOM 26
 #define CLIENT_QUIT_ROOM 27
