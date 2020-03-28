@@ -94,7 +94,7 @@ private:
     Ui::DetailsWidget *page;
     std::string chooseHistory;
     playerRank rank;
-    historyTable historique;
+    std::vector<gameHistory> historique;
 public:
     DetailsQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;
@@ -162,7 +162,7 @@ class Modifier_EquipeQT: public WindowQT{
     Q_OBJECT
 private:
     Ui::Modifier_EquipeWidget *page;
-    stringTable OldLombricName;
+    std::vector<std::string> OldLombricName;
 public:
     Modifier_EquipeQT(int id, MainWindow *parent, Client* cli);
     void initWindow() override;

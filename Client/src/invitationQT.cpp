@@ -1,8 +1,9 @@
 #include "../includes/LesFenetres_QT.hpp"
 
 InvitationQT::InvitationQT(int id, MainWindow *parent, Client* cli):
-WindowQT(id, parent, client){
-  
+WindowQT(id, parent, client),
+item_clicked(nullptr){
+
 
   page = new Ui::InvitationWidget;
   page->setupUi(this);
@@ -106,5 +107,5 @@ void InvitationQT::accept_invit(){
 }
 InvitationQT::~InvitationQT(){
   delete page;
-  delete item_clicked;
+  //if(item_clicked)delete item_clicked;
 }
