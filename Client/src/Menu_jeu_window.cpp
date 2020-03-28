@@ -162,7 +162,7 @@ info Menu_jeu_window::run(info information)
       if (y == posStart_arrow+2)
       // création partie
       {
-        information.id = ROOM_SCREEN;
+        information.id = SET_GAME_PARAM;
         break;
       }
       if (y == posStart_arrow)

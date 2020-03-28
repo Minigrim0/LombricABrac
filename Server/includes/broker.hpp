@@ -3,4 +3,6 @@
 
 int broker_thread();
 
+void ping_rooms();
+
 #endif
