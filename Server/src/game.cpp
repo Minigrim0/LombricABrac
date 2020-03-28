@@ -418,6 +418,13 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             if(m_game_object.isTourFinish())end_round(current_step);
             break;
         }
+        case CLIENT_CHANGE_WEAPON:{
+            zmq_msg.set_type_message(SERVER_DIFFERENT_WEAPON);
+            for(size_t i=0;i<m_players.size();i++){
+                m_players[i].sendMessage(zmq_msg.SerializeAsString());
+            }
+            break;
+        }
         case SHOOT:{
             zmq_msg.set_type_message(SHOOT);
             // Telling everyone that a player shot
@@ -444,6 +451,8 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             end_round(current_step);
             break;
         }
+        default:
+          std::cout << "error michel serv : " << zmq_msg.type_message() << std::endl;
     }
 }
 
