@@ -9,6 +9,8 @@ gameInfo(nullptr){
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
+  gameLabel = new QLabel(this);
+  mainLayout = new QGridLayout;
 
   //images des blocks
   textureMur = new QPixmap[4]{
@@ -56,12 +58,14 @@ void partieQT::update(){
 
 void partieQT::initWindow(){
   weaponIndex = 0;
+  t0 = 0;
+  spentTime = 0;
   tour = false;
   endRound = true;
   gameParam = client->getParamsPartie();
   std::cout << "getting game info" <<std::endl;
   gameInfo = client->getGameInfo();
-  std::cout << "got game info" <<std::endl;
+  std::cout << "got game info " << gameInfo << std::endl;
   camX = 0;
   camY = 0;
   changed=false;
@@ -76,8 +80,6 @@ void partieQT::initWindow(){
   //timePressed = 0;
   //timerPower.setInterval(5);
   //bazookaSelected = false;
-  mainLayout = new QGridLayout;
-  gameLabel = new QLabel(this);
   gamePixmap = nullptr;
   installEventFilter(this);
   parent->installEventFilter(this);
@@ -85,8 +87,9 @@ void partieQT::initWindow(){
   //setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();
-  Block_Destroy destroyByServ;
-  Degats_lombric lombricUpdatedByServ;
+  destroyByServ.Clear();
+  lombricUpdatedByServ.Clear();
+  blockDeleted.clear();
 
 }
 
@@ -104,7 +107,6 @@ void partieQT::updateGame(){
       parent->removeEventFilter(this);
     parent->setPage(END_SCREEN);
   }else{
-
     drawMap();
 
     //vérifie si le tour a changé
@@ -130,7 +132,7 @@ void partieQT::updateGame(){
         //destroyByServ.Clear();
         endRound = false;
       }
-      update();
+      //update();
       parent->update();
     }
 
@@ -681,4 +683,7 @@ partieQT::~partieQT(){
   delete[] skinSprite;
   delete[] skinWeapons;
   delete[] chooseWeaponRects;
+  delete gameLabel;
+  if(gamePixmap)delete gamePixmap;
+  delete mainLayout;
 }

@@ -18,6 +18,7 @@ protected:
     Client* client;
     QSignalMapper* signalMapper;
     QTimer* timer;
+    QTimer* checkServerTimer;
 public:
     WindowQT(int id, MainWindow *parent, Client* cli);
     virtual void initWindow();
@@ -25,7 +26,9 @@ public:
     void startTimer();
     void stopTimer();
     void setTimerIntervalle(int t);
-    virtual ~WindowQT() = default;
+    virtual ~WindowQT();
+private slots:
+    void checkServer();
 };
 
 #endif

@@ -61,7 +61,7 @@ void Client::nvJoueur(message& m){
 	Usr_add obj;
 	obj.ParseFromString(m.text); //convertis en struct proto-buff
 	newPlayers.push_back(obj.pseudo()); //ajoute message recu dans le vecteur
-	std::cout << obj.pseudo() << " join" << std::endl;
+	//std::cout << obj.pseudo() << " join" << std::endl;
 	infoJoueurs.push_back({obj.pseudo(), 0});
 }
 
@@ -213,6 +213,7 @@ void Client::notifyStarted(message& m){ //serveur nevoie message quand la partie
 	gameInfo->armesVector.push_back(new BatteBaseball("Batte", 2, 20, -25));
 	gameInfo->armesVector.push_back(new PassTour("PassTour", 0, 0, 0));
 
+	gameInfo->currentWorms = nullptr;
 
 	thisGame = gameInfo;
 }

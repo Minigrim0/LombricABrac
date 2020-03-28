@@ -105,10 +105,10 @@ bool Client::joinPartie(int room_id){
 }
 
 
-stringTable Client::getLombricsName(){
+std::vector<std::string> Client::getLombricsName(){
 	message m{};
 
-	stringTable res{0,nullptr};
+	std::vector<std::string> res;
 
 	m.type = GET_LOMBRIC_NAMES;
 	m.text = ""; //serveur n'a besoin d'aucunes infos
@@ -120,10 +120,8 @@ stringTable Client::getLombricsName(){
 	obj.ParseFromString(*reponse);
 
 	//remplissage de la structure à envoyer à l'affichage
-	res.size = obj.lombs_size();
-	res.table = new std::string[res.size];//on va recevoir 8 noms de lombrics
-	for(int i=0; i<res.size;i++){
-		res.table[i] = obj.lombs(i);
+	for(int i=0; i<obj.lombs_size();i++){
+		res.push_back(obj.lombs(i));
 	}
 
 	delete reponse;
@@ -153,7 +151,7 @@ void Client::getAllInvits(){
 }
 
 
-historyTable Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
+std::vector<gameHistory> Client::get_history(std::string user, uint32_t first_game, uint32_t nbr_game){
 	message m{};
 
 	//construction de la struct du joueur qui demande son historique
@@ -171,28 +169,25 @@ historyTable Client::get_history(std::string user, uint32_t first_game, uint32_t
 	obj_r.ParseFromString(*reponse);
 
 	//création et remplissage de la struct de l'historique à envoyer à l'affichage
-	historyTable res;
-	res.size = obj_r.history_size();
-	res.table = new gameHistory[res.size];
+	std::vector<gameHistory> res;
 
-	for (int i=0;i<res.size;i++){
+	for (int i=0;i<obj_r.history_size();i++){
 		uint32_t index_table = static_cast<uint32_t>(i);
-		res.table[index_table].size = 4;
-		res.table[index_table].pseudo = new std::string[4];
-		res.table[index_table].point = new uint32_t[4];
+		res.push_back({});
+		res[index_table].size = 4;
 
 		//les pseudos des joueurs de la partie
-		res.table[index_table].pseudo[static_cast<uint32_t>(0)] = obj_r.history(i).pseudo_1();
-		res.table[index_table].pseudo[static_cast<uint32_t>(1)] = obj_r.history(i).pseudo_2();
-		res.table[index_table].pseudo[static_cast<uint32_t>(2)] = obj_r.history(i).pseudo_3();
-		res.table[index_table].pseudo[static_cast<uint32_t>(3)] = obj_r.history(i).pseudo_4();
+		res[index_table].pseudo.push_back(obj_r.history(i).pseudo_1());
+		res[index_table].pseudo.push_back(obj_r.history(i).pseudo_2());
+		res[index_table].pseudo.push_back(obj_r.history(i).pseudo_3());
+		res[index_table].pseudo.push_back(obj_r.history(i).pseudo_4());
 		//les points des joueurs de la partie
-		res.table[index_table].point[static_cast<uint32_t>(0)] = obj_r.history(i).point_1();
-		res.table[index_table].point[static_cast<uint32_t>(1)] = obj_r.history(i).point_2();
-		res.table[index_table].point[static_cast<uint32_t>(2)] = obj_r.history(i).point_3();
-		res.table[index_table].point[static_cast<uint32_t>(3)] = obj_r.history(i).point_4();
+		res[index_table].point.push_back(obj_r.history(i).point_1());
+		res[index_table].point.push_back(obj_r.history(i).point_2());
+		res[index_table].point.push_back(obj_r.history(i).point_3());
+		res[index_table].point.push_back(obj_r.history(i).point_4());
 		//la date
-		res.table[index_table].date = obj_r.history(i).date();
+		res[index_table].date = obj_r.history(i).date();
 	}
 
 	delete reponse;
@@ -219,18 +214,12 @@ playerRank Client::getRank(uint32_t nbr_players){
 	//std::cout << obj_r.DebugString() << std::endl;
 	playerRank res;
 
-	//remplissage du vecteur à envoyer à l'affichage
-	res.size = obj_r.players_size(); //taille
-	res.pseudo = new std::string[res.size];
-	res.points = new uint32_t[res.size];
-
-	for (int i=0;i<res.size;i++){
-		uint32_t index = static_cast<uint32_t>(i);
-		res.pseudo[index] = obj_r.players(i).user(); //pseudo
+	for (int i=0;i<obj_r.players_size();i++){
+		res.pseudo.push_back(obj_r.players(i).user()); //pseudo
 		try{
-			res.points[index] = obj_r.players(i).point(); //points
+			res.points.push_back(obj_r.players(i).point()); //points
 		} catch(std::exception& e){ //si pas de points recus, on les mets à 0
-			res.points[index] = 0; //points
+			res.points.push_back(0); //points
 		}
 	}
 

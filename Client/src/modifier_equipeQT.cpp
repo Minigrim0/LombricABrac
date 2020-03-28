@@ -4,7 +4,7 @@
 
 Modifier_EquipeQT::Modifier_EquipeQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client){
-  
+
 
   page = new Ui::Modifier_EquipeWidget;
   page->setupUi(this);
@@ -19,14 +19,14 @@ WindowQT(id, parent, client){
 void Modifier_EquipeQT::initWindow(){
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
     OldLombricName = client->getLombricsName();
-    page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName.table[0].c_str()));
-    page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName.table[1].c_str()));
-    page->Lombric_TroisLineEdit->setPlaceholderText(QString(OldLombricName.table[2].c_str()));
-    page->Lombric_QuatreLineEdit->setPlaceholderText(QString(OldLombricName.table[3].c_str()));
-    page->Lombric_CinqLineEdit->setPlaceholderText(QString(OldLombricName.table[4].c_str()));
-    page->Lombric_SixLineEdit->setPlaceholderText(QString(OldLombricName.table[5].c_str()));
-    page->Lombric_SeptLineEdit->setPlaceholderText(QString(OldLombricName.table[6].c_str()));
-    page->Lombric_HuitLineEdit->setPlaceholderText(QString(OldLombricName.table[7].c_str()));
+    page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName[0].c_str()));
+    page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName[1].c_str()));
+    page->Lombric_TroisLineEdit->setPlaceholderText(QString(OldLombricName[2].c_str()));
+    page->Lombric_QuatreLineEdit->setPlaceholderText(QString(OldLombricName[3].c_str()));
+    page->Lombric_CinqLineEdit->setPlaceholderText(QString(OldLombricName[4].c_str()));
+    page->Lombric_SixLineEdit->setPlaceholderText(QString(OldLombricName[5].c_str()));
+    page->Lombric_SeptLineEdit->setPlaceholderText(QString(OldLombricName[6].c_str()));
+    page->Lombric_HuitLineEdit->setPlaceholderText(QString(OldLombricName[7].c_str()));
 
 }
 
@@ -65,14 +65,14 @@ void Modifier_EquipeQT::ChangeNameLombric(){
   page->Lombric_SeptLineEdit->clear();
   page->Lombric_HuitLineEdit->clear();
   OldLombricName = client->getLombricsName();
-  page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName.table[0].c_str()));
-  page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName.table[1].c_str()));
-  page->Lombric_TroisLineEdit->setPlaceholderText(QString(OldLombricName.table[2].c_str()));
-  page->Lombric_QuatreLineEdit->setPlaceholderText(QString(OldLombricName.table[3].c_str()));
-  page->Lombric_CinqLineEdit->setPlaceholderText(QString(OldLombricName.table[4].c_str()));
-  page->Lombric_SixLineEdit->setPlaceholderText(QString(OldLombricName.table[5].c_str()));
-  page->Lombric_SeptLineEdit->setPlaceholderText(QString(OldLombricName.table[6].c_str()));
-  page->Lombric_HuitLineEdit->setPlaceholderText(QString(OldLombricName.table[7].c_str()));
+  page->Lombric_UnLineEdit->setPlaceholderText(QString(OldLombricName[0].c_str()));
+  page->Lombric_DeuxLineEdit->setPlaceholderText(QString(OldLombricName[1].c_str()));
+  page->Lombric_TroisLineEdit->setPlaceholderText(QString(OldLombricName[2].c_str()));
+  page->Lombric_QuatreLineEdit->setPlaceholderText(QString(OldLombricName[3].c_str()));
+  page->Lombric_CinqLineEdit->setPlaceholderText(QString(OldLombricName[4].c_str()));
+  page->Lombric_SixLineEdit->setPlaceholderText(QString(OldLombricName[5].c_str()));
+  page->Lombric_SeptLineEdit->setPlaceholderText(QString(OldLombricName[6].c_str()));
+  page->Lombric_HuitLineEdit->setPlaceholderText(QString(OldLombricName[7].c_str()));
 
 
 }
@@ -90,6 +90,5 @@ bool Modifier_EquipeQT::JustSpace_inLomb(std::string text){
 }
 
 Modifier_EquipeQT::~Modifier_EquipeQT(){
-    delete OldLombricName.table;
     delete page;
 }

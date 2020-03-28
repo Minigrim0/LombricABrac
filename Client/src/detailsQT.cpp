@@ -4,7 +4,7 @@
 DetailsQT::DetailsQT(int id, MainWindow *parent, Client* cli):
 WindowQT(id, parent, client),
 chooseHistory(""){
-  
+
 
   page = new Ui::DetailsWidget;
   page->setupUi(this);
@@ -26,8 +26,7 @@ void DetailsQT::initWindow(){
     page->Nom_Classement_treeWidget->clear();
     page->Score_Classement_treeWidget->clear();
     rank = client->getRank(15);
-    std::cout << rank.size<<std::endl;
-    for (int i =0; i < rank.size; i++)
+    for (int i =0; i < rank.pseudo.size(); i++)
     {
       string point = std::to_string(rank.points[i]);
       QTreeWidgetItem *item_nom = new QTreeWidgetItem(page->Nom_Classement_treeWidget);
@@ -46,17 +45,16 @@ void DetailsQT::askHistory(){
   page->Historique_display_plainTextEdit->clear();
   chooseHistory = page->Name_pseudo_Historique_lineEdit->text().toStdString();
   historique = client->get_history(chooseHistory, 0, 10);
-  std::cout<<historique.size<<std::endl;
 
-  if(historique.size)
+  if(historique.size())
   {
-    for(int i = 0; i< historique.size; i++ )
+    for(uint32_t i = 0; i< historique.size(); i++ )
     {
-      display_message = "Partie joué le " + historique.table[i].date;
+      display_message = "Partie joué le " + historique[i].date;
       page->Historique_display_plainTextEdit->appendPlainText(QString(display_message.c_str()));
-      for (int j = 0; j < historique.table[i].size; j++)
+      for (int j = 0; j < historique[i].size; j++)
       {
-        display_joueur = "\t" + historique.table[i].pseudo[j] + " : " + to_string(historique.table[i].point[j]);
+        display_joueur = "\t" + historique[i].pseudo[j] + " : " + to_string(historique[i].point[j]);
         page->Historique_display_plainTextEdit->appendPlainText(QString(display_joueur.c_str()));
       }
       page->Historique_display_plainTextEdit->appendPlainText("\n");
@@ -70,8 +68,5 @@ void DetailsQT::askHistory(){
 }
 
 DetailsQT::~DetailsQT(){
-    delete rank.pseudo;
-    delete rank.points;
-    delete historique.table;
     delete page;
 }

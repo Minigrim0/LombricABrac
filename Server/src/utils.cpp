@@ -200,9 +200,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 break;
             }
             case CLIENT_ASK_FRIENDSHIP_LIST:{
-                Fri_ls_r fri;
-                db.get_friend_list(usr->get_id(), &fri);
-                la_poste->envoie_msg(SERVER_RESPONDS_FRIENDSHIP_LIST, fri.SerializeAsString());
+                ask_friendship_list(la_poste, usr);
                 break;
             }
             case SERVER_RECEIVE_INVITE:{
@@ -344,4 +342,10 @@ int register_user(Listener* la_poste, ConnectedPlayer *usr){
     la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 1);
     DataBase_mutex.unlock();
     return USER_CONNECTED;
+}
+
+void ask_friendship_list(Listener* la_poste, ConnectedPlayer* usr){
+    Fri_ls_r fri;
+    db.get_friend_list(usr->get_id(), &fri);
+    la_poste->envoie_msg(SERVER_RESPONDS_FRIENDSHIP_LIST, fri.SerializeAsString());
 }

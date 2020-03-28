@@ -129,12 +129,10 @@ bool Game::check_round_time(){
 
 
 uint32_t Game::get_next_lombric_id(){
-  if(m_players[m_current_player_id].get_team() == 0){
-    return 0;
-  }
-  else{
+    if(m_players[m_current_player_id].get_team() == 0){
+        return 0;
+    }
     return m_players[m_current_player_id].getNextLombricId(&m_game_object, m_lomb_nb);
-  }
 }
 
 void Game::end_round(int *current_step){
@@ -305,11 +303,9 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 time_m.ParseFromString(zmq_msg.message());
                 m_max_time_game = time_m.time();
 
-                pub_mutex.lock();
                 for(size_t i=0;i<m_players.size();i++){
                     m_players[i].sendMessage(zmq_msg.SerializeAsString());
                 }
-                pub_mutex.unlock();
                 break;
             }
             case CLIENT_MODIFY_ROUND_TIME:{

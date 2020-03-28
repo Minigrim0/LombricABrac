@@ -26,7 +26,7 @@ info Menu_creation_equipe_lombric::run(info information)
   bzero(lombric6, 19);
   bzero(lombric7, 19);
   bzero(lombric8, 19);
-  stringTable lombric_name;
+  std::vector<std::string> lombric_name;
   string titre= "Creation d'une equipe de lombric";
   string annulation= "Pour revenir en arriere, appuyez sur RETURN";
   string msg_confirme_equipe= "Appuyez sur ENTER pour confirmer";
@@ -88,10 +88,10 @@ info Menu_creation_equipe_lombric::run(info information)
     }
   }*/
   draw(20,3,msg_pseudo.c_str());
-  if (lombric_name.size != 0)
+  if (lombric_name.size() != 0)
   {
     msg_pseudo="";
-    for (int i=0;i<lombric_name.size;i++)
+    for (int i=0;i<lombric_name.size();i++)
     {
       /*if (decalage1<=16)
       {
@@ -105,7 +105,7 @@ info Menu_creation_equipe_lombric::run(info information)
         draw(4+decalage2,largeur/2 +12,lombric_name.table[i].c_str());
         decalage2+=4;
       }*/
-      msg_pseudo = msg_pseudo + lombric_name.table[i] + " ";
+      msg_pseudo = msg_pseudo + lombric_name[i] + " ";
     }
     draw(22,6,msg_pseudo.c_str());
   }

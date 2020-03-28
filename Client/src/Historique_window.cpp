@@ -27,23 +27,23 @@ info Historique_window::run(info information)
   string arrow = "-> ";
 
   //gameHistory tableau_joueur;
-  historyTable historique;
+  std::vector<gameHistory> historique;
   historique = information.client->get_history(information.friends, 0, 10);//renvoie l'histoirique des parties
   int size_history;
-  size_history = historique.size;
+  size_history = historique.size();
   string joueur;
-  for (int i=0;i<size_history;i++)
+  for (uint32_t i=0;i<size_history;i++)
   {
     joueur="";
-    for (int a=0;a<historique.table[i].size;a++)
+    for (int a=0;a<historique[i].size;a++)
     {
-      joueur = joueur + "Pseudo : " +historique.table[i].pseudo[a] + ' ';
+      joueur = joueur + "Pseudo : " +historique[i].pseudo[a] + ' ';
       joueur = joueur + "/";
-      joueur= joueur + "Score : " + to_string(historique.table[i].point[a]) + ' ';
+      joueur= joueur + "Score : " + to_string(historique[i].point[a]) + ' ';
       joueur = joueur + "|| ";
     }
-    joueur= joueur +" date : "+ historique.table[i].date;
-    historique.table[i].pseudo[0]=joueur;
+    joueur= joueur +" date : "+ historique[i].date;
+    historique[i].pseudo[0]=joueur;
   }
 
   len_str=static_cast<int>(msg1.size());
@@ -70,7 +70,7 @@ info Historique_window::run(info information)
     }
     else
     {
-      print_string_window(win, y+n, 5, historique.table[i].pseudo[0]);;
+      print_string_window(win, y+n, 5, historique[i].pseudo[0]);;
       n+=4;
       nbr_printed++;
     }
@@ -105,7 +105,7 @@ info Historique_window::run(info information)
             print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
             for (i = key; i < nbr_printed+key; i++)
             {
-              print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
+              print_string_window(win, y_save+n ,5, historique[i].pseudo[0] );
               n+=4;
               if (i == nbr_printed-1 && key == 0)
               {
@@ -135,7 +135,7 @@ info Historique_window::run(info information)
             print_string_window(win, 1, (max_x/2)-(len_str/2), msg1);
             for (i = key; i < nbr_printed+key; i++)
             {
-              print_string_window(win, y_save+n ,5, historique.table[i].pseudo[0] );
+              print_string_window(win, y_save+n ,5, historique[i].pseudo[0] );
               n+=4;
               if (i == size_history- 1)
               {

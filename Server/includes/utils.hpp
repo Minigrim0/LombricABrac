@@ -26,6 +26,6 @@ void create_room_thread(ZMQ_msg zmqmsg);
 // Cases
 bool send_room_invite(ZMQ_msg *zmqmsg, Listener *la_poste, ConnectedPlayer *usr);
 int register_user(Listener* la_poste, ConnectedPlayer *usr);
-
+void ask_friendship_list(Listener* la_poste, ConnectedPlayer* usr);
 
 #endif

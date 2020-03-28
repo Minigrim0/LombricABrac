@@ -26,6 +26,7 @@ WindowQT(id, parent, client){
 
 
 void SalonQT::initWindow(){
+    client->resetGameParam();
     bool room = true;
 
     page->Equipe_quatreplainTextEdit->setVisible(true);
@@ -266,6 +267,7 @@ void SalonQT::update_para(){
     page->Equipe_quatreplainTextEdit->setVisible(false);
     page->Equipe_quatreLabel->setVisible(false);
   }
+  page->Choix_EquipeSpinBox->setMaximum(nbr_equipe);
   //teste si la partie est lancéée
   if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
     parent->setPage(GAME_SCREEN);
@@ -273,9 +275,24 @@ void SalonQT::update_para(){
 }
 
 void SalonQT::play(){
-  client->startGame();
-  parent->setPage(GAME_SCREEN);
+  vector<playerTeam> joueur_in_room;
+  bool player = false;
+  int len_tab;
+  joueur_in_room = client->getTeams();
+  len_tab = static_cast<int>(joueur_in_room.size());
+
+  for (int i = 0; i< len_tab; i++){
+    if (joueur_in_room[static_cast<unsigned int>(i)].id_team != 0){
+      player = true;
+      break;
+    }
+  }
+  if (player){
+    client->startGame();
+    parent->setPage(GAME_SCREEN);
+  }
 }
+
 
 void SalonQT::change_equipe(){
   int equipe = page->Choix_EquipeSpinBox->value();

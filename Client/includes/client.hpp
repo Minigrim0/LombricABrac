@@ -54,27 +54,16 @@ struct chat_r{  //struct d'un message
 	std::string text;
 };
 
-struct stringTable{
-	int size;
-	std::string* table;
-};
-
 struct gameHistory{//infos sur une partie
 	int size;
-	std::string* pseudo;
-	uint32_t* point;
+	std::vector<std::string> pseudo;
+	std::vector<uint32_t> point;
 	std::string date;
 };
 
-struct historyTable{ //historiquede parties
-	int size;
-	gameHistory* table;
-};
-
 struct playerRank{ //tableau(trié) des joueurs dans le classement et de leurs points
-	int size;
-	std::string* pseudo;
-	uint32_t* points;
+	std::vector<std::string> pseudo;
+	std::vector<uint32_t> points;
 };
 
 
@@ -207,7 +196,7 @@ public:
 	void addFriend(std::string user);//ajout d'un amis
 
 	//méthodes du menu lombric
-	stringTable getLombricsName();//renvoie un tableau de 8 strings
+	std::vector<std::string> getLombricsName();//renvoie un tableau de 8 strings
 	void setLombricName(uint32_t id, std::string name);//change le nom d'un lombric
 
 	//méthodes du salon d'attente
@@ -220,7 +209,7 @@ public:
 	void quitRoom();//quitter salon d'attente
 
 	//méthode pour l'historique
-	historyTable get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
+	std::vector<gameHistory> get_history(std::string user, uint32_t first_game, uint32_t nbr_game);//renvoie l'histoirique des parties
 
 	//méthodes pour le rank
 	playerRank getRank(uint32_t nbr_players);//renvoie le classement des nbr_players meilleurs joueurs

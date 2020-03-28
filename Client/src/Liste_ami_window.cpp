@@ -66,7 +66,7 @@ info Liste_ami_window::run(info information)
   if (information.id==CLASSEMENT_SCREEN)
   {
     rank=information.client->getRank(10);
-    len_tab=rank.size;
+    len_tab=rank.pseudo.size();
     msg1= "Classement des 10 meilleurs joueurs (Appyuez sur RETURN pour revenir en arriére)";
     for (int i=0;i<len_tab;i++)
     {

@@ -82,9 +82,10 @@ int client_thread(int socket_client){
 
             zmqmsg.set_type_message(type);
             zmqmsg.set_receiver_id(usr.get_id());
+            zmqmsg.set_message("");
 
             if(type == CLIENT_ASK_FRIENDSHIP_LIST){
-                res = handle_instruction(type, &la_poste, &usr, zmqmsg.message());
+                ask_friendship_list(&la_poste, &usr);
             }
             else if(type == CLIENT_SEND_INVITE){
                 send_room_invite(&zmqmsg, &la_poste, &usr);
@@ -94,9 +95,6 @@ int client_thread(int socket_client){
                 if(type != INFO_ROOM && type != START){
                     la_poste.reception();
                     zmqmsg.set_message(la_poste.get_buffer());
-                }
-                else{
-                    zmqmsg.set_message("");
                 }
 
                 pub_mutex.lock();
