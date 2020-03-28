@@ -27,12 +27,6 @@ isHost(false){
 
     addWidget(new EndGame(END_SCREEN, this,cli));
 
-    information.client=client;
-    information.id = INIT_SCREEN;
-    information.ishost = false;
-    information.notif = 0;
-    information.notif_invit = 0;
-
     setObjectName(QStringLiteral("menuWindow"));
     QFile File("./UI/style.qss");
     File.open(QFile::ReadOnly);
@@ -50,15 +44,12 @@ Client* MainWindow::getClient(){
 
 
 void MainWindow::setPage(int index){
-    information.id = index;
     for(int i=0; i<count();++i){
         WindowQT* currentWidget = dynamic_cast<WindowQT*>(widget(i));
         int currentIndex = currentWidget->getId();
         currentWidget->hide();
         currentWidget->stopTimer();
         if(currentIndex == index){
-            //setStyleSheet(StyleSheet);
-
             setCurrentIndex(i);
             currentWidget->initWindow();
             currentWidget->startTimer();

@@ -52,8 +52,6 @@ private:
 
   int weaponIndex; //id de l'arme
 
-  tour_s tourParam;
-
   time_t t0;//reset à chaque début de tour
   uint32_t spentTime;//temps écoulé depuis le début du tour
   bool tour;

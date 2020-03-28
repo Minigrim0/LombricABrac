@@ -23,8 +23,6 @@ protected:
     bool isHost;
     std::string username;
 
-    info information;
-
 public:
     MainWindow(Client *cli, QWidget *parent);
     Client* getClient();

@@ -97,7 +97,8 @@ bool Client::getIsEnded(){
 }
 
 void Client::resetGameParam(){
-	thisGame = nullptr;//pas besoin de delete, ça a été fait au rpéalable si nécéssaire
+	if(thisGame)deleteinfoPartie_s(thisGame);
+	thisGame = nullptr;
 	end = false;
 }
 
