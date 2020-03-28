@@ -316,7 +316,6 @@ int DataBase::get_x_lombrics(int owner_id, int nbLombs, End_tour* lomb_r){
     return m_rc;
 }
 
-
 int DataBase::get_lombric_name(int lomb_id, std::string* lomb_name){
     m_stringStream.str("");
     m_stringStream.clear();
@@ -331,7 +330,6 @@ int DataBase::get_lombric_name(int lomb_id, std::string* lomb_name){
 
     return m_rc;
 }
-
 
 
 // Game history operations
@@ -629,6 +627,7 @@ int DataBase::is_online(int friend_id, int* online){
 }
 
 
+// Room operations
 int DataBase::create_room(int owner_id){
     m_stringStream.str("");
     m_stringStream.clear();
