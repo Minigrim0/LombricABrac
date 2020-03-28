@@ -27,12 +27,6 @@ isHost(false){
 
     addWidget(new EndGame(END_SCREEN, this,cli));
 
-    information.client=client;
-    information.id = INIT_SCREEN;
-    information.ishost = false;
-    information.notif = 0;
-    information.notif_invit = 0;
-
     setObjectName(QStringLiteral("menuWindow"));
     QFile File("./UI/style.qss");
     File.open(QFile::ReadOnly);
