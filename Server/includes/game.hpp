@@ -33,6 +33,7 @@ class Game{
         //Verification methods
         bool check_round_time();
         bool check_time();
+        int nb_alive_teams();
 
         uint32_t get_next_lombric_id();
         void end_round(int* current_step);

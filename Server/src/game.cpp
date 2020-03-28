@@ -119,12 +119,20 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 }
 
 //Verification methods
+bool Game::check_round_time(){
+    return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
+}
+
 bool Game::check_time(){
     return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
 }
 
-bool Game::check_round_time(){
-    return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
+int Game::nb_alive_teams(){
+    int nb_teams = 0;
+    for(size_t index=0;index<m_players.size();index++){
+        nb_teams = static_cast<int>(m_players[index].get_team() != 0);
+    }
+    return nb_teams;
 }
 
 
