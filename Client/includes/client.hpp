@@ -244,7 +244,6 @@ public:
 	std::vector<playerTeam> getTeams();
 	std::string getNextRound(); //infos du provhain tour
 	std::vector<std::string> getGonePlayers();//renvoie les joueurs qui ont quitté le salon d'attente
-	void setWeaponId(uint32_t id);
 
 	void resetGameParam();//méthode qui reset les paramètres
 
