@@ -266,6 +266,7 @@ void SalonQT::update_para(){
     page->Equipe_quatreplainTextEdit->setVisible(false);
     page->Equipe_quatreLabel->setVisible(false);
   }
+  page->Choix_EquipeSpinBox->setMaximum(nbr_equipe);
   //teste si la partie est lancéée
   if(id == ROOM_INVITEE_SCREEN && client->isStarted()){
     parent->setPage(GAME_SCREEN);

@@ -19,6 +19,14 @@ WindowQT(id, parent, client){
 }
 void Parametre_PartieQT::initWindow(){
     //parent->setStyleSheet("background-image: url(:/wallpaper/UI/Resources/cropped-1920-1080-521477.jpg);");
+    paramsPartie Para_partie;
+    Para_partie = client->getParamsPartie();
+
+    page->Temps_TourspinBox->setValue(Para_partie.time_round);
+    page->Nombre_equipespinBox->setValue(Para_partie.nbr_equipes);
+    page->Nombre_lombricspinBox->setValue(Para_partie.nbr_lombs);
+    page->Temps_EauspinBox->setValue(Para_partie.time);
+    page->CartecomboBox->setCurrentIndex(Para_partie.map - 1);
 
 }
 

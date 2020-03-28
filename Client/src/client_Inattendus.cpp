@@ -61,7 +61,7 @@ void Client::nvJoueur(message& m){
 	Usr_add obj;
 	obj.ParseFromString(m.text); //convertis en struct proto-buff
 	newPlayers.push_back(obj.pseudo()); //ajoute message recu dans le vecteur
-	std::cout << obj.pseudo() << " join" << std::endl;
+	//std::cout << obj.pseudo() << " join" << std::endl;
 	infoJoueurs.push_back({obj.pseudo(), 0});
 }
 
