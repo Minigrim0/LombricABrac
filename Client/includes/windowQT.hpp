@@ -26,7 +26,7 @@ public:
     void startTimer();
     void stopTimer();
     void setTimerIntervalle(int t);
-    virtual ~WindowQT() = default;
+    virtual ~WindowQT();
 private slots:
     void checkServer();
 };

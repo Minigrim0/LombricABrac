@@ -74,3 +74,12 @@ void MainWindow::setUsername(std::string name){
 }
 
 std::string MainWindow::getUsername(){return username;}
+
+MainWindow::~MainWindow(){
+    for(int i = count(); i >= 0; --i)
+    {
+        QWidget* currentWidget = widget(i);
+        removeWidget(currentWidget);
+        currentWidget->deleteLater();
+    }
+}

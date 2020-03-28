@@ -48,3 +48,8 @@ void WindowQT::checkServer(){
         parent->close();
     }
 }
+
+WindowQT::~WindowQT(){
+    if(timer)delete timer;
+    delete checkServerTimer;
+}

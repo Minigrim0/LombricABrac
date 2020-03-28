@@ -28,7 +28,7 @@ protected:
 public:
     MainWindow(Client *cli, QWidget *parent);
     Client* getClient();
-    virtual ~MainWindow()=default;
+    virtual ~MainWindow();
 
     void setUsername(std::string);
     std::string getUsername();
