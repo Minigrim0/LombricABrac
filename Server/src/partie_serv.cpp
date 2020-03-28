@@ -30,7 +30,7 @@ std::vector<std::string> Partie::useWeapon(std::string tir){
     currentWeapon->setForce(weaponUsed.force());
     currentWeapon->setAngle(weaponUsed.angle());
     currentWeapon->shoot(gameInfo, 0);
-    
+
     update();
 
     res.push_back(blockDeleted.SerializeAsString());
@@ -133,7 +133,7 @@ void Partie::setAnimationTime(int t){
 }
 
 void Partie::waitAnimationTime(){
-    usleep(animationTime*10);//en millisecondes
+    usleep(animationTime*1000);//en millisecondes
     animationTime = 0;
 }
 
