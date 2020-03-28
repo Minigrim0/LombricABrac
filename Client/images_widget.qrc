@@ -5,6 +5,7 @@
     <file>UI/Resources/cropped-1920-1080-521477.jpg</file>
   </qresource>
   <qresource prefix="icons">
+    <file>UI/Resources/search.png</file>
     <file>UI/Resources/replay.png</file>
     <file>UI/Resources/lomb1.png</file>
     <file>UI/Resources/invitation.png</file>

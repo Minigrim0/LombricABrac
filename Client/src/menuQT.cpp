@@ -32,6 +32,9 @@ chatNotifIsDraw(false){
 
   connect(page->Deconexion_toolButton, SIGNAL(clicked()), this, SLOT(deconnection()));
 
+  signalMapper->setMapping(page->Trouver_partieToolButton, WAITING_SCREEN);
+  connect(page->Trouver_partieToolButton, SIGNAL(clicked()), signalMapper, SLOT(map()));
+
 }
 
 void MenuQT::initWindow(){

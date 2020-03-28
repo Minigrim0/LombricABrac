@@ -19,6 +19,7 @@
 #include "../UI/src/End_GameQt_ui.hpp"
 #include "../UI/src/InvitationQt_ui.hpp"
 #include "../UI/src/ReplayQt_ui.hpp"
+#include "../UI/src/Wait_ScreenQt_ui.hpp"
 
 
 #include <QPushButton>
@@ -204,6 +205,18 @@ public:
 private slots:
     void handle_double_clicked(QListWidgetItem * item);
     void go_replay();
+};
+
+class Wait_ScreenQT: public WindowQT{
+  Q_OBJECT
+private:
+  Ui::Wait_ScreenWidget *page;
+public:
+  Wait_ScreenQT(int id, MainWindow *parent, Client* cli);
+  void initWindow() override;
+  virtual ~Wait_ScreenQT();
+private slots:
+  void CheckMatchIsFind();
 };
 
 
