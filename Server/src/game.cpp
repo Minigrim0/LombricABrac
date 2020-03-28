@@ -128,16 +128,14 @@ bool Game::check_time(){
 }
 
 void Game::nb_alive_teams(){
-  uint32_t id_team;
-  for(size_t i = 0; i < 4 ;i++){
-    alive_team[i] = false;
-  }
-  for(size_t index=0;index<m_players.size();index++){
-    id_team = m_players[index].get_team();
-      if(id_team != 0){
-        alive_team[id_team-1] = true;
-      }
-  }
+    uint32_t id_team;
+    for(size_t i = 0; i < 4 ;i++)
+        alive_team[i] = false;
+    for(size_t index=0;index<m_players.size();index++){
+        id_team = m_players[index].get_team();
+        if(id_team != 0)
+            alive_team[id_team-1] = true;
+    }
 }
 
 
@@ -162,34 +160,16 @@ void Game::end_round(int *current_step){
     size_t nbr_team = 0;
     size_t last_team = 0;
     nb_alive_teams();
-    for(size_t i = 0; i < 4 ;i++){
-      if(alive_team[i]){
-        nbr_team+=1;
-        last_team = i+1;
-      }
+    for(size_t i=0;i<4;i++){
+        if(alive_team[i]){
+            nbr_team += 1;
+            last_team = i+1;
+        }
     }
+    std::cout << "Nbr Teams : " << nbr_team << std::endl;
     if(nbr_team <= 1){  // Si endgame
-      zmq_msg.set_type_message(END_GAME);
-      DataBase_mutex.lock();
-      size_t j = 1;
-      for(size_t i=0;i<m_players.size();i++){
-          m_players[i].sendMessage(zmq_msg.SerializeAsString());
-          if(m_players[i].get_team() == 0){
-              continue;
-          }
-          else if(m_players[i].get_team() == last_team){
-              db.set_final_points(m_game_id, 1, j);
-              j++;
-          }
-          else{
-              db.set_final_points(m_game_id, 0, j);
-              j++;
-          }
-      }
-      DataBase_mutex.unlock();
-
-      (*current_step)++;
-      return;
+        end_game(current_step, last_team);
+        return;
     }
 
     do{
@@ -203,16 +183,16 @@ void Game::end_round(int *current_step){
     m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
+    // ^ Fait !
 
     Next_lombric lomb;
     lomb.set_id_lomb(next_lomb_id);
-    //std::cout << "Map: " << m_map << std::endl;
     lomb.set_water_level(m_map->getWaterLevel());
 
     for(size_t i=0;i<m_players.size();i++){
+        std::cout << "Tour de " << static_cast<int>(m_current_player_id) << std::endl;
         if(i == m_current_player_id){
             lomb.set_is_yours(true);
-            std::cout << "Tour de " << i << std::endl;
             zmq_msg.set_message(lomb.SerializeAsString());
             m_players[i].sendMessage(zmq_msg.SerializeAsString());
         }
@@ -223,6 +203,32 @@ void Game::end_round(int *current_step){
         }
     }
     time(&m_begin_time_round);
+}
+
+void Game::end_game(int* current_step, size_t last_team){
+    ZMQ_msg zmq_msg;
+    zmq_msg.set_type_message(END_GAME);
+    DataBase_mutex.lock();
+    size_t player_index = 1;
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg.SerializeAsString());
+        if(m_players[i].get_team() == 0){
+            continue;
+        }
+        else if(m_players[i].get_team() == last_team){
+            // If the user if from the winning team, give him cookies !
+            db.set_final_points(m_game_id, 1, player_index);
+            player_index++;
+        }
+        else{
+            // If the user lost the game, he gets a beautiful 0
+            db.set_final_points(m_game_id, 0, player_index);
+            player_index++;
+        }
+    }
+    DataBase_mutex.unlock();
+
+    (*current_step)++;
 }
 
 void Game::spawn_lombric(){
@@ -284,8 +290,6 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
         s_sendmore_b(publisher, stream.str());
         s_send_b(publisher, zmq_msg.SerializeAsString());
         pub_mutex.unlock();
-
-        std::cout << "\n\nPONG\n\n" << std::endl;
     }
     else if(zmq_msg.type_message() == CLIENT_JOIN_TEAM){
         set_users_team(&zmq_msg);

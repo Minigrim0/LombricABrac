@@ -248,7 +248,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
             case CLIENT_LOOKUP_MATCH:{
                 ZMQ_msg msg;
                 msg.set_type_message(CLIENT_LOOKUP_MATCH);
-                msg.set_message("");
+                msg.set_message("look");
                 msg.set_receiver_id(usr->get_id());
                 pub_mutex.lock();
                 s_sendmore_b(publisher, "all");

@@ -38,8 +38,7 @@ int broker_thread(){
         if(address == "") continue; // If timed out -> Try to ping the rooms
 
         zmqmsg.ParseFromString(contents);
-        std::cout << "Broker got [" << address << "] '" << contents << "' ";
-        std::cout << "---interpreting---> local" << std::endl;
+        std::cout << "Broker got [" << address << "] '" << zmqmsg.DebugString() << "' " << std::endl;
         switch(zmqmsg.type_message()){
             case CLIENT_CREATE_ROOM:{
                 create_room_thread(zmqmsg);

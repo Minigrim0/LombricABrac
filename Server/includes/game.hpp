@@ -37,6 +37,7 @@ class Game{
 
         uint32_t get_next_lombric_id();
         void end_round(int* current_step);
+        void end_game(int* current_step, size_t last_team);
         void spawn_lombric();
 
         void handle_room(ZMQ_msg zmq_msg, int* current_step);

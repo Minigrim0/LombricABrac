@@ -87,7 +87,7 @@ int client_thread(int socket_client){
 
             zmqmsg.set_type_message(type);
             zmqmsg.set_receiver_id(usr.get_id());
-            zmqmsg.set_message("");
+            zmqmsg.set_message("msg");
 
             if(type == CLIENT_ASK_FRIENDSHIP_LIST){
                 ask_friendship_list(&la_poste, &usr);
@@ -103,7 +103,7 @@ int client_thread(int socket_client){
                 }
 
                 pub_mutex.lock();
-                s_sendmore_b(publisher, game_url);
+                std::cout << "17" << std::endl;s_sendmore_b(publisher, game_url);
                 s_send_b(publisher, zmqmsg.SerializeAsString());
                 pub_mutex.unlock();
             }
