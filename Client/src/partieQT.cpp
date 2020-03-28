@@ -5,7 +5,6 @@
 partieQT::partieQT(int id, MainWindow *parent, Client* client):
 WindowQT(id, parent, client),
 gameInfo(nullptr){
-  installEventFilter(this);
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
@@ -82,7 +81,6 @@ void partieQT::initWindow(){
   //bazookaSelected = false;
   gamePixmap = nullptr;
   installEventFilter(this);
-  parent->installEventFilter(this);
   show();
   //setLayout(mainLayout);
 
@@ -104,7 +102,6 @@ void partieQT::updateGame(){
 
   if (client->getIsEnded()){
       removeEventFilter(this);
-      parent->removeEventFilter(this);
     parent->setPage(END_SCREEN);
   }else{
     drawMap();
