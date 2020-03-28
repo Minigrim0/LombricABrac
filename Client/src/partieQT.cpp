@@ -290,8 +290,7 @@ void partieQT::drawMap(){
     for(int i=0; i<3; ++i){
       if(i == weaponIndex){ //cadre bloc arme
           pen.setColor(Qt::red);
-
-          //client->changeWeapon(static_cast<uint32_t>(i)); //en attente que le serveur gère message
+          client->changeWeapon(static_cast<uint32_t>(i)); //en attente que le serveur gère message
 
       }else{pen.setColor(Qt::black);}
       painter.setPen(pen);
