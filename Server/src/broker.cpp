@@ -54,15 +54,17 @@ int broker_thread(){
             }
         }
         else{
-            stream_obj << "users/" << zmqmsg.receiver_id() << "/broker";
-            pub_mutex.lock();
-            s_sendmore_b(publisher, stream_obj.str());
-            s_send_b(publisher, zmqmsg.SerializeAsString());
-            pub_mutex.unlock();
-            std::cout << "---transfered---> [" << stream_obj.str() << "]" << std::endl;
             if(zmqmsg.type_message() == CLIENT_LOOKUP_MATCH){
                 waiting_players.push(zmqmsg.receiver_id());
                 ping_rooms();
+            }
+            else{
+                stream_obj << "users/" << zmqmsg.receiver_id() << "/broker";
+                pub_mutex.lock();
+                s_sendmore_b(publisher, stream_obj.str());
+                s_send_b(publisher, zmqmsg.SerializeAsString());
+                pub_mutex.unlock();
+                std::cout << "---transfered---> [" << stream_obj.str() << "]" << std::endl;
             }
         }
     }
