@@ -60,6 +60,10 @@ int broker_thread(){
             s_send_b(publisher, zmqmsg.SerializeAsString());
             pub_mutex.unlock();
             std::cout << "---transfered---> [" << stream_obj.str() << "]" << std::endl;
+            if(zmqmsg.type_message() == CLIENT_LOOKUP_MATCH){
+                waiting_players.push(zmqmsg.receiver_id());
+                ping_rooms();
+            }
         }
     }
 
