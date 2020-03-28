@@ -59,7 +59,6 @@ int broker_thread(){
 
                     stream_obj << "users/" << waiting_players.front() << "/broker";
                     waiting_players.pop();
-                    std::cout << "deleted one player in the waiting list" << std::endl;
 
                     pub_mutex.lock();
                     s_sendmore_b(publisher, stream_obj.str());
@@ -83,13 +82,11 @@ int broker_thread(){
 }
 
 void ping_rooms(){
-    std::cout << "Server is pinging rooms" << std::endl;
     Block_Destroy open_rooms;
     DataBase_mutex.lock();
     db.get_all_opened_rooms(&open_rooms);
     DataBase_mutex.unlock();
 
-    std::cout << "Server got rooms" << std::endl;
     // Go through all rooms
     for(int room_index=0;room_index<open_rooms.coord_size();room_index++){
         ZMQ_msg zmqmsg;
@@ -106,7 +103,6 @@ void ping_rooms(){
         s_send_b(publisher, zmqmsg.SerializeAsString());
         pub_mutex.unlock();
     }
-    std::cout << "Server pinged rooms" << std::endl;
 }
 
 void create_room_thread(ZMQ_msg zmqmsg){
