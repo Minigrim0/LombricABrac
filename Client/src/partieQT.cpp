@@ -108,8 +108,6 @@ void partieQT::updateGame(){
 
     //vérifie si le tour a changé
     if(endRound){
-      weaponIndex = 0;
-      client->changeWeapon(static_cast<uint32_t>(weaponIndex));
       beginShoot = false;
       std::string nextRound = client->getNextRound();
       if(nextRound.size()){//si on a un string-> on change de tour
@@ -417,6 +415,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
         painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
       }
     }else{ //si en local, on demande pas au serveur
+      std::cout << "test: " <<weaponIndex << std::endl;
       if (weaponIndex!=2 && lomb == thisLomb){
         textureWeapon = skinWeapons[weaponIndex];
         textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
