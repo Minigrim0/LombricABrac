@@ -2,7 +2,7 @@
 
 Sprite* findById(std::vector<Sprite*>& data, uint32_t id){
 	for(auto curseur = data.begin(); curseur != data.end(); ++curseur){
-		if((*curseur)->getId() == id){
+		if(*curseur && (*curseur)->getId() == id){
 			return (*curseur);
 		}
 	}
