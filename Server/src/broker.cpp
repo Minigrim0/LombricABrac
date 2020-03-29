@@ -42,9 +42,6 @@ int broker_thread(){
         switch(zmqmsg.type_message()){
             case CLIENT_CREATE_ROOM:{
                 create_room_thread(zmqmsg);
-                if(waiting_players.size() > 0){
-                    ping_rooms();
-                }
                 break;
             }
             case CLIENT_LOOKUP_MATCH:{

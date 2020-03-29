@@ -115,7 +115,6 @@ void Partie::addDeletedBlock(std::vector<int> v){
 
 bool Partie::isLombAlive(int id){
     Lombric_c* lomb =  dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, id));
-    std::cout << "Find worms " << id << ": " << lomb << std::endl;
     if(!lomb)return false;
     return lomb->getLife()>0;
 }

@@ -192,7 +192,7 @@ void Game::nb_alive_teams(size_t *nbr_teams, size_t *last_team){
     for(size_t index=0, id_team;index<m_players.size();index++){ // Go through all the connected players
         id_team = m_players[index].get_team();
         // If the player's team is not spectator and has not been registered yet
-        if(id_team != 0 && m_alive_team[id_team-1] == false){
+        if(id_team != 0 && m_players[index].is_still_alive(&m_game_object) && m_alive_team[id_team-1] == false){
             m_alive_team[id_team-1] = true; // Register it as alive
             *nbr_teams += 1; // Add one to the counter
             *last_team = id_team-1; // Save it as the last alive team (used only if there's only one team alive)
@@ -216,7 +216,7 @@ void Game::end_round(int *current_step){
 
     uint32_t next_lomb_id;
     size_t last_team;
-    size_t nbr_team;
+    size_t nbr_team = 0;
 
     if(check_time()){
         m_map->increaseWaterLevel();  // si le temps est écoulé -> montée de l'eau
