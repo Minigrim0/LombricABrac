@@ -59,20 +59,21 @@ int DataBase::callback(void *data_container, int argc, char **argv, char **azCol
             break;
         }
         case DT_HIS:{
-            History *history = static_cast<History_r*>(data_container)->add_history();
+            History_TMP *history = static_cast<History_r_TMP*>(data_container)->add_history();
 
             for(int i=0;i<argc;i++){
+                std::string username;
                 if(strcmp(azColName[i], "user_1_id") == 0){
-                    history->set_pseudo_1(argv[i]);
+                    history->set_id_1(std::stoi(argv[i]));
                 }
                 else if(strcmp(azColName[i], "user_2_id") == 0){
-                    history->set_pseudo_2(argv[i]);
+                    history->set_id_2(std::stoi(argv[i]));
                 }
                 else if(strcmp(azColName[i], "user_3_id") == 0){
-                    history->set_pseudo_3(argv[i]);
+                    history->set_id_3(std::stoi(argv[i]));
                 }
                 else if(strcmp(azColName[i], "user_4_id") == 0){
-                    history->set_pseudo_4(argv[i]);
+                    history->set_id_4(std::stoi(argv[i]));
                 }
                 else if(strcmp(azColName[i], "user_1_points") == 0){
                     history->set_point_1(std::stoi(argv[i]));
@@ -360,7 +361,7 @@ int DataBase::get_lombric_name(int lomb_id, std::string* lomb_name){
 
 
 // Game history operations
-int DataBase::get_history(int user_id, int index, int size, History_r* history_r){
+int DataBase::get_history(int user_id, int index, int size, History_r_TMP* history_r){
     m_stringStream.str("");
     m_stringStream.clear();
 

@@ -50,7 +50,7 @@ class DataBase{
         int get_lombric_name(int lomb_id, std::string* lomb_name);
 
         // Game history operations
-        int get_history(int user_id, int index, int size, History_r* history_r);
+        int get_history(int user_id, int index, int size, History_r_TMP* history_r);
         int add_history_entry(int player1, int player2, int player3, int player4, int player1_points, int player2_points, int player3_points, int player4_points);
 
         // Game rank operations
