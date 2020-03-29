@@ -18,9 +18,10 @@ gameInfo(nullptr){
   };
 
   //images projectil et lombric
-  skinSprite = new QPixmap[2]{
+  skinSprite = new QPixmap[3]{
     QPixmap("images/bomb.png"),
     QPixmap("images/lombrics/lomb1.png"),
+    QPixmap("images/parachute.png")
   };
 
   //images des armes
@@ -436,8 +437,12 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     }
   }
   else{
-    texture = skinSprite[0];
-     painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
+    if (s->getSkin()==1){//caisse
+      texture = skinSprite[2];
+    }else{//bombe
+      texture = skinSprite[0];
+    }
+    painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
   }
 
   if (id){
@@ -517,7 +522,7 @@ bool partieQT::updateSprites(double t){
     else life=1;
     if(life>0){
         (*s)->getPos(oldPos);
-        bool alive = (*s)->update(gameInfo, t);
+        bool alive = (*s)->update(gameInfo->carte, t);
         (*s)->getPos(newPos);
 
         //si la vie du lombric a changé -> fin de tour
