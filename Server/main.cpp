@@ -36,7 +36,7 @@ int main(int argc, char **argv){
         return EXIT_FAILURE;
     }
 
-    port = static_cast<uint16_t>(strtol(argv[1], NULL, 10));
+    port = static_cast<uint16_t>(strtol(argv[1], nullptr, 10));
 
     if(errno != 0 && port == 0) {
         perror("Unable to convert port <%s>");

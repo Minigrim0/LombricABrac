@@ -425,7 +425,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
         int color;
         int xBarVie = x;
         int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
-        int largeur = blockWidth * lomb->getLife() / 100;
+        int largeur = blockWidth * lomb->getLife() / gameParam.maxPv;
         setPenColor(lomb, &painter);
 
         //painter.setPen(pen);
