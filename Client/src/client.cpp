@@ -196,16 +196,29 @@ int Client::run(){
 					break;
 				case CLIENT_MODIFY_INIT_VIE: {
 					Life_mod obj;
-					obj.ParseFromString(m.text);
+					obj.ParseFromString(msg.text);
 					currentParams.initPv = obj.life();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
 				case CLIENT_MODIFY_MAX_VIE:{
 					Life_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.maxPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}/*
+				case CLIENT_MODIFY_VIE_CAISSE:{
+					Life_mod obj;
 					obj.ParseFromString(m.text);
 					currentParams.maxPv = obj.life();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
+				case CLIENT_MODIFY_VIE_CAISSE:{
+					Life_mod obj;
+					obj.ParseFromString(m.text);
+					currentParams.maxPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}*/
+				}
 			}
 			msgMutex.unlock();
 		}
