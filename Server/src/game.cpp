@@ -20,7 +20,7 @@ m_map(nullptr)
     set_round_time(INIT_ROUND_TIME);
     set_global_time(INIT_GLOBAL_TIME);
     set_box_pv(INIT_BOX_PV);
-    set_prob_health_box(INIT_PROBA);
+    set_prob_health_box(50);
     set_lomb_pv_init(INIT_LOMB_PV_INIT);
     set_lomb_pv_max(INIT_LOMB_PV_MAX);
 }
@@ -294,7 +294,7 @@ void Game::end_round(int *current_step){
     Next_lombric lomb;
 
     if((rand()%100) < m_prob_health_box ){
-
+        std::cout << "New Box" << std::endl;
       HealthBox* health_box;
       health_box = new HealthBox(m_box_pv,m_map);
       int pos_box[2];
@@ -302,7 +302,10 @@ void Game::end_round(int *current_step){
       m_game_object.addHealthBox(health_box);
       lomb.set_x(pos_box[0]);
       lomb.set_y(pos_box[1]);
-    }
+  }else{
+      lomb.set_x(-1);
+      lomb.set_y(-1);
+  }
 
     lomb.set_id_lomb(next_lomb_id);
     lomb.set_water_level(m_map->getWaterLevel());
@@ -493,6 +496,8 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 zmq_msg.Clear();
                 zmq_msg.set_type_message(NEXT_ROUND);
                 Next_lombric lomb;
+                lomb.set_x(-1);
+                lomb.set_y(-1);
                 lomb.set_id_lomb(get_next_lombric_id());
                 std::cout << "Starting lomb : " << lomb.id_lomb() << std::endl;
                 m_game_object.setCurrentLomb(lomb.id_lomb());
