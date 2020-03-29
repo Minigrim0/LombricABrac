@@ -145,6 +145,12 @@ int Client::run(){
 					{newUser obj;
 					obj.ParseFromString(msg.text); //convertis en struct proto-buff
 					playersGone.push_back(obj.pseudo());
+					for(auto joueur=infoJoueurs.begin();joueur<infoJoueurs.end();++joueur){
+						if (joueur->pseudo == obj.pseudo()){
+							infoJoueurs.erase(joueur);
+							break;
+						}
+					}
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
 				case CLIENT_MODIFY_MAP: //L'hôte a changé de map

@@ -12,7 +12,8 @@ Sprite::Sprite(uint32_t id_l, Map* carte, bool canFly):id(id_l), skin(0), moveme
 			y = rand() % carte->getHauteur();//nombre entre 0 et hauteur de la carte
 		}while(!carte->isTypeBloc(x,y,AIR));
 
-		while(y < carte->getHauteur()-1 && !canFly){//pour ne pas être placé sur le bord inférieur sinon faut recommencer
+		if(canFly)break;
+		while(y < carte->getHauteur()-1){//pour ne pas être placé sur le bord inférieur sinon faut recommencer
 			if(!carte->isTypeBloc(x,y+1,AIR)){//le bloc en dessous doit pas être de l'air -> c'est ok
 				run = false;
 				break;
