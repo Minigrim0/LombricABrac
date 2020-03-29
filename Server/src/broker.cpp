@@ -17,7 +17,7 @@ int broker_thread(){
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
     {
-        size_t opt_value = 2000;
+        size_t opt_value = 500;
         subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
     }
     std::queue<uint32_t> waiting_players;
@@ -95,7 +95,6 @@ void ping_rooms(){
 
         std::ostringstream stream;
         stream << "room/" << open_rooms.coord(room_index) << "/client";
-        std::cout << "PINGING : " << stream.str() << std::endl;
 
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
