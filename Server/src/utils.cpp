@@ -57,6 +57,7 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 db.is_online(user_id, &online);
                 if(online){
                     la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 0);
+                    DataBase_mutex.unlock();
                     return 0;
                 }
                 usr->set_id(user_id);
