@@ -17,7 +17,7 @@ int broker_thread(){
     subscriber.connect("tcp://localhost:5563");
     subscriber.setsockopt(ZMQ_SUBSCRIBE, "all", 3);
     {
-        size_t opt_value = 2000;
+        size_t opt_value = 500;
         subscriber.setsockopt(ZMQ_RCVTIMEO, &opt_value, sizeof(int));
     }
     std::queue<uint32_t> waiting_players;

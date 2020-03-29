@@ -21,7 +21,7 @@ uint32_t Joueur::getNextLombricId(Partie *obj_partie, int nbLomb){
     for(uint8_t next_lomb=1;next_lomb<=nbr_lomb;next_lomb++){
         uint32_t id_lombric_checked = (next_lomb+m_current_lombric)%nbLomb;
         if(obj_partie->isLombAlive(m_Lombrics[id_lombric_checked])){
-            m_current_lombric=id_lombric_checked;
+            m_current_lombric = id_lombric_checked;
             return m_Lombrics[(next_lomb+m_current_lombric)%nbLomb];
         }
     }
@@ -63,14 +63,6 @@ void Joueur::set_player_id(int id){
     DataBase_mutex.unlock();
 
     set_pseudo(usr.pseudo());
-}
-
-void Joueur::set_current_lomb(int id){
-    for(size_t i=0;i<nbr_lomb;i++){
-        if(m_Lombrics[i] == static_cast<unsigned int>(id)){
-            m_current_lombric = i;
-        }
-    }
 }
 
 void Joueur::set_current_player(bool current){

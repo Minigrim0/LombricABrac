@@ -16,7 +16,6 @@ class Joueur{
         void set_pseudo(std::string pseudo);
         void set_equipe(uint8_t equipe);
         void set_player_id(int id);
-        void set_current_lomb(int id);
         void set_current_player(bool current);
 
         void init_worms(int lomb_nb);
