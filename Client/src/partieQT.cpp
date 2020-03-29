@@ -46,11 +46,11 @@ gameInfo(nullptr){
     chatLayout->addWidget(chatContainer);
     chatLayout->addWidget(chatInput);
 
-    chatArea->addSubWindow(chatWidget);
-    chatWidget->setWindowTitle("Chat");
-    chatWidget->show();
+    //chatArea->addSubWindow(chatWidget);
+    //chatWidget->setWindowTitle("Chat");
+    //chatWidget->show();
 
-    chatArea->currentSubWindow()->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
+    //chatArea->currentSubWindow()->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
   chooseWeaponRects = new QRect[3];//on a que 2 armes
 
   connect(chatInput, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
@@ -111,6 +111,7 @@ void partieQT::initWindow(){
   //bazookaSelected = false;
   gamePixmap = nullptr;
   installEventFilter(this);
+
   show();
 
   initTime = std::chrono::high_resolution_clock::now();
