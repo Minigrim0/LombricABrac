@@ -42,8 +42,14 @@ void EndGame::initWindow(){
   } else {
     msg_winner = teams[indexWinner]->getName() + " a gagné ! ";
   }
-
+  QFont font = page->ImageLabel->font();
+  font.setPointSize(28);
+  font.setBold(true);
+  page->ImageLabel->setFont(font);
+  page->ImageLabel->setStyleSheet("color: #00b2ff");
   page->ImageLabel->setText(QString(msg_winner.c_str()));
+  page->ImageLabel->setAlignment(Qt::AlignCenter);
+
 }
 
 EndGame::~EndGame(){
