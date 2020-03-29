@@ -21,7 +21,7 @@ gameInfo(nullptr){
   skinSprite = new QPixmap[3]{
     QPixmap("images/bomb.png"),
     QPixmap("images/lombrics/lomb1.png"),
-    QPixmap("images/parachute.png")
+    QPixmap("images/caisse.png")
   };
 
   //images des armes
