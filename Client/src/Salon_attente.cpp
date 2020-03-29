@@ -489,6 +489,7 @@ info Salon_Attente::run(info information)
           {
 
             information.id = MAIN_MENU_SCREEN;
+            information.client->quitRoom();
             information.already_in_room = 0;
             running = false;
             break;

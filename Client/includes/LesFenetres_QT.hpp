@@ -138,6 +138,7 @@ public:
     virtual ~Parametre_PartieQT();
 private slots:
     void setPara();
+    void changeMax(int);
 };
 
 class SalonQT: public WindowQT{
