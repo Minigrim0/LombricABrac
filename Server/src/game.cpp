@@ -318,7 +318,7 @@ void Game::spawn_lombric(){
       }
       else{
         for(int j=0;j<m_lomb_nb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, m_map));
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, 150, m_map));
         }
       }
     }

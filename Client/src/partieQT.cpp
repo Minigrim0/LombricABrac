@@ -517,7 +517,7 @@ bool partieQT::updateSprites(double t){
     else life=1;
     if(life>0){
         (*s)->getPos(oldPos);
-        bool alive = (*s)->update(gameInfo->carte, t);
+        bool alive = (*s)->update(gameInfo, t);
         (*s)->getPos(newPos);
 
         //si la vie du lombric a changé -> fin de tour

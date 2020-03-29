@@ -4,7 +4,8 @@ Projectile_c::Projectile_c(int x, int y, double speedX, double speedY,int rayon,
 	setMovement(speedX, speedY, GRAVITY, PARABOLE, t);
 }
 
-bool Projectile_c::update(Map* carte, double t){
+bool Projectile_c::update(infoPartie_s* inf, double t){
+	Map* carte = inf->carte;
 	bool res = true;
 	if(movement){
 		int newPos[2];
