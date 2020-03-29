@@ -6,17 +6,17 @@
 #define SAVE_FILE_DELIMITER "####"
 
 //NAVIGATION DANS LE MENU
-/*#define NAVIGATE_RIGHT KEY_RIGHT
+#define NAVIGATE_RIGHT KEY_RIGHT
 #define NAVIGATE_LEFT KEY_LEFT
 #define NAVIGATE_UP KEY_UP
-#define NAVIGATE_DOWN KEY_DOWN*/
+#define NAVIGATE_DOWN KEY_DOWN
 
 #define MENU_SLEEP_TIME 100 //temps de sleep entre chaque pause (en microseconde)
 
-#define NAVIGATE_RIGHT 'l'
+/*#define NAVIGATE_RIGHT 'l'
 #define NAVIGATE_LEFT 'j'
 #define NAVIGATE_UP 'i'
-#define NAVIGATE_DOWN 'k'
+#define NAVIGATE_DOWN 'k'*/
 
 #define ENTER_KEY '\n'
 
