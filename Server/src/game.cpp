@@ -19,6 +19,10 @@ m_map(nullptr)
     set_nb_teams(INIT_NB_TEAMS);
     set_round_time(INIT_ROUND_TIME);
     set_global_time(INIT_GLOBAL_TIME);
+    set_box_pv(INIT_BOX_PV);
+    set_prob_health_box(INIT_PROBA);
+    set_lomb_pv_init(INIT_LOMB_PV_INIT);
+    set_lomb_pv_max(INIT_LOMB_PV_MAX);
 }
 
 Game::~Game(){
@@ -38,6 +42,10 @@ void Game::set_map(uint8_t id_map){m_map_id = id_map;}
 void Game::set_nb_teams(uint8_t nbr_teams){m_team_nb = nbr_teams;}
 void Game::set_round_time(int round_time){m_max_time_round = round_time;}
 void Game::set_global_time(int global_time){m_max_time_game = global_time;}
+void Game::set_box_pv(int box_pv){m_box_pv = box_pv;}
+void Game::set_prob_health_box(int prob_health_box){m_prob_health_box = prob_health_box;}
+void Game::set_lomb_pv_init(int lomb_pv_init){m_lomb_pv_init = lomb_pv_init;}
+void Game::set_lomb_pv_max(int lomb_pv_max){m_lomb_pv_max = lomb_pv_max;}
 
 void Game::set_users_team(ZMQ_msg *zmq_msg){
     Join_groupe_s request;
@@ -129,6 +137,49 @@ void Game::change_nb_lomb(ZMQ_msg* zmq_msg){
     }
 }
 
+void Game::change_box_pv(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_VIE_CAISSE);
+    Caisse_mod caisse_m;
+    caisse_m.ParseFromString(zmq_msg->message());
+    m_box_pv = caisse_m.val();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_prob_health_box(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_PROBA_CAISSE);
+    Caisse_mod caisse_m;
+    caisse_m.ParseFromString(zmq_msg->message());
+    m_prob_health_box = caisse_m.val();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_lomb_pv_init(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_INIT_VIE);
+    Life_mod life_m;
+    life_m.ParseFromString(zmq_msg->message());
+    m_lomb_pv_init = life_m.life();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
+
+void Game::change_lomb_pv_max(ZMQ_msg* zmq_msg){
+    zmq_msg->set_type_message(CLIENT_MODIFY_MAX_VIE);
+    Life_mod life_m;
+    life_m.ParseFromString(zmq_msg->message());
+    m_lomb_pv_max = life_m.life();
+
+    for(size_t i=0;i<m_players.size();i++){
+        m_players[i].sendMessage(zmq_msg->SerializeAsString());
+    }
+}
 
 void Game::add_user(ZMQ_msg *zmq_msg){
     infoRoom room;
@@ -180,11 +231,11 @@ void Game::add_user(ZMQ_msg *zmq_msg){
 
 //Verification methods
 bool Game::check_round_time(){
-    return (difftime(time(NULL),m_begin_time_round) > m_max_time_round);
+    return (difftime(time(nullptr),m_begin_time_round) > m_max_time_round);
 }
 
 bool Game::check_time(){
-    return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
+    return (difftime(time(nullptr),m_begin_time_game) > m_max_time_game);
 }
 
 void Game::nb_alive_teams(size_t *nbr_teams, size_t *last_team){
@@ -240,10 +291,19 @@ void Game::end_round(int *current_step){
 
     m_game_object.setCurrentLomb(next_lomb_id);
 
-    // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
-    // ^ Fait !
-
     Next_lombric lomb;
+
+    if((rand()%100) < m_prob_health_box ){
+
+      HealthBox* health_box;
+      health_box = new HealthBox(m_box_pv,m_map);
+      int pos_box[2];
+      health_box->getPos(pos_box);
+      m_game_object.addHealthBox(health_box);
+      lomb.set_x(pos_box[0]);
+      lomb.set_y(pos_box[1]);
+    }
+
     lomb.set_id_lomb(next_lomb_id);
     lomb.set_water_level(m_map->getWaterLevel());
 
@@ -318,7 +378,7 @@ void Game::spawn_lombric(){
       }
       else{
         for(int j=0;j<m_lomb_nb;j++){
-            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), 100, 150, m_map));
+            m_lombs.push_back(new Lombric_c(m_players[i].get_lombric_id(j), m_lomb_pv_init, m_lomb_pv_max, m_map));
         }
       }
     }
@@ -375,6 +435,18 @@ void Game::handle_room(ZMQ_msg zmq_msg, int* current_step){
                 break;
             case CLIENT_MODIFY_NB_LOMBRICS:
                 change_nb_lomb(&zmq_msg);
+                break;
+            case CLIENT_MODIFY_VIE_CAISSE:
+                change_box_pv(&zmq_msg);
+                break;
+            case CLIENT_MODIFY_PROBA_CAISSE:
+                change_prob_health_box(&zmq_msg);
+                break;
+            case CLIENT_MODIFY_INIT_VIE:
+                change_lomb_pv_init(&zmq_msg);
+                break;
+            case CLIENT_MODIFY_MAX_VIE:
+                change_lomb_pv_max(&zmq_msg);
                 break;
             case START:{
                 //Setting current game step to STEP_GAME

@@ -12,6 +12,10 @@
 #define INIT_NB_TEAMS 4
 #define INIT_ROUND_TIME 20
 #define INIT_GLOBAL_TIME 30
+#define INIT_PROBA 30
+#define INIT_BOX_PV 25
+#define INIT_LOMB_PV_INIT 100
+#define INIT_LOMB_PV_MAX 150
 
 //Tout ce qui est en rapport avec la fin de la partie(timer) sera geré en partie 3(eau qui monte)
 class Game{
@@ -27,12 +31,20 @@ class Game{
         void set_round_time(int round_time);
         void set_global_time(int global_time);
         void set_users_team(ZMQ_msg* zmq_msg);
+        void set_box_pv(int box_pv);
+        void set_prob_health_box(int prob_health_box);
+        void set_lomb_pv_init(int lomb_pv_init);
+        void set_lomb_pv_max(int lomb_pv_max);
 
         void change_map(ZMQ_msg* zmq_msg);
         void change_nb_teams(ZMQ_msg* zmq_msg);
         void change_time(ZMQ_msg* zmq_msg);
         void change_round_time(ZMQ_msg* zmq_msg);
         void change_nb_lomb(ZMQ_msg* zmq_msg);
+        void change_box_pv(ZMQ_msg* zmq_msg);
+        void change_prob_health_box(ZMQ_msg* zmq_msg);
+        void change_lomb_pv_init(ZMQ_msg* zmq_msg);
+        void change_lomb_pv_max(ZMQ_msg* zmq_msg);
 
         void add_user(ZMQ_msg *zmq_msg);
 
@@ -62,6 +74,10 @@ class Game{
         time_t m_begin_time_game; // Temps de début de partie
         int m_max_time_game; // Durée totale d'une partie en sec
 
+        uint8_t m_lomb_pv_init;
+        uint8_t m_lomb_pv_max;
+        uint8_t m_box_pv;
+        uint8_t m_prob_health_box;
         uint8_t m_team_nb; // Nbr equipes
         uint8_t m_lomb_nb; // nombre lombric par joueur
         uint32_t m_owner_id;
