@@ -29,10 +29,10 @@ void Parametre_PartieQT::initWindow(){
     page->Nombre_lombricspinBox->setValue(Para_partie.nbr_lombs);
     page->Temps_EauspinBox->setValue(Para_partie.time);
     page->CartecomboBox->setCurrentIndex(Para_partie.map - 1);
-    page->Proba_CaissespinBox->setValue(Para_partie.heath_of_box);
+    page->Proba_CaissespinBox->setValue(Para_partie.probabilite);
     page->Vie_MaxspinBox->setValue(Para_partie.maxPv);
     page->Vie_InitialspinBox->setValue(Para_partie.initPv);
-    page->Points_DansCaissespinBox->setValue(Para_partie.probabilite);
+    page->Points_DansCaissespinBox->setValue(Para_partie.heath_of_box);
 
 
 }
