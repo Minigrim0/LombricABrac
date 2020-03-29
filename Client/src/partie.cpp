@@ -307,40 +307,46 @@ bool Partie::updateSprites(double t){
   while(s != gameInfo->spriteVector.end()){
     int id = (*s)->getId();
     if(id)life = dynamic_cast<Lombric_c*>(*s)->getLife();
-    (*s)->getPos(oldPos);
-    bool alive = (*s)->update(gameInfo->carte, t);
-    (*s)->getPos(newPos);
+    else life=1;
+    if(life>0){
+        (*s)->getPos(oldPos);
+        bool alive = (*s)->update(gameInfo->carte, t);
+        (*s)->getPos(newPos);
 
-    //si la vie du lombric a changé -> fin de tour
-    if(id && dynamic_cast<Lombric_c*>(*s)->getLife() != life){
-        spentTime = gameParam.time_round;
-        mustRefreshOverlay = true;
-        tour = false;
-    };
+        //si la vie du lombric a changé -> fin de tour
+        if(*s == gameInfo->currentWorms && dynamic_cast<Lombric_c*>(*s)->getLife() != life){
+            spentTime = gameParam.time_round;
+            mustRefreshOverlay = true;
+            tour = false;
+        };
 
-    isMovement |= (*s)->isInMovement();//un seul lombric en mouvement -> isMovement = true
-    if(!alive){//le sprite doit mourir, on le supprime
-      isMovement = true;
+        isMovement |= (*s)->isInMovement();//un seul lombric en mouvement -> isMovement = true
+        if(!alive){//le sprite doit mourir, on le supprime
+          isMovement = true;
 
-      std::vector<int> temp = (*s)->deathMove(gameInfo, t);
-      addDeletedBlock(temp);
-      mustDrawWall = true;
-      mustRefreshOverlay = true;
-      gameInfo->spriteVector.erase(s);
-      if(!id){
-        delete(*s);
-      }
-      drawMur(newPos[0], newPos[1]);
-    }
-    else{
-      drawSprite((*s), oldPos, newPos);
-      ++s;
+          std::vector<int> temp = (*s)->deathMove(gameInfo, t);
+          addDeletedBlock(temp);
+          mustDrawWall = true;
+          mustRefreshOverlay = true;
+          if(!id){
+              gameInfo->spriteVector.erase(s);
+            delete(*s);
+          }
+          drawMur(newPos[0], newPos[1]);
+        }
+        else{
+          drawSprite((*s), oldPos, newPos);
+          ++s;
+        }
+    }else{
+        ++s;
     }
   }
   return isMovement;
 }
 
 void Partie::drawSprite(Sprite* s, int* oldPos, int* newPos){
+    if(s->getId() && dynamic_cast<Lombric_c*>(s)->getLife()<=0)return;
   //supprime l'ancienne position
   drawMur(oldPos[0], oldPos[1]);
   //redessine le sprite au bon endroit

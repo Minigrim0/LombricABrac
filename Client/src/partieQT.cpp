@@ -129,7 +129,9 @@ void partieQT::updateGame(){
 
   bool movement = updateSprites(t);//update la positions des sprites à cahque itérations
   //si le temps est écoulé et qu'il n'y a plus de mouvement -> fin du round
-  if(spentTime >= gameParam.time_round && !movement)endRound = true;
+  if(spentTime >= gameParam.time_round && !movement){
+      endRound = true;
+  }
 
   if (client->getIsEnded()){
       removeEventFilter(this);
@@ -407,67 +409,73 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
   if (id){//si lombric dans la case
     texture = skinSprite[1];
     Lombric_c* lomb = dynamic_cast<Lombric_c*>(s);
-    int direction = lomb->getDirection();
-    texture = texture.transformed(QTransform().scale(-direction,1));
+    if(lomb->getLife()>0){
+        int direction = lomb->getDirection();
+        texture = texture.transformed(QTransform().scale(-direction,1));
 
-    //Affichage de la barre de vie
-    int color;
-    int xBarVie = x;
-    int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
-    int largeur = blockWidth * lomb->getLife() / 100;
-    setPenColor(lomb, &painter);
+        //Affichage de la barre de vie
+        int color;
+        int xBarVie = x;
+        int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
+        int largeur = blockWidth * lomb->getLife() / 100;
+        setPenColor(lomb, &painter);
 
-    //painter.setPen(pen);
-    painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);// remplissage bar vie
+        //painter.setPen(pen);
+        painter.drawRect(xBarVie,yBarVie,largeur,blockWidth*EPAISSEUR_BAR_VIE);// remplissage bar vie
 
-    painter.setBrush(Qt::NoBrush);
-    if (blockWidth >= INIT_SIZE_BLOCK){
-      painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
+        painter.setBrush(Qt::NoBrush);
+        if (blockWidth >= INIT_SIZE_BLOCK){
+          painter.drawRect(xBarVie,yBarVie,blockWidth,blockWidth*EPAISSEUR_BAR_VIE); //cadre barre vie
+        }
+
+        QRect rect(x-blockWidth, y - blockWidth, 3*blockWidth, 0.8*blockWidth);
+        QString name(lomb->getName().c_str());
+        painter.drawText(rect, Qt::AlignCenter, name);
+         painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
     }
-
-    QRect rect(x-blockWidth, y - blockWidth, 3*blockWidth, 0.8*blockWidth);
-    QString name(lomb->getName().c_str());
-    painter.drawText(rect, Qt::AlignCenter, name);
   }
   else{
     texture = skinSprite[0];
+     painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
   }
-  painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
 
   if (id){
     Lombric_c* lomb = dynamic_cast<Lombric_c*>(s);
-    int direction = lomb->getDirection();
-    Lombric_c* thisLomb = gameInfo->currentWorms;
-    //draw weapons
-    QPixmap textureWeapon;
-    if (!tour){
-      int current = client->getCurrentWeapon();
-      if (lomb == thisLomb && current!=2){
-        textureWeapon = skinWeapons[current];
-        textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
-        painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+    if(lomb->getLife()>0){
+        int direction = lomb->getDirection();
+        Lombric_c* thisLomb = gameInfo->currentWorms;
+        //draw weapons
+        QPixmap textureWeapon;
+        if (!tour){
+          int current = client->getCurrentWeapon();
+          if (lomb == thisLomb && current!=2){
+            textureWeapon = skinWeapons[current];
+            textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
+            painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+          }
+        }else{ //si en local, on demande pas au serveur
+          if (weaponIndex!=2 && lomb == thisLomb){
+            textureWeapon = skinWeapons[weaponIndex];
+            textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
+            painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
+          }
       }
-    }else{ //si en local, on demande pas au serveur
-      if (weaponIndex!=2 && lomb == thisLomb){
-        textureWeapon = skinWeapons[weaponIndex];
-        textureWeapon = textureWeapon.transformed(QTransform().scale(-direction,1));
-        painter.drawPixmap(x, y, textureWeapon.scaled(blockWidth, blockWidth));
-      }
-    }
 
-    if(lomb == thisLomb){//dessin du triangle au dessus du joueur actif
-        int xTriangle = x + blockWidth/2;//x de la pointe du bas du triangle
-        int yTriangle = y - blockWidth;//y de la pointe du bas du triangle
-        int height = blockWidth;//hauteur du triangle
 
-        QPainterPath path;
-        path.moveTo(xTriangle,yTriangle);
-        path.lineTo(xTriangle+tan(PI/6)*height,yTriangle-height);
-        path.lineTo(xTriangle-tan(PI/6)*height,yTriangle-height);
-        path.lineTo(xTriangle,yTriangle);
+        if(lomb == thisLomb){//dessin du triangle au dessus du joueur actif
+            int xTriangle = x + blockWidth/2;//x de la pointe du bas du triangle
+            int yTriangle = y - blockWidth;//y de la pointe du bas du triangle
+            int height = blockWidth;//hauteur du triangle
 
-        painter.setPen(Qt::NoPen);
-        painter.fillPath(path, QBrush(QColor ("red")));
+            QPainterPath path;
+            path.moveTo(xTriangle,yTriangle);
+            path.lineTo(xTriangle+tan(PI/6)*height,yTriangle-height);
+            path.lineTo(xTriangle-tan(PI/6)*height,yTriangle-height);
+            path.lineTo(xTriangle,yTriangle);
+
+            painter.setPen(Qt::NoPen);
+            painter.fillPath(path, QBrush(QColor ("red")));
+        }
     }
   }
 
@@ -505,30 +513,36 @@ bool partieQT::updateSprites(double t){
   while(s != gameInfo->spriteVector.end()){
     int id = (*s)->getId();
     if(id)life = dynamic_cast<Lombric_c*>(*s)->getLife();
-    (*s)->getPos(oldPos);
-    bool alive = (*s)->update(gameInfo->carte, t);
-    (*s)->getPos(newPos);
+    else life=1;
+    if(life>0){
+        (*s)->getPos(oldPos);
+        bool alive = (*s)->update(gameInfo->carte, t);
+        (*s)->getPos(newPos);
 
-    //si la vie du lombric a changé -> fin de tour
-    if(id && dynamic_cast<Lombric_c*>(*s)->getLife() != life){
-        spentTime = gameParam.time_round;
-        tour = false;
-    };
+        //si la vie du lombric a changé -> fin de tour
+        if(*s == gameInfo->currentWorms && dynamic_cast<Lombric_c*>(*s)->getLife() != life){
+            spentTime = gameParam.time_round;
+            tour = false;
+        };
 
-    isMovement |= (*s)->isInMovement();//un seul lombric en mouvement -> isMovement = true
-    if(!alive){//le sprite doit mourir, on le supprime
-      isMovement = true;
+        isMovement |= (*s)->isInMovement();//un seul lombric en mouvement -> isMovement = true
+        if(!alive){//le sprite doit mourir, on le supprime
+          isMovement = true;
 
-      std::vector<int> temp = (*s)->deathMove(gameInfo, t);
-      addDeletedBlock(temp);
+          std::vector<int> temp = (*s)->deathMove(gameInfo, t);
+          addDeletedBlock(temp);
 
-      gameInfo->spriteVector.erase(s);
-      if(!id){
-        delete(*s);
-      }
+          if(!id){
+              gameInfo->spriteVector.erase(s);
+            delete(*s);
+          }
+        }
+        else{
+          ++s;
+        }
     }
     else{
-      ++s;
+        ++s;
     }
   }
   return isMovement;
@@ -561,11 +575,13 @@ void partieQT::synchronizeLombrics(Degats_lombric d){
   for(int i=0;i<d.lomb_upt_size();++i){
     Lombric l = d.lomb_upt(i);
     Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, l.id_lomb()));
-    int pos[2];
-    pos[0] = l.pos_x();
-    pos[1] = l.pos_y();
-    lomb->setPos(pos);
-    lomb->setLife(l.vie());
+    if(lomb){
+        int pos[2];
+        pos[0] = l.pos_x();
+        pos[1] = l.pos_y();
+        lomb->setPos(pos);
+        lomb->setLife(l.vie());
+    }
   }
 }
 
