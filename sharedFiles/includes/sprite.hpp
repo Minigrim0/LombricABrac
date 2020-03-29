@@ -19,7 +19,7 @@ protected:
 	unsigned long skin;
 public:
 	Sprite(int x, int y, unsigned long skin, uint32_t id_l);
-	Sprite(uint32_t id_l, Map* carte);
+	Sprite(uint32_t id_l, Map* carte, bool canFly=false);
 	uint32_t getId();
 	unsigned long getSkin();
 	void getPos(int *pos);//rempli le tableau pos des coordonnées x et y

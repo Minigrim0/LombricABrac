@@ -5,7 +5,7 @@ Sprite(x,y,skin,0),
 health(pv){}
 
 HealthBox::HealthBox(int pv, Map* carte):
-Sprite(0, carte),
+Sprite(0, carte, true),
 health(pv){}
 
 bool HealthBox::update(infoPartie_s* inf, double t){
@@ -28,8 +28,13 @@ bool HealthBox::update(infoPartie_s* inf, double t){
 		}
     }
 
+    if(!movement && carte->isTypeBloc(static_cast<uint32_t>(posX), static_cast<uint32_t>(posY+1), AIR)){
+		setMovement(0,0, GRAVITY/4, PARABOLE, t);
+	}
+
+
     for(auto s=inf->spriteVector.begin();s!=inf->spriteVector.end();++s){
-        if((*s)->getId()){
+        if(*s && (*s)->getId()){
             Lombric_c* lomb = dynamic_cast<Lombric_c*>(*s);
             int pos[2];
             lomb->getPos(pos);
@@ -42,4 +47,6 @@ bool HealthBox::update(infoPartie_s* inf, double t){
     return true;
 }
 
-std::vector<int> HealthBox::deathMove(infoPartie_s* inf, double t){}
+std::vector<int> HealthBox::deathMove(infoPartie_s* inf, double t){
+    return std::vector<int>();
+}
