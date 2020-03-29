@@ -213,6 +213,8 @@ public:
 	void set_nbr_equipes(uint32_t nbr_eq);
 	void setInitLife(uint32_t vie);
 	void setMaxLife(uint32_t vie);
+	void setProbaCaisse(uint32_t vie);
+	void setLifeCaisse(uint32_t vie);
 	void changeTeam(uint32_t id_equipe);
 	void quitRoom();//quitter salon d'attente
 
