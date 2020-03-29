@@ -189,11 +189,11 @@ int Client::run(){
 					msg.type = 0;
 					break;
 				case CLIENT_SEND_IN_GAME_MESSAGE:
-					Chat obj;
+					{Chat obj;
 					obj.ParseFromString(msg.text);
 					inGameMessage.push_back({obj.pseudo(), obj.msg()});
 					msg.type = 0;
-					break;
+					break;}
 				case CLIENT_MODIFY_INIT_VIE: {
 					Life_mod obj;
 					obj.ParseFromString(msg.text);
