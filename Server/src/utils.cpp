@@ -129,9 +129,50 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
                 Get_history r_history;
                 la_poste->reception();
                 r_history.ParseFromString(la_poste->get_buffer());
+                History_r_TMP history_list_tmp;
                 History_r history_list;
                 int user_r_id;db.get_user_id(r_history.pseudo(), &user_r_id);
-                db.get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list);
+                db.get_history(user_r_id, r_history.first_game(), r_history.nbr_game(), &history_list_tmp);
+                for(int index=0;index<history_list_tmp.history_size();index++){
+                    History_TMP history_TMP = history_list_tmp.history(index);
+                    History *new_history = history_list.add_history();
+
+                    std::string username;
+                    db.get_user_username(history_TMP.id_1(), &username);
+                    new_history->set_pseudo_1(username);
+
+                    if(history_TMP.id_2() != 0){
+                        db.get_user_username(history_TMP.id_2(), &username);
+                    }
+                    else{
+                        username = "";
+                    }
+                    new_history->set_pseudo_2(username);
+
+                    if(history_TMP.id_3() != 0){
+                        db.get_user_username(history_TMP.id_3(), &username);
+                    }
+                    else{
+                        username = "";
+                    }
+                    new_history->set_pseudo_3(username);
+
+                    if(history_TMP.id_4() != 0){
+                        db.get_user_username(history_TMP.id_4(), &username);
+                    }
+                    else{
+                        username = "";
+                    }
+                    new_history->set_pseudo_4(username);
+
+                    new_history->set_point_1(history_TMP.point_1());
+                    new_history->set_point_2(history_TMP.point_2());
+                    new_history->set_point_3(history_TMP.point_3());
+                    new_history->set_point_4(history_TMP.point_4());
+                    std::cout << "Date : " << history_TMP.date() << std::endl;
+                    new_history->set_date(history_TMP.date());
+                    std::cout << "Date after : " << new_history->date() << std::endl;
+                }
                 la_poste->envoie_msg(SERVER_HISTORY_RESPONSE, history_list.SerializeAsString());
                 break;
             }
