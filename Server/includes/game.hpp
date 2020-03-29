@@ -27,6 +27,7 @@ class Game{
         void set_round_time(int round_time);
         void set_global_time(int global_time);
         void set_users_team(ZMQ_msg* zmq_msg);
+
         void change_map(ZMQ_msg* zmq_msg);
         void change_nb_teams(ZMQ_msg* zmq_msg);
         void change_time(ZMQ_msg* zmq_msg);
@@ -38,7 +39,7 @@ class Game{
         //Verification methods
         bool check_round_time();
         bool check_time();
-        void nb_alive_teams();
+        void nb_alive_teams(size_t *nbr_teams, size_t *last_team);
 
         uint32_t get_next_lombric_id();
         void end_round(int* current_step);
@@ -70,7 +71,7 @@ class Game{
         std::vector<Sprite*> m_lombs;
         Map* m_map;
 
-        bool alive_team[4];
+        bool m_alive_team[4];
 };
 
 #endif

@@ -187,18 +187,22 @@ bool Game::check_time(){
     return (difftime(time(NULL),m_begin_time_game) > m_max_time_game);
 }
 
-void Game::nb_alive_teams(){
-    uint32_t id_team;
-    bzero(alive_team, 4 * sizeof(bool));
-    for(size_t index=0;index<m_players.size();index++){
+void Game::nb_alive_teams(size_t *nbr_teams, size_t *last_team){
+    bzero(m_alive_team, 4 * sizeof(bool)); // Reset the array
+    for(size_t index=0, id_team;index<m_players.size();index++){ // Go through all the connected players
         id_team = m_players[index].get_team();
-        if(id_team != 0)
-            alive_team[id_team-1] = true;
+        // If the player's team is not spectator and has not been registered yet
+        if(id_team != 0 && m_alive_team[id_team-1] == false){
+            m_alive_team[id_team-1] = true; // Register it as alive
+            *nbr_teams += 1; // Add one to the counter
+            *last_team = id_team-1; // Save it as the last alive team (used only if there's only one team alive)
+        }
     }
 }
 
 
 uint32_t Game::get_next_lombric_id(){
+    // If the user is a spectator, pass
     if(m_players[m_current_player_id].get_team() == 0){
         return 0;
     }
@@ -211,26 +215,22 @@ void Game::end_round(int *current_step){
     zmq_msg.set_type_message(NEXT_ROUND);
 
     uint32_t next_lomb_id;
+    size_t last_team;
+    size_t nbr_team;
 
     if(check_time()){
         m_map->increaseWaterLevel();  // si le temps est écoulé -> montée de l'eau
         m_game_object.update();
     }
-    size_t nbr_team = 0;
-    size_t last_team = 0;
-    nb_alive_teams();
-    for(size_t i=0;i<4;i++){
-        if(alive_team[i]){
-            nbr_team += 1;
-            last_team = i+1;
-        }
-    }
+
+    nb_alive_teams(&nbr_team, &last_team);
     std::cout << "Nbr Teams : " << nbr_team << std::endl;
     if(nbr_team <= 1){  // Si endgame
         end_game(current_step, last_team);
         return;
     }
 
+    // We are sure that at least two teams are stiil in course
     do{
         m_current_player_id++;
         if(m_current_player_id >= m_players.size())
