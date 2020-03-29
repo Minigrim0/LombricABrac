@@ -268,6 +268,18 @@ infoRoom_s Client::getInfoRoom(){
 	res.time = obj.time();
 	currentParams.time = obj.time();
 
+	res.heath_of_box = obj.vie_caisse();
+	currentParams.heath_of_box = obj.vie_caisse();
+
+	res.probabilite = obj.proba_caisse();
+	currentParams.probabilite = obj.proba_caisse();
+
+	res.maxPv = obj.max_vie();
+	currentParams.maxPv = obj.max_vie();
+
+	res.initPv = obj.init_vie();
+	currentParams.initPv = obj.init_vie();
+
 
 	infoJoueurs.clear();
 	for (int i=0; i<obj.joueur_size();++i){
