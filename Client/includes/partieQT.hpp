@@ -23,8 +23,9 @@
 #include <QString>
 #include <QRect>
 #include <QFont>
-
-
+#include <QSplitter>
+#include <QMdiArea>
+#include <QVBoxLayout>
 
 #include "client.hpp"
 #include "../../sharedFiles/includes/infoPartie.hpp"
@@ -79,13 +80,17 @@ private:
 
   QLabel* gameLabel;
   QPixmap* gamePixmap;
-  QGridLayout* mainLayout;
 
   QPixmap *textureMur;
   QPixmap *skinSprite;
   QPixmap *skinWeapons;
 
   QRect *chooseWeaponRects;
+
+  QWidget* chatWidget;
+  QMdiArea* chatArea;
+  QPlainTextEdit* chatContainer;
+  QLineEdit* chatInput;
 
   void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur
@@ -111,6 +116,7 @@ public:
   ~partieQT(); // Destructor
 private slots:
   void update();
+  void sendMessage();
 };
 
 #endif
