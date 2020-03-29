@@ -79,6 +79,7 @@ class HealthBox: public Sprite{
 private:
 	int health;//nbre de point de vie que la boxe fait gagner
 public:
+	HealthBox(int x, int y, int pv, unsigned long skin);
 	HealthBox(int pv, Map* carte);
 	bool update(infoPartie_s* inf, double t)override;
 	virtual std::vector<int> deathMove(infoPartie_s* inf, double t) override;

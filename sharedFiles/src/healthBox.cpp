@@ -1,5 +1,9 @@
 #include "../includes/sprite.hpp"
 
+HealthBox::HealthBox(int x, int y, int pv, unsigned long skin):
+Sprite(x,y,skin,0),
+health(pv){}
+
 HealthBox::HealthBox(int pv, Map* carte):
 Sprite(0, carte),
 health(pv){}
