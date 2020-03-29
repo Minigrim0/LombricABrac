@@ -32,8 +32,8 @@ int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){
                     std::string contents = s_recv(subscriber);
 
                     zmqmsg.ParseFromString(contents);
-                    current_game.handle_room(zmqmsg, &current_step);
                     current_game.handle_quit(zmqmsg, &current_step);
+                    current_game.handle_room(zmqmsg, &current_step);
                 }
 
                 break;
@@ -50,8 +50,8 @@ int game_thread(std::string chan_sub, uint32_t room_id, uint32_t owner){
                     if(address.size()){ // The receive just timed out
                         std::string contents = s_recv(subscriber);
                         zmqmsg.ParseFromString(contents);
-                        current_game.handle_game(zmqmsg, &current_step);
                         current_game.handle_quit(zmqmsg, &current_step);
+                        current_game.handle_game(zmqmsg, &current_step);
                     }
                     if(current_game.check_round_time()){ //Checking the time
                         std::cout << "changing round" << std::endl;

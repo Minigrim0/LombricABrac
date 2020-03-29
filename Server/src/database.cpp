@@ -187,6 +187,33 @@ int DataBase::get_user(int user_id, UserConnect* userconnect){
     return m_rc;
 }
 
+int DataBase::get_user_points(int user_id, int* user_points){
+    m_stringStream.str("");
+    m_stringStream.clear();
+    m_stringStream << "SELECT victory_amount FROM users WHERE id='" << user_id << "';";
+    m_sql_request = m_stringStream.str();
+
+    m_data_type = DT_INT;
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, user_points, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
+int DataBase::set_user_points(int user_id, int user_points){
+    m_stringStream.str("");
+    m_stringStream.clear();
+
+    m_stringStream << "UPDATE users SET victory_amount=" << user_points << " WHERE id='" << user_id << "';";
+    m_sql_request = m_stringStream.str();
+
+    m_rc = sqlite3_exec(m_db, m_sql_request.c_str(), callback, nullptr, &m_zErrMsg);
+    catch_error();
+
+    return m_rc;
+}
+
 int DataBase::get_passwd(std::string username, std::string* password){
     m_data_type = DT_STR;
 
