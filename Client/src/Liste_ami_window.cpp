@@ -305,7 +305,7 @@ info Liste_ami_window::run(info information)
         break;
       }
     }
-    if (touch == 'q')
+    if (touch == 'q' && information.id == INVITATIONS_SCREEN)
     {
       /*vector<invitation>::iterator i_double_save;
       i_double_save = information.vec_invit.begin();
