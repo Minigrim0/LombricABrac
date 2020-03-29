@@ -73,7 +73,7 @@ bool Lombric_c::update(infoPartie_s* inf, double t){
 	}
 
 	//le lombric meurt s'il est sous l'eau/sous la map
-	if(posY >= carte->getHauteur() - carte->getWaterLevel())vie = 0;
+	if(posY >= carte->getHauteur() - carte->getWaterLevel() - 1)vie = 0;
 
 	if(vie<0)vie=0;
 	return vie;

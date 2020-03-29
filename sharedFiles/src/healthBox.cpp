@@ -32,6 +32,11 @@ bool HealthBox::update(infoPartie_s* inf, double t){
 		setMovement(0,0, GRAVITY/4, PARABOLE, t);
 	}
 
+    //if(posY >= carte->getHauteur() - carte->getWaterLevel()){
+
+    //    return false;
+    //}
+
 
     for(auto s=inf->spriteVector.begin();s!=inf->spriteVector.end();++s){
         if(*s && (*s)->getId()){
