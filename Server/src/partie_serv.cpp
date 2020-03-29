@@ -97,10 +97,18 @@ bool Partie::moveCurrentLombric(std::string s){
     Lomb_pos lp;
     lp.ParseFromString(s);
     Lombric_c* lomb = dynamic_cast<Lombric_c*>(findById(gameInfo->spriteVector, lp.id_lomb()));
-    int pos[2];
-    pos[0] = lp.pos_x();
-    pos[1] = lp.pos_y();
-    lomb->setPos(pos);
+    if(!lomb)return false;
+
+    int oldPos[2];
+    lomb->getPos(oldPos);
+    int newPos[2];
+    newPos[0] = lp.pos_x();
+    newPos[1] = lp.pos_y();
+
+    if(oldPos[0] != newPos[0]-1 && oldPos[0] != newPos[0]-1)return false;
+    if(oldPos[1] != newPos[1] && oldPos[1]-1 != newPos[1])return false;
+
+    lomb->setPos(newPos);
 
     update();
 
