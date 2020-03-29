@@ -73,6 +73,9 @@ struct paramsPartie{
 	uint32_t time_round;
 	uint32_t nbr_lombs;
 	uint32_t nbr_equipes;
+	uint32_t heath_of_box=50;
+	uint32_t probabilite=50;
+	uint32_t maxPv=150;
 };
 
 struct nextTour{
