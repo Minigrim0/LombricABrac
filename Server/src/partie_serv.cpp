@@ -154,3 +154,7 @@ void Partie::update(){
     }
     setAnimationTime(t);
 }
+
+void Partie::addHealthBox(HealthBox* box){
+    gameInfo->spriteVector.push_back(box);
+}

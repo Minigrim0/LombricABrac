@@ -61,6 +61,7 @@ public:
   void setAnimationTime(int t);
   void waitAnimationTime();
   void update();//méthode qui update les sprites jusqu'à plus de mouvements
+  void addHealthBox(HealthBox* box);
 
   ~Partie();
 };
