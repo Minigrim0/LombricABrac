@@ -52,7 +52,13 @@ int handle_instruction(uint8_t msg_type, Listener* la_poste , ConnectedPlayer* u
         if(usr->isregister()){ // si joueur a deja un compte
             if(usr->check_passwd(&db, usr->password())){
                 int user_id;
+                int online;
                 db.get_user_id(usr->pseudo(), &user_id);
+                db.is_online(user_id, &online);
+                if(online){
+                    la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 0);
+                    return 0;
+                }
                 usr->set_id(user_id);
                 usr->set_auth(true);
                 la_poste->envoie_bool(AUTHENTIFICATION_RESPONSE, 1);
