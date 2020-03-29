@@ -239,6 +239,7 @@ void Game::end_round(int *current_step){
         next_lomb_id = get_next_lombric_id();
     }while(next_lomb_id == 0);
 
+    std::cout << "Current lombric " << next_lomb_id << std::endl;
     m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)

@@ -95,7 +95,6 @@ void ping_rooms(){
 
         std::ostringstream stream;
         stream << "room/" << open_rooms.coord(room_index) << "/client";
-        std::cout << "PINGING : " << stream.str() << std::endl;
 
         pub_mutex.lock();
         s_sendmore_b(publisher, stream.str());
