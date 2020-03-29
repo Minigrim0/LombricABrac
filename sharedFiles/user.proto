@@ -58,6 +58,14 @@ message Map_mod{
   uint32 id = 1;
 }
 
+message Caisse_mod{
+  uint32 val = 1;
+}
+
+message Life_mod{
+  uint32 life = 1;
+}
+
 message Time_mod{
   uint32 time = 1;
 }
@@ -203,6 +211,8 @@ message Next_lombric{
   uint32 id_lomb = 1;
   bool is_yours = 2;
   uint32 water_level = 3; //indique le niveau de l'eau pour ce tour
+  int32 x = 4;//pos de la nouvelle caisse
+  int32 y = 5;
 }
 
 message infoPartie_p{
@@ -216,6 +226,10 @@ message infoRoom{
   uint32 time_round = 4;
   uint32 map = 5;
   repeated Join_groupe_r joueur = 6;
+  uint32 init_vie = 7;
+  uint32 max_vie = 8;
+  uint32 proba_caisse = 9;
+  uint32 vie_caisse = 10;
 
 }
 

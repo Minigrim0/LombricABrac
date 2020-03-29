@@ -145,6 +145,12 @@ int Client::run(){
 					{newUser obj;
 					obj.ParseFromString(msg.text); //convertis en struct proto-buff
 					playersGone.push_back(obj.pseudo());
+					for(auto joueur=infoJoueurs.begin();joueur<infoJoueurs.end();++joueur){
+						if (joueur->pseudo == obj.pseudo()){
+							infoJoueurs.erase(joueur);
+							break;
+						}
+					}
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
 				case CLIENT_MODIFY_MAP: //L'hôte a changé de map
@@ -189,12 +195,36 @@ int Client::run(){
 					msg.type = 0;
 					break;
 				case CLIENT_SEND_IN_GAME_MESSAGE:
-					Chat obj;
+					{Chat obj;
 					obj.ParseFromString(msg.text);
 					inGameMessage.push_back({obj.pseudo(), obj.msg()});
 					msg.type = 0;
-					break;
-			}
+					break;}
+				case CLIENT_MODIFY_INIT_VIE: {
+					Life_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.initPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
+				case CLIENT_MODIFY_MAX_VIE:{
+					Life_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.maxPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
+				case CLIENT_MODIFY_VIE_CAISSE:{
+					Caisse_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.heath_of_box = obj.val();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
+				case CLIENT_MODIFY_PROBA_CAISSE:{
+					Caisse_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.probabilite = obj.val();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
+				}
 			msgMutex.unlock();
 		}
 		usleep(50);

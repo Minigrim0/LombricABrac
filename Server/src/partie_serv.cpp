@@ -65,7 +65,7 @@ bool Partie::updateSprites(int t){
         int id = (*s)->getId();
         if(id)life = dynamic_cast<Lombric_c*>(*s)->getLife();
         (*s)->getPos(oldPos);
-        bool alive = (*s)->update(gameInfo->carte, t);
+        bool alive = (*s)->update(gameInfo, t);
         (*s)->getPos(newPos);
 
         //si la vie du lombric a changé -> fin de tour
@@ -153,4 +153,8 @@ void Partie::update(){
         t += 25;
     }
     setAnimationTime(t);
+}
+
+void Partie::addHealthBox(HealthBox* box){
+    gameInfo->spriteVector.push_back(box);
 }

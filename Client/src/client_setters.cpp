@@ -45,6 +45,66 @@ void Client::setTimeRound(uint32_t time_round){
 	sendMutex.unlock();
 }
 
+void Client::setInitLife(uint32_t vie){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Life_mod obj;
+	obj.set_life(vie);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_INIT_VIE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setProbaCaisse(uint32_t valeur){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Caisse_mod obj;
+	obj.set_val(valeur);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_PROBA_CAISSE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setLifeCaisse(uint32_t valeur){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Caisse_mod obj;
+	obj.set_val(valeur);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_VIE_CAISSE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setMaxLife(uint32_t vie){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Life_mod obj;
+	obj.set_life(vie);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_MAX_VIE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 	message m{};
 

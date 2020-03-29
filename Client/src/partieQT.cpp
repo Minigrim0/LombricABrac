@@ -18,9 +18,10 @@ gameInfo(nullptr){
   };
 
   //images projectil et lombric
-  skinSprite = new QPixmap[2]{
+  skinSprite = new QPixmap[3]{
     QPixmap("images/bomb.png"),
     QPixmap("images/lombrics/lomb1.png"),
+    QPixmap("images/caisse.png")
   };
 
   //images des armes
@@ -161,6 +162,12 @@ void partieQT::updateGame(){
         blockDeleted.clear();
 
         gameInfo->carte->setWaterLevel(next.water_level());
+        if(next.x()>=0 && next.y()>=0){//on fait spawn la caisse
+            int x = next.x();
+            int y = next.y();
+            gameInfo->spriteVector.push_back(new HealthBox(x,y, gameParam.heath_of_box, 1));
+        }
+
         //destroyByServ.Clear();
         endRound = false;
       }
@@ -418,7 +425,7 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
         int color;
         int xBarVie = x;
         int yBarVie = y - 2*EPAISSEUR_BAR_VIE * blockWidth;
-        int largeur = blockWidth * lomb->getLife() / 100;
+        int largeur = blockWidth * lomb->getLife() / gameParam.maxPv;
         setPenColor(lomb, &painter);
 
         //painter.setPen(pen);
@@ -436,8 +443,12 @@ void partieQT::drawSprite(Sprite* s, int* oldPos, int* newPos){
     }
   }
   else{
-    texture = skinSprite[0];
-     painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
+    if (s->getSkin()==1){//caisse
+      texture = skinSprite[2];
+    }else{//bombe
+      texture = skinSprite[0];
+    }
+    painter.drawPixmap(x, y, texture.scaled(blockWidth, blockWidth));
   }
 
   if (id){
@@ -517,7 +528,7 @@ bool partieQT::updateSprites(double t){
     else life=1;
     if(life>0){
         (*s)->getPos(oldPos);
-        bool alive = (*s)->update(gameInfo->carte, t);
+        bool alive = (*s)->update(gameInfo, t);
         (*s)->getPos(newPos);
 
         //si la vie du lombric a changé -> fin de tour

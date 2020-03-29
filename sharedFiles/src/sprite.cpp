@@ -2,17 +2,19 @@
 
 Sprite::Sprite(int x, int y, unsigned long sk, uint32_t id_l):id(id_l),posX(x),posY(y),movement(nullptr),skin(sk){}
 
-Sprite::Sprite(uint32_t id_l, Map* carte):id(id_l), skin(0), movement(nullptr){
+Sprite::Sprite(uint32_t id_l, Map* carte, bool canFly):id(id_l), skin(0), movement(nullptr){
 	int x,y;
 	bool run = true;
-
+	int saveY=0;
 	while(run){//on recommence tant que l'emplacement n'est pas bon
 		do{//jusqu'à ce que les coords = bloc d'air
 			x = rand() % carte->getLargeur();//nombre entre 0 et largeur de la carte
 			y = rand() % carte->getHauteur();//nombre entre 0 et hauteur de la carte
 		}while(!carte->isTypeBloc(x,y,AIR));
 
+		saveY=y;
 		while(y < carte->getHauteur()-1){//pour ne pas être placé sur le bord inférieur sinon faut recommencer
+			if(y >= carte->getHauteur()-carte->getWaterLevel())break;
 			if(!carte->isTypeBloc(x,y+1,AIR)){//le bloc en dessous doit pas être de l'air -> c'est ok
 				run = false;
 				break;
@@ -23,7 +25,8 @@ Sprite::Sprite(uint32_t id_l, Map* carte):id(id_l), skin(0), movement(nullptr){
 		}
 	}
 	posX = x;
-	posY = y;
+	if(!canFly)	posY = y;
+	else posY=saveY;
 }
 
 uint32_t Sprite::getId(){return id;}

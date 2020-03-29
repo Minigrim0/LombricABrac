@@ -101,6 +101,12 @@ info Partie::run(info information)
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
         gameInfo->carte->setWaterLevel(next.water_level());
+
+        if(next.x()>=0 && next.y()>=0){//on fait spawn la caisse
+            int x = next.x();
+            int y = next.y();
+            gameInfo->spriteVector.push_back(new HealthBox(x,y, gameParam.heath_of_box, 'H'));
+        }
         //destroyByServ.Clear();
 
         mustRefreshOverlay = true;
@@ -310,7 +316,7 @@ bool Partie::updateSprites(double t){
     else life=1;
     if(life>0){
         (*s)->getPos(oldPos);
-        bool alive = (*s)->update(gameInfo->carte, t);
+        bool alive = (*s)->update(gameInfo, t);
         (*s)->getPos(newPos);
 
         //si la vie du lombric a changé -> fin de tour

@@ -16,6 +16,7 @@ info Salon_Attente::run(info information)
   int n = 0, x_1 = 0,x_2 = 0,x_3 = 0,x_4 = 0;
   //int x_pseudo1, x_pseudo2, x_pseudo3, x_pseudo4;
   const char* space = " ";
+  bool running_invit = true;
   int x_arrow1, x_arrow2,x_arrow3, x_arrow4, touch;
   string titre= "Salon d'attente";
   string indication_hote = "Appuyer n'importe quelle touche pour refresh la room.";
@@ -162,6 +163,11 @@ info Salon_Attente::run(info information)
     draw(9,(max_x/2)-len_str/2,indication);
     len_str=static_cast<int>(spectateur.size());
     draw(10,(max_x/2)-len_str/2,spectateur);
+
+    print_string_window(getInput,2,x, bouttonLeave);
+    print_string_window(getInput, 2, x-3, arrow);
+
+
     refresh();
     keypad(pseudo,true);
     nodelay(pseudo, true);
@@ -216,13 +222,13 @@ info Salon_Attente::run(info information)
     effacer_caractere_window(pseudo, 1 , 1, 19);
     len_str=static_cast<int>(msg_attente.size());
     draw(max_y-5,(max_x/2)-len_str/2,msg_attente);
-    while(1)
+    while(running_invit)
     {
       partie_lance = information.client->isStarted();
       if (partie_lance)
       {
         information.id = GAME_SCREEN;
-        break;
+        running_invit = false;
       }
       else{
         x_1 = 0;
@@ -306,6 +312,14 @@ info Salon_Attente::run(info information)
         wrefresh(equipe2);
         wrefresh(equipe3);
         wrefresh(equipe4);
+
+        touch= wgetch(getInput);
+        if (touch == 10){
+          information.id = MAIN_MENU_SCREEN;
+          information.client->quitRoom();
+          running_invit = false;
+        }
+
       }
     }
   }
@@ -487,11 +501,13 @@ info Salon_Attente::run(info information)
         {
           if ( x == x_arrow1)
           {
-
-            information.id = MAIN_MENU_SCREEN;
-            information.already_in_room = 0;
-            running = false;
-            break;
+            if(!information.ishost){
+              information.id = MAIN_MENU_SCREEN;
+              information.client->quitRoom();
+              information.already_in_room = 0;
+              running = false;
+              break;
+            }
           }
           if (x == x_arrow2 && information.ishost)
           {

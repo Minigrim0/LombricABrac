@@ -34,7 +34,100 @@
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <layout class="QGridLayout" name="Parametre_PartiegridLayout">
-        <item row="10" column="0">
+        <item row="18" column="3" alignment="Qt::AlignRight">
+         <widget class="QToolButton" name="Apply_ParametretoolButton">
+          <property name="text">
+           <string>Appliquer</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../images_widget.qrc">
+            <normaloff>:/icons/UI/Resources/login.png</normaloff>:/icons/UI/Resources/login.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>24</width>
+            <height>24</height>
+           </size>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="1">
+         <widget class="QLabel" name="Proba_CaisseLabel">
+          <property name="text">
+           <string>Probabilité d'apparation des caisses de soins(%)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="2">
+         <widget class="QSpinBox" name="Points_DansCaissespinBox">
+          <property name="minimum">
+           <number>10</number>
+          </property>
+          <property name="maximum">
+           <number>50</number>
+          </property>
+          <property name="singleStep">
+           <number>25</number>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="Temps_EauLabel">
+          <property name="text">
+           <string>Temps avant la montée des eaux (en seconde)</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="2">
+         <widget class="QSpinBox" name="Vie_InitialspinBox">
+          <property name="minimum">
+           <number>50</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="singleStep">
+           <number>10</number>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <spacer name="verticalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="17" column="1">
+         <widget class="QLabel" name="CarteLabel">
+          <property name="text">
+           <string>Carte</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="3">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="18" column="0">
          <widget class="QToolButton" name="Return_Parametre_PArtietoolButton">
           <property name="text">
            <string>Retour</string>
@@ -67,8 +160,30 @@
           </property>
          </spacer>
         </item>
-        <item row="0" column="2">
-         <spacer name="verticalSpacer">
+        <item row="17" column="2">
+         <widget class="QComboBox" name="CartecomboBox">
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <item>
+           <property name="text">
+            <string>Highjacked</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Warzone</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>No Man's Land</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="18" column="1">
+         <spacer name="verticalSpacer_4">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -80,50 +195,49 @@
           </property>
          </spacer>
         </item>
-        <item row="9" column="1">
-         <widget class="QLabel" name="CarteLabel">
-          <property name="text">
-           <string>Carte</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <spacer name="horizontalSpacer_2">
+        <item row="6" column="1">
+         <spacer name="verticalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>20</width>
+            <height>40</height>
            </size>
           </property>
          </spacer>
         </item>
-        <item row="7" column="1">
-         <widget class="QLabel" name="Temps_EauLabel">
+        <item row="3" column="1">
+         <widget class="QLabel" name="Nombre_lombricLabel">
           <property name="text">
-           <string>Temps avant la montée des eaux (en seconde)</string>
+           <string>Nombre de lombric par équipe</string>
           </property>
          </widget>
         </item>
-        <item row="10" column="3" alignment="Qt::AlignRight">
-         <widget class="QToolButton" name="Apply_ParametretoolButton">
-          <property name="text">
-           <string>Appliquer</string>
+        <item row="3" column="2">
+         <widget class="QSpinBox" name="Nombre_lombricspinBox">
+          <property name="styleSheet">
+           <string notr="true"/>
           </property>
-          <property name="icon">
-           <iconset resource="../images_widget.qrc">
-            <normaloff>:/icons/UI/Resources/login.png</normaloff>:/icons/UI/Resources/login.png</iconset>
+          <property name="minimum">
+           <number>1</number>
           </property>
-          <property name="iconSize">
-           <size>
-            <width>24</width>
-            <height>24</height>
-           </size>
+          <property name="maximum">
+           <number>8</number>
           </property>
-          <property name="toolButtonStyle">
-           <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QSpinBox" name="Temps_EauspinBox">
+          <property name="minimum">
+           <number>60</number>
+          </property>
+          <property name="maximum">
+           <number>900</number>
+          </property>
+          <property name="singleStep">
+           <number>30</number>
           </property>
          </widget>
         </item>
@@ -146,8 +260,8 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="1">
-         <spacer name="verticalSpacer_4">
+        <item row="2" column="1">
+         <spacer name="verticalSpacer_2">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -159,8 +273,48 @@
           </property>
          </spacer>
         </item>
-        <item row="6" column="1">
-         <spacer name="verticalSpacer_3">
+        <item row="4" column="1">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="Temps_tourLabel">
+          <property name="text">
+           <string>Temps maximum (en seconde) pour chaque tour</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="Nombre_equipeLabel">
+          <property name="text">
+           <string>Nombre d'équipe</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="8" column="1">
+         <spacer name="verticalSpacer_6">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
@@ -191,113 +345,97 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="2">
-         <widget class="QSpinBox" name="Nombre_lombricspinBox">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <property name="minimum">
-           <number>1</number>
-          </property>
-          <property name="maximum">
-           <number>8</number>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <spacer name="verticalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="4" column="1">
-         <spacer name="verticalSpacer_5">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="Nombre_lombricLabel">
-          <property name="text">
-           <string>Nombre de lombric par équipe</string>
-          </property>
-         </widget>
-        </item>
         <item row="9" column="2">
-         <widget class="QComboBox" name="CartecomboBox">
-          <property name="styleSheet">
-           <string notr="true"/>
-          </property>
-          <item>
-           <property name="text">
-            <string>Highjacked</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Warzone</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>No Man's Land</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QLabel" name="Temps_tourLabel">
-          <property name="text">
-           <string>Temps maximum (en seconde) pour chaque tour</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLabel" name="Nombre_equipeLabel">
-          <property name="text">
-           <string>Nombre d'équipe</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="1">
-         <spacer name="verticalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="7" column="2">
-         <widget class="QSpinBox" name="Temps_EauspinBox">
+         <widget class="QSpinBox" name="Vie_MaxspinBox">
           <property name="minimum">
-           <number>60</number>
+           <number>50</number>
           </property>
           <property name="maximum">
-           <number>900</number>
+           <number>200</number>
           </property>
           <property name="singleStep">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>100</number>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QLabel" name="Vie_MaxLabel">
+          <property name="text">
+           <string>Points de vie max pour les lombrics</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="2">
+         <widget class="QSpinBox" name="Proba_CaissespinBox">
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="singleStep">
+           <number>5</number>
+          </property>
+          <property name="value">
            <number>30</number>
           </property>
          </widget>
+        </item>
+        <item row="11" column="1">
+         <widget class="QLabel" name="Vie_InitialeLabel">
+          <property name="text">
+           <string>Point de vie initiale des lombrics</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="1">
+         <widget class="QLabel" name="Point_DansCaisseLabel">
+          <property name="text">
+           <string>Point de vie dans une caisse</string>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="1">
+         <spacer name="verticalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="12" column="1">
+         <spacer name="verticalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="16" column="1">
+         <spacer name="verticalSpacer_10">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
         </item>
        </layout>
       </item>

@@ -73,6 +73,10 @@ struct paramsPartie{
 	uint32_t time_round;
 	uint32_t nbr_lombs;
 	uint32_t nbr_equipes;
+	uint32_t heath_of_box=50;
+	uint32_t probabilite=50;
+	uint32_t maxPv=150;
+	uint32_t initPv=150;
 };
 
 struct nextTour{
@@ -97,6 +101,10 @@ struct infoRoom_s{
 	uint32_t map;
 	uint32_t time_round;
 	uint32_t time;
+	uint32_t heath_of_box=50;
+	uint32_t probabilite=50;
+	uint32_t maxPv=150;
+	uint32_t initPv=150;
 	std::vector<playerTeam> pseudos;
 };
 
@@ -207,6 +215,10 @@ public:
 	void setTimeRound(uint32_t time_round);//défini durée par tours
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
 	void set_nbr_equipes(uint32_t nbr_eq);
+	void setInitLife(uint32_t vie);
+	void setMaxLife(uint32_t vie);
+	void setProbaCaisse(uint32_t vie);
+	void setLifeCaisse(uint32_t vie);
 	void changeTeam(uint32_t id_equipe);
 	void quitRoom();//quitter salon d'attente
 

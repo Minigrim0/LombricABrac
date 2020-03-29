@@ -1,17 +1,19 @@
 #include "../includes/sprite.hpp"
 
 //y'a un warning surprenant par ici
-Lombric_c::Lombric_c(int id,int idTeam,int x, int y, unsigned long skin, int pv, std::string name_lomb):
+Lombric_c::Lombric_c(int id,int idTeam,int x, int y, unsigned long skin, int pv, int maxPv, std::string name_lomb):
 Sprite(x, y, skin, id),
 direction(FORWARD),
 teamId(idTeam),
 vie(pv),
+maxVie(maxPv),
 name(name_lomb)
 {}
 
-Lombric_c::Lombric_c(int id, int pv, Map* carte):
+Lombric_c::Lombric_c(int id, int pv, int maxPv, Map* carte):
 Sprite(id, carte),
-vie(pv){}
+vie(pv),
+maxVie(maxPv){}
 
 void Lombric_c::move(int type, Map* carte){
 	uint32_t newX, newY;
@@ -40,7 +42,8 @@ void Lombric_c::move(int type, Map* carte){
   	}
 }
 
-bool Lombric_c::update(Map* carte, double t){
+bool Lombric_c::update(infoPartie_s* inf, double t){
+	Map* carte = inf->carte;
 	if(movement){
 		int newPos[2];
 		movement->update(newPos, t);
@@ -70,7 +73,7 @@ bool Lombric_c::update(Map* carte, double t){
 	}
 
 	//le lombric meurt s'il est sous l'eau/sous la map
-	if(posY >= carte->getHauteur() - carte->getWaterLevel())vie = 0;
+	if(posY >= carte->getHauteur() - carte->getWaterLevel() - 1)vie = 0;
 
 	if(vie<0)vie=0;
 	return vie;
@@ -102,6 +105,10 @@ void Lombric_c::setPos(int* newPos){
 	Sprite::setPos(newPos);
 }
 
+void Lombric_c::addLife(int n){
+	vie += n;
+	if(vie>maxVie)vie=maxVie;
+}
 int Lombric_c::getDirection(){return direction;}
 
 int Lombric_c::getTeamId(){return teamId;}
