@@ -45,6 +45,36 @@ void Client::setTimeRound(uint32_t time_round){
 	sendMutex.unlock();
 }
 
+void Client::setInitLife(uint32_t vie){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Life_mod obj;
+	obj.set_life(vie);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_INIT_VIE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setMaxLife(uint32_t vie){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Life_mod obj;
+	obj.set_life(vie);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_MAX_VIE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 void Client::set_nrb_lombrics(uint32_t nbr_lomb){
 	message m{};
 

@@ -194,6 +194,18 @@ int Client::run(){
 					inGameMessage.push_back({obj.pseudo(), obj.msg()});
 					msg.type = 0;
 					break;
+				case CLIENT_MODIFY_INIT_VIE: {
+					Life_mod obj;
+					obj.ParseFromString(m.text);
+					currentParams.initPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
+				case CLIENT_MODIFY_MAX_VIE:{
+					Life_mod obj;
+					obj.ParseFromString(m.text);
+					currentParams.maxPv = obj.life();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
 			}
 			msgMutex.unlock();
 		}

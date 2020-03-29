@@ -76,6 +76,7 @@ struct paramsPartie{
 	uint32_t heath_of_box=50;
 	uint32_t probabilite=50;
 	uint32_t maxPv=150;
+	uint32_t initPv=150;
 };
 
 struct nextTour{
@@ -210,6 +211,8 @@ public:
 	void setTimeRound(uint32_t time_round);//défini durée par tours
 	void set_nrb_lombrics(uint32_t nbr_lomb);//défini nombre lombrics
 	void set_nbr_equipes(uint32_t nbr_eq);
+	void setInitLife(uint32_t vie);
+	void setMaxLife(uint32_t vie);
 	void changeTeam(uint32_t id_equipe);
 	void quitRoom();//quitter salon d'attente
 

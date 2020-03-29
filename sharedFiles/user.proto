@@ -58,6 +58,10 @@ message Map_mod{
   uint32 id = 1;
 }
 
+message Life_mod{
+  uint32 life = 1;
+}
+
 message Time_mod{
   uint32 time = 1;
 }
