@@ -218,6 +218,10 @@ message infoRoom{
   uint32 time_round = 4;
   uint32 map = 5;
   repeated Join_groupe_r joueur = 6;
+  uint32 init_vie = 7;
+  uint32 max_vie = 8;
+  uint32 proba_caisse = 9;
+  uint32 vie_caisse = 10;
 
 }
 
