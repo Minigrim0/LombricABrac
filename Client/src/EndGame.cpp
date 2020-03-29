@@ -46,7 +46,7 @@ void EndGame::initWindow(){
   font.setPointSize(28);
   font.setBold(true);
   page->ImageLabel->setFont(font);
-  page->ImageLabel->setStyleSheet("color: #00b2ff");
+  page->ImageLabel->setStyleSheet("color: #0097ff");
   page->ImageLabel->setText(QString(msg_winner.c_str()));
   page->ImageLabel->setAlignment(Qt::AlignCenter);
 
