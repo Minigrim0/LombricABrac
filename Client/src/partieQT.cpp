@@ -30,28 +30,30 @@ gameInfo(nullptr){
   };
 
   gameLabel = new QLabel(this);
-  
+
   chatArea = new QMdiArea(this);
   chatArea->setBackground(QBrush(Qt::transparent));
   chatArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   chatArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
+  chatContainer = new QPlainTextEdit;
+  chatContainer->setReadOnly(true);
+  chatInput = new QLineEdit;
   chatWidget = new QWidget();
-    // Adding layout to it
-    QGridLayout *gridLayout = new QGridLayout(chatWidget);
-    chatWidget->setLayout(gridLayout);
-    // Adding an label to the widget
-    QLabel *label = new QLabel("Hello, I am sub window!!!", chatWidget);
-    gridLayout->addWidget(label);
+    QVBoxLayout *chatLayout = new QVBoxLayout(chatWidget);
+    chatWidget->setLayout(chatLayout);
 
-    // Adding a widget as a sub window in the Mdi Area
+    chatLayout->addWidget(chatContainer);
+    chatLayout->addWidget(chatInput);
+
     chatArea->addSubWindow(chatWidget);
-    // Set the window title
-    chatWidget->setWindowTitle("Sub Window");
-    // And show the widget
+    chatWidget->setWindowTitle("Chat");
     chatWidget->show();
 
+    chatArea->currentSubWindow()->setWindowFlags(Qt::Window | Qt::WindowTitleHint | Qt::CustomizeWindowHint);
   chooseWeaponRects = new QRect[3];//on a que 2 armes
+
+  connect(chatInput, SIGNAL(returnPressed()), this, SLOT(sendMessage()));
 }
 
 void partieQT::update(){
@@ -73,6 +75,14 @@ void partieQT::update(){
   tempScreenWidth = size.width();
   tempScreenHeight = size.height();
   updateGame();
+
+  std::vector<chat_r> newMsg = client->getInGameMessage();
+  for(auto msg=newMsg.begin();msg!=newMsg.end();++msg){
+      if(msg->username != parent->getUsername()){
+          std::string newMsg = msg->username +": "+msg->text;
+          chatContainer->appendPlainText(QString(newMsg.c_str()));
+      }
+  }
 }
 
 void partieQT::initWindow(){
@@ -108,6 +118,8 @@ void partieQT::initWindow(){
   lombricUpdatedByServ.Clear();
   blockDeleted.clear();
 
+  chatContainer->clear();
+  chatInput->clear();
 }
 
 void partieQT::updateGame(){
@@ -693,6 +705,15 @@ int partieQT::getPower(){
   return min(100,std::round(t * 100/TIME_FOR_FULL_POWER));
 }
 
+void partieQT::sendMessage(){
+    std::string message =chatInput->text().toStdString();
+    chatInput->clear();
+    if(message.size()){
+        client->sendInGameMessage(message);
+        std::string newMsg = parent->getUsername()+": "+message;
+        chatContainer->appendPlainText(QString(newMsg.c_str()));
+    }
+}
 
 partieQT::~partieQT(){
   delete[] textureMur;
@@ -701,4 +722,8 @@ partieQT::~partieQT(){
   delete[] chooseWeaponRects;
   delete gameLabel;
   if(gamePixmap)delete gamePixmap;
+  delete chatInput;
+  delete chatContainer;
+  delete chatWidget;
+  delete chatArea;
 }

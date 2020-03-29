@@ -119,3 +119,26 @@ void Client::changeWeapon(uint32_t id){
 	sendMessage(m, true);
 	sendMutex.unlock();
 }
+
+void Client::sendInGameMessage(std::string text){
+	message m{};
+	m.type = CLIENT_SEND_IN_GAME_MESSAGE;
+	if(text.size()){
+		Chat obj;
+		obj.set_pseudo("");
+		obj.set_msg(text);
+
+		obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur pour l'envoyer au serveur
+
+
+		sendMutex.lock();
+		sendMessage(m, true);
+		sendMutex.unlock();
+	}
+}
+
+std::vector<chat_r> Client::getInGameMessage(){
+	std::vector<chat_r> res = inGameMessage;
+	inGameMessage.clear();
+	return res;
+}

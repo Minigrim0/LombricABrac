@@ -188,6 +188,12 @@ int Client::run(){
 					matchFind = true;
 					msg.type = 0;
 					break;
+				case CLIENT_SEND_IN_GAME_MESSAGE:
+					Chat obj;
+					obj.ParseFromString(msg.text);
+					inGameMessage.push_back({obj.pseudo(), obj.msg()});
+					msg.type = 0;
+					break;
 			}
 			msgMutex.unlock();
 		}

@@ -450,6 +450,18 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             }
             break;
         }
+        case CLIENT_SEND_IN_GAME_MESSAGE:{
+            Chat obj;
+            obj.ParseFromString(zmq_msg.message());
+            std::string pseudo;
+            db.get_user_username(zmq_msg.receiver_id(),&pseudo);
+            obj.set_pseudo(pseudo);
+            zmq_msg.set_message(obj.SerializeAsString());
+            for(size_t i=0;i<m_players.size();i++){
+                m_players[i].sendMessage(zmq_msg.SerializeAsString());
+            }
+            break;
+        }
         case SHOOT:{
             zmq_msg.set_type_message(SHOOT);
             // Telling everyone that a player shot

@@ -144,6 +144,8 @@ private:
 
 	bool matchFind;
 
+	std::vector<chat_r> inGameMessage;
+
 
 	void sendMessage(message& m, bool forceSend=false);//envoie le type, la taille et le string
 	int readMessage();//fonction qui lit un string sur le socket (un entier correespondant à la taille du message qui suit)
@@ -255,6 +257,9 @@ public:
 	bool matchIsFind();
 	//thread
 	bool isRunning(){return running;};
+
+	void sendInGameMessage(std::string);
+	std::vector<chat_r> getInGameMessage();
 };
 
 #endif
