@@ -213,6 +213,10 @@ void Game::add_user(ZMQ_msg *zmq_msg){
     room.set_nbr_eq(static_cast<uint32_t>(m_team_nb));
     room.set_time_round(m_max_time_round);
     room.set_time(m_max_time_game);
+    room.set_init_vie(m_lomb_pv_init);
+    room.set_max_vie(m_lomb_pv_max);
+    room.set_proba_caisse(m_prob_health_box);
+    room.set_vie_caisse(m_box_pv);
 
     for(size_t i = 0;i<m_players.size();i++){
         Join_groupe_r* joueur = room.add_joueur();
