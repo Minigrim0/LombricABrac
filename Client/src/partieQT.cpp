@@ -140,10 +140,10 @@ void partieQT::updateGame(){
     //vérifie si le tour a changé
     if(endRound){
       beginShoot = false;
-      weaponIndex = 0;
-      client->changeWeapon(static_cast<uint32_t>(weaponIndex));
       std::string nextRound = client->getNextRound();
       if(nextRound.size()){//si on a un string-> on change de tour
+          weaponIndex = 0;
+          client->changeWeapon(static_cast<uint32_t>(weaponIndex));
         Next_lombric next;
         next.ParseFromString(nextRound);
         spentTime = 0;
