@@ -205,21 +205,20 @@ int Client::run(){
 					obj.ParseFromString(msg.text);
 					currentParams.maxPv = obj.life();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
-					break;}/*
-				case CLIENT_MODIFY_VIE_CAISSE:{
-					Life_mod obj;
-					obj.ParseFromString(m.text);
-					currentParams.maxPv = obj.life();
-					msg.type = 0;//pour qu'un nouveau message puisse être lu
 					break;}
 				case CLIENT_MODIFY_VIE_CAISSE:{
-					Life_mod obj;
-					obj.ParseFromString(m.text);
-					currentParams.maxPv = obj.life();
+					Caisse_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.heath_of_box = obj.val();
 					msg.type = 0;//pour qu'un nouveau message puisse être lu
-					break;}*/
+					break;}
+				case CLIENT_MODIFY_PROBA_CAISSE:{
+					Caisse_mod obj;
+					obj.ParseFromString(msg.text);
+					currentParams.probabilite = obj.val();
+					msg.type = 0;//pour qu'un nouveau message puisse être lu
+					break;}
 				}
-			}
 			msgMutex.unlock();
 		}
 		usleep(50);

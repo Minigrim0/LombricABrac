@@ -60,6 +60,36 @@ void Client::setInitLife(uint32_t vie){
 	sendMutex.unlock();
 }
 
+void Client::setProbaCaisse(uint32_t valeur){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Caisse_mod obj;
+	obj.set_val(valeur);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_PROBA_CAISSE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
+void Client::setLifeCaisse(uint32_t valeur){
+	message m{};
+
+	//construction de la structure à envoyer au serveur
+	Caisse_mod obj;
+	obj.set_val(valeur);
+
+	obj.SerializeToString(&m.text);//convertis en string pour l'envoyer au serveur
+	m.type = CLIENT_MODIFY_VIE_CAISSE;
+
+	sendMutex.lock();
+	sendMessage(m);
+	sendMutex.unlock();
+}
+
 void Client::setMaxLife(uint32_t vie){
 	message m{};
 
