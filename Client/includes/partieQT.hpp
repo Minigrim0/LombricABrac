@@ -23,8 +23,8 @@
 #include <QString>
 #include <QRect>
 #include <QFont>
-
-
+#include <QSplitter>
+#include <QMdiArea>
 
 #include "client.hpp"
 #include "../../sharedFiles/includes/infoPartie.hpp"
@@ -79,13 +79,16 @@ private:
 
   QLabel* gameLabel;
   QPixmap* gamePixmap;
-  QGridLayout* mainLayout;
 
   QPixmap *textureMur;
   QPixmap *skinSprite;
   QPixmap *skinWeapons;
 
   QRect *chooseWeaponRects;
+
+  QSplitter* splitter;
+  QWidget* chatWidget;
+  QMdiArea* chatArea;
 
   void drawMap();//dessine toute la carte
   void drawMur(int x, int y);//dessine 1 mur

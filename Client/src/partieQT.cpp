@@ -8,8 +8,6 @@ gameInfo(nullptr){
   timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, &partieQT::update);
   setTimerIntervalle(50);
-  gameLabel = new QLabel(this);
-  mainLayout = new QGridLayout;
 
   //images des blocks
   textureMur = new QPixmap[4]{
@@ -30,6 +28,28 @@ gameInfo(nullptr){
     QPixmap("images/weapons/bazooka.png"),
     QPixmap("images/weapons/baseballbat.png")
   };
+
+  gameLabel = new QLabel(this);
+  
+  chatArea = new QMdiArea(this);
+  chatArea->setBackground(QBrush(Qt::transparent));
+  chatArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  chatArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+  chatWidget = new QWidget();
+    // Adding layout to it
+    QGridLayout *gridLayout = new QGridLayout(chatWidget);
+    chatWidget->setLayout(gridLayout);
+    // Adding an label to the widget
+    QLabel *label = new QLabel("Hello, I am sub window!!!", chatWidget);
+    gridLayout->addWidget(label);
+
+    // Adding a widget as a sub window in the Mdi Area
+    chatArea->addSubWindow(chatWidget);
+    // Set the window title
+    chatWidget->setWindowTitle("Sub Window");
+    // And show the widget
+    chatWidget->show();
 
   chooseWeaponRects = new QRect[3];//on a que 2 armes
 }
@@ -82,7 +102,6 @@ void partieQT::initWindow(){
   gamePixmap = nullptr;
   installEventFilter(this);
   show();
-  //setLayout(mainLayout);
 
   initTime = std::chrono::high_resolution_clock::now();
   destroyByServ.Clear();
@@ -338,7 +357,6 @@ void partieQT::drawMap(){
   gameLabel->adjustSize();
   gameLabel->show();
   gameLabel->update();
-
 }
 
 void partieQT::drawMur(int x, int y){//dessine le pos ème mur du tableau
@@ -683,5 +701,4 @@ partieQT::~partieQT(){
   delete[] chooseWeaponRects;
   delete gameLabel;
   if(gamePixmap)delete gamePixmap;
-  delete mainLayout;
 }
