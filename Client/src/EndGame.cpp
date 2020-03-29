@@ -20,17 +20,6 @@ void EndGame::initWindow(){
   teams = client->getGameInfo()->teamsVector;
   client->resetGameParam();
 
-  QPixmap* gamePixmap = new QPixmap(page->ImageLabel->width(), page->ImageLabel->height());
-  QPainter painter(gamePixmap);
-  QPen pen;
-  pen.setColor(Qt::green);
-  painter.setPen(pen);
-
-  QFont font("Cursive", 16);
-  font.setItalic(true);
-  font.setBold(true);
-  painter.setFont(font);
-
   //affichage equipe gagnante
   int indexWinner = 0;
   for (int i=1; i<teams.size();++i){
@@ -54,12 +43,7 @@ void EndGame::initWindow(){
     msg_winner = teams[indexWinner]->getName() + " a gagné ! ";
   }
 
-  QString name(msg_winner.c_str());
-  painter.drawText((page->ImageLabel->width()/2) - msg_winner.length()*10/2, page->ImageLabel->height()/2, name);
-
-  page->ImageLabel->setPixmap(*gamePixmap);
-  page->ImageLabel->adjustSize();
-  page->ImageLabel->show();
+  page->ImageLabel->setText(QString(msg_winner.c_str()));
 }
 
 EndGame::~EndGame(){
