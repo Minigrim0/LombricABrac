@@ -34,6 +34,8 @@ class DataBase{
         int get_user(std::string username, UserConnect* userconnect);
         int get_user_username(int user_id, std::string* username);
         int get_user(int user_id, UserConnect* userconnect);
+        int get_user_points(int user_id, int* user_points);
+        int set_user_points(int user_id, int user_points);
         int get_user_id(std::string username, int* id);
         int get_passwd(std::string username, std::string* password);
         int register_user(std::string username, std::string passwd);

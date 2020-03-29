@@ -224,7 +224,6 @@ void Game::end_round(int *current_step){
     }
 
     nb_alive_teams(&nbr_team, &last_team);
-    std::cout << "Nbr Teams : " << nbr_team << std::endl;
     if(nbr_team <= 1){  // Si endgame
         end_game(current_step, last_team);
         return;
@@ -239,7 +238,6 @@ void Game::end_round(int *current_step){
         next_lomb_id = get_next_lombric_id();
     }while(next_lomb_id == 0);
 
-    std::cout << "Current lombric " << next_lomb_id << std::endl;
     m_game_object.setCurrentLomb(next_lomb_id);
 
     // Il faut ajouter la vérification d'équipes mais là tout de suite je dois aller pisser :)
@@ -278,13 +276,16 @@ void Game::end_game(int* current_step, size_t last_team){
         else if(m_players[i].get_team() == last_team){
             // If the user if from the winning team, give him cookies !
             db.set_final_points(m_game_id, 1, player_index);
-            player_index++;
+            int player_points;
+            db.get_user_points(m_players[i].get_id(), &player_points);
+            db.set_user_points(m_players[i].get_id(), player_points+1);
         }
         else{
             // If the user lost the game, he gets a beautiful 0
             db.set_final_points(m_game_id, 0, player_index);
-            player_index++;
         }
+        db.add_player(m_game_id, m_players[i].get_id(), player_index);
+        player_index++;
     }
     DataBase_mutex.unlock();
 
@@ -507,7 +508,7 @@ void Game::handle_game(ZMQ_msg zmq_msg, int* current_step){
             break;
         }
         default:
-          std::cout << "error michel serv : " << zmq_msg.type_message() << std::endl;
+          std::cout << "ERROR BOBBY : " << zmq_msg.type_message() << std::endl;
     }
 }
 
