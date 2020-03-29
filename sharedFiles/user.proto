@@ -58,6 +58,10 @@ message Map_mod{
   uint32 id = 1;
 }
 
+message Caisse_mod{
+  uint32 val = 1;
+}
+
 message Life_mod{
   uint32 life = 1;
 }
