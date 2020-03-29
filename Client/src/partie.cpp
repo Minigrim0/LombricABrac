@@ -101,6 +101,12 @@ info Partie::run(info information)
         synchronizeMap(destroyByServ);
         blockDeleted.clear();
         gameInfo->carte->setWaterLevel(next.water_level());
+
+        if(next.x()>=0 && next.y()>=0){//on fait spawn la caisse
+            int x = next.x();
+            int y = next.y();
+            gameInfo->spriteVector.push_back(new HealthBox(x,y, gameParam.heath_of_box, 'H'));
+        }
         //destroyByServ.Clear();
 
         mustRefreshOverlay = true;
